@@ -289,9 +289,22 @@ export function RecipeEditor({
                         items={ingredients}
                         value={ingredient ?? null}
                         inputValue={row.ingredientName}
+                        itemToStringLabel={(item) => item.name}
                         itemToStringValue={(item) => item.name}
+                        isItemEqualToValue={(a, b) => a.id === b.id}
                         onInputValueChange={(value) => updateIngredientInput(row.key, value)}
-                        onValueChange={(value) => value && selectRecipeIngredient(row.key, value)}
+                        onValueChange={(value) => {
+                          if (value) {
+                            selectRecipeIngredient(row.key, value);
+                          } else {
+                            updateRow(row.key, {
+                              ingredientId: "",
+                              ingredientName: "",
+                              unitId: "",
+                              importStatus: undefined,
+                            });
+                          }
+                        }}
                       >
                         <ComboboxInput placeholder="Chercher un ingrédient" showClear />
                         <ComboboxContent>
