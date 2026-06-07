@@ -96,7 +96,7 @@ export function KitchuApp({ units, globalRatios, ingredients, recipes }: KitchuA
     <main className="min-h-screen bg-background text-foreground">
       <header className="sticky top-0 z-20 border-b border-border bg-card/95 backdrop-blur">
         <div className="mx-auto flex max-w-[1480px] min-w-0 flex-col gap-4 px-4 py-4 md:flex-row md:items-center md:justify-between lg:px-8">
-          <div className="flex items-center gap-3">
+          <div className="flex min-w-0 items-center gap-3">
             <div className="flex size-11 items-center justify-center rounded-lg bg-primary text-primary-foreground shadow-sm">
               <ChefHat className="size-6" />
             </div>
@@ -105,8 +105,8 @@ export function KitchuApp({ units, globalRatios, ingredients, recipes }: KitchuA
               <p className="text-sm text-muted-foreground">Recettes, ingrédients, unités et produits réels.</p>
             </div>
           </div>
-          <Tabs value={tab} onValueChange={(value) => setTab(value as typeof tab)}>
-            <TabsList className="h-auto max-w-full overflow-x-auto rounded-full border border-border bg-card p-1 shadow-sm md:w-auto">
+          <Tabs value={tab} onValueChange={(value) => setTab(value as typeof tab)} className="w-full md:w-auto">
+            <TabsList className="h-auto w-full max-w-full overflow-x-auto rounded-full border border-border bg-card p-1 shadow-sm md:w-auto">
               <TabsTrigger value="recipes" className="rounded-full px-3 md:px-4">
                 <BookOpen data-icon="inline-start" />
                 Recettes
@@ -124,7 +124,7 @@ export function KitchuApp({ units, globalRatios, ingredients, recipes }: KitchuA
         </div>
       </header>
 
-      <div className="mx-auto grid max-w-[1480px] gap-6 px-4 py-6 lg:grid-cols-[340px_1fr] lg:px-8">
+      <div className="mx-auto grid max-w-[1480px] gap-6 px-4 py-6 lg:grid-cols-[minmax(280px,340px)_minmax(0,1fr)] lg:items-start lg:px-8">
         {tab === "recipes" && (
           <>
             <LibraryPanel
@@ -147,7 +147,7 @@ export function KitchuApp({ units, globalRatios, ingredients, recipes }: KitchuA
                     setRecipeDraft(recipeToDraft(recipe));
                     setRecipeMode("view");
                   }}
-                  media={<EntityImage src={recipeImageUrl(recipe)} label={recipe.name} size="sm" />}
+                  media={<EntityImage src={recipeImageUrl(recipe)} label={recipe.name} size="xs" />}
                   title={recipe.name}
                   description={
                     <>
@@ -322,7 +322,7 @@ export function KitchuApp({ units, globalRatios, ingredients, recipes }: KitchuA
                       setSelectedIngredientId(ingredient.id);
                       setIngredientDraft(ingredientToDraft(ingredient, defaultBaseUnitId));
                     }}
-                    media={<EntityImage src={ingredientImageUrl(ingredient)} label={ingredient.name} size="sm" />}
+                    media={<EntityImage src={ingredientImageUrl(ingredient)} label={ingredient.name} size="xs" />}
                     title={ingredient.name}
                     description={`${usableUnitCount} unités · ${specificRatioCount} ratio${specificRatioCount > 1 ? "s" : ""} spécifique${specificRatioCount > 1 ? "s" : ""} · ${ingredient.products.length} produits`}
                   />

@@ -174,30 +174,30 @@ export function RecipeEditor({
   const dialogMeasurementOptions = baseMeasurementOptions(units);
 
   return (
-    <section className="space-y-4">
+    <section className="flex min-w-0 flex-col gap-4">
       <HelloFreshImporter busy={busy} onImport={onImport} onError={onImportError} />
       <Card>
         <CardHeader>
-          <div className="flex flex-col gap-3 md:flex-row md:items-start md:justify-between">
-            <div className="flex items-center gap-3">
-              <EntityImage src={draftRecipeImageUrl(draft, ingredients)} label={draft.name || "Recette"} size="md" />
-              <div>
+          <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
+            <div className="flex min-w-0 items-center gap-3">
+              <EntityImage src={draftRecipeImageUrl(draft, ingredients)} label={draft.name || "Recette"} size="md" className="shrink-0" />
+              <div className="min-w-0">
                 <h2 className="text-xl font-semibold">{draft.id ? "Modifier la recette" : "Nouvelle recette"}</h2>
                 <p className="text-sm text-muted-foreground">Les quantités sont enregistrées pour une portion.</p>
               </div>
             </div>
-            <div className="flex flex-wrap items-center gap-2">
+            <div className="flex shrink-0 flex-wrap items-center gap-2">
               {onCancel && (
                 <Button variant="outline" onClick={onCancel}>
-                  <X className="h-4 w-4" />
+                  <X data-icon="inline-start" />
                   Fermer
                 </Button>
               )}
             </div>
           </div>
         </CardHeader>
-        <CardContent className="space-y-5">
-          <div className="grid gap-3 md:grid-cols-[1fr_140px_140px]">
+        <CardContent className="flex flex-col gap-4">
+          <div className="grid gap-3 md:grid-cols-[minmax(0,1fr)_120px_120px]">
             <Field label="Titre">
               <Input value={draft.name} onChange={(event) => setDraft({ ...draft, name: event.target.value })} />
             </Field>
@@ -218,18 +218,19 @@ export function RecipeEditor({
               />
             </Field>
           </div>
-          <div className="grid gap-3 md:grid-cols-[1fr_1fr]">
+          <Field label="Description">
+            <Textarea
+              value={draft.description}
+              onChange={(event) => setDraft({ ...draft, description: event.target.value })}
+              className="min-h-24"
+            />
+          </Field>
+          <div className="grid gap-3 md:grid-cols-2">
             <Field label="Image">
               <Input
                 value={draft.imageUrl}
                 onChange={(event) => setDraft({ ...draft, imageUrl: event.target.value })}
                 placeholder="https://..."
-              />
-            </Field>
-            <Field label="Description">
-              <Textarea
-                value={draft.description}
-                onChange={(event) => setDraft({ ...draft, description: event.target.value })}
               />
             </Field>
             <Field label="Source">
@@ -259,12 +260,12 @@ export function RecipeEditor({
               size="sm"
               onClick={() => setDraft((current) => ({ ...current, ingredients: [...current.ingredients, blankRecipeIngredient()] }))}
             >
-              <Plus className="h-4 w-4" />
+              <Plus data-icon="inline-start" />
               Ligne
             </Button>
           </div>
         </CardHeader>
-        <CardContent className="space-y-3">
+        <CardContent className="flex flex-col gap-3">
           {draft.ingredients.map((row, index) => {
             const ingredient = ingredientById.get(row.ingredientId);
             const allowedUnits = ingredient ? usableUnitsForIngredient(ingredient, units, globalRatios) : [];
@@ -277,15 +278,17 @@ export function RecipeEditor({
                     : "border-border bg-card"
                 }`}
               >
-                <div className="grid gap-3 xl:grid-cols-[1.4fr_110px_150px_1fr_44px]">
+                <div className="grid gap-3 lg:grid-cols-[minmax(0,1.4fr)_100px_minmax(120px,150px)_minmax(0,1fr)_44px]">
                   <Field label={`Ingrédient ${index + 1}`} showLabel={false}>
-                    <div className="flex gap-2">
+                    <div className="flex min-w-0 items-center gap-2">
                       <EntityImage
                         src={ingredientImageUrl(ingredient) ?? row.ingredientImageUrl}
                         label={row.ingredientName || "Ingrédient"}
-                        size="sm"
+                        size="xs"
+                        className="shrink-0"
                       />
-                      <Combobox
+                      <div className="min-w-0 flex-1">
+                        <Combobox
                         items={ingredients}
                         value={ingredient ?? null}
                         inputValue={row.ingredientName}
@@ -326,19 +329,21 @@ export function RecipeEditor({
                           </ComboboxList>
                         </ComboboxContent>
                       </Combobox>
+                      </div>
                       {row.importStatus === "ingredient_missing" && row.ingredientName.trim() && (
                         <Button
                           variant="outline"
                           size="icon"
                           title="Créer l'ingrédient"
                           onClick={() => openIngredientDialog(row)}
+                          className="shrink-0"
                         >
-                          <Plus className="h-4 w-4" />
+                          <Plus data-icon="inline-start" />
                         </Button>
                       )}
                       {!row.ingredientId && row.ingredientName.trim() && row.importStatus !== "ingredient_missing" && (
-                        <Button variant="outline" size="icon" onClick={() => openIngredientDialog(row)}>
-                          <Plus className="h-4 w-4" />
+                        <Button variant="outline" size="icon" onClick={() => openIngredientDialog(row)} className="shrink-0">
+                          <Plus data-icon="inline-start" />
                         </Button>
                       )}
                     </div>
@@ -386,7 +391,7 @@ export function RecipeEditor({
                       }
                       disabled={draft.ingredients.length === 1}
                     >
-                      <Trash2 className="h-4 w-4" />
+                      <Trash2 />
                     </Button>
                   </div>
                 </div>
@@ -417,15 +422,15 @@ export function RecipeEditor({
               size="sm"
               onClick={() => setDraft((current) => ({ ...current, steps: [...current.steps, { key: key(), instruction: "" }] }))}
             >
-              <Plus className="h-4 w-4" />
+              <Plus data-icon="inline-start" />
               Étape
             </Button>
           </div>
         </CardHeader>
-        <CardContent className="space-y-2">
+        <CardContent className="flex flex-col gap-2">
           {draft.steps.map((step, index) => (
-            <div key={step.key} className="grid gap-2 md:grid-cols-[34px_1fr_92px]">
-              <div className="flex size-10 items-center justify-center rounded-full bg-primary text-sm font-semibold text-primary-foreground">
+            <div key={step.key} className="flex gap-2 sm:grid sm:grid-cols-[34px_1fr_auto] sm:items-center">
+              <div className="flex size-8 shrink-0 items-center justify-center rounded-full bg-primary text-sm font-semibold text-primary-foreground sm:size-10">
                 {index + 1}
               </div>
               <Input
@@ -438,15 +443,16 @@ export function RecipeEditor({
                     ),
                   }))
                 }
+                className="min-w-0"
               />
-              <div className="flex gap-1">
+              <div className="flex shrink-0 gap-1">
                 <Button
                   variant="ghost"
                   size="icon"
                   onClick={() => setDraft((current) => ({ ...current, steps: move(current.steps, index, index - 1) }))}
                   disabled={index === 0}
                 >
-                  <GripVertical className="h-4 w-4" />
+                  <GripVertical />
                 </Button>
                 <Button
                   variant="ghost"
@@ -459,7 +465,7 @@ export function RecipeEditor({
                   }
                   disabled={draft.steps.length === 1}
                 >
-                  <Trash2 className="h-4 w-4" />
+                  <Trash2 />
                 </Button>
               </div>
             </div>
@@ -552,7 +558,7 @@ export function RecipeEditor({
                   }
                   disabled={busy || !ingredientDialog.draft.name.trim() || !ingredientDialog.draft.baseUnitId}
                 >
-                  <Plus className="h-4 w-4" />
+                  <Plus data-icon="inline-start" />
                   Créer
                 </Button>
               </DialogFooter>

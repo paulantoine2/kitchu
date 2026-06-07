@@ -83,15 +83,15 @@ export function IngredientEditor({
   }
 
   return (
-    <section className="space-y-4">
+    <section className="flex min-w-0 flex-col gap-4">
       <Card>
         <CardHeader>
-          <div className="flex items-center gap-3">
-            <EntityImage src={draft.imageUrl} label={draft.name || "Ingrédient"} size="md" />
+          <div className="flex min-w-0 items-center gap-3">
+            <EntityImage src={draft.imageUrl} label={draft.name || "Ingrédient"} size="md" className="shrink-0" />
             <h2 className="text-xl font-semibold">{draft.id ? "Modifier l'ingrédient" : "Nouvel ingrédient"}</h2>
           </div>
         </CardHeader>
-        <CardContent className="grid gap-3 md:grid-cols-[1fr_220px]">
+        <CardContent className="grid gap-3 md:grid-cols-[minmax(0,1fr)_220px]">
           <Field label="Nom">
             <Input value={draft.name} onChange={(event) => setDraft({ ...draft, name: event.target.value })} />
           </Field>
@@ -154,13 +154,14 @@ export function IngredientEditor({
                   units: [...current.units, { key: key(), unitId: "", toBaseFactor: "" }],
                 }))
               }
+              className="shrink-0"
             >
-              <Plus className="h-4 w-4" />
+              <Plus data-icon="inline-start" />
               Ratio
             </Button>
           </div>
         </CardHeader>
-        <CardContent className="space-y-3">
+        <CardContent className="flex flex-col gap-3">
           {specificRows.length === 0 && (
             <div className="rounded-lg border border-dashed border-border bg-muted/30 p-6 text-center text-sm text-muted-foreground">
               Aucun ratio spécifique. Les unités du type de mesure sont déjà utilisables.
@@ -174,7 +175,7 @@ export function IngredientEditor({
               units,
             });
             return (
-              <div key={row.key} className="grid gap-3 rounded-lg border border-border bg-card p-3 shadow-sm md:grid-cols-[1fr_160px_1fr_44px]">
+              <div key={row.key} className="grid gap-3 rounded-lg border border-border bg-card p-3 shadow-sm md:grid-cols-[minmax(0,1fr)_160px_minmax(0,1fr)_44px] md:items-end">
                 <Field label="Unité">
                   <NativeSelect
                     value={row.unitId}
@@ -206,18 +207,18 @@ export function IngredientEditor({
                     }
                   />
                 </Field>
-                <div className="flex items-end text-sm text-muted-foreground">
+                <div className="flex min-w-0 items-end">
                   {unit && baseUnit && effectiveFactor ? (
                     <Badge className="border-primary/20 bg-primary/10 text-primary">
                       1 {unit.symbol} = {formatNumber(effectiveFactor)} {baseUnit.symbol} · ingrédient
                     </Badge>
                   ) : (
-                    <Badge>
+                    <Badge variant="outline">
                       {unit ? "Ratio spécifique requis" : "Choisir une unité variable"}
                     </Badge>
                   )}
                 </div>
-                <div className="flex items-end">
+                <div className="flex items-end justify-end">
                   <Button
                     variant="ghost"
                     size="icon"
@@ -228,7 +229,7 @@ export function IngredientEditor({
                       }))
                     }
                   >
-                    <Trash2 className="h-4 w-4" />
+                    <Trash2 />
                   </Button>
                 </div>
               </div>
@@ -266,13 +267,14 @@ export function IngredientEditor({
                   ],
                 }))
               }
+              className="shrink-0"
             >
-              <Plus className="h-4 w-4" />
+              <Plus data-icon="inline-start" />
               Produit
             </Button>
           </div>
         </CardHeader>
-        <CardContent className="space-y-3">
+        <CardContent className="flex flex-col gap-3">
           {draft.products.length === 0 && (
             <div className="rounded-lg border border-dashed border-border bg-muted/30 p-6 text-center text-sm text-muted-foreground">
               Aucun produit lié.
@@ -300,20 +302,36 @@ export function IngredientEditor({
               ? derivedPrice * preferredPriceFactor
               : derivedPrice;
             return (
-              <div key={product.key} className="rounded-lg border border-border bg-card p-3 shadow-sm">
-                <div className="grid gap-3 lg:grid-cols-[56px_1fr_1fr_1.2fr_110px_140px_150px_110px_44px]">
-                  <div className="flex items-end">
-                    <EntityImage src={product.imageUrl} label={product.name || "Produit"} size="sm" />
+              <div key={product.key} className="flex flex-col gap-4 rounded-lg border border-border bg-card p-4 shadow-sm">
+                <div className="flex flex-col gap-3 lg:flex-row lg:items-start">
+                  <EntityImage src={product.imageUrl} label={product.name || "Produit"} size="sm" className="shrink-0" />
+                  <div className="grid min-w-0 flex-1 gap-3 sm:grid-cols-2 xl:grid-cols-3">
+                    <Field label="Magasin">
+                      <Input value={product.store} onChange={(event) => updateProduct(setDraft, product.key, { store: event.target.value })} />
+                    </Field>
+                    <Field label="Marque">
+                      <Input value={product.brand} onChange={(event) => updateProduct(setDraft, product.key, { brand: event.target.value })} />
+                    </Field>
+                    <Field label="Produit" className="sm:col-span-2 xl:col-span-1">
+                      <Input value={product.name} onChange={(event) => updateProduct(setDraft, product.key, { name: event.target.value })} />
+                    </Field>
                   </div>
-                  <Field label="Magasin">
-                    <Input value={product.store} onChange={(event) => updateProduct(setDraft, product.key, { store: event.target.value })} />
-                  </Field>
-                  <Field label="Marque">
-                    <Input value={product.brand} onChange={(event) => updateProduct(setDraft, product.key, { brand: event.target.value })} />
-                  </Field>
-                  <Field label="Produit">
-                    <Input value={product.name} onChange={(event) => updateProduct(setDraft, product.key, { name: event.target.value })} />
-                  </Field>
+                  <div className="flex justify-end lg:pt-6">
+                    <Button
+                      variant="ghost"
+                      size="icon"
+                      onClick={() =>
+                        setDraft((current) => ({
+                          ...current,
+                          products: current.products.filter((item) => item.key !== product.key),
+                        }))
+                      }
+                    >
+                      <Trash2 />
+                    </Button>
+                  </div>
+                </div>
+                <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
                   <Field label="Qté">
                     <Input
                       type="number"
@@ -369,22 +387,8 @@ export function IngredientEditor({
                       onChange={(event) => updateProduct(setDraft, product.key, { price: event.target.value })}
                     />
                   </Field>
-                  <div className="flex items-end">
-                    <Button
-                      variant="ghost"
-                      size="icon"
-                      onClick={() =>
-                        setDraft((current) => ({
-                          ...current,
-                          products: current.products.filter((item) => item.key !== product.key),
-                        }))
-                      }
-                    >
-                      <Trash2 className="h-4 w-4" />
-                    </Button>
-                  </div>
                 </div>
-                <div className="mt-3 grid gap-3 md:grid-cols-3">
+                <div className="grid gap-3 md:grid-cols-3">
                   <Field label="Image">
                     <Input
                       value={product.imageUrl}
@@ -398,16 +402,16 @@ export function IngredientEditor({
                   <Field label="Code-barres">
                     <Input value={product.barcode} onChange={(event) => updateProduct(setDraft, product.key, { barcode: event.target.value })} />
                   </Field>
-                  <div className="flex items-end">
-                    {standardPrice !== null && standardPriceUnit ? (
-                      <Badge className="border-primary/20 bg-primary/10 text-primary">
-                        {formatCurrency(standardPrice)} / {standardPriceUnit.symbol} ·{" "}
-                        {usesSystemRatio ? "défini dans Unités" : "produit"}
-                      </Badge>
-                    ) : (
-                      <Badge>Ratio produit requis{unit ? ` pour ${unit.symbol}` : ""}</Badge>
-                    )}
-                  </div>
+                </div>
+                <div className="flex flex-wrap items-center gap-2">
+                  {standardPrice !== null && standardPriceUnit ? (
+                    <Badge className="border-primary/20 bg-primary/10 text-primary">
+                      {formatCurrency(standardPrice)} / {standardPriceUnit.symbol} ·{" "}
+                      {usesSystemRatio ? "défini dans Unités" : "produit"}
+                    </Badge>
+                  ) : (
+                    <Badge variant="outline">Ratio produit requis{unit ? ` pour ${unit.symbol}` : ""}</Badge>
+                  )}
                 </div>
               </div>
             );

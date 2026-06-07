@@ -51,7 +51,7 @@ export function UnitListButton({
       active={active}
       onClick={onClick}
       media={
-        <div className="flex size-10 items-center justify-center rounded-sm bg-secondary font-semibold">
+        <div className="flex size-8 items-center justify-center rounded-sm bg-secondary text-xs font-semibold">
           {unit.symbol}
         </div>
       }
@@ -116,19 +116,19 @@ export function UnitEditor({
   }
 
   return (
-    <section className="space-y-4">
+    <section className="flex min-w-0 flex-col gap-4">
       <Card>
         <CardHeader>
-          <div className="flex flex-col gap-2 md:flex-row md:items-start md:justify-between">
-            <div>
+          <div className="flex flex-col gap-2 sm:flex-row sm:items-start sm:justify-between">
+            <div className="min-w-0">
               <h2 className="text-xl font-semibold">{draft.id ? "Modifier l'unité" : "Nouvelle unité"}</h2>
               <p className="text-sm text-muted-foreground">Base commune utilisée par les ingrédients.</p>
             </div>
-            <Badge>{units.length} unités</Badge>
+            <Badge className="w-fit shrink-0">{units.length} unités</Badge>
           </div>
         </CardHeader>
-        <CardContent className="space-y-4">
-          <div className="grid gap-3 md:grid-cols-[1fr_160px_160px]">
+        <CardContent className="flex flex-col gap-4">
+          <div className="grid gap-3 md:grid-cols-3">
             <Field label="Nom">
               <Input
                 value={draft.name}
@@ -148,7 +148,7 @@ export function UnitEditor({
               />
             </Field>
           </div>
-          <div className="grid gap-3 md:grid-cols-[220px_1fr]">
+          <div className="grid gap-3 md:grid-cols-[220px_minmax(0,1fr)] md:items-end">
             <Field label="Famille">
               <NativeSelect
                 value={draft.kind}
@@ -161,10 +161,8 @@ export function UnitEditor({
                 <option value="CUSTOM">Personnalisée</option>
               </NativeSelect>
             </Field>
-            <div className="flex items-end">
-              <div className="flex flex-wrap gap-2">
-                <Badge>{configuredRatioCount} configurables</Badge>
-              </div>
+            <div className="flex flex-wrap items-center gap-2 pb-0.5">
+              <Badge variant="outline">{configuredRatioCount} configurables</Badge>
             </div>
           </div>
         </CardContent>
@@ -182,7 +180,7 @@ export function UnitEditor({
             <Badge>Optionnel</Badge>
           </div>
         </CardHeader>
-        <CardContent className="space-y-3">
+        <CardContent className="flex flex-col gap-3">
           {!currentUnit && (
             <div className="rounded-lg border border-dashed border-border bg-muted/30 p-6 text-center text-sm text-muted-foreground">
               Enregistre l&apos;unité avant d&apos;ajouter ses ratios.
@@ -218,8 +216,8 @@ export function UnitEditor({
       {showDeleteWarning && currentUnit && (
         <Card className="border-primary/20 bg-primary/5">
           <CardHeader>
-            <div className="flex flex-col gap-3 md:flex-row md:items-start md:justify-between">
-              <div className="space-y-1">
+            <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
+              <div className="flex min-w-0 flex-col gap-1">
                 <Badge className="w-fit border-primary/20 bg-card text-primary">Action irréversible</Badge>
                 <h3 className="text-lg font-semibold text-primary">
                   Supprimer l&apos;unité « {currentUnit.name} » ?
@@ -229,15 +227,15 @@ export function UnitEditor({
                   Vérifie les changements ci-dessous avant de confirmer.
                 </p>
               </div>
-              <Badge className="w-fit bg-card">{currentUnit.symbol}</Badge>
+              <Badge className="w-fit shrink-0 bg-card">{currentUnit.symbol}</Badge>
             </div>
           </CardHeader>
-          <CardContent className="space-y-4">
+          <CardContent className="flex flex-col gap-4">
             <div className="rounded-lg border border-primary/20 bg-card p-3 text-sm leading-6 text-muted-foreground">
               En confirmant, Kitchu supprimera l&apos;unité et nettoiera automatiquement les références associées
               pour éviter des conversions incohérentes.
             </div>
-            <div className="space-y-2">
+            <div className="flex flex-col gap-2">
               {impactedIngredients.map((impact) => (
                 <div
                   key={impact.ingredientId}
@@ -265,7 +263,7 @@ export function UnitEditor({
                 Garder l&apos;unité
               </Button>
               <Button variant="destructive" onClick={onDelete} disabled={busy}>
-                <Trash2 className="h-4 w-4" />
+                <Trash2 data-icon="inline-start" />
                 Supprimer définitivement
               </Button>
             </div>
@@ -301,8 +299,8 @@ function MeasurementRatioEditorRow({
   const numericFactor = Number(factor);
 
   return (
-    <div className="grid gap-3 rounded-lg border border-border bg-card p-3 shadow-sm md:grid-cols-[1fr_160px_1fr_142px]">
-      <div>
+    <div className="grid gap-3 rounded-lg border border-border bg-card p-3 shadow-sm md:grid-cols-[minmax(0,1fr)_160px_minmax(0,1fr)_auto] md:items-end">
+      <div className="min-w-0">
         <div className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">Destination</div>
         <div className="mt-1 font-semibold">{targetLabel}</div>
         <div className="text-sm text-muted-foreground">{targetUnit.symbol}</div>
@@ -317,19 +315,19 @@ function MeasurementRatioEditorRow({
           placeholder={`ex. ${targetUnit.code === "ml" ? "5" : "100"}`}
         />
       </Field>
-      <div className="flex items-end">
+      <div className="flex min-w-0 items-end">
         <div className="flex flex-wrap gap-2">
-          <Badge>
+          <Badge variant="outline">
             {factor && Number.isFinite(numericFactor) && numericFactor > 0
               ? `1 ${currentUnit.symbol} = ${formatNumber(numericFactor, 4)} ${targetUnit.symbol}`
               : `1 ${currentUnit.symbol} = ... ${targetUnit.symbol}`}
           </Badge>
           {ratio?.storedTargetUnit.id !== targetUnit.id && ratio?.storedTargetUnit && (
-            <Badge>Stocké {ratio.storedTargetUnit.symbol}</Badge>
+            <Badge variant="secondary">Stocké {ratio.storedTargetUnit.symbol}</Badge>
           )}
         </div>
       </div>
-      <div className="flex items-end gap-1">
+      <div className="flex items-end justify-end gap-1">
         {ratio && (
           <Button
             variant="ghost"
@@ -338,11 +336,12 @@ function MeasurementRatioEditorRow({
             onClick={() => onDelete(ratio.id)}
             disabled={busy}
           >
-            <Trash2 className="h-4 w-4" />
+            <Trash2 />
           </Button>
         )}
         <Button
           size="sm"
+          className="shrink-0"
           aria-label={`Enregistrer le ratio ${targetLabel.toLowerCase()}`}
           onClick={() =>
             onSave({
@@ -354,7 +353,7 @@ function MeasurementRatioEditorRow({
           }
           disabled={busy || !factor || !Number.isFinite(numericFactor) || numericFactor <= 0}
         >
-          <Save className="h-4 w-4" />
+          <Save data-icon="inline-start" />
           Enregistrer
         </Button>
       </div>

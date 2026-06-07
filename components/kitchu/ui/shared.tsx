@@ -22,12 +22,15 @@ export function EntityImage({
   src,
   label,
   size = "md",
+  className,
 }: {
   src?: string | null;
   label: string;
-  size?: "sm" | "md" | "lg";
+  size?: "xs" | "sm" | "md" | "lg";
+  className?: string;
 }) {
-  const className = {
+  const sizeClassName = {
+    xs: "size-8 rounded-md",
     sm: "size-14 rounded-lg",
     md: "size-20 rounded-lg",
     lg: "size-32 rounded-lg",
@@ -35,7 +38,7 @@ export function EntityImage({
   const initial = label.trim().charAt(0).toUpperCase() || "?";
 
   return (
-    <Avatar className={cn(className, "rounded-lg after:rounded-lg")}>
+    <Avatar className={cn(sizeClassName, "rounded-lg after:rounded-lg", className)}>
       {src ? <AvatarImage src={src} alt={label} className="rounded-lg" /> : null}
       <AvatarFallback className="rounded-lg bg-primary/10 font-semibold text-primary">
         {initial}
@@ -61,11 +64,11 @@ export function LibraryPanel({
 }) {
   return (
     <aside className="min-w-0 lg:sticky lg:top-24 lg:self-start">
-      <Card className="flex flex-col gap-3">
+      <Card>
         <CardHeader className="border-b">
           <div className="flex items-center justify-between gap-3">
             <CardTitle>{title}</CardTitle>
-            <Button variant="secondary" size="sm" onClick={onNew} aria-label={actionLabel}>
+            <Button variant="secondary" size="sm" onClick={onNew} aria-label={actionLabel} className="shrink-0">
               <Plus data-icon="inline-start" />
               <span className="hidden sm:inline">{actionLabel}</span>
             </Button>
@@ -137,10 +140,10 @@ export function StickySave({
   onDelete?: () => void;
 }) {
   return (
-    <Card className="bg-card/95 p-3 shadow-lg backdrop-blur md:sticky md:bottom-4 md:z-10">
-      <div className="flex flex-col gap-3 md:flex-row md:items-center md:justify-between">
-        <p className="min-h-5 text-sm text-muted-foreground">{notice}</p>
-        <div className="flex gap-2">
+    <Card className="bg-card/95 py-3 shadow-lg backdrop-blur md:sticky md:bottom-4 md:z-10">
+      <div className="flex flex-col gap-3 px-(--card-spacing) sm:flex-row sm:items-center sm:justify-between">
+        <p className="min-h-5 min-w-0 flex-1 text-sm text-muted-foreground">{notice || "\u00a0"}</p>
+        <div className="flex shrink-0 flex-wrap gap-2 sm:justify-end">
           {onDelete && (
             <Button variant="outline" onClick={onDelete} disabled={busy}>
               <Trash2 data-icon="inline-start" />

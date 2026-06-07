@@ -44,34 +44,34 @@ export function RecipeView({
   const heroImageUrl = recipeImageUrl(recipe);
 
   return (
-    <section className="space-y-6">
+    <section className="flex min-w-0 flex-col gap-6">
       <Card className="overflow-hidden">
-        <div className="grid md:grid-cols-[minmax(260px,360px)_1fr]">
-          <div className="relative min-h-64 bg-primary/10">
+        <div className="grid md:grid-cols-[minmax(220px,320px)_minmax(0,1fr)]">
+          <div className="relative aspect-[4/3] bg-primary/10 md:aspect-auto md:min-h-64">
             {heroImageUrl ? (
               // eslint-disable-next-line @next/next/no-img-element
-              <img src={heroImageUrl} alt={recipe.name} className="h-full w-full object-cover" />
+              <img src={heroImageUrl} alt={recipe.name} className="size-full object-cover" />
             ) : (
-              <div className="flex h-full min-h-64 items-center justify-center text-5xl font-semibold text-primary">
+              <div className="flex size-full min-h-48 items-center justify-center text-5xl font-semibold text-primary md:min-h-64">
                 {recipe.name.trim().charAt(0).toUpperCase() || "K"}
               </div>
             )}
           </div>
-          <div>
-            <CardHeader className="border-b-0">
-              <div className="flex flex-col gap-4 md:flex-row md:items-start md:justify-between">
-                <div className="min-w-0">
+          <div className="flex min-w-0 flex-col">
+            <CardHeader>
+              <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
+                <div className="min-w-0 flex-1">
                   <p className="text-sm font-semibold text-primary">Recette sélectionnée</p>
-                  <h2 className="mt-1 text-3xl font-semibold leading-tight">{recipe.name}</h2>
+                  <h2 className="mt-1 text-2xl font-semibold leading-tight sm:text-3xl">{recipe.name}</h2>
                   {recipe.description && (
                     <p className="mt-2 max-w-2xl text-sm leading-6 text-muted-foreground">{recipe.description}</p>
                   )}
-                  <div className="mt-4 flex flex-wrap gap-2">
-                    <Badge>{sortedIngredients.length} ingrédients</Badge>
-                    <Badge>{sortedSteps.length} étapes</Badge>
+                  <div className="mt-4 flex flex-wrap items-center gap-2">
+                    <Badge variant="secondary">{sortedIngredients.length} ingrédients</Badge>
+                    <Badge variant="secondary">{sortedSteps.length} étapes</Badge>
                     {totalMinutes > 0 && (
-                      <Badge>
-                        <Clock className="h-3.5 w-3.5" />
+                      <Badge variant="secondary">
+                        <Clock data-icon="inline-start" />
                         {totalMinutes} min
                       </Badge>
                     )}
@@ -89,25 +89,25 @@ export function RecipeView({
                     )}
                   </div>
                 </div>
-                <Button onClick={onEdit}>
-                  <Pencil className="h-4 w-4" />
+                <Button onClick={onEdit} className="shrink-0 self-start">
+                  <Pencil data-icon="inline-start" />
                   Modifier
                 </Button>
               </div>
             </CardHeader>
-            <CardContent className="border-t border-border">
-              <div className="flex flex-wrap items-end gap-3">
-                <Field label="Portions">
+            <CardContent className="border-t border-border pt-4">
+              <div className="flex flex-wrap items-center gap-3">
+                <Field label="Portions" className="w-auto">
                   <Input
                     type="number"
                     min={1}
                     value={portions}
                     onChange={(event) => setPortions(Number(event.target.value) || 1)}
-                    className="w-24 rounded-full"
+                    className="w-20 rounded-full"
                   />
                 </Field>
-                {recipe.prepMinutes !== null && <Badge>Préparation {recipe.prepMinutes} min</Badge>}
-                {recipe.cookMinutes !== null && <Badge>Cuisson {recipe.cookMinutes} min</Badge>}
+                {recipe.prepMinutes !== null && <Badge variant="outline">Préparation {recipe.prepMinutes} min</Badge>}
+                {recipe.cookMinutes !== null && <Badge variant="outline">Cuisson {recipe.cookMinutes} min</Badge>}
               </div>
             </CardContent>
           </div>
@@ -126,7 +126,7 @@ export function RecipeView({
           <CardHeader>
             <h3 className="text-lg font-semibold">Ingrédients</h3>
           </CardHeader>
-          <CardContent className="space-y-3">
+          <CardContent className="flex flex-col gap-3">
             {sortedIngredients.map((item) => {
               const baseFactor = effectiveToBaseFactor(
                 item.unit,
@@ -137,8 +137,8 @@ export function RecipeView({
               );
               const baseQuantity = convertToBase(item.quantityPerServing, baseFactor);
               return (
-                <div key={item.id} className="flex gap-3 rounded-lg border border-border bg-card p-3 shadow-sm">
-                  <EntityImage src={ingredientImageUrl(item.ingredient)} label={item.ingredient.name} size="sm" />
+                <div key={item.id} className="flex items-start gap-3 rounded-lg border border-border bg-card p-3 shadow-sm">
+                  <EntityImage src={ingredientImageUrl(item.ingredient)} label={item.ingredient.name} size="xs" className="mt-0.5 shrink-0" />
                   <div className="min-w-0 flex-1">
                     <div className="flex flex-wrap items-center gap-2">
                       <span className="font-semibold">{item.ingredient.name}</span>
@@ -146,7 +146,7 @@ export function RecipeView({
                         {formatNumber(scaleQuantity(item.quantityPerServing, portions))} {item.unit.symbol}
                       </Badge>
                       {baseQuantity !== null && (
-                        <Badge>
+                        <Badge variant="outline">
                           {formatNumber(scaleQuantity(baseQuantity, portions))} {item.ingredient.baseUnit.symbol}
                         </Badge>
                       )}
@@ -163,13 +163,13 @@ export function RecipeView({
           <CardHeader>
             <h3 className="text-lg font-semibold">Étapes</h3>
           </CardHeader>
-          <CardContent className="space-y-3">
+          <CardContent className="flex flex-col gap-3">
             {sortedSteps.map((step, index) => (
-              <div key={step.id} className="grid gap-3 rounded-lg border border-border bg-card p-3 shadow-sm md:grid-cols-[34px_1fr]">
-                <div className="flex size-8 items-center justify-center rounded-full bg-primary text-sm font-semibold text-primary-foreground">
+              <div key={step.id} className="flex gap-3 rounded-lg border border-border bg-card p-3 shadow-sm">
+                <div className="flex size-8 shrink-0 items-center justify-center rounded-full bg-primary text-sm font-semibold text-primary-foreground">
                   {index + 1}
                 </div>
-                <p className="text-sm leading-6 text-foreground">{step.instruction}</p>
+                <p className="min-w-0 flex-1 pt-1 text-sm leading-6 text-foreground">{step.instruction}</p>
               </div>
             ))}
           </CardContent>
@@ -197,30 +197,30 @@ function RecipeCostCard({
   return (
     <Card className="overflow-hidden">
       <CardHeader>
-        <div className="flex flex-col gap-3 md:flex-row md:items-start md:justify-between">
-          <div>
+        <div className="flex flex-col gap-4 lg:flex-row lg:items-start lg:justify-between">
+          <div className="min-w-0">
             <p className="text-sm font-semibold text-primary">Panier estimé</p>
             <h3 className="text-xl font-semibold">Estimation achat</h3>
             <p className="text-sm text-muted-foreground">Prix théorique et achat en produits entiers.</p>
           </div>
-          <div className="flex flex-wrap gap-2">
-            <Badge className="border-primary/20 bg-primary/10 text-primary">
+          <div className="flex flex-wrap gap-2 lg:max-w-xl lg:justify-end">
+            <Badge variant="outline" className="border-primary/20 bg-primary/10 text-primary">
               Théorique total {theoreticalTotal === null ? "incomplet" : formatCurrency(theoreticalTotal)}
             </Badge>
-            <Badge className="border-primary/20 bg-card text-primary">
+            <Badge variant="outline" className="border-primary/20 bg-primary/10 text-primary">
               Théorique / portion{" "}
               {theoreticalTotal === null ? "incomplet" : formatCurrency(theoreticalTotal / portionCount)}
             </Badge>
-            <Badge className="border-border bg-card text-foreground">
+            <Badge variant="outline">
               Réel total {purchaseTotal === null ? "incomplet" : formatCurrency(purchaseTotal)}
             </Badge>
-            <Badge className="border-border bg-card text-foreground">
+            <Badge variant="outline">
               Réel / portion {purchaseTotal === null ? "incomplet" : formatCurrency(purchaseTotal / portionCount)}
             </Badge>
           </div>
         </div>
       </CardHeader>
-      <CardContent className="space-y-3">
+      <CardContent className="flex flex-col gap-3">
         {!hasAnyEstimate && (
           <div className="rounded-lg border border-dashed border-border bg-muted/30 p-6 text-center text-sm text-muted-foreground">
             Ajoute des ingrédients pour estimer le panier.
@@ -228,12 +228,13 @@ function RecipeCostCard({
         )}
         {estimates.map((estimate) => (
           <div key={estimate.ingredientId} className="rounded-lg border border-border bg-card p-4 shadow-sm">
-            <div className="grid gap-4 lg:grid-cols-[1fr_135px_135px_1.4fr_120px]">
-              <div className="flex items-center gap-3">
+            <div className="flex flex-col gap-4 xl:grid xl:grid-cols-[minmax(0,1.4fr)_110px_110px_minmax(0,1.2fr)_100px] xl:items-start">
+              <div className="flex min-w-0 items-start gap-3">
                 <EntityImage
                   src={estimate.ingredientImageUrl}
                   label={estimate.ingredientName}
-                  size="sm"
+                  size="xs"
+                  className="shrink-0"
                 />
                 <div className="min-w-0">
                   <div className="truncate font-semibold">{estimate.ingredientName}</div>
@@ -254,13 +255,13 @@ function RecipeCostCard({
                   {estimate.purchasePlan === null ? "Indisponible" : formatCurrency(estimate.purchasePlan.totalPrice)}
                 </div>
               </div>
-              <div>
+              <div className="min-w-0">
                 <div className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">Produits</div>
-                <div className="mt-1 space-y-1">
+                <div className="mt-1 flex flex-col gap-1">
                   {estimate.purchasePlan?.items.map((item) => (
-                    <div key={item.product.id} className="flex items-center gap-2">
-                      <EntityImage src={item.product.imageUrl} label={item.product.name} size="sm" />
-                      <Badge className="bg-secondary">
+                    <div key={item.product.id} className="flex min-w-0 items-center gap-2">
+                      <EntityImage src={item.product.imageUrl} label={item.product.name} size="xs" className="shrink-0" />
+                      <Badge variant="outline" className="min-w-0 truncate">
                         {item.count} x {item.product.name}
                       </Badge>
                     </div>

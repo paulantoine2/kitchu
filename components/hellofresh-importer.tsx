@@ -34,7 +34,7 @@ export function HelloFreshImporter({ busy, onImport, onError }: HelloFreshImport
   return (
     <div className="rounded-lg border border-dashed border-primary/20 bg-primary/10 p-4">
       <div className="flex flex-col gap-3 md:flex-row md:items-end">
-        <div className="flex-1 space-y-1.5">
+        <div className="flex-1 flex flex-col gap-1.5">
           <Label htmlFor="hellofresh-url" className="normal-case tracking-normal text-primary">
             Importer depuis HelloFresh
           </Label>
@@ -49,8 +49,8 @@ export function HelloFreshImporter({ busy, onImport, onError }: HelloFreshImport
             Les données sont lues depuis le JSON SSR de la page (`__NEXT_DATA__`).
           </p>
         </div>
-        <Button onClick={handleImport} disabled={disabled} className="md:mb-0.5">
-          {isPending ? <Loader2 className="h-4 w-4 animate-spin" /> : <Download className="h-4 w-4" />}
+        <Button onClick={handleImport} disabled={disabled} className="shrink-0">
+          {isPending ? <Loader2 data-icon="inline-start" className="animate-spin" /> : <Download data-icon="inline-start" />}
           Importer
         </Button>
       </div>
