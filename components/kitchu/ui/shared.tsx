@@ -1,35 +1,22 @@
 "use client";
 
 import { Plus, Save, Search, Trash2 } from "lucide-react";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardHeader } from "@/components/ui/card";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-
-export function NavButton({
-  active,
-  onClick,
-  icon,
-  children,
-}: {
-  active: boolean;
-  onClick: () => void;
-  icon: React.ReactElement<{ className?: string }>;
-  children: React.ReactNode;
-}) {
-  return (
-    <Button
-      variant={active ? "default" : "ghost"}
-      onClick={onClick}
-      className={`min-w-fit rounded-full px-3 md:flex-none md:px-4 ${
-        active ? "shadow-none" : "text-[#717171] hover:text-[#222222]"
-      }`}
-    >
-      {icon}
-      {children}
-    </Button>
-  );
-}
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import {
+  Field as ShadcnField,
+  FieldLabel,
+} from "@/components/ui/field";
+import {
+  InputGroup,
+  InputGroupAddon,
+  InputGroupInput,
+} from "@/components/ui/input-group";
+import { Item, ItemContent, ItemDescription, ItemMedia, ItemTitle } from "@/components/ui/item";
+import { ScrollArea } from "@/components/ui/scroll-area";
+import { Spinner } from "@/components/ui/spinner";
+import { cn } from "@/lib/utils";
 
 export function EntityImage({
   src,
@@ -41,23 +28,19 @@ export function EntityImage({
   size?: "sm" | "md" | "lg";
 }) {
   const className = {
-    sm: "h-14 w-14",
-    md: "h-20 w-20",
-    lg: "h-32 w-32",
+    sm: "size-14 rounded-lg",
+    md: "size-20 rounded-lg",
+    lg: "size-32 rounded-lg",
   }[size];
   const initial = label.trim().charAt(0).toUpperCase() || "?";
 
   return (
-    <div className={`${className} shrink-0 overflow-hidden rounded-lg border border-[#dddddd] bg-[#f7f4ef] shadow-sm`}>
-      {src ? (
-        // eslint-disable-next-line @next/next/no-img-element
-        <img src={src} alt={label} className="h-full w-full object-cover" />
-      ) : (
-        <div className="flex h-full w-full items-center justify-center bg-[#fff0f3] text-sm font-semibold text-[#d70466]">
-          {initial}
-        </div>
-      )}
-    </div>
+    <Avatar className={cn(className, "rounded-lg after:rounded-lg")}>
+      {src ? <AvatarImage src={src} alt={label} className="rounded-lg" /> : null}
+      <AvatarFallback className="rounded-lg bg-primary/10 font-semibold text-primary">
+        {initial}
+      </AvatarFallback>
+    </Avatar>
   );
 }
 
@@ -77,33 +60,71 @@ export function LibraryPanel({
   children: React.ReactNode;
 }) {
   return (
-    <aside className="min-w-0 space-y-3 lg:sticky lg:top-24 lg:self-start">
-      <Card className="overflow-hidden">
-        <CardHeader className="bg-white">
+    <aside className="min-w-0 lg:sticky lg:top-24 lg:self-start">
+      <Card className="flex flex-col gap-3">
+        <CardHeader className="border-b">
           <div className="flex items-center justify-between gap-3">
-            <h2 className="text-lg font-semibold">{title}</h2>
+            <CardTitle>{title}</CardTitle>
             <Button variant="secondary" size="sm" onClick={onNew} aria-label={actionLabel}>
-              <Plus className="h-4 w-4" />
+              <Plus data-icon="inline-start" />
               <span className="hidden sm:inline">{actionLabel}</span>
             </Button>
           </div>
         </CardHeader>
-        <CardContent className="space-y-3 bg-[#fffdfb]">
-          <div className="relative">
-            <Search className="pointer-events-none absolute left-3 top-3 h-4 w-4 text-[#717171]" />
-            <Input
+        <CardContent className="flex flex-col gap-3">
+          <InputGroup className="rounded-full">
+            <InputGroupAddon align="inline-start">
+              <Search />
+            </InputGroupAddon>
+            <InputGroupInput
               value={searchValue}
               onChange={(event) => onSearch(event.target.value)}
               placeholder="Rechercher"
-              className="rounded-full pl-9"
             />
-          </div>
-          <div className="max-h-[calc(100vh-260px)] space-y-2 overflow-auto pr-1">{children}</div>
+          </InputGroup>
+          <ScrollArea className="max-h-[calc(100vh-260px)] pr-1">
+            <div className="flex flex-col gap-2">{children}</div>
+          </ScrollArea>
         </CardContent>
       </Card>
     </aside>
   );
 }
+
+export function LibraryListItem({
+  active,
+  onClick,
+  media,
+  title,
+  description,
+}: {
+  active: boolean;
+  onClick: () => void;
+  media: React.ReactNode;
+  title: string;
+  description: React.ReactNode;
+}) {
+  return (
+    <Item
+      variant={active ? "outline" : "default"}
+      size="sm"
+      className={cn(
+        "w-full cursor-pointer border text-left transition-shadow",
+        active
+          ? "border-foreground bg-card shadow-md"
+          : "border-transparent hover:border-border hover:bg-card hover:shadow-sm",
+      )}
+      render={<button type="button" onClick={onClick} />}
+    >
+      <ItemMedia variant="image">{media}</ItemMedia>
+      <ItemContent>
+        <ItemTitle>{title}</ItemTitle>
+        <ItemDescription>{description}</ItemDescription>
+      </ItemContent>
+    </Item>
+  );
+}
+
 export function StickySave({
   busy,
   notice,
@@ -116,23 +137,23 @@ export function StickySave({
   onDelete?: () => void;
 }) {
   return (
-    <div className="rounded-lg border border-[#eeeeee] bg-white/95 p-3 shadow-lg backdrop-blur md:sticky md:bottom-4 md:z-10">
+    <Card className="bg-card/95 p-3 shadow-lg backdrop-blur md:sticky md:bottom-4 md:z-10">
       <div className="flex flex-col gap-3 md:flex-row md:items-center md:justify-between">
-        <p className="min-h-5 text-sm text-[#717171]">{notice}</p>
+        <p className="min-h-5 text-sm text-muted-foreground">{notice}</p>
         <div className="flex gap-2">
           {onDelete && (
             <Button variant="outline" onClick={onDelete} disabled={busy}>
-              <Trash2 className="h-4 w-4" />
+              <Trash2 data-icon="inline-start" />
               Supprimer
             </Button>
           )}
           <Button onClick={onSave} disabled={busy}>
-            <Save className="h-4 w-4" />
+            {busy ? <Spinner data-icon="inline-start" /> : <Save data-icon="inline-start" />}
             {busy ? "Enregistrement..." : "Enregistrer"}
           </Button>
         </div>
       </div>
-    </div>
+    </Card>
   );
 }
 
@@ -148,9 +169,9 @@ export function Field({
   children: React.ReactNode;
 }) {
   return (
-    <label className={`space-y-1.5 ${className ?? ""}`}>
-      <Label className={showLabel ? undefined : "sr-only"}>{label}</Label>
+    <ShadcnField className={className}>
+      <FieldLabel className={showLabel ? undefined : "sr-only"}>{label}</FieldLabel>
       {children}
-    </label>
+    </ShadcnField>
   );
 }

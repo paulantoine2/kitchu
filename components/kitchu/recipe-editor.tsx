@@ -16,7 +16,6 @@ import {
 } from "@/components/ui/combobox";
 import {
   Dialog,
-  DialogBody,
   DialogContent,
   DialogDescription,
   DialogFooter,
@@ -24,7 +23,7 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
-import { Select } from "@/components/ui/select";
+import { NativeSelect } from "@/components/ui/native-select";
 import { Textarea } from "@/components/ui/textarea";
 import type { HelloFreshImportResult } from "@/lib/hellofresh";
 import { suggestedBaseUnitCode } from "@/lib/hellofresh/units";
@@ -184,7 +183,7 @@ export function RecipeEditor({
               <EntityImage src={draftRecipeImageUrl(draft, ingredients)} label={draft.name || "Recette"} size="md" />
               <div>
                 <h2 className="text-xl font-semibold">{draft.id ? "Modifier la recette" : "Nouvelle recette"}</h2>
-                <p className="text-sm text-[#717171]">Les quantités sont enregistrées pour une portion.</p>
+                <p className="text-sm text-muted-foreground">Les quantités sont enregistrées pour une portion.</p>
               </div>
             </div>
             <div className="flex flex-wrap items-center gap-2">
@@ -275,7 +274,7 @@ export function RecipeEditor({
                 className={`rounded-lg border p-3 shadow-sm ${
                   row.importStatus && row.importStatus !== "matched"
                     ? "border-amber-200 bg-amber-50/50"
-                    : "border-[#eeeeee] bg-white"
+                    : "border-border bg-card"
                 }`}
               >
                 <div className="grid gap-3 xl:grid-cols-[1.4fr_110px_150px_1fr_44px]">
@@ -297,14 +296,14 @@ export function RecipeEditor({
                         <ComboboxInput placeholder="Chercher un ingrédient" showClear />
                         <ComboboxContent>
                           <ComboboxEmpty>Aucun ingrédient trouvé.</ComboboxEmpty>
-                          <ComboboxList<IngredientRecord>>
+                          <ComboboxList>
                             {(option) => (
                               <ComboboxItem key={option.id} value={option}>
                                 <div className="flex min-w-0 items-center gap-3">
                                   <EntityImage src={ingredientImageUrl(option)} label={option.name} size="sm" />
                                   <div className="min-w-0">
                                     <div className="truncate font-semibold">{option.name}</div>
-                                    <div className="truncate text-xs text-[#717171]">
+                                    <div className="truncate text-xs text-muted-foreground">
                                       {usableUnitsForIngredient(option, units, globalRatios).length} unités
                                     </div>
                                   </div>
@@ -342,7 +341,7 @@ export function RecipeEditor({
                     />
                   </Field>
                   <Field label="Unité" showLabel={false}>
-                    <Select
+                    <NativeSelect
                       value={row.unitId}
                       onChange={(event) => updateRow(row.key, { unitId: event.target.value })}
                       disabled={!ingredient}
@@ -353,7 +352,7 @@ export function RecipeEditor({
                           {item.unit.symbol}
                         </option>
                       ))}
-                    </Select>
+                    </NativeSelect>
                   </Field>
                   <Field label="Note" showLabel={false}>
                     <Input
@@ -413,7 +412,7 @@ export function RecipeEditor({
         <CardContent className="space-y-2">
           {draft.steps.map((step, index) => (
             <div key={step.key} className="grid gap-2 md:grid-cols-[34px_1fr_92px]">
-              <div className="flex h-10 items-center justify-center rounded-full bg-[#222222] text-sm font-semibold text-white">
+              <div className="flex size-10 items-center justify-center rounded-full bg-primary text-sm font-semibold text-primary-foreground">
                 {index + 1}
               </div>
               <Input
@@ -465,8 +464,8 @@ export function RecipeEditor({
                   Choisis l&apos;unité de base avant de rattacher cet ingrédient à la recette.
                 </DialogDescription>
               </DialogHeader>
-              <DialogBody>
-                <div className="flex items-center gap-3 rounded-lg border border-[#eeeeee] bg-[#fffdfb] p-3">
+              <div className="flex flex-col gap-4">
+                <div className="flex items-center gap-3 rounded-lg border border-border bg-muted/30 p-3">
                   <EntityImage
                     src={ingredientDialog.draft.imageUrl}
                     label={ingredientDialog.draft.name || "Ingrédient"}
@@ -476,9 +475,9 @@ export function RecipeEditor({
                     <div className="truncate font-semibold">{ingredientDialog.draft.name || "Nouvel ingrédient"}</div>
                     <div className="mt-1 flex flex-wrap gap-2">
                       {ingredientDialog.suggestedUnitCode && (
-                        <Badge className="bg-white">Unité HelloFresh {ingredientDialog.suggestedUnitCode}</Badge>
+                        <Badge className="bg-card">Unité HelloFresh {ingredientDialog.suggestedUnitCode}</Badge>
                       )}
-                      {dialogBaseUnit && <Badge className="bg-white">Base {dialogBaseUnit.symbol}</Badge>}
+                      {dialogBaseUnit && <Badge className="bg-card">Base {dialogBaseUnit.symbol}</Badge>}
                     </div>
                   </div>
                 </div>
@@ -491,7 +490,7 @@ export function RecipeEditor({
                     />
                   </Field>
                   <Field label="Unité de base">
-                    <Select
+                    <NativeSelect
                       value={dialogBaseUnit?.kind ?? ""}
                       onChange={(event) => {
                         const canonicalUnit = canonicalBaseUnitForKind(event.target.value, units);
@@ -503,7 +502,7 @@ export function RecipeEditor({
                           {measurementKindLabel(kind)} ({unit.symbol})
                         </option>
                       ))}
-                    </Select>
+                    </NativeSelect>
                   </Field>
                 </div>
 
@@ -520,7 +519,7 @@ export function RecipeEditor({
                     onChange={(event) => updateDialogDraft({ notes: event.target.value })}
                   />
                 </Field>
-              </DialogBody>
+              </div>
               <DialogFooter>
                 <Button variant="outline" onClick={() => setIngredientDialog(null)} disabled={busy}>
                   Annuler

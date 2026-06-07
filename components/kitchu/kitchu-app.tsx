@@ -29,7 +29,9 @@ import { toIngredientPayload, toRecipePayload, toUnitPayload } from "@/component
 import { RecipeEditor } from "@/components/kitchu/recipe-editor";
 import { RecipeView } from "@/components/kitchu/recipe-view";
 import type { IngredientRecord, KitchuAppProps } from "@/components/kitchu/types";
-import { EntityImage, LibraryPanel, NavButton } from "@/components/kitchu/ui/shared";
+import { EntityImage, LibraryListItem, LibraryPanel } from "@/components/kitchu/ui/shared";
+import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Empty, EmptyDescription } from "@/components/ui/empty";
 import { UnitEditor, UnitListButton, UnitListSection } from "@/components/kitchu/unit-editor";
 import {
   canonicalBaseUnitForKind,
@@ -91,33 +93,34 @@ export function KitchuApp({ units, globalRatios, ingredients, recipes }: KitchuA
   }
 
   return (
-    <main className="min-h-screen bg-[#fffaf7] text-[#222222]">
-      <header className="sticky top-0 z-20 border-b border-[#dddddd] bg-white/95 backdrop-blur">
+    <main className="min-h-screen bg-background text-foreground">
+      <header className="sticky top-0 z-20 border-b border-border bg-card/95 backdrop-blur">
         <div className="mx-auto flex max-w-[1480px] min-w-0 flex-col gap-4 px-4 py-4 md:flex-row md:items-center md:justify-between lg:px-8">
           <div className="flex items-center gap-3">
-            <div className="flex h-11 w-11 items-center justify-center rounded-lg bg-[#ff385c] text-white shadow-sm">
-              <ChefHat className="h-6 w-6" />
+            <div className="flex size-11 items-center justify-center rounded-lg bg-primary text-primary-foreground shadow-sm">
+              <ChefHat className="size-6" />
             </div>
             <div>
               <h1 className="text-2xl font-semibold tracking-normal">Kitchu</h1>
-              <p className="text-sm text-[#717171]">Recettes, ingrédients, unités et produits réels.</p>
+              <p className="text-sm text-muted-foreground">Recettes, ingrédients, unités et produits réels.</p>
             </div>
           </div>
-          <nav className="flex max-w-full gap-1 overflow-x-auto rounded-full border border-[#dddddd] bg-white p-1 shadow-[0_3px_14px_rgba(0,0,0,0.07)] md:w-auto md:gap-2">
-            <NavButton active={tab === "recipes"} onClick={() => setTab("recipes")} icon={<BookOpen />}>
-              Recettes
-            </NavButton>
-            <NavButton
-              active={tab === "ingredients"}
-              onClick={() => setTab("ingredients")}
-              icon={<Utensils />}
-            >
-              Ingrédients
-            </NavButton>
-            <NavButton active={tab === "units"} onClick={() => setTab("units")} icon={<Package />}>
-              Unités
-            </NavButton>
-          </nav>
+          <Tabs value={tab} onValueChange={(value) => setTab(value as typeof tab)}>
+            <TabsList className="h-auto max-w-full overflow-x-auto rounded-full border border-border bg-card p-1 shadow-sm md:w-auto">
+              <TabsTrigger value="recipes" className="rounded-full px-3 md:px-4">
+                <BookOpen data-icon="inline-start" />
+                Recettes
+              </TabsTrigger>
+              <TabsTrigger value="ingredients" className="rounded-full px-3 md:px-4">
+                <Utensils data-icon="inline-start" />
+                Ingrédients
+              </TabsTrigger>
+              <TabsTrigger value="units" className="rounded-full px-3 md:px-4">
+                <Package data-icon="inline-start" />
+                Unités
+              </TabsTrigger>
+            </TabsList>
+          </Tabs>
         </div>
       </header>
 
@@ -136,30 +139,22 @@ export function KitchuApp({ units, globalRatios, ingredients, recipes }: KitchuA
               }}
             >
               {filteredRecipes.map((recipe) => (
-                <button
+                <LibraryListItem
                   key={recipe.id}
-                  className={`block w-full min-w-0 rounded-lg border p-2 text-left transition ${
-                    selectedRecipeId === recipe.id
-                      ? "border-[#222222] bg-white shadow-[0_8px_28px_rgba(0,0,0,0.08)]"
-                      : "border-transparent hover:border-[#dddddd] hover:bg-white hover:shadow-[0_4px_18px_rgba(0,0,0,0.05)]"
-                  }`}
+                  active={selectedRecipeId === recipe.id}
                   onClick={() => {
                     setSelectedRecipeId(recipe.id);
                     setRecipeDraft(recipeToDraft(recipe));
                     setRecipeMode("view");
                   }}
-                >
-                  <div className="flex items-center gap-3">
-                    <EntityImage src={recipeImageUrl(recipe)} label={recipe.name} size="sm" />
-                    <div className="min-w-0 flex-1">
-                      <div className="truncate font-semibold">{recipe.name}</div>
-                      <div className="mt-1 flex gap-2 text-xs text-[#717171]">
-                        <span>{recipe.ingredients.length} ingrédients</span>
-                        <span>{recipe.steps.length} étapes</span>
-                      </div>
-                    </div>
-                  </div>
-                </button>
+                  media={<EntityImage src={recipeImageUrl(recipe)} label={recipe.name} size="sm" />}
+                  title={recipe.name}
+                  description={
+                    <>
+                      {recipe.ingredients.length} ingrédients · {recipe.steps.length} étapes
+                    </>
+                  }
+                />
               ))}
             </LibraryPanel>
             {recipeMode === "view" && selectedRecipe ? (
@@ -320,30 +315,17 @@ export function KitchuApp({ units, globalRatios, ingredients, recipes }: KitchuA
                 const usableUnitCount = usableUnitsForIngredient(ingredient, units, globalRatios).length;
                 const specificRatioCount = specificIngredientUnits(ingredient, globalRatios, units).length;
                 return (
-                  <button
+                  <LibraryListItem
                     key={ingredient.id}
-                    className={`block w-full min-w-0 rounded-lg border p-2 text-left transition ${
-                      selectedIngredientId === ingredient.id
-                        ? "border-[#222222] bg-white shadow-[0_8px_28px_rgba(0,0,0,0.08)]"
-                        : "border-transparent hover:border-[#dddddd] hover:bg-white hover:shadow-[0_4px_18px_rgba(0,0,0,0.05)]"
-                    }`}
+                    active={selectedIngredientId === ingredient.id}
                     onClick={() => {
                       setSelectedIngredientId(ingredient.id);
                       setIngredientDraft(ingredientToDraft(ingredient, defaultBaseUnitId));
                     }}
-                  >
-                    <div className="flex items-center gap-3">
-                      <EntityImage src={ingredientImageUrl(ingredient)} label={ingredient.name} size="sm" />
-                      <div className="min-w-0 flex-1">
-                        <div className="truncate font-semibold">{ingredient.name}</div>
-                        <div className="mt-1 text-xs text-[#717171]">
-                          {usableUnitCount} unités · {specificRatioCount} ratio
-                          {specificRatioCount > 1 ? "s" : ""} spécifique
-                          {specificRatioCount > 1 ? "s" : ""} · {ingredient.products.length} produits
-                        </div>
-                      </div>
-                    </div>
-                  </button>
+                    media={<EntityImage src={ingredientImageUrl(ingredient)} label={ingredient.name} size="sm" />}
+                    title={ingredient.name}
+                    description={`${usableUnitCount} unités · ${specificRatioCount} ratio${specificRatioCount > 1 ? "s" : ""} spécifique${specificRatioCount > 1 ? "s" : ""} · ${ingredient.products.length} produits`}
+                  />
                 );
               })}
             </LibraryPanel>
@@ -416,9 +398,9 @@ export function KitchuApp({ units, globalRatios, ingredients, recipes }: KitchuA
                 </UnitListSection>
               )}
               {editableUnits.length === 0 && (
-                <div className="rounded-lg border border-dashed border-[#dddddd] bg-white p-4 text-center text-sm text-[#717171]">
-                  Aucune unité trouvée.
-                </div>
+                <Empty className="border-border bg-card">
+                  <EmptyDescription>Aucune unité trouvée.</EmptyDescription>
+                </Empty>
               )}
             </LibraryPanel>
             <UnitEditor

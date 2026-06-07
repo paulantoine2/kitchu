@@ -6,7 +6,7 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
-import { Select } from "@/components/ui/select";
+import { NativeSelect } from "@/components/ui/native-select";
 import { formatNumber } from "@/lib/utils";
 import type {
   IngredientRecord,
@@ -16,7 +16,7 @@ import type {
   UnitRatioRecord,
   UnitRecord,
 } from "@/components/kitchu/types";
-import { Field, StickySave } from "@/components/kitchu/ui/shared";
+import { Field, LibraryListItem, StickySave } from "@/components/kitchu/ui/shared";
 import {
   canonicalBaseUnitForKind,
   configurableMeasurementKindsForUnit,
@@ -30,9 +30,9 @@ import {
 
 export function UnitListSection({ title, children }: { title: string; children: React.ReactNode }) {
   return (
-    <div className="space-y-2">
-      <div className="px-1 text-xs font-semibold uppercase tracking-wide text-[#717171]">{title}</div>
-      <div className="space-y-2">{children}</div>
+    <div className="flex flex-col gap-2">
+      <div className="px-1 text-xs font-semibold uppercase tracking-wide text-muted-foreground">{title}</div>
+      <div className="flex flex-col gap-2">{children}</div>
     </div>
   );
 }
@@ -47,24 +47,17 @@ export function UnitListButton({
   onClick: () => void;
 }) {
   return (
-    <button
-      className={`block w-full min-w-0 rounded-lg border px-3 py-3 text-left transition ${
-        active
-          ? "border-[#222222] bg-white shadow-[0_8px_28px_rgba(0,0,0,0.08)]"
-          : "border-transparent hover:border-[#dddddd] hover:bg-white hover:shadow-[0_4px_18px_rgba(0,0,0,0.05)]"
-      }`}
+    <LibraryListItem
+      active={active}
       onClick={onClick}
-    >
-      <div className="flex items-center justify-between gap-3">
-        <span className="min-w-0 truncate font-semibold">{unit.name}</span>
-        <div className="flex shrink-0 gap-1">
-          <Badge>{unit.symbol}</Badge>
+      media={
+        <div className="flex size-10 items-center justify-center rounded-sm bg-secondary font-semibold">
+          {unit.symbol}
         </div>
-      </div>
-      <div className="mt-1 text-xs text-[#717171]">
-        {unit.code} · {unit.kind.toLowerCase()}
-      </div>
-    </button>
+      }
+      title={unit.name}
+      description={`${unit.code} · ${unit.kind.toLowerCase()}`}
+    />
   );
 }
 export function UnitEditor({
@@ -129,7 +122,7 @@ export function UnitEditor({
           <div className="flex flex-col gap-2 md:flex-row md:items-start md:justify-between">
             <div>
               <h2 className="text-xl font-semibold">{draft.id ? "Modifier l'unité" : "Nouvelle unité"}</h2>
-              <p className="text-sm text-[#717171]">Base commune utilisée par les ingrédients.</p>
+              <p className="text-sm text-muted-foreground">Base commune utilisée par les ingrédients.</p>
             </div>
             <Badge>{units.length} unités</Badge>
           </div>
@@ -157,7 +150,7 @@ export function UnitEditor({
           </div>
           <div className="grid gap-3 md:grid-cols-[220px_1fr]">
             <Field label="Famille">
-              <Select
+              <NativeSelect
                 value={draft.kind}
                 onChange={(event) => setDraft((current) => ({ ...current, kind: event.target.value }))}
               >
@@ -166,7 +159,7 @@ export function UnitEditor({
                 <option value="COUNT">Comptage</option>
                 <option value="PACKAGE">Conditionnement</option>
                 <option value="CUSTOM">Personnalisée</option>
-              </Select>
+              </NativeSelect>
             </Field>
             <div className="flex items-end">
               <div className="flex flex-wrap gap-2">
@@ -182,7 +175,7 @@ export function UnitEditor({
           <div className="flex items-center justify-between gap-3">
             <div>
               <h3 className="text-lg font-semibold">Ratios vers masse / volume</h3>
-              <p className="text-sm text-[#717171]">
+              <p className="text-sm text-muted-foreground">
                 Pour les autres unités, définis simplement leur équivalent en grammes et/ou en millilitres.
               </p>
             </div>
@@ -191,17 +184,17 @@ export function UnitEditor({
         </CardHeader>
         <CardContent className="space-y-3">
           {!currentUnit && (
-            <div className="rounded-lg border border-dashed border-[#dddddd] bg-[#fffdfb] p-6 text-center text-sm text-[#717171]">
+            <div className="rounded-lg border border-dashed border-border bg-muted/30 p-6 text-center text-sm text-muted-foreground">
               Enregistre l&apos;unité avant d&apos;ajouter ses ratios.
             </div>
           )}
           {currentUnit && isHardcodedMeasurementKind(currentUnit.kind) && (
-            <div className="rounded-lg border border-dashed border-[#dddddd] bg-[#fffdfb] p-6 text-center text-sm text-[#717171]">
+            <div className="rounded-lg border border-dashed border-border bg-muted/30 p-6 text-center text-sm text-muted-foreground">
               Les conversions entre g/kg et ml/cl/l sont définies dans le code.
             </div>
           )}
           {currentUnit && !isHardcodedMeasurementKind(currentUnit.kind) && measurementTargets.length === 0 && (
-            <div className="rounded-lg border border-dashed border-[#dddddd] bg-[#fffdfb] p-6 text-center text-sm text-[#717171]">
+            <div className="rounded-lg border border-dashed border-border bg-muted/30 p-6 text-center text-sm text-muted-foreground">
               Les unités de base g et ml doivent exister pour ajouter des conversions globales.
             </div>
           )}
@@ -223,24 +216,24 @@ export function UnitEditor({
       </Card>
 
       {showDeleteWarning && currentUnit && (
-        <Card className="border-[#ffd1dc] bg-[#fff8fa]">
+        <Card className="border-primary/20 bg-primary/5">
           <CardHeader>
             <div className="flex flex-col gap-3 md:flex-row md:items-start md:justify-between">
               <div className="space-y-1">
-                <Badge className="w-fit border-[#ffd1dc] bg-white text-[#d70466]">Action irréversible</Badge>
-                <h3 className="text-lg font-semibold text-[#d70466]">
+                <Badge className="w-fit border-primary/20 bg-card text-primary">Action irréversible</Badge>
+                <h3 className="text-lg font-semibold text-primary">
                   Supprimer l&apos;unité « {currentUnit.name} » ?
                 </h3>
-                <p className="text-sm leading-6 text-[#717171]">
+                <p className="text-sm leading-6 text-muted-foreground">
                   Cette unité est encore liée à {formatImpactCount(impactedIngredients.length)}.
                   Vérifie les changements ci-dessous avant de confirmer.
                 </p>
               </div>
-              <Badge className="w-fit bg-white">{currentUnit.symbol}</Badge>
+              <Badge className="w-fit bg-card">{currentUnit.symbol}</Badge>
             </div>
           </CardHeader>
           <CardContent className="space-y-4">
-            <div className="rounded-lg border border-[#ffd1dc] bg-white p-3 text-sm leading-6 text-[#717171]">
+            <div className="rounded-lg border border-primary/20 bg-card p-3 text-sm leading-6 text-muted-foreground">
               En confirmant, Kitchu supprimera l&apos;unité et nettoiera automatiquement les références associées
               pour éviter des conversions incohérentes.
             </div>
@@ -248,19 +241,19 @@ export function UnitEditor({
               {impactedIngredients.map((impact) => (
                 <div
                   key={impact.ingredientId}
-                  className="rounded-lg border border-[#ffd1dc] bg-white p-3"
+                  className="rounded-lg border border-primary/20 bg-card p-3"
                 >
                   <div className="font-semibold">{impact.ingredientName}</div>
                   <div className="mt-3 grid gap-2 md:grid-cols-2">
                     {impact.reasons.map((reason) => (
                       <div
                         key={`${impact.ingredientId}-${reason.title}-${reason.detail}`}
-                        className="rounded-md border border-[#eeeeee] bg-[#fffdfb] p-3"
+                        className="rounded-md border border-border bg-muted/30 p-3"
                       >
-                        <div className="text-xs font-semibold uppercase tracking-wide text-[#d70466]">
+                        <div className="text-xs font-semibold uppercase tracking-wide text-primary">
                           {reason.title}
                         </div>
-                        <div className="mt-1 text-sm leading-5 text-[#717171]">{reason.detail}</div>
+                        <div className="mt-1 text-sm leading-5 text-muted-foreground">{reason.detail}</div>
                       </div>
                     ))}
                   </div>
@@ -308,11 +301,11 @@ function MeasurementRatioEditorRow({
   const numericFactor = Number(factor);
 
   return (
-    <div className="grid gap-3 rounded-lg border border-[#eeeeee] bg-white p-3 shadow-sm md:grid-cols-[1fr_160px_1fr_142px]">
+    <div className="grid gap-3 rounded-lg border border-border bg-card p-3 shadow-sm md:grid-cols-[1fr_160px_1fr_142px]">
       <div>
-        <div className="text-xs font-semibold uppercase tracking-wide text-[#717171]">Destination</div>
+        <div className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">Destination</div>
         <div className="mt-1 font-semibold">{targetLabel}</div>
-        <div className="text-sm text-[#717171]">{targetUnit.symbol}</div>
+        <div className="text-sm text-muted-foreground">{targetUnit.symbol}</div>
       </div>
       <Field label="Ratio">
         <Input

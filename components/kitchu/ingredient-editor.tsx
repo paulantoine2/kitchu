@@ -5,7 +5,7 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
-import { Select } from "@/components/ui/select";
+import { NativeSelect } from "@/components/ui/native-select";
 import { Textarea } from "@/components/ui/textarea";
 import { effectiveToBaseFactor, globalConversionFactor, pricePerBaseUnit } from "@/lib/conversions";
 import { formatCurrency, formatNumber } from "@/lib/utils";
@@ -96,7 +96,7 @@ export function IngredientEditor({
             <Input value={draft.name} onChange={(event) => setDraft({ ...draft, name: event.target.value })} />
           </Field>
           <Field label="Type de mesure">
-            <Select
+            <NativeSelect
               value={baseUnit?.kind ?? ""}
               onChange={(event) => {
                 const canonicalUnit = canonicalBaseUnitForKind(event.target.value, units);
@@ -114,9 +114,9 @@ export function IngredientEditor({
                   {measurementKindLabel(kind)} ({unit.symbol})
                 </option>
               ))}
-            </Select>
+            </NativeSelect>
             {baseUnit && (
-              <p className="text-xs leading-5 text-[#717171]">
+              <p className="text-xs leading-5 text-muted-foreground">
                 Calculs en {measurementKindLabel(baseUnit.kind).toLowerCase()} via {baseUnit.symbol}.
               </p>
             )}
@@ -139,7 +139,7 @@ export function IngredientEditor({
           <div className="flex flex-col gap-3 md:flex-row md:items-start md:justify-between">
             <div>
               <h3 className="text-lg font-semibold">Ratios spécifiques</h3>
-              <p className="text-sm leading-5 text-[#717171]">
+              <p className="text-sm leading-5 text-muted-foreground">
                 {automaticUnitCount} unité{automaticUnitCount > 1 ? "s" : ""} disponible
                 {automaticUnitCount > 1 ? "s" : ""} automatiquement pour ce type de mesure. Ajoute seulement
                 les unités variables comme pièce, filet ou boîte.
@@ -162,7 +162,7 @@ export function IngredientEditor({
         </CardHeader>
         <CardContent className="space-y-3">
           {specificRows.length === 0 && (
-            <div className="rounded-lg border border-dashed border-[#dddddd] bg-[#fffdfb] p-6 text-center text-sm text-[#717171]">
+            <div className="rounded-lg border border-dashed border-border bg-muted/30 p-6 text-center text-sm text-muted-foreground">
               Aucun ratio spécifique. Les unités du type de mesure sont déjà utilisables.
             </div>
           )}
@@ -174,9 +174,9 @@ export function IngredientEditor({
               units,
             });
             return (
-              <div key={row.key} className="grid gap-3 rounded-lg border border-[#eeeeee] bg-white p-3 shadow-sm md:grid-cols-[1fr_160px_1fr_44px]">
+              <div key={row.key} className="grid gap-3 rounded-lg border border-border bg-card p-3 shadow-sm md:grid-cols-[1fr_160px_1fr_44px]">
                 <Field label="Unité">
-                  <Select
+                  <NativeSelect
                     value={row.unitId}
                     onChange={(event) => updateUnitChoice(row.key, event.target.value)}
                   >
@@ -186,7 +186,7 @@ export function IngredientEditor({
                         {option.name} ({option.symbol})
                       </option>
                     ))}
-                  </Select>
+                  </NativeSelect>
                 </Field>
                 <Field label="Ratio ingrédient">
                   <Input
@@ -206,9 +206,9 @@ export function IngredientEditor({
                     }
                   />
                 </Field>
-                <div className="flex items-end text-sm text-[#717171]">
+                <div className="flex items-end text-sm text-muted-foreground">
                   {unit && baseUnit && effectiveFactor ? (
-                    <Badge className="border-[#ffd1dc] bg-[#fff0f3] text-[#d70466]">
+                    <Badge className="border-primary/20 bg-primary/10 text-primary">
                       1 {unit.symbol} = {formatNumber(effectiveFactor)} {baseUnit.symbol} · ingrédient
                     </Badge>
                   ) : (
@@ -274,7 +274,7 @@ export function IngredientEditor({
         </CardHeader>
         <CardContent className="space-y-3">
           {draft.products.length === 0 && (
-            <div className="rounded-lg border border-dashed border-[#dddddd] bg-[#fffdfb] p-6 text-center text-sm text-[#717171]">
+            <div className="rounded-lg border border-dashed border-border bg-muted/30 p-6 text-center text-sm text-muted-foreground">
               Aucun produit lié.
             </div>
           )}
@@ -300,7 +300,7 @@ export function IngredientEditor({
               ? derivedPrice * preferredPriceFactor
               : derivedPrice;
             return (
-              <div key={product.key} className="rounded-lg border border-[#eeeeee] bg-white p-3 shadow-sm">
+              <div key={product.key} className="rounded-lg border border-border bg-card p-3 shadow-sm">
                 <div className="grid gap-3 lg:grid-cols-[56px_1fr_1fr_1.2fr_110px_140px_150px_110px_44px]">
                   <div className="flex items-end">
                     <EntityImage src={product.imageUrl} label={product.name || "Produit"} size="sm" />
@@ -324,7 +324,7 @@ export function IngredientEditor({
                     />
                   </Field>
                   <Field label="Unité">
-                    <Select
+                    <NativeSelect
                       value={product.packageUnitId}
                       onChange={(event) =>
                         updateProduct(setDraft, product.key, {
@@ -346,7 +346,7 @@ export function IngredientEditor({
                           {item.symbol}
                         </option>
                       ))}
-                    </Select>
+                    </NativeSelect>
                   </Field>
                   <Field label="Ratio produit">
                     <Input
@@ -400,7 +400,7 @@ export function IngredientEditor({
                   </Field>
                   <div className="flex items-end">
                     {standardPrice !== null && standardPriceUnit ? (
-                      <Badge className="border-[#ffd1dc] bg-[#fff0f3] text-[#d70466]">
+                      <Badge className="border-primary/20 bg-primary/10 text-primary">
                         {formatCurrency(standardPrice)} / {standardPriceUnit.symbol} ·{" "}
                         {usesSystemRatio ? "défini dans Unités" : "produit"}
                       </Badge>

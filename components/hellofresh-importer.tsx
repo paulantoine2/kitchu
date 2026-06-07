@@ -32,10 +32,10 @@ export function HelloFreshImporter({ busy, onImport, onError }: HelloFreshImport
   const disabled = busy || isPending || !url.trim();
 
   return (
-    <div className="rounded-lg border border-dashed border-[#ffd1dc] bg-[#fff0f3]/70 p-4">
+    <div className="rounded-lg border border-dashed border-primary/20 bg-primary/10 p-4">
       <div className="flex flex-col gap-3 md:flex-row md:items-end">
         <div className="flex-1 space-y-1.5">
-          <Label htmlFor="hellofresh-url" className="normal-case tracking-normal text-[#d70466]">
+          <Label htmlFor="hellofresh-url" className="normal-case tracking-normal text-primary">
             Importer depuis HelloFresh
           </Label>
           <Input
@@ -43,9 +43,9 @@ export function HelloFreshImporter({ busy, onImport, onError }: HelloFreshImport
             value={url}
             onChange={(event) => setUrl(event.target.value)}
             placeholder="https://www.hellofresh.fr/recipes/..."
-            className="bg-white"
+            className="bg-card"
           />
-          <p className="text-xs text-[#717171]">
+          <p className="text-xs text-muted-foreground">
             Les données sont lues depuis le JSON SSR de la page (`__NEXT_DATA__`).
           </p>
         </div>
@@ -78,13 +78,13 @@ export type RecipeImportStatus = "matched" | "ingredient_missing" | "unit_missin
 export function importStatusClassName(status: RecipeImportStatus | undefined): string {
   switch (status) {
     case "matched":
-      return "border-[#cce8d8] bg-[#f0fff6] text-[#0b6b3a]";
+      return "border-emerald-200 bg-emerald-50 text-emerald-900";
     case "ingredient_missing":
       return "border-amber-200 bg-amber-50 text-amber-900";
     case "unit_missing":
       return "border-orange-200 bg-orange-50 text-orange-900";
     case "unit_unknown":
-      return "border-[#dddddd] bg-[#f7f4ef] text-[#222222]";
+      return "border-border bg-secondary text-foreground";
     default:
       return "";
   }
