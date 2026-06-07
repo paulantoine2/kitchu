@@ -1,0 +1,1046 @@
+{
+  "recipeId": "672890c2d49f300fd61630ab",
+  "name": "Porc doré & réduction fraise balsamique",
+  "clonedFrom": "671a611bd68888376c8d3997",
+  "description": "Bœuf, porc, poulet, agneau... Nos viandes sont 100% origine France*, et nos charcuteries origine UE.\n*En cas de problème d'approvisionnement nous favorisons des fournisseurs européens de qualité équivalente.",
+  "descriptionHTML": "<p>Bœuf, porc, poulet, agneau... Nos viandes sont 100% origine France*, et nos charcuteries origine UE.\n*En cas de problème d'approvisionnement nous favorisons des fournisseurs européens de qualité équivalente.</p>",
+  "descriptionMarkdown": "Bœuf, porc, poulet, agneau... Nos viandes sont 100% origine France*, et nos charcuteries origine UE. \n*En cas de problème d'approvisionnement nous favorisons des fournisseurs européens de qualité équivalente.",
+  "uuid": "04a4005a-4a4a-41c1-9143-c8e4ac25bf6f",
+  "label": [],
+  "allergens": [
+    {
+      "type": "traces-of-nuts",
+      "name": "Fruits à coque",
+      "slug": "traces-of-fruits-a-coque",
+      "iconPath": "/allergens/57962a07b7e8697d4b305302-20b4388c.png",
+      "tracesOf": true,
+      "triggersTracesOf": false,
+      "id": "57962a07b7e8697d4b305302"
+    },
+    {
+      "type": "traces-of-milk",
+      "name": "Lait (contient du lactose)",
+      "slug": "traces-of-lait-contient-du-lactose",
+      "iconPath": "",
+      "tracesOf": true,
+      "triggersTracesOf": false,
+      "id": "5acf97b7ae08b54d88061162"
+    },
+    {
+      "type": "traces-of-mustard",
+      "name": "Moutarde",
+      "slug": "traces-of-moutarde",
+      "iconPath": "",
+      "tracesOf": true,
+      "triggersTracesOf": false,
+      "id": "5de91d27f4c17e42c17aef94"
+    },
+    {
+      "id": "5acf97a2ae08b54dad34eb82",
+      "type": "traces-of-sulphites",
+      "name": "Anhydride sulfureux et sulfites",
+      "slug": "traces-of-anhydride-sulfureux-et-sulfites",
+      "iconPath": "",
+      "tracesOf": true,
+      "triggersTracesOf": false
+    },
+    {
+      "iconPath": "",
+      "tracesOf": true,
+      "triggersTracesOf": true,
+      "id": "57962a07b7e8697d4b3052f3",
+      "type": "maycontaintracesofallergens",
+      "name": "Peut contenir des traces d'allergènes",
+      "slug": "peut-contenir-des-traces-dallergenes"
+    }
+  ],
+  "languageCode": "fr-FR",
+  "servingSize": 733,
+  "headline": "avec des légumes rissolés au romarin",
+  "country": "FR",
+  "uniqueRecipeCode": "RFR20161865-SP-1-23",
+  "imagePath": "/image/HF_Y25_R228_W02_FR_RFR20161865-20_MAIN_high-fad0e1cd.jpg",
+  "totalTime": "PT35M",
+  "prepTime": "PT45M",
+  "difficulty": 2,
+  "isAddon": false,
+  "seoName": "",
+  "seoDescription": "",
+  "canonical": "",
+  "averageRating": 4,
+  "favoritesCount": 7,
+  "ratingsCount": 2,
+  "nutrition": [
+    {
+      "id": "6a1ea349eb2a01bc740dd4ef",
+      "type": "57b42a48b7e8697d4b30530d",
+      "name": "Énergie (kJ)",
+      "unit": "kJ",
+      "amount": 3118
+    },
+    {
+      "id": "6a1ea349eb2a01bc740dd4f0",
+      "type": "57b42a48b7e8697d4b305304",
+      "name": "Énergie (kcal)",
+      "unit": "kcal",
+      "amount": 745
+    },
+    {
+      "type": "57b42a48b7e8697d4b305307",
+      "name": "Matières grasses",
+      "unit": "g",
+      "id": "6a1ea349eb2a01bc740dd4f1",
+      "amount": 33.2
+    },
+    {
+      "id": "6a1ea349eb2a01bc740dd4f2",
+      "type": "57b42a48b7e8697d4b305308",
+      "name": "dont acides gras saturés",
+      "unit": "g",
+      "amount": 8.6
+    },
+    {
+      "id": "6a1ea349eb2a01bc740dd4f3",
+      "type": "57b42a48b7e8697d4b305305",
+      "name": "Glucides",
+      "unit": "g",
+      "amount": 72.3
+    },
+    {
+      "id": "6a1ea349eb2a01bc740dd4f4",
+      "type": "57b42a48b7e8697d4b305306",
+      "name": "dont sucres",
+      "unit": "g",
+      "amount": 23.8
+    },
+    {
+      "id": "6a1ea349eb2a01bc740dd4f5",
+      "type": "57b42a48b7e8697d4b30530a",
+      "name": "Fibres alimentaires",
+      "unit": "g",
+      "amount": 10.9
+    },
+    {
+      "type": "57b42a48b7e8697d4b305309",
+      "name": "Protéines",
+      "unit": "g",
+      "id": "6a1ea349eb2a01bc740dd4f6",
+      "amount": 37
+    },
+    {
+      "id": "6a1ea349eb2a01bc740dd4f7",
+      "type": "57b42a48b7e8697d4b30530c",
+      "name": "Cholestérol",
+      "unit": "mg",
+      "amount": 0.9
+    },
+    {
+      "unit": "g",
+      "id": "6a1ea349eb2a01bc740dd4f8",
+      "type": "57b42a48b7e8697d4b30530b",
+      "name": "Sel",
+      "amount": 1.7
+    },
+    {
+      "id": "6a1ea349eb2a01bc740dd4f9",
+      "type": "652d4d45ce1a3c29bd168c80",
+      "name": "Trans Fat",
+      "unit": "g",
+      "amount": 0.6
+    },
+    {
+      "name": "Potassium",
+      "unit": "mg",
+      "id": "6a1ea349eb2a01bc740dd4fa",
+      "type": "652d4d58ce1a3c29bd168c82",
+      "amount": 669.4
+    },
+    {
+      "name": "Calcium",
+      "unit": "mg",
+      "id": "6a1ea349eb2a01bc740dd4fb",
+      "type": "652d4d6bce1a3c29bd168c84",
+      "amount": 86.1
+    },
+    {
+      "name": "Iron",
+      "unit": "mg",
+      "id": "6a1ea349eb2a01bc740dd4fc",
+      "type": "652d4d7bce1a3c29bd168c86",
+      "amount": 1.4
+    }
+  ],
+  "ingredients": [
+    {
+      "uuid": "d67e98f2-2774-5b94-b51a-359ed028712e",
+      "slug": "pommes-de-terre",
+      "shipped": true,
+      "imagePath": "/ingredient/6405bf22b0da194777986166-63b67bc1.png",
+      "familyId": "6299e0f4f7cd25bc1c024384",
+      "id": "6405bf22b0da194777986166",
+      "type": "potato",
+      "name": "Pommes de terre",
+      "allergensNew": [],
+      "allergens": []
+    },
+    {
+      "familyId": "6299e0f4f7cd25bc1c024384",
+      "uuid": "d566e2fd-c965-5a9d-ab98-0a48e581ae81",
+      "type": "dried-rosemary",
+      "slug": "romarin-seche",
+      "shipped": true,
+      "imagePath": "/ingredient/6405bf29b9d07cd5d38d799d-5592774c.png",
+      "allergensNew": [],
+      "id": "6405bf29b9d07cd5d38d799d",
+      "name": "Romarin séché",
+      "allergens": []
+    },
+    {
+      "uuid": "33029324-f0e0-5e63-9f6f-3934ffe1bf83",
+      "name": "Tête d'ail",
+      "slug": "tete-dail",
+      "imagePath": "/ingredient/6405bf62b9d07cd5d38d7a7d-f7ddbcbd.png",
+      "familyId": "6299e0f4f7cd25bc1c024384",
+      "id": "6405bf62b9d07cd5d38d7a7d",
+      "type": "garlic",
+      "shipped": true,
+      "allergensNew": [],
+      "allergens": []
+    },
+    {
+      "uuid": "9c185787-b4f8-5457-863b-da9d361fcd22",
+      "type": "broccoli",
+      "name": "Brocoli",
+      "slug": "brocoli",
+      "shipped": true,
+      "familyId": "6299e0f4f7cd25bc1c024384",
+      "id": "6405bf80af4af6d531d50be4",
+      "imagePath": "/ingredient/6405bf80af4af6d531d50be4-f8abb111.png",
+      "allergensNew": [],
+      "allergens": []
+    },
+    {
+      "slug": "tranches-de-carre-de-porc",
+      "allergensNew": [],
+      "id": "640afb09cda96bb6528b8fc3",
+      "uuid": "3aec5865-23f0-43f0-82a2-01fd55468250",
+      "type": "pork-loin-slices",
+      "name": "Tranches de carré de porc",
+      "shipped": true,
+      "imagePath": "/ingredient/640afb09cda96bb6528b8fc3-63bb5ec6.png",
+      "familyId": "6299e0f4f7cd25bc1c024384",
+      "allergens": []
+    },
+    {
+      "type": "shallot",
+      "shipped": true,
+      "uuid": "26d69601-21cf-5e86-bf40-c3c5f44f95b1",
+      "name": "Échalote",
+      "slug": "echalote",
+      "imagePath": "/ingredient/6405bfc5b9d07cd5d38d7bce-c7e46e41.png",
+      "familyId": "6299e0f4f7cd25bc1c024384",
+      "allergensNew": [],
+      "id": "6405bfc5b9d07cd5d38d7bce",
+      "allergens": []
+    },
+    {
+      "shipped": true,
+      "familyId": "6299e0f4f7cd25bc1c024384",
+      "uuid": "b1d9dc0e-8cc8-4cf3-ae46-bf5c10fcbc5f",
+      "name": "Confiture de fraises",
+      "imagePath": "/ingredient/64132d2d6b23cefedf01c8cf-085bf28f.png",
+      "allergensNew": [
+        {
+          "id": "57962a07b7e8697d4b305302",
+          "type": "traces-of-nuts",
+          "name": "Fruits à coque",
+          "slug": "traces-of-fruits-a-coque",
+          "iconPath": "/allergens/57962a07b7e8697d4b305302-20b4388c.png",
+          "tracesOf": true,
+          "triggersTracesOf": false
+        },
+        {
+          "type": "traces-of-milk",
+          "name": "Lait (contient du lactose)",
+          "slug": "traces-of-lait-contient-du-lactose",
+          "iconPath": "",
+          "tracesOf": true,
+          "triggersTracesOf": false,
+          "id": "5acf97b7ae08b54d88061162"
+        },
+        {
+          "tracesOf": true,
+          "triggersTracesOf": false,
+          "id": "5de91d27f4c17e42c17aef94",
+          "type": "traces-of-mustard",
+          "name": "Moutarde",
+          "slug": "traces-of-moutarde",
+          "iconPath": ""
+        },
+        {
+          "tracesOf": true,
+          "triggersTracesOf": false,
+          "id": "5acf97a2ae08b54dad34eb82",
+          "type": "traces-of-sulphites",
+          "name": "Anhydride sulfureux et sulfites",
+          "slug": "traces-of-anhydride-sulfureux-et-sulfites",
+          "iconPath": ""
+        },
+        {
+          "tracesOf": true,
+          "triggersTracesOf": true,
+          "id": "57962a07b7e8697d4b3052f3",
+          "type": "maycontaintracesofallergens",
+          "name": "Peut contenir des traces d'allergènes",
+          "slug": "peut-contenir-des-traces-dallergenes",
+          "iconPath": ""
+        }
+      ],
+      "id": "64132d2d6b23cefedf01c8cf",
+      "type": "strawberry-jelly",
+      "slug": "confiture-de-fraises",
+      "allergens": [
+        {
+          "id": "57962a07b7e8697d4b305302",
+          "type": "traces-of-nuts",
+          "name": "Fruits à coque",
+          "slug": "traces-of-fruits-a-coque",
+          "iconPath": "/allergens/57962a07b7e8697d4b305302-20b4388c.png",
+          "tracesOf": true,
+          "triggersTracesOf": false
+        },
+        {
+          "type": "traces-of-milk",
+          "name": "Lait (contient du lactose)",
+          "slug": "traces-of-lait-contient-du-lactose",
+          "iconPath": "",
+          "tracesOf": true,
+          "triggersTracesOf": false,
+          "id": "5acf97b7ae08b54d88061162"
+        },
+        {
+          "tracesOf": true,
+          "triggersTracesOf": false,
+          "id": "5de91d27f4c17e42c17aef94",
+          "type": "traces-of-mustard",
+          "name": "Moutarde",
+          "slug": "traces-of-moutarde",
+          "iconPath": ""
+        },
+        {
+          "tracesOf": true,
+          "triggersTracesOf": false,
+          "id": "5acf97a2ae08b54dad34eb82",
+          "type": "traces-of-sulphites",
+          "name": "Anhydride sulfureux et sulfites",
+          "slug": "traces-of-anhydride-sulfureux-et-sulfites",
+          "iconPath": ""
+        },
+        {
+          "tracesOf": true,
+          "triggersTracesOf": true,
+          "id": "57962a07b7e8697d4b3052f3",
+          "type": "maycontaintracesofallergens",
+          "name": "Peut contenir des traces d'allergènes",
+          "slug": "peut-contenir-des-traces-dallergenes",
+          "iconPath": ""
+        }
+      ]
+    },
+    {
+      "type": "huile-dolive-extra-vierge-cs",
+      "name": "Huile d'olive",
+      "slug": "huile-dolive",
+      "imagePath": "/ingredient/63e5121881b4b295e66f0251-09f084eb.png",
+      "allergensNew": [],
+      "id": "63e5121881b4b295e66f0251",
+      "uuid": "2b075344-0190-4141-b2bb-b9bce25abcd1",
+      "shipped": false,
+      "familyId": "6299e0f4f7cd25bc1c024384",
+      "allergens": []
+    },
+    {
+      "id": "63e5121081b4b295e66f024d",
+      "uuid": "4ced7170-b1b5-4f4b-a392-c98a5cd3dc0f",
+      "type": "bouillon-de-legumes-ml",
+      "name": "Bouillon de légumes",
+      "slug": "bouillon-de-legumes",
+      "shipped": false,
+      "imagePath": "/ingredient/63e5121081b4b295e66f024d-176ac1aa.png",
+      "familyId": "6299e0f4f7cd25bc1c024384",
+      "allergensNew": [],
+      "allergens": []
+    },
+    {
+      "uuid": "9c2f577f-2aa0-4423-afb3-cf6719abe6ff",
+      "slug": "vinaigre-balsamique-noir",
+      "imagePath": "/ingredient/63e5123281b4b295e66f025f-7567b744.png",
+      "allergensNew": [],
+      "type": "vinaigre-balsamique-noir-cs",
+      "name": "Vinaigre balsamique noir",
+      "shipped": false,
+      "familyId": "6299e0f4f7cd25bc1c024384",
+      "id": "63e5123281b4b295e66f025f",
+      "allergens": []
+    },
+    {
+      "name": "Beurre",
+      "shipped": false,
+      "imagePath": "/ingredient/63e5122181b4b295e66f0258-1fc1b122.png",
+      "id": "63e5122181b4b295e66f0258",
+      "uuid": "36c20260-788a-4eed-8423-454cc7d047ac",
+      "type": "beurre-cc",
+      "slug": "beurre",
+      "familyId": "6299e0f4f7cd25bc1c024384",
+      "allergensNew": [],
+      "allergens": []
+    },
+    {
+      "familyId": "6299e0f4f7cd25bc1c024384",
+      "type": "poivre-et-sel-au-gout",
+      "name": "Poivre et sel",
+      "shipped": false,
+      "allergensNew": [],
+      "id": "63e5122b81b4b295e66f025e",
+      "uuid": "9481dcd8-7825-4a7a-8b7f-1d2171de985d",
+      "slug": "poivre-et-sel",
+      "imagePath": "/ingredient/63e5122b81b4b295e66f025e-b135bada.png",
+      "allergens": []
+    }
+  ],
+  "yields": [
+    {
+      "id": "6a1ea349eb2a01bc740dd506",
+      "yields": 1,
+      "ingredients": [
+        {
+          "unit": "g",
+          "id": "6405bf22b0da194777986166",
+          "amount": 250
+        },
+        {
+          "id": "6405bf29b9d07cd5d38d799d",
+          "amount": 0.25,
+          "unit": "sachet(s)"
+        },
+        {
+          "id": "6405bf62b9d07cd5d38d7a7d",
+          "amount": 0.5,
+          "unit": "pièce(s)"
+        },
+        {
+          "id": "6405bf80af4af6d531d50be4",
+          "amount": 0.75,
+          "unit": "pièce(s)"
+        },
+        {
+          "amount": 1,
+          "unit": "pièce(s)",
+          "id": "640afb09cda96bb6528b8fc3"
+        },
+        {
+          "id": "6405bfc5b9d07cd5d38d7bce",
+          "amount": 0.25,
+          "unit": "pièce(s)"
+        },
+        {
+          "id": "64132d2d6b23cefedf01c8cf",
+          "amount": 1,
+          "unit": "pot(s)"
+        },
+        {
+          "amount": 2,
+          "unit": "cs",
+          "id": "63e5121881b4b295e66f0251"
+        },
+        {
+          "id": "63e5121081b4b295e66f024d",
+          "amount": 125,
+          "unit": "ml"
+        },
+        {
+          "id": "63e5123281b4b295e66f025f",
+          "amount": 0.5,
+          "unit": "cs"
+        },
+        {
+          "amount": 1,
+          "unit": "cc",
+          "id": "63e5122181b4b295e66f0258"
+        },
+        {
+          "id": "63e5122b81b4b295e66f025e",
+          "amount": 0,
+          "unit": "selon le goût"
+        }
+      ]
+    },
+    {
+      "id": "6a1ea349eb2a01bc740dd507",
+      "yields": 2,
+      "ingredients": [
+        {
+          "id": "6405bf22b0da194777986166",
+          "amount": 500,
+          "unit": "g"
+        },
+        {
+          "id": "6405bf29b9d07cd5d38d799d",
+          "amount": 0.5,
+          "unit": "sachet(s)"
+        },
+        {
+          "id": "6405bf62b9d07cd5d38d7a7d",
+          "amount": 1,
+          "unit": "pièce(s)"
+        },
+        {
+          "amount": 0.75,
+          "unit": "pièce(s)",
+          "id": "6405bf80af4af6d531d50be4"
+        },
+        {
+          "id": "640afb09cda96bb6528b8fc3",
+          "amount": 2,
+          "unit": "pièce(s)"
+        },
+        {
+          "id": "6405bfc5b9d07cd5d38d7bce",
+          "amount": 0.5,
+          "unit": "pièce(s)"
+        },
+        {
+          "id": "64132d2d6b23cefedf01c8cf",
+          "amount": 2,
+          "unit": "pot(s)"
+        },
+        {
+          "id": "63e5121881b4b295e66f0251",
+          "amount": 3,
+          "unit": "cs"
+        },
+        {
+          "id": "63e5121081b4b295e66f024d",
+          "amount": 250,
+          "unit": "ml"
+        },
+        {
+          "unit": "cs",
+          "id": "63e5123281b4b295e66f025f",
+          "amount": 1
+        },
+        {
+          "id": "63e5122181b4b295e66f0258",
+          "amount": 2,
+          "unit": "cc"
+        },
+        {
+          "unit": "selon le goût",
+          "id": "63e5122b81b4b295e66f025e",
+          "amount": 0
+        }
+      ]
+    },
+    {
+      "id": "6a1ea349eb2a01bc740dd508",
+      "yields": 3,
+      "ingredients": [
+        {
+          "unit": "g",
+          "id": "6405bf22b0da194777986166",
+          "amount": 750
+        },
+        {
+          "amount": 0.75,
+          "unit": "sachet(s)",
+          "id": "6405bf29b9d07cd5d38d799d"
+        },
+        {
+          "id": "6405bf62b9d07cd5d38d7a7d",
+          "amount": 1,
+          "unit": "pièce(s)"
+        },
+        {
+          "id": "6405bf80af4af6d531d50be4",
+          "amount": 1,
+          "unit": "pièce(s)"
+        },
+        {
+          "id": "640afb09cda96bb6528b8fc3",
+          "amount": 3,
+          "unit": "pièce(s)"
+        },
+        {
+          "id": "6405bfc5b9d07cd5d38d7bce",
+          "amount": 0.75,
+          "unit": "pièce(s)"
+        },
+        {
+          "amount": 3,
+          "unit": "pot(s)",
+          "id": "64132d2d6b23cefedf01c8cf"
+        },
+        {
+          "unit": "cs",
+          "id": "63e5121881b4b295e66f0251",
+          "amount": 4
+        },
+        {
+          "id": "63e5121081b4b295e66f024d",
+          "amount": 375,
+          "unit": "ml"
+        },
+        {
+          "id": "63e5123281b4b295e66f025f",
+          "amount": 1.5,
+          "unit": "cs"
+        },
+        {
+          "unit": "cc",
+          "id": "63e5122181b4b295e66f0258",
+          "amount": 3
+        },
+        {
+          "id": "63e5122b81b4b295e66f025e",
+          "amount": 0,
+          "unit": "selon le goût"
+        }
+      ]
+    },
+    {
+      "id": "6a1ea349eb2a01bc740dd509",
+      "yields": 4,
+      "ingredients": [
+        {
+          "unit": "g",
+          "id": "6405bf22b0da194777986166",
+          "amount": 1000
+        },
+        {
+          "id": "6405bf29b9d07cd5d38d799d",
+          "amount": 1,
+          "unit": "sachet(s)"
+        },
+        {
+          "unit": "pièce(s)",
+          "id": "6405bf62b9d07cd5d38d7a7d",
+          "amount": 2
+        },
+        {
+          "amount": 1.5,
+          "unit": "pièce(s)",
+          "id": "6405bf80af4af6d531d50be4"
+        },
+        {
+          "id": "640afb09cda96bb6528b8fc3",
+          "amount": 4,
+          "unit": "pièce(s)"
+        },
+        {
+          "id": "6405bfc5b9d07cd5d38d7bce",
+          "amount": 1,
+          "unit": "pièce(s)"
+        },
+        {
+          "id": "64132d2d6b23cefedf01c8cf",
+          "amount": 4,
+          "unit": "pot(s)"
+        },
+        {
+          "id": "63e5121881b4b295e66f0251",
+          "amount": 5,
+          "unit": "cs"
+        },
+        {
+          "unit": "ml",
+          "id": "63e5121081b4b295e66f024d",
+          "amount": 500
+        },
+        {
+          "id": "63e5123281b4b295e66f025f",
+          "amount": 2,
+          "unit": "cs"
+        },
+        {
+          "id": "63e5122181b4b295e66f0258",
+          "amount": 4,
+          "unit": "cc"
+        },
+        {
+          "id": "63e5122b81b4b295e66f025e",
+          "amount": 0,
+          "unit": "selon le goût"
+        }
+      ]
+    },
+    {
+      "id": "6a1ea349eb2a01bc740dd50a",
+      "yields": 5,
+      "ingredients": [
+        {
+          "id": "6405bf22b0da194777986166",
+          "amount": 1250,
+          "unit": "g"
+        },
+        {
+          "id": "6405bf29b9d07cd5d38d799d",
+          "amount": 1.25,
+          "unit": "sachet(s)"
+        },
+        {
+          "id": "6405bf62b9d07cd5d38d7a7d",
+          "amount": 2,
+          "unit": "pièce(s)"
+        },
+        {
+          "id": "6405bf80af4af6d531d50be4",
+          "amount": 1.75,
+          "unit": "pièce(s)"
+        },
+        {
+          "id": "640afb09cda96bb6528b8fc3",
+          "amount": 5,
+          "unit": "pièce(s)"
+        },
+        {
+          "unit": "pièce(s)",
+          "id": "6405bfc5b9d07cd5d38d7bce",
+          "amount": 1.25
+        },
+        {
+          "id": "64132d2d6b23cefedf01c8cf",
+          "amount": 5,
+          "unit": "pot(s)"
+        },
+        {
+          "id": "63e5121881b4b295e66f0251",
+          "amount": 7,
+          "unit": "cs"
+        },
+        {
+          "id": "63e5121081b4b295e66f024d",
+          "amount": 625,
+          "unit": "ml"
+        },
+        {
+          "amount": 2.5,
+          "unit": "cs",
+          "id": "63e5123281b4b295e66f025f"
+        },
+        {
+          "id": "63e5122181b4b295e66f0258",
+          "amount": 5,
+          "unit": "cc"
+        },
+        {
+          "id": "63e5122b81b4b295e66f025e",
+          "amount": 0,
+          "unit": "selon le goût"
+        }
+      ]
+    },
+    {
+      "id": "6a1ea349eb2a01bc740dd50b",
+      "yields": 6,
+      "ingredients": [
+        {
+          "id": "6405bf22b0da194777986166",
+          "amount": 1500,
+          "unit": "g"
+        },
+        {
+          "id": "6405bf29b9d07cd5d38d799d",
+          "amount": 1.5,
+          "unit": "sachet(s)"
+        },
+        {
+          "id": "6405bf62b9d07cd5d38d7a7d",
+          "amount": 2,
+          "unit": "pièce(s)"
+        },
+        {
+          "id": "6405bf80af4af6d531d50be4",
+          "amount": 2,
+          "unit": "pièce(s)"
+        },
+        {
+          "id": "640afb09cda96bb6528b8fc3",
+          "amount": 6,
+          "unit": "pièce(s)"
+        },
+        {
+          "id": "6405bfc5b9d07cd5d38d7bce",
+          "amount": 1.5,
+          "unit": "pièce(s)"
+        },
+        {
+          "id": "64132d2d6b23cefedf01c8cf",
+          "amount": 6,
+          "unit": "pot(s)"
+        },
+        {
+          "id": "63e5121881b4b295e66f0251",
+          "amount": 8,
+          "unit": "cs"
+        },
+        {
+          "id": "63e5121081b4b295e66f024d",
+          "amount": 750,
+          "unit": "ml"
+        },
+        {
+          "amount": 3,
+          "unit": "cs",
+          "id": "63e5123281b4b295e66f025f"
+        },
+        {
+          "id": "63e5122181b4b295e66f0258",
+          "amount": 6,
+          "unit": "cc"
+        },
+        {
+          "id": "63e5122b81b4b295e66f025e",
+          "amount": 0,
+          "unit": "selon le goût"
+        }
+      ]
+    }
+  ],
+  "steps": [
+    {
+      "id": "6a1ea349eb2a01bc740dd4fd",
+      "index": 1,
+      "instructions": "<ul>\n<li>Veillez à bien respecter les quantités indiquées à gauche pour préparer votre recette !</li>\n<li>Préchauffez le four à 220°C (200°C chaleur tournante). </li>\n<li>Lavez bien ou épluchez les pommes de terre, puis coupez-les en potatoes de 1 cm de large. Placez-les sur une plaque recouverte de papier sulfurisé.</li>\n<li>Arrosez-les d&#39;un filet d&#39;huile d&#39;olive, salez et saupoudrez-les de 1 pincée de romarin séché (selon votre goût). Mélangez bien.</li>\n<li>Enfournez-les 25-35 min dans la partie haute du four, ou jusqu’à ce qu’elles soient dorées et croustillantes. Remuez à mi-cuisson.</li>\n</ul>",
+      "instructionsHTML": "<ul>\n<li>Veillez à bien respecter les quantités indiquées à gauche pour préparer votre recette !</li>\n<li>Préchauffez le four à 220°C (200°C chaleur tournante). </li>\n<li>Lavez bien ou épluchez les pommes de terre, puis coupez-les en potatoes de 1 cm de large. Placez-les sur une plaque recouverte de papier sulfurisé.</li>\n<li>Arrosez-les d&#39;un filet d&#39;huile d&#39;olive, salez et saupoudrez-les de 1 pincée de romarin séché (selon votre goût). Mélangez bien.</li>\n<li>Enfournez-les 25-35 min dans la partie haute du four, ou jusqu’à ce qu’elles soient dorées et croustillantes. Remuez à mi-cuisson.</li>\n</ul>",
+      "instructionsMarkdown": "<ul>\n<li>Veillez à bien respecter les quantités indiquées à gauche pour préparer votre recette !</li>\n<li>Préchauffez le four à 220°C (200°C chaleur tournante). </li>\n<li>Lavez bien ou épluchez les pommes de terre, puis coupez-les en potatoes de 1 cm de large. Placez-les sur une plaque recouverte de papier sulfurisé.</li>\n<li>Arrosez-les d&#39;un filet d&#39;huile d&#39;olive, salez et saupoudrez-les de 1 pincée de romarin séché (selon votre goût). Mélangez bien.</li>\n<li>Enfournez-les 25-35 min dans la partie haute du four, ou jusqu’à ce qu’elles soient dorées et croustillantes. Remuez à mi-cuisson.</li>\n</ul>",
+      "images": [
+        {
+          "path": "/672890c2d49f300fd61630ab/step-920ec000.jpg",
+          "link": "/672890c2d49f300fd61630ab/step-920ec000.jpg",
+          "caption": "Ça donne la patate !",
+          "id": "6a1eacd9e5f2db002375f244"
+        }
+      ],
+      "videos": []
+    },
+    {
+      "instructionsHTML": "<ul>\n<li>Pendant ce temps, préparez le bouillon avec de l&#39;eau chaude. Ciselez l&#39;ail.</li>\n<li>Coupez les bouquets du brocoli en fleurettes et les tiges en dés de taille égale.</li>\n<li>Faites chauffer un filet d&#39;huile d&#39;olive dans une grande sauteuse à feu vif. Faites-y revenir le brocoli, l&#39;ail et ½ cc de romarin séché par personne 2-3 min. </li>\n<li>À feu moyen-doux, ajoutez le bouillon. Couvrez et laissez étuver 10-12 min, ou jusqu&#39;à ce que la pointe d&#39;un couteau y rentre facilement. Égouttez-le, puis réservez-le à couvert.</li>\n</ul>",
+      "instructionsMarkdown": "<ul>\n<li>Pendant ce temps, préparez le bouillon avec de l&#39;eau chaude. Ciselez l&#39;ail.</li>\n<li>Coupez les bouquets du brocoli en fleurettes et les tiges en dés de taille égale.</li>\n<li>Faites chauffer un filet d&#39;huile d&#39;olive dans une grande sauteuse à feu vif. Faites-y revenir le brocoli, l&#39;ail et ½ cc de romarin séché par personne 2-3 min. </li>\n<li>À feu moyen-doux, ajoutez le bouillon. Couvrez et laissez étuver 10-12 min, ou jusqu&#39;à ce que la pointe d&#39;un couteau y rentre facilement. Égouttez-le, puis réservez-le à couvert.</li>\n</ul>",
+      "images": [
+        {
+          "path": "/672890c2d49f300fd61630ab/step-51681410.jpg",
+          "link": "/672890c2d49f300fd61630ab/step-51681410.jpg",
+          "caption": "Le brocoli entre en scène",
+          "id": "6a1eacd9e5f2db002375f245"
+        }
+      ],
+      "videos": [],
+      "id": "6a1ea349eb2a01bc740dd4fe",
+      "index": 2,
+      "instructions": "<ul>\n<li>Pendant ce temps, préparez le bouillon avec de l&#39;eau chaude. Ciselez l&#39;ail.</li>\n<li>Coupez les bouquets du brocoli en fleurettes et les tiges en dés de taille égale.</li>\n<li>Faites chauffer un filet d&#39;huile d&#39;olive dans une grande sauteuse à feu vif. Faites-y revenir le brocoli, l&#39;ail et ½ cc de romarin séché par personne 2-3 min. </li>\n<li>À feu moyen-doux, ajoutez le bouillon. Couvrez et laissez étuver 10-12 min, ou jusqu&#39;à ce que la pointe d&#39;un couteau y rentre facilement. Égouttez-le, puis réservez-le à couvert.</li>\n</ul>"
+    },
+    {
+      "instructions": "<ul>\n<li>Salez et poivrez les tranches de carré de porc.</li>\n<li>Ciselez finement 1/4 d&#39;échalote par personne.</li>\n</ul>",
+      "instructionsHTML": "<ul>\n<li>Salez et poivrez les tranches de carré de porc.</li>\n<li>Ciselez finement 1/4 d&#39;échalote par personne.</li>\n</ul>",
+      "instructionsMarkdown": "<ul>\n<li>Salez et poivrez les tranches de carré de porc.</li>\n<li>Ciselez finement 1/4 d&#39;échalote par personne.</li>\n</ul>",
+      "images": [
+        {
+          "path": "/672890c2d49f300fd61630ab/step-1cd72820.jpg",
+          "link": "/672890c2d49f300fd61630ab/step-1cd72820.jpg",
+          "caption": "Mission découpe activée ",
+          "id": "6a1eacd9e5f2db002375f246"
+        }
+      ],
+      "videos": [],
+      "id": "6a1ea349eb2a01bc740dd4ff",
+      "index": 3
+    },
+    {
+      "videos": [],
+      "id": "6a1ea349eb2a01bc740dd500",
+      "index": 4,
+      "instructions": "<ul>\n<li>Faites chauffer un filet d’huile d’olive dans la sauteuse du brocoli à feu moyen-vif.</li>\n<li>Faites-y dorer le porc des deux côtés 2-4 min en l&#39;arrosant d&#39;huile, ou jusqu&#39;à ce qu&#39;il ne soit plus rosé à cœur.</li>\n<li>Réservez-le dans une assiette recouverte d&#39;aluminium jusqu’au service.</li>\n<li>Conservez les sucs de cuisson dans la sauteuse.</li>\n</ul>",
+      "instructionsHTML": "<ul>\n<li>Faites chauffer un filet d’huile d’olive dans la sauteuse du brocoli à feu moyen-vif.</li>\n<li>Faites-y dorer le porc des deux côtés 2-4 min en l&#39;arrosant d&#39;huile, ou jusqu&#39;à ce qu&#39;il ne soit plus rosé à cœur.</li>\n<li>Réservez-le dans une assiette recouverte d&#39;aluminium jusqu’au service.</li>\n<li>Conservez les sucs de cuisson dans la sauteuse.</li>\n</ul>",
+      "instructionsMarkdown": "<ul>\n<li>Faites chauffer un filet d’huile d’olive dans la sauteuse du brocoli à feu moyen-vif.</li>\n<li>Faites-y dorer le porc des deux côtés 2-4 min en l&#39;arrosant d&#39;huile, ou jusqu&#39;à ce qu&#39;il ne soit plus rosé à cœur.</li>\n<li>Réservez-le dans une assiette recouverte d&#39;aluminium jusqu’au service.</li>\n<li>Conservez les sucs de cuisson dans la sauteuse.</li>\n</ul>",
+      "images": [
+        {
+          "path": "/672890c2d49f300fd61630ab/step-04034930.jpg",
+          "link": "/672890c2d49f300fd61630ab/step-04034930.jpg",
+          "caption": "C'est du tout cuit ! ",
+          "id": "6a1eacd9e5f2db002375f247"
+        }
+      ]
+    },
+    {
+      "instructions": "<ul>\n<li>Remettez la sauteuse à chauffer à feu moyen. Faites-y cuire l&#39;échalote avec une pincée de romarin 3-5 min.</li>\n<li>Ajoutez la confiture de fraises (voir L&#39;ASTUCE), le vinaigre balsamique noir et 2-3 cs d&#39;eau par personne. Remuez bien et laissez réduire 1-2 min, ou jusqu&#39;à obtenir une consistance légèrement sirupeuse. Éteignez le feu.</li>\n<li>Juste avant de servir, ajoutez une noix de beurre à la sauce. Mélangez, salez et poivrez.</li>\n</ul>\n<p>L&#39;ASTUCE DU CHEF : Si vous n&#39;appréciez pas le sucré-salé, utilisez seulement la moitié de la confiture.</p>",
+      "instructionsHTML": "<ul>\n<li>Remettez la sauteuse à chauffer à feu moyen. Faites-y cuire l&#39;échalote avec une pincée de romarin 3-5 min.</li>\n<li>Ajoutez la confiture de fraises (voir L&#39;ASTUCE), le vinaigre balsamique noir et 2-3 cs d&#39;eau par personne. Remuez bien et laissez réduire 1-2 min, ou jusqu&#39;à obtenir une consistance légèrement sirupeuse. Éteignez le feu.</li>\n<li>Juste avant de servir, ajoutez une noix de beurre à la sauce. Mélangez, salez et poivrez.</li>\n</ul>\n<p>L&#39;ASTUCE DU CHEF : Si vous n&#39;appréciez pas le sucré-salé, utilisez seulement la moitié de la confiture.</p>",
+      "instructionsMarkdown": "<ul>\n<li>Remettez la sauteuse à chauffer à feu moyen. Faites-y cuire l&#39;échalote avec une pincée de romarin 3-5 min.</li>\n<li>Ajoutez la confiture de fraises (voir L&#39;ASTUCE), le vinaigre balsamique noir et 2-3 cs d&#39;eau par personne. Remuez bien et laissez réduire 1-2 min, ou jusqu&#39;à obtenir une consistance légèrement sirupeuse. Éteignez le feu.</li>\n<li>Juste avant de servir, ajoutez une noix de beurre à la sauce. Mélangez, salez et poivrez.</li>\n</ul>\n<p>L&#39;ASTUCE DU CHEF : Si vous n&#39;appréciez pas le sucré-salé, utilisez seulement la moitié de la confiture.</p>",
+      "images": [
+        {
+          "path": "/672890c2d49f300fd61630ab/step-aea1a240.jpg",
+          "link": "/672890c2d49f300fd61630ab/step-aea1a240.jpg",
+          "caption": "Envoyez la sauce !",
+          "id": "6a1eacd9e5f2db002375f248"
+        }
+      ],
+      "videos": [],
+      "id": "6a1ea349eb2a01bc740dd501",
+      "index": 5
+    },
+    {
+      "id": "6a1ea349eb2a01bc740dd502",
+      "index": 6,
+      "instructions": "<ul>\n<li>Servez le porc dans les assiettes ainsi que les potatoes et le brocoli.</li>\n<li>Nappez le tout de sauce fraise-balsamique.</li>\n<li>Ajustez l&#39;assaisonnement en sel et en poivre.</li>\n</ul>",
+      "instructionsHTML": "<ul>\n<li>Servez le porc dans les assiettes ainsi que les potatoes et le brocoli.</li>\n<li>Nappez le tout de sauce fraise-balsamique.</li>\n<li>Ajustez l&#39;assaisonnement en sel et en poivre.</li>\n</ul>",
+      "instructionsMarkdown": "<ul>\n<li>Servez le porc dans les assiettes ainsi que les potatoes et le brocoli.</li>\n<li>Nappez le tout de sauce fraise-balsamique.</li>\n<li>Ajustez l&#39;assaisonnement en sel et en poivre.</li>\n</ul>",
+      "images": [
+        {
+          "path": "/672890c2d49f300fd61630ab/step-12ed8550.jpg",
+          "link": "/672890c2d49f300fd61630ab/step-12ed8550.jpg",
+          "caption": "À table ! ",
+          "id": "6a1eacd9e5f2db002375f249"
+        }
+      ],
+      "videos": []
+    }
+  ],
+  "active": true,
+  "slug": "porc-dore-and-reduction-fraise-balsamique",
+  "tags": [
+    {
+      "slug": "seo",
+      "colorHandle": "",
+      "preferences": null,
+      "displayLabel": false,
+      "id": "6a1ea349eb2a01bc740dd503",
+      "name": "SEO",
+      "type": "seo"
+    },
+    {
+      "id": "6a1ea349eb2a01bc740dd504",
+      "name": "Famille",
+      "type": "family-friendly",
+      "slug": "famille",
+      "colorHandle": "familyFriendly",
+      "preferences": [
+        "Famille"
+      ],
+      "displayLabel": false
+    },
+    {
+      "id": "6a1ea349eb2a01bc740dd505",
+      "name": "Moins de CO2",
+      "type": "less-carbon",
+      "slug": "moins-de-co2",
+      "colorHandle": "vegan",
+      "preferences": [
+        "CO2 Smart"
+      ],
+      "displayLabel": false
+    }
+  ],
+  "isPublished": true,
+  "utensils": [
+    {
+      "id": "5e3ad24dfcf61c18c30ff522",
+      "type": "",
+      "name": "Plaque de cuisson recouverte de papier sulfurisé"
+    },
+    {
+      "type": "peeler",
+      "name": "Éplucheur",
+      "id": "57e2674fb7e8697d4b305379"
+    },
+    {
+      "id": "57e2674fb7e8697d4b305382",
+      "type": "strainer",
+      "name": "Passoire"
+    },
+    {
+      "id": "57e2674fb7e8697d4b305389",
+      "type": "casserole-lid",
+      "name": "Sauteuse avec couvercle"
+    }
+  ],
+  "cuisines": [
+    {
+      "country": "FR",
+      "locale": "fr-FR",
+      "name": "Française",
+      "slug": "french",
+      "type": "french",
+      "id": "57ebbc17b7e8697d4b3053a8 fr-FR",
+      "cuisineId": "57ebbc17b7e8697d4b3053a8"
+    }
+  ],
+  "createdAt": "2024-11-04T09:15:47.484Z",
+  "allergensNew": [
+    {
+      "type": "traces-of-nuts",
+      "name": "Fruits à coque",
+      "slug": "traces-of-fruits-a-coque",
+      "iconPath": "/allergens/57962a07b7e8697d4b305302-20b4388c.png",
+      "tracesOf": true,
+      "triggersTracesOf": false,
+      "id": "57962a07b7e8697d4b305302"
+    },
+    {
+      "type": "traces-of-milk",
+      "name": "Lait (contient du lactose)",
+      "slug": "traces-of-lait-contient-du-lactose",
+      "iconPath": "",
+      "tracesOf": true,
+      "triggersTracesOf": false,
+      "id": "5acf97b7ae08b54d88061162"
+    },
+    {
+      "type": "traces-of-mustard",
+      "name": "Moutarde",
+      "slug": "traces-of-moutarde",
+      "iconPath": "",
+      "tracesOf": true,
+      "triggersTracesOf": false,
+      "id": "5de91d27f4c17e42c17aef94"
+    },
+    {
+      "id": "5acf97a2ae08b54dad34eb82",
+      "type": "traces-of-sulphites",
+      "name": "Anhydride sulfureux et sulfites",
+      "slug": "traces-of-anhydride-sulfureux-et-sulfites",
+      "iconPath": "",
+      "tracesOf": true,
+      "triggersTracesOf": false
+    },
+    {
+      "iconPath": "",
+      "tracesOf": true,
+      "triggersTracesOf": true,
+      "id": "57962a07b7e8697d4b3052f3",
+      "type": "maycontaintracesofallergens",
+      "name": "Peut contenir des traces d'allergènes",
+      "slug": "peut-contenir-des-traces-dallergenes"
+    }
+  ],
+  "adjustedRating": 5,
+  "updatedCanonical": "672890c2d49f300fd61630ab",
+  "tier": 3,
+  "updatedAt": "2026-06-02T09:32:57.783Z",
+  "hasBeenProcessed": {
+    "qualityJudge": false,
+    "updatedCanonical": true,
+    "tier": false
+  },
+  "isCanonical": true,
+  "id": "672890c2d49f300fd61630ab-fr-FR",
+  "videoMetadata": {
+    "thumbnails": {}
+  },
+  "reviews": null,
+  "canonicalLink": "https://www.hellofresh.fr/recipes/porc-dore-and-reduction-fraise-balsamique-672890c2d49f300fd61630ab",
+  "websiteUrl": "https://www.hellofresh.fr/recipes/porc-dore-and-reduction-fraise-balsamique-672890c2d49f300fd61630ab",
+  "disableTierAutoUpdate": false,
+  "reviewSummaryHighlights": null,
+  "aggregateRating": 4.346704447158326,
+  "aggregateRatingsCount": 1502,
+  "reviewSummaryLastUpdated": null
+}

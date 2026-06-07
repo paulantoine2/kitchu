@@ -1,0 +1,131 @@
+generator client {
+  provider = "prisma-client"
+  output   = "../app/generated/prisma"
+}
+
+datasource db {
+  provider = "sqlite"
+}
+
+enum UnitKind {
+  MASS
+  VOLUME
+  COUNT
+  PACKAGE
+  CUSTOM
+}
+
+model Unit {
+  id                 String             @id @default(uuid())
+  code               String             @unique
+  name               String
+  symbol             String
+  kind               UnitKind           @default(CUSTOM)
+  globalToBaseFactor Float?
+  globalBaseUnitId   String?
+  globalBaseUnit     Unit?              @relation("UnitGlobalBase", fields: [globalBaseUnitId], references: [id], onDelete: SetNull)
+  derivedGlobalUnits Unit[]             @relation("UnitGlobalBase")
+  createdAt          DateTime           @default(now())
+  updatedAt          DateTime           @updatedAt
+  baseIngredients    Ingredient[]       @relation("IngredientBaseUnit")
+  ingredientUnits    IngredientUnit[]
+  productReferences  ProductReference[]
+  recipeIngredients  RecipeIngredient[]
+  globalRatiosFrom   UnitRatio[]        @relation("UnitRatioFrom")
+  globalRatiosTo     UnitRatio[]        @relation("UnitRatioTo")
+}
+
+model UnitRatio {
+  id         String   @id @default(uuid())
+  fromUnitId String
+  toUnitId   String
+  factor     Float
+  fromUnit   Unit     @relation("UnitRatioFrom", fields: [fromUnitId], references: [id], onDelete: Cascade)
+  toUnit     Unit     @relation("UnitRatioTo", fields: [toUnitId], references: [id], onDelete: Cascade)
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+
+  @@unique([fromUnitId, toUnitId])
+}
+
+model Ingredient {
+  id          String             @id @default(uuid())
+  name        String             @unique
+  imageUrl    String?
+  notes       String?
+  baseUnitId  String
+  baseUnit    Unit               @relation("IngredientBaseUnit", fields: [baseUnitId], references: [id])
+  units       IngredientUnit[]
+  products    ProductReference[]
+  recipeItems RecipeIngredient[]
+  createdAt   DateTime           @default(now())
+  updatedAt   DateTime           @updatedAt
+}
+
+model IngredientUnit {
+  id             String     @id @default(uuid())
+  ingredientId   String
+  unitId         String
+  toBaseFactor   Float?
+  ingredient     Ingredient @relation(fields: [ingredientId], references: [id], onDelete: Cascade)
+  unit           Unit       @relation(fields: [unitId], references: [id])
+  createdAt      DateTime   @default(now())
+  updatedAt      DateTime   @updatedAt
+
+  @@unique([ingredientId, unitId])
+}
+
+model ProductReference {
+  id              String     @id @default(uuid())
+  ingredientId    String
+  store           String
+  brand           String?
+  name            String
+  imageUrl        String?
+  packageQuantity Float
+  packageUnitId   String
+  packageToBaseFactor Float?
+  price           Float
+  url             String?
+  barcode         String?
+  notes           String?
+  ingredient      Ingredient @relation(fields: [ingredientId], references: [id], onDelete: Cascade)
+  packageUnit     Unit       @relation(fields: [packageUnitId], references: [id])
+  createdAt       DateTime   @default(now())
+  updatedAt       DateTime   @updatedAt
+}
+
+model Recipe {
+  id          String             @id @default(uuid())
+  name        String
+  imageUrl    String?
+  description String?
+  sourceUrl   String?
+  prepMinutes Int?
+  cookMinutes Int?
+  ingredients RecipeIngredient[]
+  steps       RecipeStep[]
+  createdAt   DateTime           @default(now())
+  updatedAt   DateTime           @updatedAt
+}
+
+model RecipeIngredient {
+  id                 String     @id @default(uuid())
+  recipeId           String
+  ingredientId       String
+  unitId             String
+  quantityPerServing Float
+  note               String?
+  position           Int
+  recipe             Recipe     @relation(fields: [recipeId], references: [id], onDelete: Cascade)
+  ingredient         Ingredient @relation(fields: [ingredientId], references: [id])
+  unit               Unit       @relation(fields: [unitId], references: [id])
+}
+
+model RecipeStep {
+  id          String   @id @default(uuid())
+  recipeId    String
+  position    Int
+  instruction String
+  recipe      Recipe   @relation(fields: [recipeId], references: [id], onDelete: Cascade)
+}
