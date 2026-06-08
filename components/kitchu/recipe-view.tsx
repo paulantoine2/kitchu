@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { Clock, ExternalLink, Pencil, ShoppingBag } from "lucide-react";
+import { Clock, ExternalLink, Pencil, ShoppingBag, ShoppingCart } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
@@ -20,11 +20,11 @@ import {
 import { Separator } from "@/components/ui/separator";
 import { convertToBase, effectiveToBaseFactor, scaleQuantity } from "@/lib/conversions";
 import { cn, formatCurrency, formatNumber } from "@/lib/utils";
-import { recipeToDraft } from "@/components/kitchu/drafts";
 import { ingredientImageUrl, recipeImageUrl } from "@/components/kitchu/images";
+import type { CartRecipeEntry } from "@/components/kitchu/cart";
 import {
-  estimateRecipeCosts,
   estimatePurchaseTotal,
+  estimateRecipeViewCosts,
   sumPartial,
   type RecipeCostEstimate,
 } from "@/components/kitchu/recipe-cost";
@@ -132,12 +132,24 @@ function IngredientPurchaseDetails({
   applyStock: boolean;
 }) {
   const purchasePlan = estimate.purchasePlan;
-  const fullyCovered = applyStock && estimate.toPurchaseBaseQuantity === 0 && estimate.stockUsed > 0;
-  const partiallyCovered = applyStock && estimate.stockUsed > 0 && estimate.toPurchaseBaseQuantity > 0;
+  const coveredByInventory =
+    applyStock &&
+    estimate.toPurchaseBaseQuantity === 0 &&
+    (estimate.stockUsed > 0 || estimate.cartLeftoverUsed > 0);
+  const partiallyCovered =
+    applyStock &&
+    (estimate.stockUsed > 0 || estimate.cartLeftoverUsed > 0) &&
+    estimate.toPurchaseBaseQuantity > 0;
+  const hasInventoryContext =
+    applyStock &&
+    (estimate.stockAvailable > 0 ||
+      estimate.stockUsed > 0 ||
+      estimate.cartLeftoverAvailable > 0 ||
+      estimate.cartLeftoverUsed > 0);
 
   return (
     <div className="flex w-full flex-col gap-2">
-      {applyStock && (estimate.stockAvailable > 0 || estimate.stockUsed > 0) && (
+      {hasInventoryContext && (
         <div className="flex flex-wrap gap-2">
           {estimate.stockAvailable > 0 && (
             <Badge variant="secondary" className="border-emerald-500/20 bg-emerald-500/10 text-emerald-700 dark:text-emerald-400">
@@ -146,12 +158,22 @@ function IngredientPurchaseDetails({
           )}
           {estimate.stockUsed > 0 && (
             <Badge variant="outline" className="border-emerald-500/30 text-emerald-700 dark:text-emerald-400">
-              Utilisé {formatNumber(estimate.stockUsed)} {estimate.baseUnit.symbol}
+              Stock utilisé {formatNumber(estimate.stockUsed)} {estimate.baseUnit.symbol}
             </Badge>
           )}
-          {fullyCovered && (
+          {estimate.cartLeftoverAvailable > 0 && (
+            <Badge variant="secondary" className="border-sky-500/20 bg-sky-500/10 text-sky-700 dark:text-sky-400">
+              Restes panier {formatNumber(estimate.cartLeftoverAvailable)} {estimate.baseUnit.symbol}
+            </Badge>
+          )}
+          {estimate.cartLeftoverUsed > 0 && (
+            <Badge variant="outline" className="border-sky-500/30 text-sky-700 dark:text-sky-400">
+              Panier utilisé {formatNumber(estimate.cartLeftoverUsed)} {estimate.baseUnit.symbol}
+            </Badge>
+          )}
+          {coveredByInventory && (
             <Badge variant="outline" className="border-emerald-500/30 text-emerald-700 dark:text-emerald-400">
-              Couvert par le stock
+              Couvert par le stock et le panier
             </Badge>
           )}
           {partiallyCovered && (
@@ -171,7 +193,7 @@ function IngredientPurchaseDetails({
         <div className="rounded-md bg-muted/40 px-2.5 py-2">
           <p className="text-[11px] font-semibold uppercase tracking-wide text-muted-foreground">Achat réel</p>
           <p className="mt-0.5 text-sm font-semibold">
-            {fullyCovered
+            {coveredByInventory
               ? formatCurrency(0)
               : purchasePlan
                 ? formatCurrency(purchasePlan.totalPrice)
@@ -181,7 +203,7 @@ function IngredientPurchaseDetails({
         <div className="rounded-md bg-muted/40 px-2.5 py-2">
           <p className="text-[11px] font-semibold uppercase tracking-wide text-muted-foreground">Restes</p>
           <p className="mt-0.5 text-sm font-semibold">
-            {fullyCovered
+            {coveredByInventory
               ? "—"
               : purchasePlan
                 ? `${formatNumber(purchasePlan.leftover)} ${estimate.baseUnit.symbol}`
@@ -189,9 +211,9 @@ function IngredientPurchaseDetails({
           </p>
         </div>
       </div>
-      {fullyCovered ? (
+      {coveredByInventory ? (
         <div className="rounded-lg border border-dashed border-emerald-500/30 bg-emerald-500/5 px-3 py-2.5 text-sm text-emerald-700 dark:text-emerald-400">
-          Rien à acheter — couvert par le stock
+          Rien à acheter — couvert par le stock et les restes du panier
         </div>
       ) : purchasePlan && purchasePlan.items.length > 0 ? (
         <div className="flex flex-col gap-2">
@@ -275,7 +297,7 @@ function RecipeIngredientsPanel({
               Quantités pour {portionCount} portion{portionCount > 1 ? "s" : ""}
               {hasEstimates
                 ? applyStock
-                  ? " — détail d'achat avec stock déduit."
+                  ? " — détail d'achat avec stock et restes du panier déduits."
                   : " — détail d'achat par ingrédient."
                 : "."}
             </CardDescription>
@@ -334,34 +356,44 @@ function RecipeIngredientsPanel({
 
 export function RecipeView({
   recipe,
+  recipes,
   units,
   ingredients,
   globalRatios,
   stockByIngredientId,
+  cartItems,
   portions,
   setPortions,
   onEdit,
+  isInCart,
+  onCartAction,
 }: {
   recipe: RecipeRecord;
+  recipes: RecipeRecord[];
   units: UnitRecord[];
   ingredients: IngredientRecord[];
   globalRatios: UnitRatioRecord[];
   stockByIngredientId: Map<string, number>;
+  cartItems: CartRecipeEntry[];
   portions: number;
   setPortions: (value: number) => void;
   onEdit: () => void;
+  isInCart: boolean;
+  onCartAction: () => void;
 }) {
   const [applyStock, setApplyStock] = useState(true);
-  const draft = recipeToDraft(recipe);
-  const estimates = estimateRecipeCosts(
-    draft,
-    ingredients,
+  const estimates = estimateRecipeViewCosts({
+    recipe,
     portions,
+    ingredients,
     globalRatios,
     units,
     stockByIngredientId,
+    cartItems,
+    isInCart,
     applyStock,
-  );
+    recipes,
+  });
   const sortedIngredients = recipe.ingredients.slice().sort((a, b) => a.position - b.position);
   const sortedSteps = recipe.steps.slice().sort((a, b) => a.position - b.position);
   const totalMinutes = (recipe.prepMinutes ?? 0) + (recipe.cookMinutes ?? 0);
@@ -456,22 +488,28 @@ export function RecipeView({
                   </div>
                 )}
                 <div className="flex flex-wrap items-end justify-between gap-4 rounded-lg bg-muted/25 px-4 py-3">
-                  <Field label="Portions" className="w-auto">
-                    <Input
-                      type="number"
-                      min={1}
-                      value={portions}
-                      onChange={(event) => setPortions(Number(event.target.value) || 1)}
-                      className="w-20 rounded-full bg-background"
-                    />
-                  </Field>
+                  <div className="flex flex-wrap items-end gap-3">
+                    <Field label="Portions" className="w-auto">
+                      <Input
+                        type="number"
+                        min={1}
+                        value={portions}
+                        onChange={(event) => setPortions(Number(event.target.value) || 1)}
+                        className="w-20 rounded-full bg-background"
+                      />
+                    </Field>
+                    <Button variant={isInCart ? "secondary" : "default"} size="sm" onClick={onCartAction}>
+                      <ShoppingCart data-icon="inline-start" />
+                      {isInCart ? "Ajuster le panier" : "Ajouter au panier"}
+                    </Button>
+                  </div>
                   {hasEstimates && (
                     <Label className="flex cursor-pointer items-center gap-2 pb-1 text-sm font-normal text-muted-foreground">
                       <Checkbox
                         checked={applyStock}
                         onCheckedChange={(checked) => setApplyStock(checked === true)}
                       />
-                      Prendre en compte le stock
+                      Prendre en compte le stock et le panier
                     </Label>
                   )}
                 </div>

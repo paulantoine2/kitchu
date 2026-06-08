@@ -5,8 +5,16 @@ import {
   scaleQuantity,
 } from "@/lib/conversions";
 import { formatCurrency } from "@/lib/utils";
+import {
+  buildProductLinesForIngredient,
+  collectIngredientDemands,
+  computeCartLeftoversByIngredient,
+  recipeShareValue,
+  type CartRecipeEntry,
+} from "@/components/kitchu/cart";
+import { recipeToDraft } from "@/components/kitchu/drafts";
 import { ingredientImageUrl } from "@/components/kitchu/images";
-import type { IngredientRecord, RecipeDraft, UnitRatioRecord, UnitRecord } from "@/components/kitchu/types";
+import type { IngredientRecord, RecipeDraft, RecipeRecord, UnitRatioRecord, UnitRecord } from "@/components/kitchu/types";
 import { usableUnitsForIngredient } from "@/components/kitchu/unit-helpers";
 import { standardUnitForPrice } from "@/components/kitchu/utils";
 
@@ -31,12 +39,64 @@ export type RecipeCostEstimate = {
   requiredBaseQuantity: number;
   stockAvailable: number;
   stockUsed: number;
+  cartLeftoverAvailable: number;
+  cartLeftoverUsed: number;
   toPurchaseBaseQuantity: number;
   theoreticalPrice: number | null;
   cheapestProduct: ProductOption | null;
   purchasePlan: PurchasePlan | null;
   missingReason: string | null;
 };
+
+function buildRecipeCostEstimate({
+  ingredient,
+  requiredBaseQuantity,
+  stockAvailable,
+  stockUsed,
+  cartLeftoverAvailable,
+  cartLeftoverUsed,
+  toPurchaseBaseQuantity,
+  options,
+  purchasePlan,
+}: {
+  ingredient: IngredientRecord;
+  requiredBaseQuantity: number;
+  stockAvailable: number;
+  stockUsed: number;
+  cartLeftoverAvailable: number;
+  cartLeftoverUsed: number;
+  toPurchaseBaseQuantity: number;
+  options: ProductOption[];
+  purchasePlan: PurchasePlan | null;
+}): RecipeCostEstimate {
+  const cheapestProduct = options.reduce<ProductOption | null>(
+    (best, option) => (!best || option.unitPrice < best.unitPrice ? option : best),
+    null,
+  );
+
+  return {
+    ingredientId: ingredient.id,
+    ingredientName: ingredient.name,
+    ingredientImageUrl: ingredientImageUrl(ingredient),
+    baseUnit: ingredient.baseUnit,
+    requiredBaseQuantity,
+    stockAvailable,
+    stockUsed,
+    cartLeftoverAvailable,
+    cartLeftoverUsed,
+    toPurchaseBaseQuantity,
+    theoreticalPrice:
+      toPurchaseBaseQuantity > 0 && cheapestProduct
+        ? toPurchaseBaseQuantity * cheapestProduct.unitPrice
+        : toPurchaseBaseQuantity === 0
+          ? 0
+          : null,
+    cheapestProduct,
+    purchasePlan,
+    missingReason: options.length ? null : "Aucun produit convertible",
+  };
+}
+
 export function estimateRecipeCosts(
   draft: RecipeDraft,
   ingredients: IngredientRecord[],
@@ -44,6 +104,7 @@ export function estimateRecipeCosts(
   globalRatios: UnitRatioRecord[],
   units: UnitRecord[],
   stockByIngredientId: Map<string, number> = new Map(),
+  cartLeftoversByIngredientId: Map<string, number> = new Map(),
   applyStock = true,
 ) {
   const ingredientById = new Map(ingredients.map((ingredient) => [ingredient.id, ingredient]));
@@ -72,38 +133,215 @@ export function estimateRecipeCosts(
 
   return Array.from(totals.values()).map(({ ingredient, requiredBaseQuantity }) => {
     const options = productOptionsForIngredient(ingredient, globalRatios, units);
-    const cheapestProduct = options.reduce<ProductOption | null>(
-      (best, option) => (!best || option.unitPrice < best.unitPrice ? option : best),
-      null,
-    );
     const stockAvailable = stockByIngredientId.get(ingredient.id) ?? 0;
     const stockUsed = applyStock ? Math.min(stockAvailable, requiredBaseQuantity) : 0;
+    const afterStock = Math.max(0, requiredBaseQuantity - stockUsed);
+    const cartLeftoverAvailable = cartLeftoversByIngredientId.get(ingredient.id) ?? 0;
+    const cartLeftoverUsed = applyStock ? Math.min(cartLeftoverAvailable, afterStock) : 0;
     const toPurchaseBaseQuantity = applyStock
-      ? Math.max(0, requiredBaseQuantity - stockUsed)
+      ? Math.max(0, afterStock - cartLeftoverUsed)
       : requiredBaseQuantity;
     const purchasePlan =
       toPurchaseBaseQuantity > 0 ? optimizePurchase(toPurchaseBaseQuantity, options) : null;
 
-    return {
-      ingredientId: ingredient.id,
-      ingredientName: ingredient.name,
-      ingredientImageUrl: ingredientImageUrl(ingredient),
-      baseUnit: ingredient.baseUnit,
+    return buildRecipeCostEstimate({
+      ingredient,
       requiredBaseQuantity,
       stockAvailable,
       stockUsed,
+      cartLeftoverAvailable,
+      cartLeftoverUsed,
       toPurchaseBaseQuantity,
-      theoreticalPrice:
-        toPurchaseBaseQuantity > 0 && cheapestProduct
-          ? toPurchaseBaseQuantity * cheapestProduct.unitPrice
-          : toPurchaseBaseQuantity === 0
-            ? 0
-            : null,
-      cheapestProduct,
+      options,
       purchasePlan,
-      missingReason: options.length ? null : "Aucun produit convertible",
-    };
+    });
   });
+}
+
+function estimateRecipeCostsFromCart({
+  recipeId,
+  portions,
+  cartItems,
+  recipes,
+  ingredients,
+  globalRatios,
+  units,
+  stockByIngredientId,
+  applyStock,
+}: {
+  recipeId: string;
+  portions: number;
+  cartItems: CartRecipeEntry[];
+  recipes: RecipeRecord[];
+  ingredients: IngredientRecord[];
+  globalRatios: UnitRatioRecord[];
+  units: UnitRecord[];
+  stockByIngredientId: Map<string, number>;
+  applyStock: boolean;
+}) {
+  const recipe = recipes.find((entry) => entry.id === recipeId);
+  if (!recipe) return [];
+
+  const adjustedCart = cartItems.map((item) =>
+    item.recipeId === recipeId ? { ...item, portions } : item,
+  );
+  const demandsByIngredientId = collectIngredientDemands(
+    adjustedCart,
+    recipes,
+    ingredients,
+    globalRatios,
+    units,
+  );
+  const ingredientById = new Map(ingredients.map((ingredient) => [ingredient.id, ingredient]));
+  const baseEstimates = estimateRecipeCosts(
+    recipeToDraft(recipe),
+    ingredients,
+    portions,
+    globalRatios,
+    units,
+    stockByIngredientId,
+    new Map(),
+    false,
+  );
+
+  return baseEstimates.map((baseEstimate) => {
+    const demands = demandsByIngredientId.get(baseEstimate.ingredientId) ?? [];
+    const ingredient = ingredientById.get(baseEstimate.ingredientId);
+    if (!ingredient || demands.length === 0) {
+      return baseEstimate;
+    }
+
+    const options = productOptionsForIngredient(ingredient, globalRatios, units);
+    const stockAvailable = stockByIngredientId.get(ingredient.id) ?? 0;
+    const result = buildProductLinesForIngredient(
+      ingredient,
+      demands,
+      stockAvailable,
+      options,
+      applyStock,
+    );
+    const stockUsed = result.stockByRecipeId.get(recipeId) ?? 0;
+    const purchasedBaseQuantity = result.remainingByRecipeId.get(recipeId) ?? 0;
+    const cartLeftoverAvailable = 0;
+    const cartLeftoverUsed = 0;
+    const purchasePrice = result.productLines.reduce(
+      (sum, line) => sum + recipeShareValue(line, recipeId),
+      0,
+    );
+    const purchaseLeftoverShare = result.productLines.reduce((sum, line) => {
+      if (line.missingReason || line.leftoverPercent <= 0) return sum;
+      const recipeShare = line.usage.find((entry) => entry.recipeId === recipeId);
+      if (!recipeShare) return sum;
+      const lineLeftoverBase = line.totalBaseQuantity * (line.leftoverPercent / 100);
+      return sum + lineLeftoverBase * (recipeShare.percent / 100);
+    }, 0);
+
+    const purchasePlan: PurchasePlan | null =
+      purchasePrice > 0
+        ? {
+            totalBaseQuantity: purchasedBaseQuantity,
+            totalPrice: purchasePrice,
+            leftover: purchaseLeftoverShare,
+            items: result.productLines
+              .filter((line) => !line.missingReason && recipeShareValue(line, recipeId) > 0)
+              .map((line) => {
+                const share = line.usage.find((entry) => entry.recipeId === recipeId);
+                const shareRatio = (share?.percent ?? 0) / 100;
+                return {
+                  product: line.product,
+                  count: line.count,
+                  baseQuantity: line.totalBaseQuantity * shareRatio,
+                  price: recipeShareValue(line, recipeId),
+                };
+              }),
+          }
+        : null;
+
+    return buildRecipeCostEstimate({
+      ingredient,
+      requiredBaseQuantity: baseEstimate.requiredBaseQuantity,
+      stockAvailable,
+      stockUsed,
+      cartLeftoverAvailable,
+      cartLeftoverUsed,
+      toPurchaseBaseQuantity: purchasedBaseQuantity,
+      options,
+      purchasePlan,
+    });
+  });
+}
+
+export function estimateRecipeViewCosts({
+  recipe,
+  portions,
+  ingredients,
+  globalRatios,
+  units,
+  stockByIngredientId,
+  cartItems,
+  isInCart,
+  applyStock,
+  recipes,
+}: {
+  recipe: RecipeRecord;
+  portions: number;
+  ingredients: IngredientRecord[];
+  globalRatios: UnitRatioRecord[];
+  units: UnitRecord[];
+  stockByIngredientId: Map<string, number>;
+  cartItems: CartRecipeEntry[];
+  isInCart: boolean;
+  applyStock: boolean;
+  recipes: RecipeRecord[];
+}) {
+  if (!applyStock) {
+    return estimateRecipeCosts(
+      recipeToDraft(recipe),
+      ingredients,
+      portions,
+      globalRatios,
+      units,
+      stockByIngredientId,
+      new Map(),
+      false,
+    );
+  }
+
+  if (isInCart) {
+    return estimateRecipeCostsFromCart({
+      recipeId: recipe.id,
+      portions,
+      cartItems,
+      recipes,
+      ingredients,
+      globalRatios,
+      units,
+      stockByIngredientId,
+      applyStock: true,
+    });
+  }
+
+  const cartLeftoversByIngredientId = computeCartLeftoversByIngredient(
+    cartItems,
+    recipes,
+    ingredients,
+    globalRatios,
+    units,
+    stockByIngredientId,
+    undefined,
+    applyStock,
+  );
+
+  return estimateRecipeCosts(
+    recipeToDraft(recipe),
+    ingredients,
+    portions,
+    globalRatios,
+    units,
+    stockByIngredientId,
+    cartLeftoversByIngredientId,
+    applyStock,
+  );
 }
 
 export function productOptionsForIngredient(
@@ -151,7 +389,7 @@ export function formatCheapestProductRatio(
   return `${estimate.cheapestProduct.product.name} (${formatCurrency(displayPrice)} / ${displayUnit.symbol})`;
 }
 
-export function optimizePurchase(requiredBaseQuantity: number, options: ProductOption[]) {
+export function optimizePurchase(requiredBaseQuantity: number, options: ProductOption[]): PurchasePlan | null {
   if (!Number.isFinite(requiredBaseQuantity) || requiredBaseQuantity <= 0 || options.length === 0) return null;
 
   let best: PurchasePlan | null = null;

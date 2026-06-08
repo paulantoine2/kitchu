@@ -2,7 +2,7 @@
 
 import { useState, useTransition } from "react";
 import { useRouter } from "next/navigation";
-import { BookOpen, ChefHat, Package, Utensils } from "lucide-react";
+import { BookOpen, ChefHat, Package, ShoppingCart, Utensils } from "lucide-react";
 import { ModeToggle } from "@/components/mode-toggle";
 import {
   addIngredientUnitQuick,
@@ -34,10 +34,14 @@ import { useBeforeUnloadWarning } from "@/components/kitchu/use-unsaved-changes"
 import { IngredientEditor } from "@/components/kitchu/ingredient-editor";
 import { ingredientImageUrl, recipeImageUrl } from "@/components/kitchu/images";
 import { toIngredientPayload, toRecipePayload, toUnitPayload } from "@/components/kitchu/payloads";
+import { CartSheet } from "@/components/kitchu/cart-sheet";
 import { RecipeEditor } from "@/components/kitchu/recipe-editor";
 import { RecipeView } from "@/components/kitchu/recipe-view";
+import { useCart } from "@/components/kitchu/use-cart";
 import type { IngredientRecord, KitchuAppProps } from "@/components/kitchu/types";
 import { EntityImage, LibraryListItem, LibraryPanel } from "@/components/kitchu/ui/shared";
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Empty, EmptyDescription } from "@/components/ui/empty";
 import { UnitEditor, UnitListButton, UnitListSection } from "@/components/kitchu/unit-editor";
@@ -70,6 +74,7 @@ export function KitchuApp({ units, globalRatios, ingredients, recipes }: KitchuA
   const [notice, setNotice] = useState("");
   const [leaveDialogOpen, setLeaveDialogOpen] = useState(false);
   const [pendingNavigation, setPendingNavigation] = useState<(() => void) | null>(null);
+  const [cartOpen, setCartOpen] = useState(false);
 
   const defaultBaseUnitId = canonicalBaseUnitForKind("MASS", units)?.id ?? units[0]?.id ?? "";
 
@@ -90,6 +95,13 @@ export function KitchuApp({ units, globalRatios, ingredients, recipes }: KitchuA
       ingredient.stock ? [[ingredient.id, ingredient.stock.quantity] as const] : [],
     ),
   );
+  const cart = useCart({
+    recipes,
+    ingredients: allIngredients,
+    globalRatios,
+    units,
+    stockByIngredientId,
+  });
   const editableUnits = filteredUnits.filter((unit) => !isHardcodedMeasurementKind(unit.kind));
   const selectedRecipe = selectedRecipeId
     ? recipes.find((recipe) => recipe.id === selectedRecipeId) ?? null
@@ -153,6 +165,21 @@ export function KitchuApp({ units, globalRatios, ingredients, recipes }: KitchuA
             </div>
           </div>
           <div className="flex w-full items-center gap-2 md:w-auto">
+            <Button
+              variant="outline"
+              size="sm"
+              className="relative shrink-0"
+              onClick={() => setCartOpen(true)}
+              aria-label="Ouvrir le panier"
+            >
+              <ShoppingCart data-icon="inline-start" />
+              <span className="hidden sm:inline">Panier</span>
+              {cart.itemCount > 0 && (
+                <Badge className="absolute -top-2 -right-2 size-5 justify-center rounded-full p-0 text-[10px]">
+                  {cart.itemCount}
+                </Badge>
+              )}
+            </Button>
             <ModeToggle />
             <Tabs
               value={tab}
@@ -213,12 +240,19 @@ export function KitchuApp({ units, globalRatios, ingredients, recipes }: KitchuA
             {recipeMode === "view" && selectedRecipe ? (
               <RecipeView
                 recipe={selectedRecipe}
+                recipes={recipes}
                 units={units}
                 ingredients={allIngredients}
                 globalRatios={globalRatios}
                 stockByIngredientId={stockByIngredientId}
+                cartItems={cart.items}
                 portions={portions}
                 setPortions={setPortions}
+                isInCart={cart.isInCart(selectedRecipe.id)}
+                onCartAction={() => {
+                  cart.addOrUpdate(selectedRecipe.id, portions);
+                  setCartOpen(true);
+                }}
                 onEdit={() => {
                   setRecipeDraft(recipeToDraft(selectedRecipe));
                   setRecipeMode("edit");
@@ -531,6 +565,14 @@ export function KitchuApp({ units, globalRatios, ingredients, recipes }: KitchuA
           </>
         )}
       </div>
+
+      <CartSheet
+        open={cartOpen}
+        onOpenChange={setCartOpen}
+        summary={cart.summary}
+        onPortionsChange={cart.setPortions}
+        onRemoveRecipe={cart.remove}
+      />
 
       <UnsavedChangesDialog
         open={leaveDialogOpen}
