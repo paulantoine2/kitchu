@@ -56,7 +56,6 @@ export type ParsedHelloFreshIngredient = {
   unitLabel: string;
   unitCode: string | null;
   shipped: boolean;
-  note: string;
 };
 
 export type IngredientMatchStatus = "matched" | "ingredient_missing" | "unit_missing" | "unit_unknown";

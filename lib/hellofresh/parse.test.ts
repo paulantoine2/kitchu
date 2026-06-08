@@ -53,6 +53,8 @@ describe("htmlInstructionsToText", () => {
     );
     assert.match(text, /Préchauffez le four/);
     assert.match(text, /Coupez les pommes de terre/);
+    assert.doesNotMatch(text, /^•/m);
+    assert.equal(text, "Préchauffez le four.\nCoupez les pommes de terre.");
   });
 });
 

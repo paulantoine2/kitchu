@@ -3,7 +3,7 @@
 import { useState } from "react";
 import { GripVertical, Plus, Trash2, X } from "lucide-react";
 import { effectiveToBaseFactor, globalConversionFactor, pricePerBaseUnit } from "@/lib/conversions";
-import { formatCurrency, formatNumber } from "@/lib/utils";
+import { formatCurrency } from "@/lib/utils";
 import { HelloFreshImporter } from "@/components/hellofresh-importer";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -734,37 +734,54 @@ export function RecipeEditor({
                   </div>
 
                   {dialogProduct && (
-                    <div className="mt-4 flex flex-col gap-3">
-                      <div className="grid gap-3 sm:grid-cols-2">
-                        <Field label="Magasin">
-                          <NativeSelect
-                            value={dialogProduct.store}
-                            onChange={(event) =>
-                              updateDialogProduct(dialogProduct.key, { store: event.target.value })
-                            }
-                          >
-                            <option value="">Choisir</option>
-                            {KNOWN_STORES.map((store) => (
-                              <option key={store} value={store}>
-                                {store}
-                              </option>
-                            ))}
-                            {dialogProduct.store && !knownStoreSet.has(dialogProduct.store) && (
-                              <option value={dialogProduct.store}>{dialogProduct.store}</option>
-                            )}
-                          </NativeSelect>
-                        </Field>
-                        <Field label="Produit">
-                          <Input
-                            value={dialogProduct.name}
-                            onChange={(event) =>
-                              updateDialogProduct(dialogProduct.key, { name: event.target.value })
-                            }
-                          />
-                        </Field>
+                    <div className="mt-4 flex flex-col gap-4">
+                      <div className="flex flex-col gap-3 lg:flex-row lg:items-start">
+                        <EntityImage
+                          src={dialogProduct.imageUrl}
+                          label={dialogProduct.name || "Produit"}
+                          size="sm"
+                          className="shrink-0"
+                        />
+                        <div className="grid min-w-0 flex-1 gap-3 sm:grid-cols-2 xl:grid-cols-3">
+                          <Field label="Magasin">
+                            <NativeSelect
+                              className="w-full"
+                              value={dialogProduct.store}
+                              onChange={(event) =>
+                                updateDialogProduct(dialogProduct.key, { store: event.target.value })
+                              }
+                            >
+                              <option value="">Choisir</option>
+                              {KNOWN_STORES.map((store) => (
+                                <option key={store} value={store}>
+                                  {store}
+                                </option>
+                              ))}
+                              {dialogProduct.store && !knownStoreSet.has(dialogProduct.store) && (
+                                <option value={dialogProduct.store}>{dialogProduct.store}</option>
+                              )}
+                            </NativeSelect>
+                          </Field>
+                          <Field label="Marque">
+                            <Input
+                              value={dialogProduct.brand}
+                              onChange={(event) =>
+                                updateDialogProduct(dialogProduct.key, { brand: event.target.value })
+                              }
+                            />
+                          </Field>
+                          <Field label="Produit" className="sm:col-span-2 xl:col-span-1">
+                            <Input
+                              value={dialogProduct.name}
+                              onChange={(event) =>
+                                updateDialogProduct(dialogProduct.key, { name: event.target.value })
+                              }
+                            />
+                          </Field>
+                        </div>
                       </div>
-                      <div className="grid gap-3 sm:grid-cols-3">
-                        <Field label="Qté colis">
+                      <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
+                        <Field label="Qté">
                           <Input
                             type="number"
                             min={0}
@@ -801,7 +818,25 @@ export function RecipeEditor({
                             ))}
                           </NativeSelect>
                         </Field>
-                        <Field label="Prix colis">
+                        <Field label="Ratio produit">
+                          <Input
+                            type="number"
+                            min={0}
+                            step="0.01"
+                            value={
+                              dialogProductUsesSystemRatio
+                                ? dialogProductEffectiveFactor?.toString() ?? ""
+                                : dialogProduct.packageToBaseFactor
+                            }
+                            disabled={dialogProductUsesSystemRatio}
+                            onChange={(event) =>
+                              updateDialogProduct(dialogProduct.key, {
+                                packageToBaseFactor: event.target.value,
+                              })
+                            }
+                          />
+                        </Field>
+                        <Field label="Prix">
                           <Input
                             type="number"
                             min={0}
@@ -813,34 +848,44 @@ export function RecipeEditor({
                           />
                         </Field>
                       </div>
-                      {!dialogProductUsesSystemRatio && dialogProductUnit && dialogBaseUnit && (
-                        <Field label="Ratio produit">
+                      <div className="grid gap-3 md:grid-cols-3">
+                        <Field label="Image">
                           <Input
-                            type="number"
-                            min={0}
-                            step="0.01"
-                            value={dialogProduct.packageToBaseFactor}
-                            placeholder={`ex. ${formatNumber(1)} ${dialogBaseUnit.symbol} / ${dialogProductUnit.symbol}`}
+                            value={dialogProduct.imageUrl}
                             onChange={(event) =>
-                              updateDialogProduct(dialogProduct.key, {
-                                packageToBaseFactor: event.target.value,
-                              })
+                              updateDialogProduct(dialogProduct.key, { imageUrl: event.target.value })
+                            }
+                            placeholder="https://..."
+                          />
+                        </Field>
+                        <Field label="URL">
+                          <Input
+                            value={dialogProduct.url}
+                            onChange={(event) =>
+                              updateDialogProduct(dialogProduct.key, { url: event.target.value })
                             }
                           />
                         </Field>
-                      )}
+                        <Field label="Code-barres">
+                          <Input
+                            value={dialogProduct.barcode}
+                            onChange={(event) =>
+                              updateDialogProduct(dialogProduct.key, { barcode: event.target.value })
+                            }
+                          />
+                        </Field>
+                      </div>
                       <div className="flex flex-wrap items-center gap-2">
                         {dialogStandardPrice !== null && dialogStandardPriceUnit ? (
                           <Badge className="border-primary/20 bg-primary/10 text-primary">
-                            {formatCurrency(dialogStandardPrice)} / {dialogStandardPriceUnit.symbol}
+                            {formatCurrency(dialogStandardPrice)} / {dialogStandardPriceUnit.symbol} ·{" "}
+                            {dialogProductUsesSystemRatio ? "défini dans Unités" : "produit"}
                           </Badge>
-                        ) : dialogProduct.packageQuantity && dialogProduct.price ? (
+                        ) : (
                           <Badge variant="outline">
-                            {dialogProductUsesSystemRatio
-                              ? "Complète les champs du produit"
-                              : "Ratio produit requis"}
+                            Ratio produit requis{dialogProductUnit ? ` pour ${dialogProductUnit.symbol}` : ""}
                           </Badge>
-                        ) : null}
+                        )}
                       </div>
                     </div>
                   )}

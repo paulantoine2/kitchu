@@ -3,7 +3,7 @@ import {
   type ParsedHelloFreshIngredient,
   type ParsedHelloFreshRecipe,
 } from "./types";
-import { helloFreshUnitToCode, isTasteUnit } from "./units";
+import { helloFreshUnitToCode } from "./units";
 
 const HELLOFRESH_IMAGE_BASE = "https://img.hellofresh.com/hellofresh_s3";
 const HELLOFRESH_URL_PATTERN =
@@ -55,9 +55,6 @@ export function parseHelloFreshRecipe(
       if (!meta) return null;
 
       const unitCode = helloFreshUnitToCode(entry.unit);
-      const noteParts: string[] = [];
-      if (!meta.shipped) noteParts.push("Non inclus dans la livraison");
-      if (isTasteUnit(entry.unit)) noteParts.push("Selon le goût");
 
       return {
         hfId: entry.id,
@@ -67,7 +64,6 @@ export function parseHelloFreshRecipe(
         unitLabel: entry.unit,
         unitCode,
         shipped: meta.shipped,
-        note: noteParts.join(" · "),
       } satisfies ParsedHelloFreshIngredient;
     })
     .filter((item): item is ParsedHelloFreshIngredient => item !== null);
@@ -117,7 +113,7 @@ export function htmlInstructionsToText(html: string): string {
 
   return withLines
     .split("\n")
-    .map((line) => line.trim())
+    .map((line) => line.trim().replace(/^•\s*/, ""))
     .filter(Boolean)
     .join("\n");
 }

@@ -27,9 +27,7 @@ export function helloFreshImportToDraft(result: HelloFreshImportResult): RecipeD
       ingredientImageUrl: match.imageUrl,
       unitId: match.unitId,
       quantityPerServing: match.amount > 0 ? String(match.amount) : "",
-      note: [match.note, match.unitLabel && !match.unitCode ? `Unité HF: ${match.unitLabel}` : ""]
-        .filter(Boolean)
-        .join(" · "),
+      note: "",
       importStatus: match.status,
       suggestedUnitCode: match.suggestedUnitCode ?? undefined,
       hfUnitLabel: match.unitLabel,
