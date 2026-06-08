@@ -1,6 +1,6 @@
 "use client";
 
-import { Plus, Save, Search, Trash2 } from "lucide-react";
+import { Plus, Save, Search, Trash2, TriangleAlert } from "lucide-react";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -13,8 +13,7 @@ import {
   InputGroupAddon,
   InputGroupInput,
 } from "@/components/ui/input-group";
-import { Item, ItemContent, ItemDescription, ItemMedia, ItemTitle } from "@/components/ui/item";
-import { ScrollArea } from "@/components/ui/scroll-area";
+import { Item, ItemActions, ItemContent, ItemDescription, ItemMedia, ItemTitle } from "@/components/ui/item";
 import { Spinner } from "@/components/ui/spinner";
 import { cn } from "@/lib/utils";
 
@@ -63,19 +62,19 @@ export function LibraryPanel({
   children: React.ReactNode;
 }) {
   return (
-    <aside className="min-w-0 lg:sticky lg:top-24 lg:self-start">
-      <Card>
-        <CardHeader className="border-b">
+    <aside className="min-h-0 min-w-0 lg:sticky lg:top-24 lg:self-start lg:h-[calc(100dvh-6rem)]">
+      <Card className="flex h-full min-h-0 max-h-[calc(100dvh-6rem)] flex-col lg:max-h-none">
+        <CardHeader className="shrink-0 border-b py-3">
           <div className="flex items-center justify-between gap-3">
-            <CardTitle>{title}</CardTitle>
+            <CardTitle className="text-base">{title}</CardTitle>
             <Button variant="secondary" size="sm" onClick={onNew} aria-label={actionLabel} className="shrink-0">
               <Plus data-icon="inline-start" />
               <span className="hidden sm:inline">{actionLabel}</span>
             </Button>
           </div>
         </CardHeader>
-        <CardContent className="flex flex-col gap-3">
-          <InputGroup className="rounded-full">
+        <CardContent className="flex min-h-0 flex-1 flex-col gap-2">
+          <InputGroup className="shrink-0 rounded-full">
             <InputGroupAddon align="inline-start">
               <Search />
             </InputGroupAddon>
@@ -85,9 +84,9 @@ export function LibraryPanel({
               placeholder="Rechercher"
             />
           </InputGroup>
-          <ScrollArea className="max-h-[calc(100vh-260px)] pr-1">
-            <div className="flex flex-col gap-2">{children}</div>
-          </ScrollArea>
+          <div className="min-h-0 flex-1 overflow-y-auto overscroll-contain pr-1">
+            <div className="flex flex-col gap-1">{children}</div>
+          </div>
         </CardContent>
       </Card>
     </aside>
@@ -100,19 +99,21 @@ export function LibraryListItem({
   media,
   title,
   description,
+  warning,
 }: {
   active: boolean;
   onClick: () => void;
   media: React.ReactNode;
   title: string;
-  description: React.ReactNode;
+  description?: React.ReactNode;
+  warning?: string;
 }) {
   return (
     <Item
       variant={active ? "outline" : "default"}
-      size="sm"
+      size="xs"
       className={cn(
-        "w-full cursor-pointer border text-left transition-shadow",
+        "w-full cursor-pointer border py-1.5 text-left transition-shadow",
         active
           ? "border-foreground bg-card shadow-md"
           : "border-transparent hover:border-border hover:bg-card hover:shadow-sm",
@@ -120,10 +121,17 @@ export function LibraryListItem({
       render={<button type="button" onClick={onClick} />}
     >
       <ItemMedia variant="image">{media}</ItemMedia>
-      <ItemContent>
-        <ItemTitle>{title}</ItemTitle>
-        <ItemDescription>{description}</ItemDescription>
+      <ItemContent className="min-w-0 gap-0">
+        <ItemTitle className="truncate text-sm leading-tight">{title}</ItemTitle>
+        {description ? <ItemDescription className="line-clamp-1">{description}</ItemDescription> : null}
       </ItemContent>
+      {warning ? (
+        <ItemActions className="shrink-0">
+          <span className="inline-flex text-amber-500 dark:text-amber-400" title={warning} aria-label={warning}>
+            <TriangleAlert className="size-4" aria-hidden="true" />
+          </span>
+        </ItemActions>
+      ) : null}
     </Item>
   );
 }

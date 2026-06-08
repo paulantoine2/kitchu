@@ -98,6 +98,8 @@ export function blankIngredient(baseUnitId = ""): IngredientDraft {
     imageUrl: "",
     notes: "",
     baseUnitId,
+    stockQuantity: "",
+    stockUnitId: baseUnitId,
     units: baseUnitId ? [{ key: key(), unitId: baseUnitId, toBaseFactor: "1" }] : [],
     products: [],
   };
@@ -111,6 +113,8 @@ export function ingredientToDraft(ingredient: IngredientRecord | undefined, defa
     imageUrl: ingredient.imageUrl ?? "",
     notes: ingredient.notes ?? "",
     baseUnitId: ingredient.baseUnitId,
+    stockQuantity: ingredient.stock?.quantity.toString() ?? "",
+    stockUnitId: ingredient.baseUnitId,
     units: ingredient.units.map((unit) => ({
       key: unit.id,
       unitId: unit.unitId,

@@ -1,29 +1,343 @@
 "use client";
 
-import { Clock, ExternalLink, Pencil } from "lucide-react";
+import { useState } from "react";
+import { Clock, ExternalLink, Pencil, ShoppingBag } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardHeader } from "@/components/ui/card";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Checkbox } from "@/components/ui/checkbox";
 import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import {
+  Item,
+  ItemContent,
+  ItemDescription,
+  ItemFooter,
+  ItemGroup,
+  ItemMedia,
+  ItemTitle,
+} from "@/components/ui/item";
+import { Separator } from "@/components/ui/separator";
 import { convertToBase, effectiveToBaseFactor, scaleQuantity } from "@/lib/conversions";
-import { formatCurrency, formatNumber } from "@/lib/utils";
+import { cn, formatCurrency, formatNumber } from "@/lib/utils";
 import { recipeToDraft } from "@/components/kitchu/drafts";
 import { ingredientImageUrl, recipeImageUrl } from "@/components/kitchu/images";
 import {
   estimateRecipeCosts,
-  formatCheapestProductRatio,
-  sumNullable,
+  estimatePurchaseTotal,
+  sumPartial,
   type RecipeCostEstimate,
 } from "@/components/kitchu/recipe-cost";
 import type { IngredientRecord, RecipeRecord, UnitRatioRecord, UnitRecord } from "@/components/kitchu/types";
 import { EntityImage, Field } from "@/components/kitchu/ui/shared";
 import { uniqueUnits } from "@/components/kitchu/utils";
 
+type RecipeIngredientRow = RecipeRecord["ingredients"][number];
+
+function formatIngredientQuantity(item: RecipeIngredientRow, portions: number, globalRatios: UnitRatioRecord[], units: UnitRecord[]) {
+  const scaledRecipeQuantity = scaleQuantity(item.quantityPerServing, portions);
+  const primary = `${formatNumber(scaledRecipeQuantity)} ${item.unit.symbol}`;
+  const usesBaseUnit = item.unitId === item.ingredient.baseUnitId;
+
+  if (usesBaseUnit) {
+    return { primary, secondary: null };
+  }
+
+  const baseFactor = effectiveToBaseFactor(
+    item.unit,
+    item.ingredient.baseUnit,
+    item.ingredient.units.find((entry) => entry.unitId === item.unitId)?.toBaseFactor,
+    globalRatios,
+    { allowSpecific: true, units },
+  );
+  const baseQuantity = convertToBase(item.quantityPerServing, baseFactor);
+
+  if (baseQuantity === null) {
+    return { primary, secondary: null };
+  }
+
+  const scaledBaseQuantity = scaleQuantity(baseQuantity, portions);
+  return {
+    primary,
+    secondary: `≈ ${formatNumber(scaledBaseQuantity)} ${item.ingredient.baseUnit.symbol}`,
+  };
+}
+
+
+function RecipeHeaderPrice({
+  label,
+  total,
+  isComplete,
+  perPortion,
+  emphasized = false,
+  className,
+}: {
+  label: string;
+  total: number | null;
+  isComplete: boolean;
+  perPortion: number | null;
+  emphasized?: boolean;
+  className?: string;
+}) {
+  return (
+    <div
+      className={cn(
+        "flex min-w-0 flex-1 flex-col rounded-lg border px-4 py-3",
+        emphasized ? "border-primary/25 bg-primary/5" : "border-border bg-card/80",
+        className,
+      )}
+    >
+      <p className="text-[11px] font-semibold uppercase tracking-wide text-muted-foreground">{label}</p>
+      <p
+        className={cn(
+          "mt-1 min-h-8 text-2xl font-semibold tabular-nums tracking-tight sm:text-3xl",
+          emphasized ? "text-primary" : "text-foreground",
+          perPortion === null && total === null && "invisible",
+        )}
+        aria-hidden={perPortion === null && total === null}
+      >
+        {perPortion !== null ? (
+          <>
+            {formatCurrency(perPortion)}
+            <span className="text-base font-medium text-muted-foreground sm:text-lg">/portion</span>
+          </>
+        ) : total !== null ? (
+          formatCurrency(total)
+        ) : (
+          "—"
+        )}
+      </p>
+      <p
+        className={cn(
+          "mt-0.5 min-h-4 text-xs leading-4 text-muted-foreground tabular-nums",
+          total === null && "invisible",
+        )}
+        aria-hidden={total === null}
+      >
+        {total !== null && !isComplete
+          ? `Total ${formatCurrency(total)} · estimation partielle`
+          : total !== null && perPortion !== null
+            ? `Total ${formatCurrency(total)}`
+            : "\u00a0"}
+      </p>
+    </div>
+  );
+}
+
+function IngredientPurchaseDetails({
+  estimate,
+  applyStock,
+}: {
+  estimate: RecipeCostEstimate;
+  applyStock: boolean;
+}) {
+  const purchasePlan = estimate.purchasePlan;
+  const fullyCovered = applyStock && estimate.toPurchaseBaseQuantity === 0 && estimate.stockUsed > 0;
+  const partiallyCovered = applyStock && estimate.stockUsed > 0 && estimate.toPurchaseBaseQuantity > 0;
+
+  return (
+    <div className="flex w-full flex-col gap-2">
+      {applyStock && (estimate.stockAvailable > 0 || estimate.stockUsed > 0) && (
+        <div className="flex flex-wrap gap-2">
+          {estimate.stockAvailable > 0 && (
+            <Badge variant="secondary" className="border-emerald-500/20 bg-emerald-500/10 text-emerald-700 dark:text-emerald-400">
+              Stock {formatNumber(estimate.stockAvailable)} {estimate.baseUnit.symbol}
+            </Badge>
+          )}
+          {estimate.stockUsed > 0 && (
+            <Badge variant="outline" className="border-emerald-500/30 text-emerald-700 dark:text-emerald-400">
+              Utilisé {formatNumber(estimate.stockUsed)} {estimate.baseUnit.symbol}
+            </Badge>
+          )}
+          {fullyCovered && (
+            <Badge variant="outline" className="border-emerald-500/30 text-emerald-700 dark:text-emerald-400">
+              Couvert par le stock
+            </Badge>
+          )}
+          {partiallyCovered && (
+            <Badge variant="outline">
+              À acheter {formatNumber(estimate.toPurchaseBaseQuantity)} {estimate.baseUnit.symbol}
+            </Badge>
+          )}
+        </div>
+      )}
+      <div className="grid gap-2 sm:grid-cols-3">
+        <div className="rounded-md bg-muted/40 px-2.5 py-2">
+          <p className="text-[11px] font-semibold uppercase tracking-wide text-muted-foreground">Théorique</p>
+          <p className="mt-0.5 text-sm font-semibold">
+            {estimate.theoreticalPrice === null ? "—" : formatCurrency(estimate.theoreticalPrice)}
+          </p>
+        </div>
+        <div className="rounded-md bg-muted/40 px-2.5 py-2">
+          <p className="text-[11px] font-semibold uppercase tracking-wide text-muted-foreground">Achat réel</p>
+          <p className="mt-0.5 text-sm font-semibold">
+            {fullyCovered
+              ? formatCurrency(0)
+              : purchasePlan
+                ? formatCurrency(purchasePlan.totalPrice)
+                : "—"}
+          </p>
+        </div>
+        <div className="rounded-md bg-muted/40 px-2.5 py-2">
+          <p className="text-[11px] font-semibold uppercase tracking-wide text-muted-foreground">Restes</p>
+          <p className="mt-0.5 text-sm font-semibold">
+            {fullyCovered
+              ? "—"
+              : purchasePlan
+                ? `${formatNumber(purchasePlan.leftover)} ${estimate.baseUnit.symbol}`
+                : "—"}
+          </p>
+        </div>
+      </div>
+      {fullyCovered ? (
+        <div className="rounded-lg border border-dashed border-emerald-500/30 bg-emerald-500/5 px-3 py-2.5 text-sm text-emerald-700 dark:text-emerald-400">
+          Rien à acheter — couvert par le stock
+        </div>
+      ) : purchasePlan && purchasePlan.items.length > 0 ? (
+        <div className="flex flex-col gap-2">
+          {purchasePlan.items.map((productItem) => (
+            <div
+              key={productItem.product.id}
+              className="flex w-full items-center gap-3 rounded-lg border border-border bg-card p-3 shadow-sm"
+            >
+              <EntityImage
+                src={productItem.product.imageUrl}
+                label={productItem.product.name}
+                size="sm"
+                className="shrink-0"
+              />
+              <div className="min-w-0 flex-1">
+                <p className="truncate font-semibold leading-snug">{productItem.product.name}</p>
+                <p className="mt-0.5 truncate text-xs text-muted-foreground">
+                  {[productItem.product.store, productItem.product.brand].filter(Boolean).join(" · ")}
+                </p>
+                <p className="mt-1 text-sm font-medium">
+                  {productItem.count}× {formatNumber(productItem.product.packageQuantity)}{" "}
+                  {productItem.product.packageUnit.symbol}
+                </p>
+              </div>
+              <div className="shrink-0 text-right">
+                <p className="text-base font-semibold">{formatCurrency(productItem.price)}</p>
+                {productItem.count > 1 && (
+                  <p className="text-xs text-muted-foreground">
+                    {formatCurrency(productItem.product.price)}/colis
+                  </p>
+                )}
+              </div>
+            </div>
+          ))}
+        </div>
+      ) : (
+        <div className="rounded-lg border border-dashed border-border bg-muted/30 px-3 py-2.5 text-sm text-muted-foreground">
+          {estimate.missingReason ?? "Indisponible"}
+        </div>
+      )}
+    </div>
+  );
+}
+
+function RecipeIngredientsPanel({
+  sortedIngredients,
+  estimates,
+  portions,
+  units,
+  globalRatios,
+  applyStock,
+}: {
+  sortedIngredients: RecipeIngredientRow[];
+  estimates: RecipeCostEstimate[];
+  portions: number;
+  units: UnitRecord[];
+  globalRatios: UnitRatioRecord[];
+  applyStock: boolean;
+}) {
+  const estimateByIngredientId = new Map(estimates.map((estimate) => [estimate.ingredientId, estimate]));
+  const firstRowByIngredientId = new Map<string, string>();
+  for (const item of sortedIngredients) {
+    if (!firstRowByIngredientId.has(item.ingredientId)) {
+      firstRowByIngredientId.set(item.ingredientId, item.id);
+    }
+  }
+
+  const portionCount = Math.max(1, portions);
+  const hasEstimates = estimates.length > 0;
+
+  return (
+    <Card>
+      <CardHeader>
+        <div className="flex items-start gap-3">
+          <div className="flex size-9 shrink-0 items-center justify-center rounded-lg bg-primary/10 text-primary">
+            <ShoppingBag />
+          </div>
+          <div className="min-w-0 flex-1">
+            <CardTitle>Ingrédients</CardTitle>
+            <CardDescription>
+              Quantités pour {portionCount} portion{portionCount > 1 ? "s" : ""}
+              {hasEstimates
+                ? applyStock
+                  ? " — détail d'achat avec stock déduit."
+                  : " — détail d'achat par ingrédient."
+                : "."}
+            </CardDescription>
+          </div>
+        </div>
+      </CardHeader>
+      <CardContent>
+        {sortedIngredients.length === 0 ? (
+          <div className="rounded-lg border border-dashed border-border bg-muted/30 p-6 text-center text-sm text-muted-foreground">
+            Aucun ingrédient dans cette recette.
+          </div>
+        ) : (
+          <ItemGroup className="gap-3">
+            {sortedIngredients.map((item) => {
+              const quantity = formatIngredientQuantity(item, portions, globalRatios, units);
+              const estimate = estimateByIngredientId.get(item.ingredientId);
+              const isPrimaryRow = estimate && firstRowByIngredientId.get(item.ingredientId) === item.id;
+              const showPurchaseDetails = isPrimaryRow && estimate;
+
+              return (
+                <Item key={item.id} variant="outline" size="sm" className="flex-col items-stretch gap-0 p-0">
+                  <div className="flex items-start gap-3 p-3">
+                    <ItemMedia variant="image">
+                      <EntityImage src={ingredientImageUrl(item.ingredient)} label={item.ingredient.name} size="xs" />
+                    </ItemMedia>
+                    <ItemContent className="min-w-0 flex-1">
+                      <div className="flex flex-wrap items-start justify-between gap-x-3 gap-y-1">
+                        <ItemTitle className="text-base font-semibold">{item.ingredient.name}</ItemTitle>
+                        <div className="flex shrink-0 flex-col items-end gap-0.5 text-right">
+                          <span className="text-sm font-semibold text-primary">{quantity.primary}</span>
+                          {quantity.secondary && (
+                            <span className="text-xs text-muted-foreground">{quantity.secondary}</span>
+                          )}
+                        </div>
+                      </div>
+                      {item.note && <ItemDescription className="mt-1">{item.note}</ItemDescription>}
+                    </ItemContent>
+                  </div>
+                  {showPurchaseDetails && estimate && (
+                    <>
+                      <Separator />
+                      <ItemFooter className="p-3 pt-2.5">
+                        <IngredientPurchaseDetails estimate={estimate} applyStock={applyStock} />
+                      </ItemFooter>
+                    </>
+                  )}
+                </Item>
+              );
+            })}
+          </ItemGroup>
+        )}
+      </CardContent>
+    </Card>
+  );
+}
+
 export function RecipeView({
   recipe,
   units,
   ingredients,
   globalRatios,
+  stockByIngredientId,
   portions,
   setPortions,
   onEdit,
@@ -32,136 +346,165 @@ export function RecipeView({
   units: UnitRecord[];
   ingredients: IngredientRecord[];
   globalRatios: UnitRatioRecord[];
+  stockByIngredientId: Map<string, number>;
   portions: number;
   setPortions: (value: number) => void;
   onEdit: () => void;
 }) {
+  const [applyStock, setApplyStock] = useState(true);
   const draft = recipeToDraft(recipe);
-  const estimates = estimateRecipeCosts(draft, ingredients, portions, globalRatios, units);
+  const estimates = estimateRecipeCosts(
+    draft,
+    ingredients,
+    portions,
+    globalRatios,
+    units,
+    stockByIngredientId,
+    applyStock,
+  );
   const sortedIngredients = recipe.ingredients.slice().sort((a, b) => a.position - b.position);
   const sortedSteps = recipe.steps.slice().sort((a, b) => a.position - b.position);
   const totalMinutes = (recipe.prepMinutes ?? 0) + (recipe.cookMinutes ?? 0);
   const heroImageUrl = recipeImageUrl(recipe);
+  const portionCount = Math.max(1, portions);
+  const hasEstimates = estimates.length > 0;
+  const theoreticalSum = sumPartial(estimates.map((estimate) => estimate.theoreticalPrice));
+  const purchaseSum = sumPartial(estimates.map(estimatePurchaseTotal));
+  const hasPartialEstimate = hasEstimates && (!theoreticalSum.isComplete || !purchaseSum.isComplete);
 
   return (
     <section className="flex min-w-0 flex-col gap-6">
-      <Card className="overflow-hidden">
-        <div className="grid md:grid-cols-[minmax(220px,320px)_minmax(0,1fr)]">
-          <div className="relative aspect-[4/3] bg-primary/10 md:aspect-auto md:min-h-64">
+      <Card>
+        <div className="grid items-start gap-4 md:grid-cols-[minmax(12rem,20rem)_minmax(0,1fr)] md:gap-6">
+          <div className="relative mx-4 mt-4 aspect-square overflow-hidden rounded-xl bg-primary/10 md:mx-0 md:mb-4 md:ml-4 md:mt-4">
             {heroImageUrl ? (
               // eslint-disable-next-line @next/next/no-img-element
               <img src={heroImageUrl} alt={recipe.name} className="size-full object-cover" />
             ) : (
-              <div className="flex size-full min-h-48 items-center justify-center text-5xl font-semibold text-primary md:min-h-64">
+              <div className="flex size-full items-center justify-center text-5xl font-semibold text-primary">
                 {recipe.name.trim().charAt(0).toUpperCase() || "K"}
               </div>
             )}
           </div>
           <div className="flex min-w-0 flex-col">
-            <CardHeader>
-              <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
-                <div className="min-w-0 flex-1">
-                  <p className="text-sm font-semibold text-primary">Recette sélectionnée</p>
-                  <h2 className="mt-1 text-2xl font-semibold leading-tight sm:text-3xl">{recipe.name}</h2>
-                  {recipe.description && (
-                    <p className="mt-2 max-w-2xl text-sm leading-6 text-muted-foreground">{recipe.description}</p>
-                  )}
-                  <div className="mt-4 flex flex-wrap items-center gap-2">
-                    <Badge variant="secondary">{sortedIngredients.length} ingrédients</Badge>
-                    <Badge variant="secondary">{sortedSteps.length} étapes</Badge>
-                    {totalMinutes > 0 && (
-                      <Badge variant="secondary">
-                        <Clock data-icon="inline-start" />
-                        {totalMinutes} min
-                      </Badge>
-                    )}
-                    {recipe.sourceUrl && (
-                      <Button
-                        variant="outline"
-                        size="sm"
-                        render={
-                          <a href={recipe.sourceUrl} target="_blank" rel="noreferrer" />
-                        }
-                      >
-                        <ExternalLink data-icon="inline-start" />
-                        Source
-                      </Button>
-                    )}
-                  </div>
-                </div>
-                <Button onClick={onEdit} className="shrink-0 self-start">
+            <CardHeader className="gap-4 pb-4">
+              <div className="flex items-start justify-between gap-3">
+                <p className="text-xs font-semibold uppercase tracking-wide text-primary">Recette sélectionnée</p>
+                <Button onClick={onEdit} size="sm" className="shrink-0">
                   <Pencil data-icon="inline-start" />
                   Modifier
                 </Button>
               </div>
+              <div className="min-w-0">
+                <h2 className="text-2xl font-semibold leading-tight tracking-tight sm:text-3xl">{recipe.name}</h2>
+                {recipe.description && (
+                  <p className="mt-2 max-w-2xl text-sm leading-6 text-muted-foreground">{recipe.description}</p>
+                )}
+              </div>
+              <div className="flex flex-wrap items-center gap-2">
+                <Badge variant="secondary">{sortedIngredients.length} ingrédients</Badge>
+                <Badge variant="secondary">{sortedSteps.length} étapes</Badge>
+                {totalMinutes > 0 && (
+                  <Badge variant="secondary">
+                    <Clock data-icon="inline-start" />
+                    {totalMinutes} min
+                  </Badge>
+                )}
+                {recipe.prepMinutes !== null && recipe.cookMinutes !== null && (
+                  <span className="text-xs text-muted-foreground">
+                    {recipe.prepMinutes} min prep · {recipe.cookMinutes} min cuisson
+                  </span>
+                )}
+                {recipe.prepMinutes !== null && recipe.cookMinutes === null && (
+                  <span className="text-xs text-muted-foreground">{recipe.prepMinutes} min de préparation</span>
+                )}
+                {recipe.prepMinutes === null && recipe.cookMinutes !== null && (
+                  <span className="text-xs text-muted-foreground">{recipe.cookMinutes} min de cuisson</span>
+                )}
+                {recipe.sourceUrl && (
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    nativeButton={false}
+                    render={
+                      <a href={recipe.sourceUrl} target="_blank" rel="noreferrer" />
+                    }
+                  >
+                    <ExternalLink data-icon="inline-start" />
+                    Source
+                  </Button>
+                )}
+              </div>
             </CardHeader>
             <CardContent className="border-t border-border pt-4">
-              <div className="flex flex-wrap items-center gap-3">
-                <Field label="Portions" className="w-auto">
-                  <Input
-                    type="number"
-                    min={1}
-                    value={portions}
-                    onChange={(event) => setPortions(Number(event.target.value) || 1)}
-                    className="w-20 rounded-full"
-                  />
-                </Field>
-                {recipe.prepMinutes !== null && <Badge variant="outline">Préparation {recipe.prepMinutes} min</Badge>}
-                {recipe.cookMinutes !== null && <Badge variant="outline">Cuisson {recipe.cookMinutes} min</Badge>}
+              <div className="flex flex-col gap-4">
+                {hasEstimates && (
+                  <div className="grid gap-3 sm:grid-cols-2">
+                    <RecipeHeaderPrice
+                      label="Coût théorique"
+                      total={theoreticalSum.total}
+                      isComplete={theoreticalSum.isComplete}
+                      perPortion={theoreticalSum.total !== null ? theoreticalSum.total / portionCount : null}
+                    />
+                    <RecipeHeaderPrice
+                      label="Achat estimé"
+                      total={purchaseSum.total}
+                      isComplete={purchaseSum.isComplete}
+                      perPortion={purchaseSum.total !== null ? purchaseSum.total / portionCount : null}
+                      emphasized
+                    />
+                  </div>
+                )}
+                <div className="flex flex-wrap items-end justify-between gap-4 rounded-lg bg-muted/25 px-4 py-3">
+                  <Field label="Portions" className="w-auto">
+                    <Input
+                      type="number"
+                      min={1}
+                      value={portions}
+                      onChange={(event) => setPortions(Number(event.target.value) || 1)}
+                      className="w-20 rounded-full bg-background"
+                    />
+                  </Field>
+                  {hasEstimates && (
+                    <Label className="flex cursor-pointer items-center gap-2 pb-1 text-sm font-normal text-muted-foreground">
+                      <Checkbox
+                        checked={applyStock}
+                        onCheckedChange={(checked) => setApplyStock(checked === true)}
+                      />
+                      Prendre en compte le stock
+                    </Label>
+                  )}
+                </div>
+                {hasEstimates && (
+                  <p
+                    className={cn(
+                      "min-h-4 text-xs leading-4 text-muted-foreground",
+                      !hasPartialEstimate && "invisible",
+                    )}
+                    aria-hidden={!hasPartialEstimate}
+                  >
+                    Estimation partielle : certains ingrédients n&apos;ont pas de produit disponible.
+                  </p>
+                )}
               </div>
             </CardContent>
           </div>
         </div>
       </Card>
 
-      <RecipeCostCard
-        estimates={estimates}
-        portions={portions}
-        units={uniqueUnits(ingredients)}
-        globalRatios={globalRatios}
-      />
-
-      <div className="grid gap-6 xl:grid-cols-[1fr_1fr]">
-        <Card>
-          <CardHeader>
-            <h3 className="text-lg font-semibold">Ingrédients</h3>
-          </CardHeader>
-          <CardContent className="flex flex-col gap-3">
-            {sortedIngredients.map((item) => {
-              const baseFactor = effectiveToBaseFactor(
-                item.unit,
-                item.ingredient.baseUnit,
-                item.ingredient.units.find((entry) => entry.unitId === item.unitId)?.toBaseFactor,
-                globalRatios,
-                { allowSpecific: true, units },
-              );
-              const baseQuantity = convertToBase(item.quantityPerServing, baseFactor);
-              return (
-                <div key={item.id} className="flex items-start gap-3 rounded-lg border border-border bg-card p-3 shadow-sm">
-                  <EntityImage src={ingredientImageUrl(item.ingredient)} label={item.ingredient.name} size="xs" className="mt-0.5 shrink-0" />
-                  <div className="min-w-0 flex-1">
-                    <div className="flex flex-wrap items-center gap-2">
-                      <span className="font-semibold">{item.ingredient.name}</span>
-                      <Badge className="bg-primary/10 text-primary">
-                        {formatNumber(scaleQuantity(item.quantityPerServing, portions))} {item.unit.symbol}
-                      </Badge>
-                      {baseQuantity !== null && (
-                        <Badge variant="outline">
-                          {formatNumber(scaleQuantity(baseQuantity, portions))} {item.ingredient.baseUnit.symbol}
-                        </Badge>
-                      )}
-                    </div>
-                    {item.note && <p className="mt-1 text-sm text-muted-foreground">{item.note}</p>}
-                  </div>
-                </div>
-              );
-            })}
-          </CardContent>
-        </Card>
+      <div className="flex flex-col gap-6">
+        <RecipeIngredientsPanel
+          sortedIngredients={sortedIngredients}
+          estimates={estimates}
+          portions={portions}
+          units={uniqueUnits(ingredients)}
+          globalRatios={globalRatios}
+          applyStock={applyStock}
+        />
 
         <Card>
           <CardHeader>
-            <h3 className="text-lg font-semibold">Étapes</h3>
+            <CardTitle>Étapes</CardTitle>
           </CardHeader>
           <CardContent className="flex flex-col gap-3">
             {sortedSteps.map((step, index) => (
@@ -176,115 +519,5 @@ export function RecipeView({
         </Card>
       </div>
     </section>
-  );
-}
-function RecipeCostCard({
-  estimates,
-  portions,
-  units,
-  globalRatios,
-}: {
-  estimates: RecipeCostEstimate[];
-  portions: number;
-  units: UnitRecord[];
-  globalRatios: UnitRatioRecord[];
-}) {
-  const theoreticalTotal = sumNullable(estimates.map((estimate) => estimate.theoreticalPrice));
-  const purchaseTotal = sumNullable(estimates.map((estimate) => estimate.purchasePlan?.totalPrice ?? null));
-  const portionCount = Math.max(1, portions);
-  const hasAnyEstimate = estimates.length > 0;
-
-  return (
-    <Card className="overflow-hidden">
-      <CardHeader>
-        <div className="flex flex-col gap-4 lg:flex-row lg:items-start lg:justify-between">
-          <div className="min-w-0">
-            <p className="text-sm font-semibold text-primary">Panier estimé</p>
-            <h3 className="text-xl font-semibold">Estimation achat</h3>
-            <p className="text-sm text-muted-foreground">Prix théorique et achat en produits entiers.</p>
-          </div>
-          <div className="flex flex-wrap gap-2 lg:max-w-xl lg:justify-end">
-            <Badge variant="outline" className="border-primary/20 bg-primary/10 text-primary">
-              Théorique total {theoreticalTotal === null ? "incomplet" : formatCurrency(theoreticalTotal)}
-            </Badge>
-            <Badge variant="outline" className="border-primary/20 bg-primary/10 text-primary">
-              Théorique / portion{" "}
-              {theoreticalTotal === null ? "incomplet" : formatCurrency(theoreticalTotal / portionCount)}
-            </Badge>
-            <Badge variant="outline">
-              Réel total {purchaseTotal === null ? "incomplet" : formatCurrency(purchaseTotal)}
-            </Badge>
-            <Badge variant="outline">
-              Réel / portion {purchaseTotal === null ? "incomplet" : formatCurrency(purchaseTotal / portionCount)}
-            </Badge>
-          </div>
-        </div>
-      </CardHeader>
-      <CardContent className="flex flex-col gap-3">
-        {!hasAnyEstimate && (
-          <div className="rounded-lg border border-dashed border-border bg-muted/30 p-6 text-center text-sm text-muted-foreground">
-            Ajoute des ingrédients pour estimer le panier.
-          </div>
-        )}
-        {estimates.map((estimate) => (
-          <div key={estimate.ingredientId} className="rounded-lg border border-border bg-card p-4 shadow-sm">
-            <div className="flex flex-col gap-4 xl:grid xl:grid-cols-[minmax(0,1.4fr)_110px_110px_minmax(0,1.2fr)_100px] xl:items-start">
-              <div className="flex min-w-0 items-start gap-3">
-                <EntityImage
-                  src={estimate.ingredientImageUrl}
-                  label={estimate.ingredientName}
-                  size="xs"
-                  className="shrink-0"
-                />
-                <div className="min-w-0">
-                  <div className="truncate font-semibold">{estimate.ingredientName}</div>
-                  <div className="mt-1 text-xs text-muted-foreground">
-                    Besoin {formatNumber(estimate.requiredBaseQuantity)} {estimate.baseUnit.symbol}
-                  </div>
-                </div>
-              </div>
-              <div>
-                <div className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">Théorique</div>
-                <div className="mt-1 text-sm font-semibold">
-                  {estimate.theoreticalPrice === null ? "Indisponible" : formatCurrency(estimate.theoreticalPrice)}
-                </div>
-              </div>
-              <div>
-                <div className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">Réel</div>
-                <div className="mt-1 text-sm font-semibold">
-                  {estimate.purchasePlan === null ? "Indisponible" : formatCurrency(estimate.purchasePlan.totalPrice)}
-                </div>
-              </div>
-              <div className="min-w-0">
-                <div className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">Produits</div>
-                <div className="mt-1 flex flex-col gap-1">
-                  {estimate.purchasePlan?.items.map((item) => (
-                    <div key={item.product.id} className="flex min-w-0 items-center gap-2">
-                      <EntityImage src={item.product.imageUrl} label={item.product.name} size="xs" className="shrink-0" />
-                      <Badge variant="outline" className="min-w-0 truncate">
-                        {item.count} x {item.product.name}
-                      </Badge>
-                    </div>
-                  )) ?? <span className="text-sm text-muted-foreground">{estimate.missingReason ?? "Aucun produit"}</span>}
-                </div>
-              </div>
-              <div>
-                <div className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">Restes</div>
-                <div className="mt-1 text-sm font-semibold">
-                  {estimate.purchasePlan
-                    ? `${formatNumber(estimate.purchasePlan.leftover)} ${estimate.baseUnit.symbol}`
-                    : "Indisponible"}
-                </div>
-              </div>
-            </div>
-            {estimate.cheapestProduct && (
-              <div className="mt-3 border-t border-border pt-3 text-xs text-muted-foreground">
-                Moins cher au ratio: {formatCheapestProductRatio(estimate, units, globalRatios)}
-              </div>
-            )}
-          </div>
-        ))}
-      </CardContent>
-    </Card>
   );
 }

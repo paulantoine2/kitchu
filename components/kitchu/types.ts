@@ -50,6 +50,7 @@ export type IngredientRecord = {
     notes: string | null;
     packageUnit: UnitRecord;
   }>;
+  stock: { quantity: number } | null;
 };
 
 export type IngredientUnitOption = {
@@ -116,6 +117,8 @@ export type IngredientDraft = {
   imageUrl: string;
   notes: string;
   baseUnitId: string;
+  stockQuantity: string;
+  stockUnitId: string;
   units: Array<{ key: string; unitId: string; toBaseFactor: string }>;
   products: Array<{
     key: string;

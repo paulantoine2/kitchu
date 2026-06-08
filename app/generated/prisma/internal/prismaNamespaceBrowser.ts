@@ -54,6 +54,7 @@ export const ModelName = {
   Unit: 'Unit',
   UnitRatio: 'UnitRatio',
   Ingredient: 'Ingredient',
+  StockEntry: 'StockEntry',
   IngredientUnit: 'IngredientUnit',
   ProductReference: 'ProductReference',
   Recipe: 'Recipe',
@@ -68,6 +69,9 @@ export type ModelName = (typeof ModelName)[keyof typeof ModelName]
  */
 
 export const TransactionIsolationLevel = runtime.makeStrictEnum({
+  ReadUncommitted: 'ReadUncommitted',
+  ReadCommitted: 'ReadCommitted',
+  RepeatableRead: 'RepeatableRead',
   Serializable: 'Serializable'
 } as const)
 
@@ -112,6 +116,17 @@ export const IngredientScalarFieldEnum = {
 } as const
 
 export type IngredientScalarFieldEnum = (typeof IngredientScalarFieldEnum)[keyof typeof IngredientScalarFieldEnum]
+
+
+export const StockEntryScalarFieldEnum = {
+  id: 'id',
+  ingredientId: 'ingredientId',
+  quantity: 'quantity',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type StockEntryScalarFieldEnum = (typeof StockEntryScalarFieldEnum)[keyof typeof StockEntryScalarFieldEnum]
 
 
 export const IngredientUnitScalarFieldEnum = {
@@ -191,6 +206,14 @@ export const SortOrder = {
 } as const
 
 export type SortOrder = (typeof SortOrder)[keyof typeof SortOrder]
+
+
+export const QueryMode = {
+  default: 'default',
+  insensitive: 'insensitive'
+} as const
+
+export type QueryMode = (typeof QueryMode)[keyof typeof QueryMode]
 
 
 export const NullsOrder = {

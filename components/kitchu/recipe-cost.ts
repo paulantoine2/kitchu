@@ -29,6 +29,9 @@ export type RecipeCostEstimate = {
   ingredientImageUrl: string | null;
   baseUnit: UnitRecord;
   requiredBaseQuantity: number;
+  stockAvailable: number;
+  stockUsed: number;
+  toPurchaseBaseQuantity: number;
   theoreticalPrice: number | null;
   cheapestProduct: ProductOption | null;
   purchasePlan: PurchasePlan | null;
@@ -40,6 +43,8 @@ export function estimateRecipeCosts(
   portions: number,
   globalRatios: UnitRatioRecord[],
   units: UnitRecord[],
+  stockByIngredientId: Map<string, number> = new Map(),
+  applyStock = true,
 ) {
   const ingredientById = new Map(ingredients.map((ingredient) => [ingredient.id, ingredient]));
   const totals = new Map<string, { ingredient: IngredientRecord; requiredBaseQuantity: number }>();
@@ -71,7 +76,13 @@ export function estimateRecipeCosts(
       (best, option) => (!best || option.unitPrice < best.unitPrice ? option : best),
       null,
     );
-    const purchasePlan = optimizePurchase(requiredBaseQuantity, options);
+    const stockAvailable = stockByIngredientId.get(ingredient.id) ?? 0;
+    const stockUsed = applyStock ? Math.min(stockAvailable, requiredBaseQuantity) : 0;
+    const toPurchaseBaseQuantity = applyStock
+      ? Math.max(0, requiredBaseQuantity - stockUsed)
+      : requiredBaseQuantity;
+    const purchasePlan =
+      toPurchaseBaseQuantity > 0 ? optimizePurchase(toPurchaseBaseQuantity, options) : null;
 
     return {
       ingredientId: ingredient.id,
@@ -79,7 +90,15 @@ export function estimateRecipeCosts(
       ingredientImageUrl: ingredientImageUrl(ingredient),
       baseUnit: ingredient.baseUnit,
       requiredBaseQuantity,
-      theoreticalPrice: cheapestProduct ? requiredBaseQuantity * cheapestProduct.unitPrice : null,
+      stockAvailable,
+      stockUsed,
+      toPurchaseBaseQuantity,
+      theoreticalPrice:
+        toPurchaseBaseQuantity > 0 && cheapestProduct
+          ? toPurchaseBaseQuantity * cheapestProduct.unitPrice
+          : toPurchaseBaseQuantity === 0
+            ? 0
+            : null,
       cheapestProduct,
       purchasePlan,
       missingReason: options.length ? null : "Aucun produit convertible",
@@ -201,4 +220,27 @@ export function optimizePurchase(requiredBaseQuantity: number, options: ProductO
 export function sumNullable(values: Array<number | null>) {
   if (values.some((value) => value === null)) return null;
   return (values as number[]).reduce((total, value) => total + value, 0);
+}
+
+export type PartialSum = {
+  total: number | null;
+  isComplete: boolean;
+};
+
+export function estimatePurchaseTotal(estimate: RecipeCostEstimate): number | null {
+  if (estimate.toPurchaseBaseQuantity === 0) return 0;
+  const plan = estimate.purchasePlan;
+  if (!plan) return null;
+  return plan.totalPrice;
+}
+
+export function sumPartial(values: Array<number | null>): PartialSum {
+  const available = values.filter((value): value is number => value !== null);
+  if (available.length === 0) {
+    return { total: null, isComplete: false };
+  }
+  return {
+    total: available.reduce((sum, value) => sum + value, 0),
+    isComplete: available.length === values.length,
+  };
 }

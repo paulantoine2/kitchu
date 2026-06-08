@@ -506,6 +506,7 @@ export type UnitRatioCreateOrConnectWithoutFromUnitInput = {
 
 export type UnitRatioCreateManyFromUnitInputEnvelope = {
   data: Prisma.UnitRatioCreateManyFromUnitInput | Prisma.UnitRatioCreateManyFromUnitInput[]
+  skipDuplicates?: boolean
 }
 
 export type UnitRatioCreateWithoutToUnitInput = {
@@ -531,6 +532,7 @@ export type UnitRatioCreateOrConnectWithoutToUnitInput = {
 
 export type UnitRatioCreateManyToUnitInputEnvelope = {
   data: Prisma.UnitRatioCreateManyToUnitInput | Prisma.UnitRatioCreateManyToUnitInput[]
+  skipDuplicates?: boolean
 }
 
 export type UnitRatioUpsertWithWhereUniqueWithoutFromUnitInput = {
@@ -1377,6 +1379,7 @@ export type UnitRatioCreateManyArgs<ExtArgs extends runtime.Types.Extensions.Int
    * The data used to create many UnitRatios.
    */
   data: Prisma.UnitRatioCreateManyInput | Prisma.UnitRatioCreateManyInput[]
+  skipDuplicates?: boolean
 }
 
 /**
@@ -1395,6 +1398,7 @@ export type UnitRatioCreateManyAndReturnArgs<ExtArgs extends runtime.Types.Exten
    * The data used to create many UnitRatios.
    */
   data: Prisma.UnitRatioCreateManyInput | Prisma.UnitRatioCreateManyInput[]
+  skipDuplicates?: boolean
   /**
    * Choose, which related nodes to fetch as well
    */

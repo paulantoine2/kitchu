@@ -400,6 +400,7 @@ export type RecipeStepCreateOrConnectWithoutRecipeInput = {
 
 export type RecipeStepCreateManyRecipeInputEnvelope = {
   data: Prisma.RecipeStepCreateManyRecipeInput | Prisma.RecipeStepCreateManyRecipeInput[]
+  skipDuplicates?: boolean
 }
 
 export type RecipeStepUpsertWithWhereUniqueWithoutRecipeInput = {
@@ -1168,6 +1169,7 @@ export type RecipeStepCreateManyArgs<ExtArgs extends runtime.Types.Extensions.In
    * The data used to create many RecipeSteps.
    */
   data: Prisma.RecipeStepCreateManyInput | Prisma.RecipeStepCreateManyInput[]
+  skipDuplicates?: boolean
 }
 
 /**
@@ -1186,6 +1188,7 @@ export type RecipeStepCreateManyAndReturnArgs<ExtArgs extends runtime.Types.Exte
    * The data used to create many RecipeSteps.
    */
   data: Prisma.RecipeStepCreateManyInput | Prisma.RecipeStepCreateManyInput[]
+  skipDuplicates?: boolean
   /**
    * Choose, which related nodes to fetch as well
    */

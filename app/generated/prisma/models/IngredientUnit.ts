@@ -498,6 +498,7 @@ export type IngredientUnitCreateOrConnectWithoutUnitInput = {
 
 export type IngredientUnitCreateManyUnitInputEnvelope = {
   data: Prisma.IngredientUnitCreateManyUnitInput | Prisma.IngredientUnitCreateManyUnitInput[]
+  skipDuplicates?: boolean
 }
 
 export type IngredientUnitUpsertWithWhereUniqueWithoutUnitInput = {
@@ -551,6 +552,7 @@ export type IngredientUnitCreateOrConnectWithoutIngredientInput = {
 
 export type IngredientUnitCreateManyIngredientInputEnvelope = {
   data: Prisma.IngredientUnitCreateManyIngredientInput | Prisma.IngredientUnitCreateManyIngredientInput[]
+  skipDuplicates?: boolean
 }
 
 export type IngredientUnitUpsertWithWhereUniqueWithoutIngredientInput = {
@@ -1369,6 +1371,7 @@ export type IngredientUnitCreateManyArgs<ExtArgs extends runtime.Types.Extension
    * The data used to create many IngredientUnits.
    */
   data: Prisma.IngredientUnitCreateManyInput | Prisma.IngredientUnitCreateManyInput[]
+  skipDuplicates?: boolean
 }
 
 /**
@@ -1387,6 +1390,7 @@ export type IngredientUnitCreateManyAndReturnArgs<ExtArgs extends runtime.Types.
    * The data used to create many IngredientUnits.
    */
   data: Prisma.IngredientUnitCreateManyInput | Prisma.IngredientUnitCreateManyInput[]
+  skipDuplicates?: boolean
   /**
    * Choose, which related nodes to fetch as well
    */

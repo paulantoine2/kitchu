@@ -117,6 +117,16 @@ export async function saveIngredient(payload: unknown) {
         });
       }
 
+      if (data.stockQuantity === null || data.stockQuantity === 0) {
+        await tx.stockEntry.deleteMany({ where: { ingredientId: saved.id } });
+      } else {
+        await tx.stockEntry.upsert({
+          where: { ingredientId: saved.id },
+          create: { ingredientId: saved.id, quantity: data.stockQuantity },
+          update: { quantity: data.stockQuantity },
+        });
+      }
+
       return saved;
     });
 
@@ -124,13 +134,21 @@ export async function saveIngredient(payload: unknown) {
       where: { id: ingredient.id },
       include: {
         baseUnit: true,
+        stock: true,
         units: { include: { unit: true }, orderBy: { unit: { name: "asc" } } },
         products: { include: { packageUnit: true }, orderBy: { updatedAt: "desc" } },
       },
     });
 
     revalidatePath("/");
-    return { ok: true as const, id: fullIngredient.id, ingredient: fullIngredient };
+    return {
+      ok: true as const,
+      id: fullIngredient.id,
+      ingredient: {
+        ...fullIngredient,
+        stock: fullIngredient.stock ? { quantity: fullIngredient.stock.quantity } : null,
+      },
+    };
   } catch (error) {
     return actionError(error);
   }
@@ -175,12 +193,19 @@ export async function createIngredientQuick(
       },
       include: {
         baseUnit: true,
+        stock: true,
         units: { include: { unit: true }, orderBy: { unit: { name: "asc" } } },
         products: { include: { packageUnit: true }, orderBy: { updatedAt: "desc" } },
       },
     });
     revalidatePath("/");
-    return { ok: true as const, ingredient };
+    return {
+      ok: true as const,
+      ingredient: {
+        ...ingredient,
+        stock: ingredient.stock ? { quantity: ingredient.stock.quantity } : null,
+      },
+    };
   } catch (error) {
     return actionError(error);
   }
@@ -219,13 +244,20 @@ export async function addIngredientUnitQuick(ingredientId: string, unitCode: str
       where: { id },
       include: {
         baseUnit: true,
+        stock: true,
         units: { include: { unit: true }, orderBy: { unit: { name: "asc" } } },
         products: { include: { packageUnit: true }, orderBy: { updatedAt: "desc" } },
       },
     });
 
     revalidatePath("/");
-    return { ok: true as const, ingredient: updatedIngredient };
+    return {
+      ok: true as const,
+      ingredient: {
+        ...updatedIngredient,
+        stock: updatedIngredient.stock ? { quantity: updatedIngredient.stock.quantity } : null,
+      },
+    };
   } catch (error) {
     return actionError(error);
   }

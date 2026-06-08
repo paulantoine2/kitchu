@@ -720,6 +720,7 @@ export type ProductReferenceCreateOrConnectWithoutPackageUnitInput = {
 
 export type ProductReferenceCreateManyPackageUnitInputEnvelope = {
   data: Prisma.ProductReferenceCreateManyPackageUnitInput | Prisma.ProductReferenceCreateManyPackageUnitInput[]
+  skipDuplicates?: boolean
 }
 
 export type ProductReferenceUpsertWithWhereUniqueWithoutPackageUnitInput = {
@@ -800,6 +801,7 @@ export type ProductReferenceCreateOrConnectWithoutIngredientInput = {
 
 export type ProductReferenceCreateManyIngredientInputEnvelope = {
   data: Prisma.ProductReferenceCreateManyIngredientInput | Prisma.ProductReferenceCreateManyIngredientInput[]
+  skipDuplicates?: boolean
 }
 
 export type ProductReferenceUpsertWithWhereUniqueWithoutIngredientInput = {
@@ -1744,6 +1746,7 @@ export type ProductReferenceCreateManyArgs<ExtArgs extends runtime.Types.Extensi
    * The data used to create many ProductReferences.
    */
   data: Prisma.ProductReferenceCreateManyInput | Prisma.ProductReferenceCreateManyInput[]
+  skipDuplicates?: boolean
 }
 
 /**
@@ -1762,6 +1765,7 @@ export type ProductReferenceCreateManyAndReturnArgs<ExtArgs extends runtime.Type
    * The data used to create many ProductReferences.
    */
   data: Prisma.ProductReferenceCreateManyInput | Prisma.ProductReferenceCreateManyInput[]
+  skipDuplicates?: boolean
   /**
    * Choose, which related nodes to fetch as well
    */

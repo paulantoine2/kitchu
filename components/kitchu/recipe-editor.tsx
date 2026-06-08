@@ -2,6 +2,8 @@
 
 import { useState } from "react";
 import { GripVertical, Plus, Trash2, X } from "lucide-react";
+import { effectiveToBaseFactor, globalConversionFactor, pricePerBaseUnit } from "@/lib/conversions";
+import { formatCurrency, formatNumber } from "@/lib/utils";
 import { HelloFreshImporter } from "@/components/hellofresh-importer";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -32,6 +34,8 @@ import {
   blankRecipeIngredient,
   key,
 } from "@/components/kitchu/drafts";
+import { isIngredientDraftDirty } from "@/components/kitchu/draft-dirty";
+import { UnsavedChangesDialog } from "@/components/kitchu/unsaved-changes-dialog";
 import { draftRecipeImageUrl, ingredientImageUrl } from "@/components/kitchu/images";
 import type {
   IngredientDraft,
@@ -48,7 +52,10 @@ import {
   measurementKindLabel,
   usableUnitsForIngredient,
 } from "@/components/kitchu/unit-helpers";
-import { move } from "@/components/kitchu/utils";
+import { move, standardUnitForPrice } from "@/components/kitchu/utils";
+
+const KNOWN_STORES = ["Leclerc", "Carrefour", "Intermarché", "Primeur"] as const;
+const knownStoreSet = new Set<string>(KNOWN_STORES);
 
 export function RecipeEditor({
   draft,
@@ -91,7 +98,9 @@ export function RecipeEditor({
     rowKey: string;
     suggestedUnitCode?: string;
     draft: IngredientDraft;
+    baseline: IngredientDraft;
   } | null>(null);
+  const [ingredientLeaveDialogOpen, setIngredientLeaveDialogOpen] = useState(false);
 
   function ingredientDraftFromRecipeRow(row: RecipeDraftIngredient) {
     const baseUnitCode = suggestedBaseUnitCode(row.suggestedUnitCode ?? null);
@@ -109,6 +118,82 @@ export function RecipeEditor({
   function updateDialogDraft(patch: Partial<IngredientDraft>) {
     setIngredientDialog((current) =>
       current ? { ...current, draft: { ...current.draft, ...patch } } : current,
+    );
+  }
+
+  function updateDialogProduct(
+    productKey: string,
+    patch: Partial<IngredientDraft["products"][number]>,
+  ) {
+    setIngredientDialog((current) => {
+      if (!current) return current;
+      return {
+        ...current,
+        draft: {
+          ...current.draft,
+          products: current.draft.products.map((product) =>
+            product.key === productKey ? { ...product, ...patch } : product,
+          ),
+        },
+      };
+    });
+  }
+
+  function addDialogProduct() {
+    setIngredientDialog((current) => {
+      if (!current) return current;
+      const suggestedUnit = current.suggestedUnitCode
+        ? units.find((unit) => unit.code === current.suggestedUnitCode)
+        : undefined;
+      return {
+        ...current,
+        draft: {
+          ...current.draft,
+          products: [
+            {
+              key: key(),
+              store: "",
+              brand: "",
+              name: current.draft.name,
+              imageUrl: current.draft.imageUrl,
+              packageQuantity: "",
+              packageUnitId: suggestedUnit?.id ?? current.draft.baseUnitId,
+              packageToBaseFactor: "",
+              price: "",
+              url: "",
+              barcode: "",
+              notes: "",
+            },
+          ],
+        },
+      };
+    });
+  }
+
+  function removeDialogProduct() {
+    updateDialogDraft({ products: [] });
+  }
+
+  function isDialogProductComplete(product: IngredientDraft["products"][number] | undefined) {
+    if (!product) return true;
+    if (
+      !product.store.trim() ||
+      !product.name.trim() ||
+      !product.packageQuantity ||
+      Number(product.packageQuantity) <= 0 ||
+      !product.packageUnitId ||
+      product.price === "" ||
+      Number(product.price) < 0
+    ) {
+      return false;
+    }
+    const packageUnit = units.find((unit) => unit.id === product.packageUnitId);
+    const baseUnit = units.find((unit) => unit.id === ingredientDialog?.draft.baseUnitId);
+    return (
+      effectiveToBaseFactor(packageUnit, baseUnit, product.packageToBaseFactor, globalRatios, {
+        allowSpecific: true,
+        units,
+      }) !== null
     );
   }
 
@@ -130,11 +215,29 @@ export function RecipeEditor({
   }
 
   function openIngredientDialog(row: RecipeDraftIngredient) {
+    const initialDraft = ingredientDraftFromRecipeRow(row);
     setIngredientDialog({
       rowKey: row.key,
       suggestedUnitCode: row.suggestedUnitCode,
-      draft: ingredientDraftFromRecipeRow(row),
+      draft: initialDraft,
+      baseline: initialDraft,
     });
+  }
+
+  function closeIngredientDialog() {
+    setIngredientDialog(null);
+    setIngredientLeaveDialogOpen(false);
+  }
+
+  function requestCloseIngredientDialog() {
+    if (
+      ingredientDialog &&
+      isIngredientDraftDirty(ingredientDialog.draft, ingredientDialog.baseline)
+    ) {
+      setIngredientLeaveDialogOpen(true);
+      return;
+    }
+    closeIngredientDialog();
   }
 
   function updateRow(rowKey: string, patch: Partial<RecipeDraftIngredient>) {
@@ -154,6 +257,10 @@ export function RecipeEditor({
     });
   }
 
+  function selectRecipeUnit(rowKey: string, unitId: string) {
+    updateRow(rowKey, unitId ? { unitId, importStatus: undefined } : { unitId });
+  }
+
   function updateIngredientInput(rowKey: string, value: string) {
     const match = ingredients.find((ingredient) => ingredient.name.toLowerCase() === value.toLowerCase());
     const usableUnits = match ? usableUnitsForIngredient(match, units, globalRatios) : [];
@@ -165,6 +272,22 @@ export function RecipeEditor({
     });
   }
 
+  function handleIngredientInputChange(
+    row: RecipeDraftIngredient,
+    value: string,
+    reason: string,
+  ) {
+    if (
+      value === "" &&
+      reason === "input-clear" &&
+      !row.ingredientId &&
+      row.ingredientName.trim()
+    ) {
+      return "cancel" as const;
+    }
+    updateIngredientInput(row.key, value);
+  }
+
   const importIssues = draft.ingredients.filter(
     (row) => row.importStatus && row.importStatus !== "matched",
   ).length;
@@ -172,6 +295,46 @@ export function RecipeEditor({
     ? units.find((unit) => unit.id === ingredientDialog.draft.baseUnitId)
     : undefined;
   const dialogMeasurementOptions = baseMeasurementOptions(units);
+  const dialogProduct = ingredientDialog?.draft.products[0];
+  const dialogProductUnit = dialogProduct
+    ? units.find((unit) => unit.id === dialogProduct.packageUnitId)
+    : undefined;
+  const dialogProductUsesSystemRatio =
+    dialogProductUnit && dialogBaseUnit
+      ? globalConversionFactor(dialogProductUnit, dialogBaseUnit, globalRatios, units) !== null
+      : false;
+  const dialogProductEffectiveFactor =
+    dialogProductUnit && dialogBaseUnit
+      ? effectiveToBaseFactor(
+          dialogProductUnit,
+          dialogBaseUnit,
+          dialogProduct?.packageToBaseFactor,
+          globalRatios,
+          { allowSpecific: true, units },
+        )
+      : null;
+  const dialogProductDerivedPrice =
+    dialogProduct && dialogProductEffectiveFactor
+      ? pricePerBaseUnit(
+          Number(dialogProduct.price),
+          Number(dialogProduct.packageQuantity),
+          dialogProductEffectiveFactor,
+        )
+      : null;
+  const dialogPreferredPriceUnit = standardUnitForPrice(dialogBaseUnit, units);
+  const dialogPreferredPriceFactor =
+    dialogPreferredPriceUnit && dialogBaseUnit
+      ? globalConversionFactor(dialogPreferredPriceUnit, dialogBaseUnit, globalRatios, units)
+      : null;
+  const dialogStandardPriceUnit =
+    dialogProductDerivedPrice !== null && dialogPreferredPriceFactor !== null
+      ? dialogPreferredPriceUnit
+      : dialogBaseUnit;
+  const dialogStandardPrice =
+    dialogProductDerivedPrice !== null && dialogPreferredPriceFactor !== null
+      ? dialogProductDerivedPrice * dialogPreferredPriceFactor
+      : dialogProductDerivedPrice;
+  const dialogProductComplete = isDialogProductComplete(dialogProduct);
 
   return (
     <section className="flex min-w-0 flex-col gap-4">
@@ -295,11 +458,18 @@ export function RecipeEditor({
                         itemToStringLabel={(item) => item.name}
                         itemToStringValue={(item) => item.name}
                         isItemEqualToValue={(a, b) => a.id === b.id}
-                        onInputValueChange={(value) => updateIngredientInput(row.key, value)}
-                        onValueChange={(value) => {
+                        onInputValueChange={(value, details) => {
+                          const result = handleIngredientInputChange(row, value, details.reason);
+                          if (result === "cancel") {
+                            details.cancel();
+                          }
+                        }}
+                        onValueChange={(value, details) => {
                           if (value) {
                             selectRecipeIngredient(row.key, value);
-                          } else {
+                            return;
+                          }
+                          if (details.reason === "clear-press") {
                             updateRow(row.key, {
                               ingredientId: "",
                               ingredientName: "",
@@ -361,7 +531,7 @@ export function RecipeEditor({
                   <Field label="Unité" showLabel={false}>
                     <NativeSelect
                       value={row.unitId}
-                      onChange={(event) => updateRow(row.key, { unitId: event.target.value })}
+                      onChange={(event) => selectRecipeUnit(row.key, event.target.value)}
                       disabled={!ingredient}
                     >
                       <option value="">Choisir</option>
@@ -473,14 +643,17 @@ export function RecipeEditor({
         </CardContent>
       </Card>
 
-      <Dialog open={Boolean(ingredientDialog)} onOpenChange={(open) => !open && setIngredientDialog(null)}>
+      <Dialog
+        open={Boolean(ingredientDialog)}
+        onOpenChange={(open) => !open && requestCloseIngredientDialog()}
+      >
         <DialogContent>
           {ingredientDialog && (
             <>
               <DialogHeader>
                 <DialogTitle>Créer l&apos;ingrédient</DialogTitle>
                 <DialogDescription>
-                  Choisis l&apos;unité de base avant de rattacher cet ingrédient à la recette.
+                  Choisis l&apos;unité de base, puis rattache éventuellement un produit magasin pour le coût.
                 </DialogDescription>
               </DialogHeader>
               <div className="flex flex-col gap-4">
@@ -538,9 +711,143 @@ export function RecipeEditor({
                     onChange={(event) => updateDialogDraft({ notes: event.target.value })}
                   />
                 </Field>
+
+                <div className="rounded-lg border border-dashed border-border bg-muted/20 p-4">
+                  <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
+                    <div>
+                      <h4 className="text-sm font-semibold">Produit magasin</h4>
+                      <p className="text-sm text-muted-foreground">
+                        Optionnel — rattache un produit pour estimer le coût des courses.
+                      </p>
+                    </div>
+                    {!dialogProduct ? (
+                      <Button variant="secondary" size="sm" onClick={addDialogProduct} className="shrink-0">
+                        <Plus data-icon="inline-start" />
+                        Ajouter
+                      </Button>
+                    ) : (
+                      <Button variant="ghost" size="sm" onClick={removeDialogProduct} className="shrink-0">
+                        <Trash2 data-icon="inline-start" />
+                        Retirer
+                      </Button>
+                    )}
+                  </div>
+
+                  {dialogProduct && (
+                    <div className="mt-4 flex flex-col gap-3">
+                      <div className="grid gap-3 sm:grid-cols-2">
+                        <Field label="Magasin">
+                          <NativeSelect
+                            value={dialogProduct.store}
+                            onChange={(event) =>
+                              updateDialogProduct(dialogProduct.key, { store: event.target.value })
+                            }
+                          >
+                            <option value="">Choisir</option>
+                            {KNOWN_STORES.map((store) => (
+                              <option key={store} value={store}>
+                                {store}
+                              </option>
+                            ))}
+                            {dialogProduct.store && !knownStoreSet.has(dialogProduct.store) && (
+                              <option value={dialogProduct.store}>{dialogProduct.store}</option>
+                            )}
+                          </NativeSelect>
+                        </Field>
+                        <Field label="Produit">
+                          <Input
+                            value={dialogProduct.name}
+                            onChange={(event) =>
+                              updateDialogProduct(dialogProduct.key, { name: event.target.value })
+                            }
+                          />
+                        </Field>
+                      </div>
+                      <div className="grid gap-3 sm:grid-cols-3">
+                        <Field label="Qté colis">
+                          <Input
+                            type="number"
+                            min={0}
+                            step="0.01"
+                            value={dialogProduct.packageQuantity}
+                            onChange={(event) =>
+                              updateDialogProduct(dialogProduct.key, { packageQuantity: event.target.value })
+                            }
+                          />
+                        </Field>
+                        <Field label="Unité">
+                          <NativeSelect
+                            value={dialogProduct.packageUnitId}
+                            onChange={(event) =>
+                              updateDialogProduct(dialogProduct.key, {
+                                packageUnitId: event.target.value,
+                                packageToBaseFactor:
+                                  globalConversionFactor(
+                                    units.find((item) => item.id === event.target.value),
+                                    dialogBaseUnit,
+                                    globalRatios,
+                                    units,
+                                  ) !== null
+                                    ? ""
+                                    : dialogProduct.packageToBaseFactor,
+                              })
+                            }
+                          >
+                            <option value="">Choisir</option>
+                            {units.map((item) => (
+                              <option key={item.id} value={item.id}>
+                                {item.symbol}
+                              </option>
+                            ))}
+                          </NativeSelect>
+                        </Field>
+                        <Field label="Prix colis">
+                          <Input
+                            type="number"
+                            min={0}
+                            step="0.01"
+                            value={dialogProduct.price}
+                            onChange={(event) =>
+                              updateDialogProduct(dialogProduct.key, { price: event.target.value })
+                            }
+                          />
+                        </Field>
+                      </div>
+                      {!dialogProductUsesSystemRatio && dialogProductUnit && dialogBaseUnit && (
+                        <Field label="Ratio produit">
+                          <Input
+                            type="number"
+                            min={0}
+                            step="0.01"
+                            value={dialogProduct.packageToBaseFactor}
+                            placeholder={`ex. ${formatNumber(1)} ${dialogBaseUnit.symbol} / ${dialogProductUnit.symbol}`}
+                            onChange={(event) =>
+                              updateDialogProduct(dialogProduct.key, {
+                                packageToBaseFactor: event.target.value,
+                              })
+                            }
+                          />
+                        </Field>
+                      )}
+                      <div className="flex flex-wrap items-center gap-2">
+                        {dialogStandardPrice !== null && dialogStandardPriceUnit ? (
+                          <Badge className="border-primary/20 bg-primary/10 text-primary">
+                            {formatCurrency(dialogStandardPrice)} / {dialogStandardPriceUnit.symbol}
+                          </Badge>
+                        ) : dialogProduct.packageQuantity && dialogProduct.price ? (
+                          <Badge variant="outline">
+                            {dialogProductUsesSystemRatio
+                              ? "Complète les champs du produit"
+                              : "Ratio produit requis"}
+                          </Badge>
+                        ) : null}
+                      </div>
+                    </div>
+                  )}
+                </div>
               </div>
               <DialogFooter>
-                <Button variant="outline" onClick={() => setIngredientDialog(null)} disabled={busy}>
+                <Button variant="outline" onClick={requestCloseIngredientDialog} disabled={busy}>
                   Annuler
                 </Button>
                 <Button
@@ -553,10 +860,15 @@ export function RecipeEditor({
                           ? [ingredientDialog.suggestedUnitCode]
                           : undefined,
                       },
-                      () => setIngredientDialog(null),
+                      closeIngredientDialog,
                     )
                   }
-                  disabled={busy || !ingredientDialog.draft.name.trim() || !ingredientDialog.draft.baseUnitId}
+                  disabled={
+                    busy ||
+                    !ingredientDialog.draft.name.trim() ||
+                    !ingredientDialog.draft.baseUnitId ||
+                    !dialogProductComplete
+                  }
                 >
                   <Plus data-icon="inline-start" />
                   Créer
@@ -566,6 +878,12 @@ export function RecipeEditor({
           )}
         </DialogContent>
       </Dialog>
+
+      <UnsavedChangesDialog
+        open={ingredientLeaveDialogOpen}
+        onOpenChange={setIngredientLeaveDialogOpen}
+        onConfirm={closeIngredientDialog}
+      />
 
       <StickySave
         busy={busy}

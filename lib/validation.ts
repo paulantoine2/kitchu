@@ -54,6 +54,11 @@ export const ingredientPayloadSchema = z.object({
       notes: optionalText,
     }),
   ),
+  stockQuantity: z
+    .union([z.literal(""), z.coerce.number().nonnegative()])
+    .optional()
+    .nullable()
+    .transform((value) => (value === "" || value == null ? null : value)),
 });
 
 export const recipePayloadSchema = z.object({

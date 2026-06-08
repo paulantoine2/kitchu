@@ -3,6 +3,7 @@
 import { useState, useTransition } from "react";
 import { useRouter } from "next/navigation";
 import { BookOpen, ChefHat, Package, Utensils } from "lucide-react";
+import { ModeToggle } from "@/components/mode-toggle";
 import {
   addIngredientUnitQuick,
   deleteIngredient,
@@ -23,6 +24,13 @@ import {
   recipeToDraft,
   unitToDraft,
 } from "@/components/kitchu/drafts";
+import {
+  isIngredientDraftDirty,
+  isRecipeDraftDirty,
+  isUnitDraftDirty,
+} from "@/components/kitchu/draft-dirty";
+import { UnsavedChangesDialog } from "@/components/kitchu/unsaved-changes-dialog";
+import { useBeforeUnloadWarning } from "@/components/kitchu/use-unsaved-changes";
 import { IngredientEditor } from "@/components/kitchu/ingredient-editor";
 import { ingredientImageUrl, recipeImageUrl } from "@/components/kitchu/images";
 import { toIngredientPayload, toRecipePayload, toUnitPayload } from "@/components/kitchu/payloads";
@@ -36,7 +44,6 @@ import { UnitEditor, UnitListButton, UnitListSection } from "@/components/kitchu
 import {
   canonicalBaseUnitForKind,
   isHardcodedMeasurementKind,
-  specificIngredientUnits,
   usableUnitsForIngredient,
 } from "@/components/kitchu/unit-helpers";
 
@@ -61,6 +68,8 @@ export function KitchuApp({ units, globalRatios, ingredients, recipes }: KitchuA
   const [unitDraft, setUnitDraft] = useState(() => unitToDraft(units[0]));
   const [portions, setPortions] = useState(2);
   const [notice, setNotice] = useState("");
+  const [leaveDialogOpen, setLeaveDialogOpen] = useState(false);
+  const [pendingNavigation, setPendingNavigation] = useState<(() => void) | null>(null);
 
   const defaultBaseUnitId = canonicalBaseUnitForKind("MASS", units)?.id ?? units[0]?.id ?? "";
 
@@ -76,10 +85,48 @@ export function KitchuApp({ units, globalRatios, ingredients, recipes }: KitchuA
       .toLowerCase()
       .includes(unitSearch.toLowerCase()),
   );
+  const stockByIngredientId = new Map(
+    allIngredients.flatMap((ingredient) =>
+      ingredient.stock ? [[ingredient.id, ingredient.stock.quantity] as const] : [],
+    ),
+  );
   const editableUnits = filteredUnits.filter((unit) => !isHardcodedMeasurementKind(unit.kind));
   const selectedRecipe = selectedRecipeId
     ? recipes.find((recipe) => recipe.id === selectedRecipeId) ?? null
     : null;
+  const selectedIngredient = selectedIngredientId
+    ? allIngredients.find((ingredient) => ingredient.id === selectedIngredientId)
+    : undefined;
+  const selectedUnit = selectedUnitId ? units.find((unit) => unit.id === selectedUnitId) : undefined;
+
+  const hasUnsavedChanges =
+    tab === "recipes" && recipeMode === "edit"
+      ? isRecipeDraftDirty(recipeDraft, selectedRecipe ? recipeToDraft(selectedRecipe) : blankRecipe())
+      : tab === "ingredients"
+        ? isIngredientDraftDirty(
+            ingredientDraft,
+            ingredientToDraft(selectedIngredient, defaultBaseUnitId),
+          )
+        : tab === "units"
+          ? isUnitDraftDirty(unitDraft, unitToDraft(selectedUnit))
+          : false;
+
+  useBeforeUnloadWarning(hasUnsavedChanges);
+
+  function guardNavigation(action: () => void) {
+    if (hasUnsavedChanges) {
+      setPendingNavigation(() => action);
+      setLeaveDialogOpen(true);
+      return;
+    }
+    action();
+  }
+
+  function confirmLeaveWithoutSaving() {
+    pendingNavigation?.();
+    setPendingNavigation(null);
+    setLeaveDialogOpen(false);
+  }
 
   function refreshWithNotice(message: string) {
     setNotice(message);
@@ -105,7 +152,13 @@ export function KitchuApp({ units, globalRatios, ingredients, recipes }: KitchuA
               <p className="text-sm text-muted-foreground">Recettes, ingrédients, unités et produits réels.</p>
             </div>
           </div>
-          <Tabs value={tab} onValueChange={(value) => setTab(value as typeof tab)} className="w-full md:w-auto">
+          <div className="flex w-full items-center gap-2 md:w-auto">
+            <ModeToggle />
+            <Tabs
+              value={tab}
+              onValueChange={(value) => guardNavigation(() => setTab(value as typeof tab))}
+              className="min-w-0 flex-1 md:flex-none"
+            >
             <TabsList className="h-auto w-full max-w-full overflow-x-auto rounded-full border border-border bg-card p-1 shadow-sm md:w-auto">
               <TabsTrigger value="recipes" className="rounded-full px-3 md:px-4">
                 <BookOpen data-icon="inline-start" />
@@ -121,6 +174,7 @@ export function KitchuApp({ units, globalRatios, ingredients, recipes }: KitchuA
               </TabsTrigger>
             </TabsList>
           </Tabs>
+          </div>
         </div>
       </header>
 
@@ -132,28 +186,27 @@ export function KitchuApp({ units, globalRatios, ingredients, recipes }: KitchuA
               searchValue={recipeSearch}
               onSearch={setRecipeSearch}
               actionLabel="Nouvelle recette"
-              onNew={() => {
-                setSelectedRecipeId(null);
-                setRecipeDraft(blankRecipe());
-                setRecipeMode("edit");
-              }}
+              onNew={() =>
+                guardNavigation(() => {
+                  setSelectedRecipeId(null);
+                  setRecipeDraft(blankRecipe());
+                  setRecipeMode("edit");
+                })
+              }
             >
               {filteredRecipes.map((recipe) => (
                 <LibraryListItem
                   key={recipe.id}
                   active={selectedRecipeId === recipe.id}
-                  onClick={() => {
-                    setSelectedRecipeId(recipe.id);
-                    setRecipeDraft(recipeToDraft(recipe));
-                    setRecipeMode("view");
-                  }}
+                  onClick={() =>
+                    guardNavigation(() => {
+                      setSelectedRecipeId(recipe.id);
+                      setRecipeDraft(recipeToDraft(recipe));
+                      setRecipeMode("view");
+                    })
+                  }
                   media={<EntityImage src={recipeImageUrl(recipe)} label={recipe.name} size="xs" />}
                   title={recipe.name}
-                  description={
-                    <>
-                      {recipe.ingredients.length} ingrédients · {recipe.steps.length} étapes
-                    </>
-                  }
                 />
               ))}
             </LibraryPanel>
@@ -163,6 +216,7 @@ export function KitchuApp({ units, globalRatios, ingredients, recipes }: KitchuA
                 units={units}
                 ingredients={allIngredients}
                 globalRatios={globalRatios}
+                stockByIngredientId={stockByIngredientId}
                 portions={portions}
                 setPortions={setPortions}
                 onEdit={() => {
@@ -181,24 +235,27 @@ export function KitchuApp({ units, globalRatios, ingredients, recipes }: KitchuA
                 notice={notice}
                 onCancel={
                   selectedRecipe
-                    ? () => {
-                        setRecipeDraft(recipeToDraft(selectedRecipe));
-                        setRecipeMode("view");
-                      }
+                    ? () =>
+                        guardNavigation(() => {
+                          setRecipeDraft(recipeToDraft(selectedRecipe));
+                          setRecipeMode("view");
+                        })
                     : undefined
                 }
-                onImport={(result) => {
-                  setSelectedRecipeId(null);
-                  setRecipeDraft(helloFreshImportToDraft(result));
-                  setRecipeMode("edit");
-                  setPortions(1);
-                  const issues = result.matches.filter((item) => item.status !== "matched").length;
-                  setNotice(
-                    issues
-                      ? `Import HelloFresh terminé. ${issues} ligne(s) à compléter.`
-                      : "Import HelloFresh terminé.",
-                  );
-                }}
+                onImport={(result) =>
+                  guardNavigation(() => {
+                    setSelectedRecipeId(null);
+                    setRecipeDraft(helloFreshImportToDraft(result));
+                    setRecipeMode("edit");
+                    setPortions(1);
+                    const issues = result.matches.filter((item) => item.status !== "matched").length;
+                    setNotice(
+                      issues
+                        ? `Import HelloFresh terminé. ${issues} ligne(s) à compléter.`
+                        : "Import HelloFresh terminé.",
+                    );
+                  })
+                }
                 onImportError={setNotice}
                 onSave={() =>
                   runAction(async () => {
@@ -306,28 +363,30 @@ export function KitchuApp({ units, globalRatios, ingredients, recipes }: KitchuA
               searchValue={ingredientSearch}
               onSearch={setIngredientSearch}
               actionLabel="Nouvel ingrédient"
-              onNew={() => {
-                setSelectedIngredientId(null);
-                setIngredientDraft(blankIngredient(defaultBaseUnitId));
-              }}
+              onNew={() =>
+                guardNavigation(() => {
+                  setSelectedIngredientId(null);
+                  setIngredientDraft(blankIngredient(defaultBaseUnitId));
+                })
+              }
             >
-              {filteredIngredients.map((ingredient) => {
-                const usableUnitCount = usableUnitsForIngredient(ingredient, units, globalRatios).length;
-                const specificRatioCount = specificIngredientUnits(ingredient, globalRatios, units).length;
-                return (
+              {filteredIngredients.map((ingredient) => (
                   <LibraryListItem
                     key={ingredient.id}
                     active={selectedIngredientId === ingredient.id}
-                    onClick={() => {
-                      setSelectedIngredientId(ingredient.id);
-                      setIngredientDraft(ingredientToDraft(ingredient, defaultBaseUnitId));
-                    }}
+                    onClick={() =>
+                      guardNavigation(() => {
+                        setSelectedIngredientId(ingredient.id);
+                        setIngredientDraft(ingredientToDraft(ingredient, defaultBaseUnitId));
+                      })
+                    }
                     media={<EntityImage src={ingredientImageUrl(ingredient)} label={ingredient.name} size="xs" />}
                     title={ingredient.name}
-                    description={`${usableUnitCount} unités · ${specificRatioCount} ratio${specificRatioCount > 1 ? "s" : ""} spécifique${specificRatioCount > 1 ? "s" : ""} · ${ingredient.products.length} produits`}
+                    warning={
+                      ingredient.products.length === 0 ? "Aucun produit magasin lié" : undefined
+                    }
                   />
-                );
-              })}
+              ))}
             </LibraryPanel>
             <IngredientEditor
               draft={ingredientDraft}
@@ -340,7 +399,14 @@ export function KitchuApp({ units, globalRatios, ingredients, recipes }: KitchuA
                 runAction(async () => {
                   const result = await saveIngredient(toIngredientPayload(ingredientDraft, units, globalRatios));
                   if (result.ok) {
+                    const ingredient = result.ingredient as IngredientRecord;
+                    setAllIngredients((current) =>
+                      current.some((item) => item.id === ingredient.id)
+                        ? current.map((item) => (item.id === ingredient.id ? ingredient : item))
+                        : [...current, ingredient].sort((a, b) => a.name.localeCompare(b.name)),
+                    );
                     setSelectedIngredientId(result.id);
+                    setIngredientDraft(ingredientToDraft(ingredient, defaultBaseUnitId));
                     refreshWithNotice("Ingrédient enregistré.");
                   } else {
                     setNotice(result.error);
@@ -377,10 +443,12 @@ export function KitchuApp({ units, globalRatios, ingredients, recipes }: KitchuA
               searchValue={unitSearch}
               onSearch={setUnitSearch}
               actionLabel="Nouvelle unité"
-              onNew={() => {
-                setSelectedUnitId(null);
-                setUnitDraft(blankUnit());
-              }}
+              onNew={() =>
+                guardNavigation(() => {
+                  setSelectedUnitId(null);
+                  setUnitDraft(blankUnit());
+                })
+              }
             >
               {editableUnits.length > 0 && (
                 <UnitListSection title="Unités configurables">
@@ -389,10 +457,12 @@ export function KitchuApp({ units, globalRatios, ingredients, recipes }: KitchuA
                       key={unit.id}
                       unit={unit}
                       active={selectedUnitId === unit.id}
-                      onClick={() => {
-                        setSelectedUnitId(unit.id);
-                        setUnitDraft(unitToDraft(unit));
-                      }}
+                      onClick={() =>
+                        guardNavigation(() => {
+                          setSelectedUnitId(unit.id);
+                          setUnitDraft(unitToDraft(unit));
+                        })
+                      }
                     />
                   ))}
                 </UnitListSection>
@@ -461,6 +531,15 @@ export function KitchuApp({ units, globalRatios, ingredients, recipes }: KitchuA
           </>
         )}
       </div>
+
+      <UnsavedChangesDialog
+        open={leaveDialogOpen}
+        onOpenChange={(open) => {
+          setLeaveDialogOpen(open);
+          if (!open) setPendingNavigation(null);
+        }}
+        onConfirm={confirmLeaveWithoutSaving}
+      />
     </main>
   );
 }

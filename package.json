@@ -3,14 +3,15 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "NEXT_TEST_WASM=1 NEXT_TEST_WASM_DIR=$PWD/node_modules/@next/swc-wasm-nodejs next dev --webpack",
-    "build": "NEXT_TEST_WASM=1 NEXT_TEST_WASM_DIR=$PWD/node_modules/@next/swc-wasm-nodejs next build --webpack",
+    "dev": "next dev",
+    "build": "prisma generate && prisma migrate deploy && next build",
     "start": "next start",
     "lint": "eslint",
     "test": "node --import tsx --test 'lib/**/*.test.ts'",
     "db:generate": "prisma generate",
     "db:migrate": "prisma migrate dev",
     "db:seed": "tsx prisma/seed.ts",
+    "env:pull": "pnpm dlx vercel env pull .env.local --environment=production --yes && node scripts/clean-env-local.mjs",
     "postinstall": "prisma generate"
   },
   "prisma": {
@@ -18,7 +19,7 @@
   },
   "dependencies": {
     "@base-ui/react": "^1.5.0",
-    "@prisma/adapter-better-sqlite3": "^7.8.0",
+    "@prisma/adapter-pg": "^7.8.0",
     "@prisma/client": "^7.8.0",
     "@radix-ui/react-dialog": "^1.1.15",
     "@radix-ui/react-label": "^2.1.8",
@@ -29,7 +30,7 @@
     "@radix-ui/react-tabs": "^1.1.13",
     "@radix-ui/react-toast": "^1.2.15",
     "@radix-ui/react-tooltip": "^1.2.8",
-    "better-sqlite3": "^12.10.0",
+    "pg": "^8.16.3",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
     "cmdk": "^1.1.1",
@@ -53,9 +54,8 @@
     "zod": "^4.4.3"
   },
   "devDependencies": {
-    "@next/swc-wasm-nodejs": "^16.2.7",
     "@tailwindcss/postcss": "^4",
-    "@types/better-sqlite3": "^7.6.13",
+    "@types/pg": "^8.15.5",
     "@types/node": "^20",
     "@types/react": "^19",
     "@types/react-dom": "^19",

@@ -1,6 +1,48 @@
-import { globalConversionFactor } from "@/lib/conversions";
-import type { IngredientDraft, RecipeDraft, UnitDraft, UnitRatioRecord, UnitRecord } from "@/components/kitchu/types";
-import { canDefineIngredientSpecificRatio } from "@/components/kitchu/unit-helpers";
+import { convertToBase, effectiveToBaseFactor, globalConversionFactor } from "@/lib/conversions";
+import type { IngredientDraft, IngredientRecord, RecipeDraft, UnitDraft, UnitRatioRecord, UnitRecord } from "@/components/kitchu/types";
+import { canDefineIngredientSpecificRatio, usableUnitsForIngredient } from "@/components/kitchu/unit-helpers";
+
+function draftAsIngredientRecord(draft: IngredientDraft, units: UnitRecord[]): IngredientRecord {
+  const baseUnit = units.find((unit) => unit.id === draft.baseUnitId)!;
+  return {
+    id: draft.id ?? "",
+    name: draft.name,
+    imageUrl: draft.imageUrl || null,
+    notes: draft.notes || null,
+    baseUnitId: draft.baseUnitId,
+    baseUnit,
+    units: draft.units
+      .filter((row) => row.unitId)
+      .map((row) => ({
+        id: row.key,
+        unitId: row.unitId,
+        toBaseFactor: row.toBaseFactor ? Number(row.toBaseFactor) : null,
+        unit: units.find((unit) => unit.id === row.unitId)!,
+      })),
+    products: [],
+    stock: null,
+  };
+}
+
+function stockQuantityInBase(draft: IngredientDraft, units: UnitRecord[], globalRatios: UnitRatioRecord[]) {
+  if (!draft.stockQuantity.trim()) return null;
+
+  const ingredientLike = draftAsIngredientRecord(draft, units);
+  const allowedUnit = usableUnitsForIngredient(ingredientLike, units, globalRatios).find(
+    (unit) => unit.unitId === draft.stockUnitId,
+  );
+  const baseQuantity = convertToBase(
+    Number(draft.stockQuantity),
+    effectiveToBaseFactor(allowedUnit?.unit, ingredientLike.baseUnit, allowedUnit?.toBaseFactor, globalRatios, {
+      allowSpecific: true,
+      units,
+    }),
+  );
+  if (baseQuantity === null) {
+    throw new Error("Unité de stock invalide.");
+  }
+  return baseQuantity;
+}
 
 export function toRecipePayload(draft: RecipeDraft) {
   return {
@@ -42,6 +84,7 @@ export function toIngredientPayload(draft: IngredientDraft, units: UnitRecord[],
     imageUrl: draft.imageUrl,
     notes: draft.notes,
     baseUnitId: draft.baseUnitId,
+    stockQuantity: stockQuantityInBase(draft, units, globalRatios),
     units: Array.from(payloadUnits.values()),
     products: draft.products
       .filter((product) => product.store || product.name)

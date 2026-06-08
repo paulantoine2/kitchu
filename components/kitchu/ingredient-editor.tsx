@@ -7,18 +7,22 @@ import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { NativeSelect } from "@/components/ui/native-select";
 import { Textarea } from "@/components/ui/textarea";
-import { effectiveToBaseFactor, globalConversionFactor, pricePerBaseUnit } from "@/lib/conversions";
+import { effectiveToBaseFactor, globalConversionFactor, pricePerBaseUnit, convertToBase } from "@/lib/conversions";
 import { formatCurrency, formatNumber } from "@/lib/utils";
 import { key } from "@/components/kitchu/drafts";
-import type { IngredientDraft, UnitRatioRecord, UnitRecord } from "@/components/kitchu/types";
+import type { IngredientDraft, IngredientRecord, UnitRatioRecord, UnitRecord } from "@/components/kitchu/types";
 import { EntityImage, Field, StickySave } from "@/components/kitchu/ui/shared";
 import {
   baseMeasurementOptions,
   canDefineIngredientSpecificRatio,
   canonicalBaseUnitForKind,
   measurementKindLabel,
+  usableUnitsForIngredient,
 } from "@/components/kitchu/unit-helpers";
 import { standardUnitForPrice, updateProduct } from "@/components/kitchu/utils";
+
+const KNOWN_STORES = ["Leclerc", "Carrefour", "Intermarché", "Primeur"] as const;
+const knownStoreSet = new Set<string>(KNOWN_STORES);
 
 export function IngredientEditor({
   draft,
@@ -56,6 +60,39 @@ export function IngredientEditor({
   const specificUnitOptions = units.filter((unit) =>
     canDefineIngredientSpecificRatio(unit, baseUnit, globalRatios, units),
   );
+  const draftAsIngredient = (): IngredientRecord => ({
+    id: draft.id ?? "",
+    name: draft.name,
+    imageUrl: draft.imageUrl || null,
+    notes: draft.notes || null,
+    baseUnitId: draft.baseUnitId,
+    baseUnit: baseUnit!,
+    units: draft.units
+      .filter((row) => row.unitId)
+      .map((row) => ({
+        id: row.key,
+        unitId: row.unitId,
+        toBaseFactor: row.toBaseFactor ? Number(row.toBaseFactor) : null,
+        unit: units.find((unit) => unit.id === row.unitId)!,
+      })),
+    products: [],
+    stock: null,
+  });
+  const stockUnitOptions = baseUnit ? usableUnitsForIngredient(draftAsIngredient(), units, globalRatios) : [];
+  const selectedStockUnit = stockUnitOptions.find((entry) => entry.unitId === draft.stockUnitId);
+  const stockBasePreview =
+    draft.stockQuantity && baseUnit && selectedStockUnit
+      ? convertToBase(
+          Number(draft.stockQuantity),
+          effectiveToBaseFactor(
+            selectedStockUnit.unit,
+            baseUnit,
+            selectedStockUnit.toBaseFactor,
+            globalRatios,
+            { allowSpecific: true, units },
+          ),
+        )
+      : null;
 
   function resetGlobalRows(baseUnitId: string, rows: IngredientDraft["units"]) {
     return rows.map((item) => ({ ...item, toBaseFactor: "" }));
@@ -105,6 +142,7 @@ export function IngredientEditor({
                 setDraft((current) => ({
                   ...current,
                   baseUnitId,
+                  stockUnitId: baseUnitId,
                   units: addBaseUnitRow(baseUnitId, current.units),
                 }));
               }}
@@ -130,6 +168,33 @@ export function IngredientEditor({
           </Field>
           <Field label="Notes" className="md:col-span-2">
             <Textarea value={draft.notes} onChange={(event) => setDraft({ ...draft, notes: event.target.value })} />
+          </Field>
+          <Field label="Quantité en stock">
+            <Input
+              type="number"
+              min={0}
+              step="any"
+              value={draft.stockQuantity}
+              onChange={(event) => setDraft({ ...draft, stockQuantity: event.target.value })}
+              placeholder="0"
+            />
+          </Field>
+          <Field label="Unité de stock">
+            <NativeSelect
+              value={draft.stockUnitId}
+              onChange={(event) => setDraft({ ...draft, stockUnitId: event.target.value })}
+            >
+              {stockUnitOptions.map((entry) => (
+                <option key={entry.unitId} value={entry.unitId}>
+                  {entry.unit.symbol}
+                </option>
+              ))}
+            </NativeSelect>
+            {stockBasePreview !== null && baseUnit && (
+              <p className="text-xs leading-5 text-muted-foreground">
+                Équivaut à {formatNumber(stockBasePreview)} {baseUnit.symbol} · déduit des estimations d&apos;achat
+              </p>
+            )}
           </Field>
         </CardContent>
       </Card>
@@ -307,7 +372,21 @@ export function IngredientEditor({
                   <EntityImage src={product.imageUrl} label={product.name || "Produit"} size="sm" className="shrink-0" />
                   <div className="grid min-w-0 flex-1 gap-3 sm:grid-cols-2 xl:grid-cols-3">
                     <Field label="Magasin">
-                      <Input value={product.store} onChange={(event) => updateProduct(setDraft, product.key, { store: event.target.value })} />
+                      <NativeSelect
+                        className="w-full"
+                        value={product.store}
+                        onChange={(event) => updateProduct(setDraft, product.key, { store: event.target.value })}
+                      >
+                        <option value="">Choisir</option>
+                        {KNOWN_STORES.map((store) => (
+                          <option key={store} value={store}>
+                            {store}
+                          </option>
+                        ))}
+                        {product.store && !knownStoreSet.has(product.store) && (
+                          <option value={product.store}>{product.store}</option>
+                        )}
+                      </NativeSelect>
                     </Field>
                     <Field label="Marque">
                       <Input value={product.brand} onChange={(event) => updateProduct(setDraft, product.key, { brand: event.target.value })} />

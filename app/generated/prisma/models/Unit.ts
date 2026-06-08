@@ -758,6 +758,7 @@ export type UnitCreateOrConnectWithoutGlobalBaseUnitInput = {
 
 export type UnitCreateManyGlobalBaseUnitInputEnvelope = {
   data: Prisma.UnitCreateManyGlobalBaseUnitInput | Prisma.UnitCreateManyGlobalBaseUnitInput[]
+  skipDuplicates?: boolean
 }
 
 export type UnitUpsertWithoutDerivedGlobalUnitsInput = {
@@ -2283,6 +2284,7 @@ export type UnitCreateManyArgs<ExtArgs extends runtime.Types.Extensions.Internal
    * The data used to create many Units.
    */
   data: Prisma.UnitCreateManyInput | Prisma.UnitCreateManyInput[]
+  skipDuplicates?: boolean
 }
 
 /**
@@ -2301,6 +2303,7 @@ export type UnitCreateManyAndReturnArgs<ExtArgs extends runtime.Types.Extensions
    * The data used to create many Units.
    */
   data: Prisma.UnitCreateManyInput | Prisma.UnitCreateManyInput[]
+  skipDuplicates?: boolean
   /**
    * Choose, which related nodes to fetch as well
    */
