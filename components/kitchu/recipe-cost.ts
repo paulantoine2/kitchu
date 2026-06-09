@@ -483,6 +483,51 @@ export function sumPartial(values: Array<number | null>): PartialSum {
   };
 }
 
+export type RecipeInventoryMatch = {
+  percent: number | null;
+  isComplete: boolean;
+  coveredValue: number | null;
+  theoreticalValue: number | null;
+};
+
+export function computeRecipeInventoryMatch(estimates: RecipeCostEstimate[]): RecipeInventoryMatch {
+  const coveredValues: Array<number | null> = [];
+  const theoreticalValues: Array<number | null> = [];
+
+  for (const estimate of estimates) {
+    if (!estimate.cheapestProduct || estimate.theoreticalPrice === null) {
+      coveredValues.push(null);
+      theoreticalValues.push(null);
+      continue;
+    }
+
+    const unitPrice = estimate.cheapestProduct.unitPrice;
+    coveredValues.push((estimate.stockUsed + estimate.cartLeftoverUsed) * unitPrice);
+    theoreticalValues.push(estimate.theoreticalPrice);
+  }
+
+  const coveredSum = sumPartial(coveredValues);
+  const theoreticalSum = sumPartial(theoreticalValues);
+
+  if (theoreticalSum.total === null || theoreticalSum.total <= 0) {
+    return {
+      percent: theoreticalSum.total === 0 ? 0 : null,
+      isComplete: coveredSum.isComplete && theoreticalSum.isComplete,
+      coveredValue: coveredSum.total,
+      theoreticalValue: theoreticalSum.total,
+    };
+  }
+
+  const percent = Math.min(100, ((coveredSum.total ?? 0) / theoreticalSum.total) * 100);
+
+  return {
+    percent,
+    isComplete: coveredSum.isComplete && theoreticalSum.isComplete,
+    coveredValue: coveredSum.total,
+    theoreticalValue: theoreticalSum.total,
+  };
+}
+
 export type RecipeListPriceMode = "theoretical" | "purchase";
 
 export type RecipeListPriceSummary = {
@@ -548,4 +593,41 @@ export function computeRecipeListPrice({
     total: sum.total,
     isComplete: sum.isComplete,
   };
+}
+
+export function computeRecipeListMatch({
+  recipe,
+  portions,
+  ingredients,
+  globalRatios,
+  units,
+  stockByIngredientId,
+  cartItems,
+  isInCart,
+  recipes,
+}: {
+  recipe: RecipeRecord;
+  portions: number;
+  ingredients: IngredientRecord[];
+  globalRatios: UnitRatioRecord[];
+  units: UnitRecord[];
+  stockByIngredientId: Map<string, number>;
+  cartItems: CartRecipeEntry[];
+  isInCart: boolean;
+  recipes: RecipeRecord[];
+}): RecipeInventoryMatch {
+  const estimates = estimateRecipeViewCosts({
+    recipe,
+    portions,
+    ingredients,
+    globalRatios,
+    units,
+    stockByIngredientId,
+    cartItems,
+    isInCart,
+    applyStock: true,
+    recipes,
+  });
+
+  return computeRecipeInventoryMatch(estimates);
 }

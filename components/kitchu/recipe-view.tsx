@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import { useState } from "react";
 import { Clock, ExternalLink, Pencil, ShoppingBag, ShoppingCart } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
@@ -29,14 +30,27 @@ import {
 import {
   estimatePurchaseTotal,
   estimateRecipeViewCosts,
+  computeRecipeInventoryMatch,
   sumPartial,
   type RecipeCostEstimate,
 } from "@/components/kitchu/recipe-cost";
+import { RecipeMatchGauge } from "@/components/kitchu/recipe-match-gauge";
 import type { IngredientRecord, RecipeRecord, UnitRatioRecord, UnitRecord } from "@/components/kitchu/types";
 import { EntityImage, Field } from "@/components/kitchu/ui/shared";
 import { uniqueUnits } from "@/components/kitchu/utils";
 
 type RecipeIngredientRow = RecipeRecord["ingredients"][number];
+
+function ingredientHref(ingredientId: string) {
+  return `/ingredients/${ingredientId}`;
+}
+
+function productHref(ingredientId: string, productId: string) {
+  return `/ingredients/${ingredientId}#product-${productId}`;
+}
+
+const entityLinkClassName =
+  "transition-colors hover:text-primary hover:underline underline-offset-2";
 
 function formatIngredientQuantity(item: RecipeIngredientRow, portions: number, globalRatios: UnitRatioRecord[], units: UnitRecord[]) {
   const scaledRecipeQuantity = scaleQuantity(item.quantityPerServing, portions);
@@ -71,14 +85,12 @@ function formatIngredientQuantity(item: RecipeIngredientRow, portions: number, g
 function RecipeHeaderPrice({
   label,
   total,
-  isComplete,
   perPortion,
   emphasized = false,
   className,
 }: {
   label: string;
   total: number | null;
-  isComplete: boolean;
   perPortion: number | null;
   emphasized?: boolean;
   className?: string;
@@ -118,11 +130,7 @@ function RecipeHeaderPrice({
         )}
         aria-hidden={total === null}
       >
-        {total !== null && !isComplete
-          ? `Total ${formatCurrency(total)} · estimation partielle`
-          : total !== null && perPortion !== null
-            ? `Total ${formatCurrency(total)}`
-            : "\u00a0"}
+        {total !== null && perPortion !== null ? `Total ${formatCurrency(total)}` : "\u00a0"}
       </p>
     </div>
   );
@@ -166,11 +174,17 @@ function IngredientPurchaseDetails({
             </Badge>
           )}
           {stockedProducts.map((product) => (
-            <Badge key={product.id} variant="outline" className="gap-1.5">
-              <ProductStorageBadge storageType={product.storageType} className="text-[10px]" />
-              {formatNumber(product.stockQuantity!)} {estimate.baseUnit.symbol}
-              {product.name.trim() ? ` · ${product.name}` : ""}
-            </Badge>
+            <Link
+              key={product.id}
+              href={productHref(ingredient.id, product.id)}
+              className="inline-flex"
+            >
+              <Badge variant="outline" className="gap-1.5 transition-colors hover:border-primary/40 hover:bg-primary/5">
+                <ProductStorageBadge storageType={product.storageType} className="text-[10px]" />
+                {formatNumber(product.stockQuantity!)} {estimate.baseUnit.symbol}
+                {product.name.trim() ? ` · ${product.name}` : ""}
+              </Badge>
+            </Link>
           ))}
           {estimate.stockUsed > 0 && (
             <Badge variant="outline" className="border-emerald-500/30 text-emerald-700 dark:text-emerald-400">
@@ -246,7 +260,12 @@ function IngredientPurchaseDetails({
               />
               <div className="min-w-0 flex-1">
                 <div className="flex flex-wrap items-center gap-2">
-                  <p className="truncate font-semibold leading-snug">{productItem.product.name}</p>
+                  <Link
+                    href={productHref(ingredient.id, productItem.product.id)}
+                    className={cn("truncate font-semibold leading-snug", entityLinkClassName)}
+                  >
+                    {productItem.product.name}
+                  </Link>
                   <ProductStorageBadge storageType={productItem.product.storageType} className="text-[10px]" />
                 </div>
                 <p className="mt-0.5 truncate text-xs text-muted-foreground">
@@ -344,7 +363,14 @@ function RecipeIngredientsPanel({
                     </ItemMedia>
                     <ItemContent className="min-w-0 flex-1">
                       <div className="flex flex-wrap items-start justify-between gap-x-3 gap-y-1">
-                        <ItemTitle className="text-base font-semibold">{item.ingredient.name}</ItemTitle>
+                        <ItemTitle className="text-base font-semibold">
+                          <Link
+                            href={ingredientHref(item.ingredient.id)}
+                            className={entityLinkClassName}
+                          >
+                            {item.ingredient.name}
+                          </Link>
+                        </ItemTitle>
                         <div className="flex shrink-0 flex-col items-end gap-0.5 text-right">
                           <span className="text-sm font-semibold text-primary">{quantity.primary}</span>
                           {quantity.secondary && (
@@ -417,6 +443,18 @@ export function RecipeView({
     applyStock,
     recipes,
   });
+  const matchEstimates = estimateRecipeViewCosts({
+    recipe,
+    portions,
+    ingredients,
+    globalRatios,
+    units,
+    stockByIngredientId,
+    cartItems,
+    isInCart,
+    applyStock: true,
+    recipes,
+  });
   const sortedIngredients = recipe.ingredients.slice().sort((a, b) => a.position - b.position);
   const sortedSteps = recipe.steps.slice().sort((a, b) => a.position - b.position);
   const totalMinutes = (recipe.prepMinutes ?? 0) + (recipe.cookMinutes ?? 0);
@@ -425,7 +463,12 @@ export function RecipeView({
   const hasEstimates = estimates.length > 0;
   const theoreticalSum = sumPartial(estimates.map((estimate) => estimate.theoreticalPrice));
   const purchaseSum = sumPartial(estimates.map(estimatePurchaseTotal));
-  const hasPartialEstimate = hasEstimates && (!theoreticalSum.isComplete || !purchaseSum.isComplete);
+  const hasPartialEstimate =
+    hasEstimates &&
+    (!theoreticalSum.isComplete ||
+      !purchaseSum.isComplete ||
+      (inventoryMatch.percent !== null && !inventoryMatch.isComplete));
+  const inventoryMatch = computeRecipeInventoryMatch(matchEstimates);
 
   return (
     <section className="flex min-w-0 flex-col gap-6">
@@ -450,10 +493,15 @@ export function RecipeView({
                   Modifier
                 </Button>
               </div>
-              <div className="min-w-0">
-                <h2 className="text-2xl font-semibold leading-tight tracking-tight sm:text-3xl">{recipe.name}</h2>
-                {recipe.description && (
-                  <p className="mt-2 max-w-2xl text-sm leading-6 text-muted-foreground">{recipe.description}</p>
+              <div className="flex items-start justify-between gap-4">
+                <div className="min-w-0 flex-1">
+                  <h2 className="text-2xl font-semibold leading-tight tracking-tight sm:text-3xl">{recipe.name}</h2>
+                  {recipe.description && (
+                    <p className="mt-2 max-w-2xl text-sm leading-6 text-muted-foreground">{recipe.description}</p>
+                  )}
+                </div>
+                {hasEstimates && inventoryMatch.percent !== null && (
+                  <RecipeMatchGauge percent={inventoryMatch.percent} compact />
                 )}
               </div>
               <div className="flex flex-wrap items-center gap-2">
@@ -475,6 +523,11 @@ export function RecipeView({
                 )}
                 {recipe.prepMinutes === null && recipe.cookMinutes !== null && (
                   <span className="text-xs text-muted-foreground">{recipe.cookMinutes} min de cuisson</span>
+                )}
+                {hasPartialEstimate && (
+                  <Badge variant="outline" className="text-muted-foreground">
+                    Estimation partielle
+                  </Badge>
                 )}
                 {recipe.sourceUrl && (
                   <Button
@@ -498,13 +551,11 @@ export function RecipeView({
                     <RecipeHeaderPrice
                       label="Coût théorique"
                       total={theoreticalSum.total}
-                      isComplete={theoreticalSum.isComplete}
                       perPortion={theoreticalSum.total !== null ? theoreticalSum.total / portionCount : null}
                     />
                     <RecipeHeaderPrice
                       label="Achat estimé"
                       total={purchaseSum.total}
-                      isComplete={purchaseSum.isComplete}
                       perPortion={purchaseSum.total !== null ? purchaseSum.total / portionCount : null}
                       emphasized
                     />
@@ -536,17 +587,6 @@ export function RecipeView({
                     </Label>
                   )}
                 </div>
-                {hasEstimates && (
-                  <p
-                    className={cn(
-                      "min-h-4 text-xs leading-4 text-muted-foreground",
-                      !hasPartialEstimate && "invisible",
-                    )}
-                    aria-hidden={!hasPartialEstimate}
-                  >
-                    Estimation partielle : certains ingrédients n&apos;ont pas de produit disponible.
-                  </p>
-                )}
               </div>
             </CardContent>
           </div>

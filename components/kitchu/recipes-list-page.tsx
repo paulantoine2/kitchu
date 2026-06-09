@@ -29,7 +29,6 @@ export function RecipesListPage(props: KitchuAppProps) {
         stockByIngredientId={stockByIngredientId}
         cartItems={cart.items}
         isInCart={cart.isInCart}
-        getCartPortions={cart.getPortions}
         onAddToCart={(recipeId, portions) => {
           cart.addOrUpdate(recipeId, portions);
           setCartOpen(true);

@@ -7,7 +7,7 @@ import {
   normalizeUsageShares,
   removeCartItem,
 } from "@/components/kitchu/cart";
-import { estimatePurchaseTotal, estimateRecipeViewCosts } from "@/components/kitchu/recipe-cost";
+import { estimatePurchaseTotal, estimateRecipeViewCosts, computeRecipeInventoryMatch } from "@/components/kitchu/recipe-cost";
 import type { IngredientRecord, RecipeRecord, UnitRatioRecord, UnitRecord } from "@/components/kitchu/types";
 
 const gram: UnitRecord = {
@@ -435,5 +435,51 @@ describe("cart coverage", () => {
     });
     assert.equal(atThreePortions[0]?.toPurchaseBaseQuantity, 400);
     assert.ok(Math.abs((estimatePurchaseTotal(atThreePortions[0]!) ?? 0) - 0.6) < 0.000001);
+  });
+
+  it("computes inventory match as covered value over theoretical price", () => {
+    const recipeA = recipe("recipe-a", "Recette A", 150, butter);
+    const stock = new Map([[butter.id, 100]]);
+
+    const estimates = estimateRecipeViewCosts({
+      recipe: recipeA,
+      portions: 1,
+      ingredients: [butter],
+      globalRatios: [],
+      units: [gram],
+      stockByIngredientId: stock,
+      cartItems: [],
+      isInCart: false,
+      applyStock: true,
+      recipes: [recipeA],
+    });
+
+    const match = computeRecipeInventoryMatch(estimates);
+    assert.ok(Math.abs((match.coveredValue ?? 0) - 1) < 0.000001);
+    assert.ok(Math.abs((match.theoreticalValue ?? 0) - 1.5) < 0.000001);
+    assert.ok(Math.abs((match.percent ?? 0) - (100 / 1.5)) < 0.000001);
+    assert.equal(match.isComplete, true);
+  });
+
+  it("includes cart leftovers in inventory match", () => {
+    const recipeA = recipe("recipe-a", "Recette A", 150, butter);
+    const recipeB = recipe("recipe-b", "Recette B", 40, butter);
+    const cartItems = [{ recipeId: recipeA.id, portions: 1 }];
+
+    const estimates = estimateRecipeViewCosts({
+      recipe: recipeB,
+      portions: 1,
+      ingredients: [butter],
+      globalRatios: [],
+      units: [gram],
+      stockByIngredientId: new Map(),
+      cartItems,
+      isInCart: false,
+      applyStock: true,
+      recipes: [recipeA, recipeB],
+    });
+
+    const match = computeRecipeInventoryMatch(estimates);
+    assert.ok(Math.abs((match.percent ?? 0) - 100) < 0.000001);
   });
 });

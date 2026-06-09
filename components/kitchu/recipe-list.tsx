@@ -5,14 +5,18 @@ import { useMemo, useState } from "react";
 import { Plus, Search, ShoppingCart } from "lucide-react";
 import { recipeImageUrl } from "@/components/kitchu/images";
 import {
+  computeRecipeListMatch,
   computeRecipeListPrice,
   type RecipeListPriceMode,
 } from "@/components/kitchu/recipe-cost";
+import { RecipeMatchGauge } from "@/components/kitchu/recipe-match-gauge";
 import type { CartRecipeEntry, IngredientRecord, RecipeRecord, UnitRatioRecord, UnitRecord } from "@/components/kitchu/types";
+import { Field } from "@/components/kitchu/ui/shared";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardFooter } from "@/components/ui/card";
 import { Empty, EmptyDescription } from "@/components/ui/empty";
+import { Input } from "@/components/ui/input";
 import {
   InputGroup,
   InputGroupAddon,
@@ -29,6 +33,7 @@ function RecipeCard({
   priceMode,
   pricePerPortion,
   priceComplete,
+  matchPercent,
   isInCart,
   onAddToCart,
 }: {
@@ -36,6 +41,7 @@ function RecipeCard({
   priceMode: RecipeListPriceMode;
   pricePerPortion: number | null;
   priceComplete: boolean;
+  matchPercent: number | null;
   isInCart: boolean;
   onAddToCart: () => void;
 }) {
@@ -54,8 +60,14 @@ function RecipeCard({
               {recipe.name.trim().charAt(0).toUpperCase() || "K"}
             </div>
           )}
-          {isInCart && (
-            <Badge className="absolute top-2 right-2 shadow-sm">Dans le panier</Badge>
+          {isInCart ? (
+            <Badge className="absolute top-2 left-2 shadow-md">Dans le panier</Badge>
+          ) : (
+            matchPercent !== null && (
+              <div className="absolute top-2 left-2">
+                <RecipeMatchGauge percent={matchPercent} size={44} framed />
+              </div>
+            )
           )}
         </div>
         <CardContent className="pt-3">
@@ -78,7 +90,9 @@ function RecipeCard({
               )}
             </p>
             {!priceComplete && pricePerPortion !== null && (
-              <p className="mt-0.5 text-xs text-muted-foreground">Estimation partielle</p>
+              <Badge variant="outline" className="mt-2 text-[10px] text-muted-foreground">
+                Estimation partielle
+              </Badge>
             )}
           </div>
         </CardContent>
@@ -110,7 +124,6 @@ export function RecipeList({
   stockByIngredientId,
   cartItems,
   isInCart,
-  getCartPortions,
   onAddToCart,
   onNewRecipe,
 }: {
@@ -122,12 +135,13 @@ export function RecipeList({
   stockByIngredientId: Map<string, number>;
   cartItems: CartRecipeEntry[];
   isInCart: (recipeId: string) => boolean;
-  getCartPortions: (recipeId: string) => number | undefined;
   onAddToCart: (recipeId: string, portions: number) => void;
   onNewRecipe: () => void;
 }) {
   const [search, setSearch] = useState("");
   const [priceMode, setPriceMode] = useState<RecipeListPriceMode>("purchase");
+  const [listPortions, setListPortions] = useState(DEFAULT_LIST_PORTIONS);
+  const portionCount = Math.max(1, listPortions);
 
   const filteredRecipes = useMemo(
     () =>
@@ -137,13 +151,15 @@ export function RecipeList({
     [recipes, search],
   );
 
-  const priceByRecipeId = useMemo(() => {
-    const entries = new Map<string, { perPortion: number | null; isComplete: boolean }>();
+  const cardDataByRecipeId = useMemo(() => {
+    const entries = new Map<
+      string,
+      { perPortion: number | null; isComplete: boolean; matchPercent: number | null }
+    >();
     for (const recipe of filteredRecipes) {
-      const portions = getCartPortions(recipe.id) ?? DEFAULT_LIST_PORTIONS;
-      const summary = computeRecipeListPrice({
+      const price = computeRecipeListPrice({
         recipe,
-        portions,
+        portions: portionCount,
         ingredients,
         globalRatios,
         units,
@@ -153,14 +169,29 @@ export function RecipeList({
         recipes: allRecipes,
         priceMode,
       });
+      const match = isInCart(recipe.id)
+        ? { percent: null }
+        : computeRecipeListMatch({
+            recipe,
+            portions: portionCount,
+            ingredients,
+            globalRatios,
+            units,
+            stockByIngredientId,
+            cartItems,
+            isInCart: false,
+            recipes: allRecipes,
+          });
       entries.set(recipe.id, {
-        perPortion: summary.perPortion,
-        isComplete: summary.isComplete,
+        perPortion: price.perPortion,
+        isComplete: price.isComplete,
+        matchPercent: match.percent,
       });
     }
     return entries;
   }, [
     filteredRecipes,
+    portionCount,
     ingredients,
     globalRatios,
     units,
@@ -169,7 +200,6 @@ export function RecipeList({
     isInCart,
     allRecipes,
     priceMode,
-    getCartPortions,
   ]);
 
   return (
@@ -187,7 +217,7 @@ export function RecipeList({
         </Button>
       </div>
 
-      <div className="mb-6 flex flex-col gap-3 sm:flex-row sm:items-center">
+      <div className="mb-6 flex flex-col gap-3 sm:flex-row sm:items-end">
         <InputGroup className="flex-1 rounded-full">
           <InputGroupAddon align="inline-start">
             <Search />
@@ -198,6 +228,16 @@ export function RecipeList({
             placeholder="Rechercher une recette"
           />
         </InputGroup>
+
+        <Field label="Portions" className="w-auto shrink-0">
+          <Input
+            type="number"
+            min={1}
+            value={listPortions}
+            onChange={(event) => setListPortions(Number(event.target.value) || 1)}
+            className="w-20 rounded-full bg-background"
+          />
+        </Field>
 
         <div className="flex shrink-0 items-center gap-2 rounded-full border border-border bg-card px-3 py-1.5">
           <Label
@@ -236,18 +276,17 @@ export function RecipeList({
       ) : (
         <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
           {filteredRecipes.map((recipe) => {
-            const price = priceByRecipeId.get(recipe.id);
+            const cardData = cardDataByRecipeId.get(recipe.id);
             return (
               <RecipeCard
                 key={recipe.id}
                 recipe={recipe}
                 priceMode={priceMode}
-                pricePerPortion={price?.perPortion ?? null}
-                priceComplete={price?.isComplete ?? false}
+                pricePerPortion={cardData?.perPortion ?? null}
+                priceComplete={cardData?.isComplete ?? false}
+                matchPercent={cardData?.matchPercent ?? null}
                 isInCart={isInCart(recipe.id)}
-                onAddToCart={() =>
-                  onAddToCart(recipe.id, getCartPortions(recipe.id) ?? DEFAULT_LIST_PORTIONS)
-                }
+                onAddToCart={() => onAddToCart(recipe.id, portionCount)}
               />
             );
           })}
