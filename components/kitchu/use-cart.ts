@@ -32,27 +32,18 @@ export function useCart({
   const [items, setItems] = useState<CartRecipeEntry[]>(initialItems);
 
   const addOrUpdate = useCallback((recipeId: string, portions: number) => {
-    setItems((current) => {
-      const next = addOrUpdateCartItem(current, recipeId, portions);
-      void upsertCartItem(recipeId, portions);
-      return next;
-    });
+    setItems((current) => addOrUpdateCartItem(current, recipeId, portions));
+    void upsertCartItem(recipeId, portions);
   }, []);
 
   const remove = useCallback((recipeId: string) => {
-    setItems((current) => {
-      const next = removeCartItem(current, recipeId);
-      void removeCartRecipe(recipeId);
-      return next;
-    });
+    setItems((current) => removeCartItem(current, recipeId));
+    void removeCartRecipe(recipeId);
   }, []);
 
   const setPortions = useCallback((recipeId: string, portions: number) => {
-    setItems((current) => {
-      const next = updateCartItemPortions(current, recipeId, portions);
-      void upsertCartItem(recipeId, portions);
-      return next;
-    });
+    setItems((current) => updateCartItemPortions(current, recipeId, portions));
+    void upsertCartItem(recipeId, portions);
   }, []);
 
   const isInCart = useCallback((recipeId: string) => Boolean(getCartItem(items, recipeId)), [items]);
