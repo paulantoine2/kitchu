@@ -1,5 +1,6 @@
 "use client";
 
+import { useEffect } from "react";
 import { Plus, Trash2 } from "lucide-react";
 import { ProductStorageBadge } from "@/components/kitchu/product-storage-badge";
 import { Badge } from "@/components/ui/badge";
@@ -61,6 +62,16 @@ export function IngredientEditor({
   const specificUnitOptions = units.filter((unit) =>
     canDefineIngredientSpecificRatio(unit, baseUnit, globalRatios, units),
   );
+
+  useEffect(() => {
+    const hash = window.location.hash.slice(1);
+    if (!hash) return;
+    const element = document.getElementById(hash);
+    if (element) {
+      element.scrollIntoView({ behavior: "smooth", block: "start" });
+    }
+  }, []);
+
   function resetGlobalRows(baseUnitId: string, rows: IngredientDraft["units"]) {
     return rows.map((item) => ({ ...item, toBaseFactor: "" }));
   }
@@ -317,7 +328,11 @@ export function IngredientEditor({
               ? derivedPrice * preferredPriceFactor
               : derivedPrice;
             return (
-              <div key={product.key} className="flex flex-col gap-4 rounded-lg border border-border bg-card p-4 shadow-sm">
+              <div
+                key={product.key}
+                id={product.id ? `product-${product.id}` : undefined}
+                className="flex scroll-mt-24 flex-col gap-4 rounded-lg border border-border bg-card p-4 shadow-sm"
+              >
                 <div className="flex flex-wrap items-center gap-2">
                   <ProductStorageBadge storageType={product.storageType} />
                   {product.stockQuantity && Number(product.stockQuantity) > 0 && unit && (
