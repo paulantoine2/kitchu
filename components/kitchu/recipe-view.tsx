@@ -463,12 +463,12 @@ export function RecipeView({
   const hasEstimates = estimates.length > 0;
   const theoreticalSum = sumPartial(estimates.map((estimate) => estimate.theoreticalPrice));
   const purchaseSum = sumPartial(estimates.map(estimatePurchaseTotal));
+  const inventoryMatch = computeRecipeInventoryMatch(matchEstimates);
   const hasPartialEstimate =
     hasEstimates &&
     (!theoreticalSum.isComplete ||
       !purchaseSum.isComplete ||
       (inventoryMatch.percent !== null && !inventoryMatch.isComplete));
-  const inventoryMatch = computeRecipeInventoryMatch(matchEstimates);
 
   return (
     <section className="flex min-w-0 flex-col gap-6">
