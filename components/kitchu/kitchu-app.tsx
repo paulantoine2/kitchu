@@ -51,7 +51,7 @@ import {
   usableUnitsForIngredient,
 } from "@/components/kitchu/unit-helpers";
 
-export function KitchuApp({ units, globalRatios, ingredients, recipes }: KitchuAppProps) {
+export function KitchuApp({ units, globalRatios, ingredients, recipes, cartItems }: KitchuAppProps) {
   const router = useRouter();
   const [isPending, startTransition] = useTransition();
   const [tab, setTab] = useState<"recipes" | "ingredients" | "units">("recipes");
@@ -96,6 +96,7 @@ export function KitchuApp({ units, globalRatios, ingredients, recipes }: KitchuA
     ),
   );
   const cart = useCart({
+    initialItems: cartItems,
     recipes,
     ingredients: allIngredients,
     globalRatios,

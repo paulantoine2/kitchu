@@ -16,7 +16,7 @@ function serializeIngredient<T extends { stock: { quantity: number } | null }>(i
 }
 
 export default async function Home() {
-  const [units, globalRatios, ingredients, recipes] = await Promise.all([
+  const [units, globalRatios, ingredients, recipes, cartItems] = await Promise.all([
     prisma.unit.findMany({ orderBy: [{ kind: "asc" }, { name: "asc" }] }),
     prisma.unitRatio.findMany({ orderBy: { updatedAt: "desc" } }),
     prisma.ingredient.findMany({
@@ -36,6 +36,10 @@ export default async function Home() {
         steps: { orderBy: { position: "asc" } },
       },
     }),
+    prisma.cartItem.findMany({
+      orderBy: { updatedAt: "asc" },
+      select: { recipeId: true, portions: true },
+    }),
   ]);
 
   return (
@@ -44,6 +48,7 @@ export default async function Home() {
       globalRatios={JSON.parse(JSON.stringify(globalRatios))}
       ingredients={JSON.parse(JSON.stringify(ingredients.map(serializeIngredient)))}
       recipes={JSON.parse(JSON.stringify(recipes))}
+      cartItems={JSON.parse(JSON.stringify(cartItems))}
     />
   );
 }

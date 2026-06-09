@@ -145,9 +145,15 @@ export type UnitDraft = {
   kind: string;
 };
 
+export type CartRecipeEntry = {
+  recipeId: string;
+  portions: number;
+};
+
 export type KitchuAppProps = {
   units: UnitRecord[];
   globalRatios: UnitRatioRecord[];
   ingredients: IngredientRecord[];
   recipes: RecipeRecord[];
+  cartItems: CartRecipeEntry[];
 };

@@ -1,6 +1,7 @@
 "use client";
 
 import { useCallback, useMemo, useState } from "react";
+import { removeCartRecipe, upsertCartItem } from "@/app/actions";
 import {
   addOrUpdateCartItem,
   computeCartPurchases,
@@ -12,6 +13,7 @@ import {
 import type { IngredientRecord, RecipeRecord, UnitRatioRecord, UnitRecord } from "@/components/kitchu/types";
 
 export function useCart({
+  initialItems,
   recipes,
   ingredients,
   globalRatios,
@@ -19,6 +21,7 @@ export function useCart({
   stockByIngredientId,
   applyStock = true,
 }: {
+  initialItems: CartRecipeEntry[];
   recipes: RecipeRecord[];
   ingredients: IngredientRecord[];
   globalRatios: UnitRatioRecord[];
@@ -26,18 +29,30 @@ export function useCart({
   stockByIngredientId: Map<string, number>;
   applyStock?: boolean;
 }) {
-  const [items, setItems] = useState<CartRecipeEntry[]>([]);
+  const [items, setItems] = useState<CartRecipeEntry[]>(initialItems);
 
   const addOrUpdate = useCallback((recipeId: string, portions: number) => {
-    setItems((current) => addOrUpdateCartItem(current, recipeId, portions));
+    setItems((current) => {
+      const next = addOrUpdateCartItem(current, recipeId, portions);
+      void upsertCartItem(recipeId, portions);
+      return next;
+    });
   }, []);
 
   const remove = useCallback((recipeId: string) => {
-    setItems((current) => removeCartItem(current, recipeId));
+    setItems((current) => {
+      const next = removeCartItem(current, recipeId);
+      void removeCartRecipe(recipeId);
+      return next;
+    });
   }, []);
 
   const setPortions = useCallback((recipeId: string, portions: number) => {
-    setItems((current) => updateCartItemPortions(current, recipeId, portions));
+    setItems((current) => {
+      const next = updateCartItemPortions(current, recipeId, portions);
+      void upsertCartItem(recipeId, portions);
+      return next;
+    });
   }, []);
 
   const isInCart = useCallback((recipeId: string) => Boolean(getCartItem(items, recipeId)), [items]);

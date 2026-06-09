@@ -94,3 +94,8 @@ export const unitRatioPayloadSchema = z.object({
   toUnitId: z.string().min(1, "Choisis l'unité de référence."),
   factor: positiveNumber,
 });
+
+export const cartItemPayloadSchema = z.object({
+  recipeId: z.string().min(1, "La recette est requise."),
+  portions: z.coerce.number().int().min(1, "Au moins une portion."),
+});

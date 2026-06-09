@@ -53,6 +53,11 @@ export type ProductReference = Prisma.ProductReferenceModel
  */
 export type Recipe = Prisma.RecipeModel
 /**
+ * Model CartItem
+ * 
+ */
+export type CartItem = Prisma.CartItemModel
+/**
  * Model RecipeIngredient
  * 
  */
