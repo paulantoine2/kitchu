@@ -271,6 +271,45 @@ describe("cart coverage", () => {
     assert.equal(estimate?.cartLeftoverUsed, 40);
     assert.equal(estimate?.toPurchaseBaseQuantity, 0);
     assert.equal(estimatePurchaseTotal(estimate!), 0);
+    assert.ok(Math.abs((estimate?.theoreticalPrice ?? 0) - 0.4) < 0.000001);
+  });
+
+  it("keeps theoretical price independent of stock and cart leftovers", () => {
+    const recipeA = recipe("recipe-a", "Recette A", 150, butter);
+    const recipeB = recipe("recipe-b", "Recette B", 40, butter);
+    const cartItems = [{ recipeId: recipeA.id, portions: 1 }];
+    const stock = new Map([[butter.id, 100]]);
+
+    const withInventory = estimateRecipeViewCosts({
+      recipe: recipeB,
+      portions: 1,
+      ingredients: [butter],
+      globalRatios: [],
+      units: [gram],
+      stockByIngredientId: stock,
+      cartItems,
+      isInCart: false,
+      applyStock: true,
+      recipes: [recipeA, recipeB],
+    });
+    const withoutInventory = estimateRecipeViewCosts({
+      recipe: recipeB,
+      portions: 1,
+      ingredients: [butter],
+      globalRatios: [],
+      units: [gram],
+      stockByIngredientId: new Map(),
+      cartItems: [],
+      isInCart: false,
+      applyStock: false,
+      recipes: [recipeA, recipeB],
+    });
+
+    const covered = withInventory.find((entry) => entry.ingredientId === butter.id);
+    const full = withoutInventory.find((entry) => entry.ingredientId === butter.id);
+    assert.equal(estimatePurchaseTotal(covered!), 0);
+    assert.ok(Math.abs((covered?.theoreticalPrice ?? 0) - 0.4) < 0.000001);
+    assert.ok(Math.abs((full?.theoreticalPrice ?? 0) - 0.4) < 0.000001);
   });
 
   it("matches cart merchandise value for a recipe already in the cart", () => {

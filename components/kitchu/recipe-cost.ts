@@ -86,9 +86,9 @@ function buildRecipeCostEstimate({
     cartLeftoverUsed,
     toPurchaseBaseQuantity,
     theoreticalPrice:
-      toPurchaseBaseQuantity > 0 && cheapestProduct
-        ? toPurchaseBaseQuantity * cheapestProduct.unitPrice
-        : toPurchaseBaseQuantity === 0
+      requiredBaseQuantity > 0 && cheapestProduct
+        ? requiredBaseQuantity * cheapestProduct.unitPrice
+        : requiredBaseQuantity === 0
           ? 0
           : null,
     cheapestProduct,
@@ -514,18 +514,27 @@ export function computeRecipeListPrice({
   recipes: RecipeRecord[];
   priceMode: RecipeListPriceMode;
 }): RecipeListPriceSummary {
-  const estimates = estimateRecipeViewCosts({
-    recipe,
-    portions,
-    ingredients,
-    globalRatios,
-    units,
-    stockByIngredientId,
-    cartItems,
-    isInCart,
-    applyStock: true,
-    recipes,
-  });
+  const estimates =
+    priceMode === "theoretical"
+      ? estimateRecipeCosts(
+          recipeToDraft(recipe),
+          ingredients,
+          portions,
+          globalRatios,
+          units,
+        )
+      : estimateRecipeViewCosts({
+          recipe,
+          portions,
+          ingredients,
+          globalRatios,
+          units,
+          stockByIngredientId,
+          cartItems,
+          isInCart,
+          applyStock: true,
+          recipes,
+        });
 
   const values =
     priceMode === "theoretical"
