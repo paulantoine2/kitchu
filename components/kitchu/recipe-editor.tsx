@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { GripVertical, Plus, Trash2, X } from "lucide-react";
 import { effectiveToBaseFactor, globalConversionFactor, pricePerBaseUnit } from "@/lib/conversions";
+import { PRODUCT_STORAGE_TYPES, isProductStorageType, productStorageLabels } from "@/lib/product-storage";
 import { formatCurrency } from "@/lib/utils";
 import { HelloFreshImporter } from "@/components/hellofresh-importer";
 import { Badge } from "@/components/ui/badge";
@@ -156,6 +157,8 @@ export function RecipeEditor({
               brand: "",
               name: current.draft.name,
               imageUrl: current.draft.imageUrl,
+              storageType: "FRESH",
+              stockQuantity: "",
               packageQuantity: "",
               packageUnitId: suggestedUnit?.id ?? current.draft.baseUnitId,
               packageToBaseFactor: "",
@@ -777,6 +780,23 @@ export function RecipeEditor({
                                 updateDialogProduct(dialogProduct.key, { name: event.target.value })
                               }
                             />
+                          </Field>
+                          <Field label="Conservation">
+                            <NativeSelect
+                              value={dialogProduct.storageType}
+                              onChange={(event) => {
+                                const value = event.target.value;
+                                if (isProductStorageType(value)) {
+                                  updateDialogProduct(dialogProduct.key, { storageType: value });
+                                }
+                              }}
+                            >
+                              {PRODUCT_STORAGE_TYPES.map((storageType) => (
+                                <option key={storageType} value={storageType}>
+                                  {productStorageLabels[storageType]}
+                                </option>
+                              ))}
+                            </NativeSelect>
                           </Field>
                         </div>
                       </div>

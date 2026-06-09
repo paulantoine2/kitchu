@@ -28,8 +28,6 @@ function ingredientFingerprint(draft: IngredientDraft) {
     imageUrl: draft.imageUrl,
     notes: draft.notes,
     baseUnitId: draft.baseUnitId,
-    stockQuantity: draft.stockQuantity,
-    stockUnitId: draft.stockUnitId,
     units: draft.units.map((unit) => ({
       unitId: unit.unitId,
       toBaseFactor: unit.toBaseFactor,
@@ -39,6 +37,8 @@ function ingredientFingerprint(draft: IngredientDraft) {
       brand: product.brand,
       name: product.name,
       imageUrl: product.imageUrl,
+      storageType: product.storageType,
+      stockQuantity: product.stockQuantity,
       packageQuantity: product.packageQuantity,
       packageUnitId: product.packageUnitId,
       packageToBaseFactor: product.packageToBaseFactor,

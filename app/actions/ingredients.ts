@@ -4,6 +4,7 @@ import { z } from "zod";
 import { prisma } from "@/lib/prisma";
 import { ingredientPayloadSchema } from "@/lib/validation";
 import { effectiveToBaseFactor, globalConversionFactor } from "@/lib/conversions";
+import { totalProductStock } from "@/lib/product-storage";
 import { actionError } from "@/app/actions/shared";
 import { supportsIngredientSpecificRatio } from "@/app/actions/unit-helpers";
 import { revalidateKitchuPaths } from "@/lib/revalidate-kitchu";
@@ -106,6 +107,8 @@ export async function saveIngredient(payload: unknown) {
             brand: product.brand,
             name: product.name,
             imageUrl: product.imageUrl,
+            storageType: product.storageType,
+            stockQuantity: product.stockQuantity,
             packageQuantity: product.packageQuantity,
             packageUnitId: product.packageUnitId,
             packageToBaseFactor: product.packageToBaseFactor,
@@ -117,16 +120,6 @@ export async function saveIngredient(payload: unknown) {
         });
       }
 
-      if (data.stockQuantity === null || data.stockQuantity === 0) {
-        await tx.stockEntry.deleteMany({ where: { ingredientId: saved.id } });
-      } else {
-        await tx.stockEntry.upsert({
-          where: { ingredientId: saved.id },
-          create: { ingredientId: saved.id, quantity: data.stockQuantity },
-          update: { quantity: data.stockQuantity },
-        });
-      }
-
       return saved;
     });
 
@@ -134,19 +127,19 @@ export async function saveIngredient(payload: unknown) {
       where: { id: ingredient.id },
       include: {
         baseUnit: true,
-        stock: true,
         units: { include: { unit: true }, orderBy: { unit: { name: "asc" } } },
         products: { include: { packageUnit: true }, orderBy: { updatedAt: "desc" } },
       },
     });
 
+    const totalStock = totalProductStock(fullIngredient.products);
     revalidateKitchuPaths({ ingredientId: fullIngredient.id });
     return {
       ok: true as const,
       id: fullIngredient.id,
       ingredient: {
         ...fullIngredient,
-        stock: fullIngredient.stock ? { quantity: fullIngredient.stock.quantity } : null,
+        stock: totalStock !== null ? { quantity: totalStock } : null,
       },
     };
   } catch (error) {
@@ -193,7 +186,6 @@ export async function createIngredientQuick(
       },
       include: {
         baseUnit: true,
-        stock: true,
         units: { include: { unit: true }, orderBy: { unit: { name: "asc" } } },
         products: { include: { packageUnit: true }, orderBy: { updatedAt: "desc" } },
       },
@@ -203,7 +195,9 @@ export async function createIngredientQuick(
       ok: true as const,
       ingredient: {
         ...ingredient,
-        stock: ingredient.stock ? { quantity: ingredient.stock.quantity } : null,
+        stock: totalProductStock(ingredient.products) !== null
+          ? { quantity: totalProductStock(ingredient.products)! }
+          : null,
       },
     };
   } catch (error) {
@@ -244,7 +238,6 @@ export async function addIngredientUnitQuick(ingredientId: string, unitCode: str
       where: { id },
       include: {
         baseUnit: true,
-        stock: true,
         units: { include: { unit: true }, orderBy: { unit: { name: "asc" } } },
         products: { include: { packageUnit: true }, orderBy: { updatedAt: "desc" } },
       },
@@ -255,7 +248,9 @@ export async function addIngredientUnitQuick(ingredientId: string, unitCode: str
       ok: true as const,
       ingredient: {
         ...updatedIngredient,
-        stock: updatedIngredient.stock ? { quantity: updatedIngredient.stock.quantity } : null,
+        stock: totalProductStock(updatedIngredient.products) !== null
+          ? { quantity: totalProductStock(updatedIngredient.products)! }
+          : null,
       },
     };
   } catch (error) {

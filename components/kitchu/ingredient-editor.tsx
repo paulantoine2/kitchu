@@ -1,23 +1,24 @@
 "use client";
 
 import { Plus, Trash2 } from "lucide-react";
+import { ProductStorageBadge } from "@/components/kitchu/product-storage-badge";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { NativeSelect } from "@/components/ui/native-select";
 import { Textarea } from "@/components/ui/textarea";
-import { effectiveToBaseFactor, globalConversionFactor, pricePerBaseUnit, convertToBase } from "@/lib/conversions";
+import { effectiveToBaseFactor, globalConversionFactor, pricePerBaseUnit } from "@/lib/conversions";
+import { PRODUCT_STORAGE_TYPES, productStorageLabels, isProductStorageType } from "@/lib/product-storage";
 import { formatCurrency, formatNumber } from "@/lib/utils";
 import { key } from "@/components/kitchu/drafts";
-import type { IngredientDraft, IngredientRecord, UnitRatioRecord, UnitRecord } from "@/components/kitchu/types";
+import type { IngredientDraft, UnitRatioRecord, UnitRecord } from "@/components/kitchu/types";
 import { EntityImage, Field, StickySave } from "@/components/kitchu/ui/shared";
 import {
   baseMeasurementOptions,
   canDefineIngredientSpecificRatio,
   canonicalBaseUnitForKind,
   measurementKindLabel,
-  usableUnitsForIngredient,
 } from "@/components/kitchu/unit-helpers";
 import { standardUnitForPrice, updateProduct } from "@/components/kitchu/utils";
 
@@ -60,40 +61,6 @@ export function IngredientEditor({
   const specificUnitOptions = units.filter((unit) =>
     canDefineIngredientSpecificRatio(unit, baseUnit, globalRatios, units),
   );
-  const draftAsIngredient = (): IngredientRecord => ({
-    id: draft.id ?? "",
-    name: draft.name,
-    imageUrl: draft.imageUrl || null,
-    notes: draft.notes || null,
-    baseUnitId: draft.baseUnitId,
-    baseUnit: baseUnit!,
-    units: draft.units
-      .filter((row) => row.unitId)
-      .map((row) => ({
-        id: row.key,
-        unitId: row.unitId,
-        toBaseFactor: row.toBaseFactor ? Number(row.toBaseFactor) : null,
-        unit: units.find((unit) => unit.id === row.unitId)!,
-      })),
-    products: [],
-    stock: null,
-  });
-  const stockUnitOptions = baseUnit ? usableUnitsForIngredient(draftAsIngredient(), units, globalRatios) : [];
-  const selectedStockUnit = stockUnitOptions.find((entry) => entry.unitId === draft.stockUnitId);
-  const stockBasePreview =
-    draft.stockQuantity && baseUnit && selectedStockUnit
-      ? convertToBase(
-          Number(draft.stockQuantity),
-          effectiveToBaseFactor(
-            selectedStockUnit.unit,
-            baseUnit,
-            selectedStockUnit.toBaseFactor,
-            globalRatios,
-            { allowSpecific: true, units },
-          ),
-        )
-      : null;
-
   function resetGlobalRows(baseUnitId: string, rows: IngredientDraft["units"]) {
     return rows.map((item) => ({ ...item, toBaseFactor: "" }));
   }
@@ -142,8 +109,11 @@ export function IngredientEditor({
                 setDraft((current) => ({
                   ...current,
                   baseUnitId,
-                  stockUnitId: baseUnitId,
                   units: addBaseUnitRow(baseUnitId, current.units),
+                  products: current.products.map((product) => ({
+                    ...product,
+                    packageUnitId: product.packageUnitId || baseUnitId,
+                  })),
                 }));
               }}
             >
@@ -168,33 +138,6 @@ export function IngredientEditor({
           </Field>
           <Field label="Notes" className="md:col-span-2">
             <Textarea value={draft.notes} onChange={(event) => setDraft({ ...draft, notes: event.target.value })} />
-          </Field>
-          <Field label="Quantité en stock">
-            <Input
-              type="number"
-              min={0}
-              step="any"
-              value={draft.stockQuantity}
-              onChange={(event) => setDraft({ ...draft, stockQuantity: event.target.value })}
-              placeholder="0"
-            />
-          </Field>
-          <Field label="Unité de stock">
-            <NativeSelect
-              value={draft.stockUnitId}
-              onChange={(event) => setDraft({ ...draft, stockUnitId: event.target.value })}
-            >
-              {stockUnitOptions.map((entry) => (
-                <option key={entry.unitId} value={entry.unitId}>
-                  {entry.unit.symbol}
-                </option>
-              ))}
-            </NativeSelect>
-            {stockBasePreview !== null && baseUnit && (
-              <p className="text-xs leading-5 text-muted-foreground">
-                Équivaut à {formatNumber(stockBasePreview)} {baseUnit.symbol} · déduit des estimations d&apos;achat
-              </p>
-            )}
           </Field>
         </CardContent>
       </Card>
@@ -306,7 +249,12 @@ export function IngredientEditor({
       <Card>
         <CardHeader>
           <div className="flex items-center justify-between gap-3">
-            <h3 className="text-lg font-semibold">Produits magasin</h3>
+            <div>
+              <h3 className="text-lg font-semibold">Produits magasin</h3>
+              <p className="text-sm text-muted-foreground">
+                Chaque produit a une conservation (frais, surgelé, sec) et son propre stock à réutiliser en priorité.
+              </p>
+            </div>
             <Button
               variant="secondary"
               size="sm"
@@ -321,6 +269,8 @@ export function IngredientEditor({
                       brand: "",
                       name: "",
                       imageUrl: "",
+                      storageType: "FRESH",
+                      stockQuantity: "",
                       packageQuantity: "",
                       packageUnitId: current.baseUnitId,
                       packageToBaseFactor: "",
@@ -368,6 +318,14 @@ export function IngredientEditor({
               : derivedPrice;
             return (
               <div key={product.key} className="flex flex-col gap-4 rounded-lg border border-border bg-card p-4 shadow-sm">
+                <div className="flex flex-wrap items-center gap-2">
+                  <ProductStorageBadge storageType={product.storageType} />
+                  {product.stockQuantity && Number(product.stockQuantity) > 0 && unit && (
+                    <Badge variant="outline">
+                      Stock {formatNumber(Number(product.stockQuantity))} {unit.symbol}
+                    </Badge>
+                  )}
+                </div>
                 <div className="flex flex-col gap-3 lg:flex-row lg:items-start">
                   <EntityImage src={product.imageUrl} label={product.name || "Produit"} size="sm" className="shrink-0" />
                   <div className="grid min-w-0 flex-1 gap-3 sm:grid-cols-2 xl:grid-cols-3">
@@ -394,6 +352,23 @@ export function IngredientEditor({
                     <Field label="Produit" className="sm:col-span-2 xl:col-span-1">
                       <Input value={product.name} onChange={(event) => updateProduct(setDraft, product.key, { name: event.target.value })} />
                     </Field>
+                    <Field label="Conservation">
+                      <NativeSelect
+                        value={isProductStorageType(product.storageType) ? product.storageType : "FRESH"}
+                        onChange={(event) => {
+                          const value = event.target.value;
+                          updateProduct(setDraft, product.key, {
+                            storageType: isProductStorageType(value) ? value : "FRESH",
+                          });
+                        }}
+                      >
+                        {PRODUCT_STORAGE_TYPES.map((storageType) => (
+                          <option key={storageType} value={storageType}>
+                            {productStorageLabels[storageType]}
+                          </option>
+                        ))}
+                      </NativeSelect>
+                    </Field>
                   </div>
                   <div className="flex justify-end lg:pt-6">
                     <Button
@@ -410,62 +385,91 @@ export function IngredientEditor({
                     </Button>
                   </div>
                 </div>
-                <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
-                  <Field label="Qté">
-                    <Input
-                      type="number"
-                      min={0}
-                      step="0.01"
-                      value={product.packageQuantity}
-                      onChange={(event) => updateProduct(setDraft, product.key, { packageQuantity: event.target.value })}
-                    />
-                  </Field>
-                  <Field label="Unité">
-                    <NativeSelect
-                      value={product.packageUnitId}
-                      onChange={(event) =>
-                        updateProduct(setDraft, product.key, {
-                          packageUnitId: event.target.value,
-                          packageToBaseFactor: globalConversionFactor(
-                            units.find((item) => item.id === event.target.value),
-                            baseUnit,
-                            globalRatios,
-                            units,
-                          ) !== null
-                            ? ""
-                            : product.packageToBaseFactor,
-                        })
-                      }
-                    >
-                      <option value="">Choisir</option>
-                      {units.map((item) => (
-                        <option key={item.id} value={item.id}>
-                          {item.symbol}
-                        </option>
-                      ))}
-                    </NativeSelect>
-                  </Field>
-                  <Field label="Ratio produit">
-                    <Input
-                      type="number"
-                      min={0}
-                      step="0.01"
-                      value={usesSystemRatio ? effectiveFactor?.toString() ?? "" : product.packageToBaseFactor}
-                      disabled={usesSystemRatio}
-                      onChange={(event) =>
-                        updateProduct(setDraft, product.key, { packageToBaseFactor: event.target.value })
-                      }
-                    />
-                  </Field>
-                  <Field label="Prix">
-                    <Input
-                      type="number"
-                      min={0}
-                      step="0.01"
-                      value={product.price}
-                      onChange={(event) => updateProduct(setDraft, product.key, { price: event.target.value })}
-                    />
-                  </Field>
+                <div className="rounded-lg border border-border/70 bg-muted/20 p-3">
+                  <p className="mb-3 text-sm font-medium">Stock</p>
+                  <div className="grid gap-3 sm:grid-cols-[minmax(0,1fr)_120px] sm:items-end">
+                    <Field label="Quantité en stock">
+                      <Input
+                        type="number"
+                        min={0}
+                        step="any"
+                        value={product.stockQuantity}
+                        onChange={(event) => updateProduct(setDraft, product.key, { stockQuantity: event.target.value })}
+                        placeholder="0"
+                        disabled={!product.packageUnitId}
+                      />
+                    </Field>
+                    <Field label="Unité">
+                      <div className="flex h-9 items-center rounded-md border border-input bg-muted/50 px-3 text-sm text-muted-foreground">
+                        {unit?.symbol ?? "—"}
+                      </div>
+                    </Field>
+                  </div>
+                  {!product.packageUnitId && (
+                    <p className="mt-2 text-xs text-muted-foreground">
+                      Choisis d&apos;abord l&apos;unité colis pour renseigner le stock.
+                    </p>
+                  )}
+                </div>
+                <div className="rounded-lg border border-border/70 bg-muted/20 p-3">
+                  <p className="mb-3 text-sm font-medium">Caractéristiques colis</p>
+                  <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
+                    <Field label="Qté colis">
+                      <Input
+                        type="number"
+                        min={0}
+                        step="0.01"
+                        value={product.packageQuantity}
+                        onChange={(event) => updateProduct(setDraft, product.key, { packageQuantity: event.target.value })}
+                      />
+                    </Field>
+                    <Field label="Unité colis">
+                      <NativeSelect
+                        value={product.packageUnitId}
+                        onChange={(event) =>
+                          updateProduct(setDraft, product.key, {
+                            packageUnitId: event.target.value,
+                            packageToBaseFactor: globalConversionFactor(
+                              units.find((item) => item.id === event.target.value),
+                              baseUnit,
+                              globalRatios,
+                              units,
+                            ) !== null
+                              ? ""
+                              : product.packageToBaseFactor,
+                          })
+                        }
+                      >
+                        <option value="">Choisir</option>
+                        {units.map((item) => (
+                          <option key={item.id} value={item.id}>
+                            {item.symbol}
+                          </option>
+                        ))}
+                      </NativeSelect>
+                    </Field>
+                    <Field label="Ratio produit">
+                      <Input
+                        type="number"
+                        min={0}
+                        step="0.01"
+                        value={usesSystemRatio ? effectiveFactor?.toString() ?? "" : product.packageToBaseFactor}
+                        disabled={usesSystemRatio}
+                        onChange={(event) =>
+                          updateProduct(setDraft, product.key, { packageToBaseFactor: event.target.value })
+                        }
+                      />
+                    </Field>
+                    <Field label="Prix">
+                      <Input
+                        type="number"
+                        min={0}
+                        step="0.01"
+                        value={product.price}
+                        onChange={(event) => updateProduct(setDraft, product.key, { price: event.target.value })}
+                      />
+                    </Field>
+                  </div>
                 </div>
                 <div className="grid gap-3 md:grid-cols-3">
                   <Field label="Image">

@@ -119,6 +119,14 @@ export function convertToBase(quantity: number, toBaseFactor?: number | null) {
   return quantity * toBaseFactor;
 }
 
+export function convertFromBase(quantity: number, toBaseFactor?: number | null) {
+  if (!Number.isFinite(quantity) || quantity < 0) return null;
+  if (!toBaseFactor || !Number.isFinite(toBaseFactor) || toBaseFactor <= 0) {
+    return null;
+  }
+  return quantity / toBaseFactor;
+}
+
 export function pricePerBaseUnit(price: number, quantity: number, toBaseFactor?: number | null) {
   const baseQuantity = convertToBase(quantity, toBaseFactor);
   if (!baseQuantity || !Number.isFinite(price) || price < 0) return null;

@@ -1,17 +1,22 @@
 import { prisma } from "@/lib/prisma";
+import { totalProductStock } from "@/lib/product-storage";
 import type { CartRecipeEntry, IngredientRecord, RecipeRecord, UnitRatioRecord, UnitRecord } from "@/components/kitchu/types";
 
 const ingredientInclude = {
   baseUnit: true,
-  stock: true,
   units: { include: { unit: true }, orderBy: { unit: { name: "asc" } } },
   products: { include: { packageUnit: true }, orderBy: { updatedAt: "desc" } },
 } as const;
 
-function serializeIngredient<T extends { stock: { quantity: number } | null }>(ingredient: T) {
+type IngredientWithProducts = {
+  products: Array<{ stockQuantity: number | null }>;
+};
+
+function serializeIngredient<T extends IngredientWithProducts>(ingredient: T) {
+  const totalStock = totalProductStock(ingredient.products);
   return {
     ...ingredient,
-    stock: ingredient.stock ? { quantity: ingredient.stock.quantity } : null,
+    stock: totalStock !== null ? { quantity: totalStock } : null,
   };
 }
 
@@ -54,7 +59,17 @@ export async function fetchKitchuData(): Promise<KitchuData> {
     units: JSON.parse(JSON.stringify(units)),
     globalRatios: JSON.parse(JSON.stringify(globalRatios)),
     ingredients: JSON.parse(JSON.stringify(ingredients.map(serializeIngredient))),
-    recipes: JSON.parse(JSON.stringify(recipes)),
+    recipes: JSON.parse(
+      JSON.stringify(
+        recipes.map((recipe) => ({
+          ...recipe,
+          ingredients: recipe.ingredients.map((item) => ({
+            ...item,
+            ingredient: serializeIngredient(item.ingredient),
+          })),
+        })),
+      ),
+    ),
     cartItems: JSON.parse(JSON.stringify(cartItems)),
   };
 }

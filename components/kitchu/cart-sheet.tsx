@@ -20,6 +20,7 @@ import {
   ItemMedia,
   ItemTitle,
 } from "@/components/ui/item";
+import { ProductStorageBadge } from "@/components/kitchu/product-storage-badge";
 import type { CartPurchaseSummary, CartUsageShare } from "@/components/kitchu/cart";
 import { EntityImage } from "@/components/kitchu/ui/shared";
 import { cn, formatCurrency, formatNumber } from "@/lib/utils";
@@ -240,7 +241,10 @@ export function CartSheet({
                             />
                           </ItemMedia>
                           <ItemContent className="min-w-0 flex-1">
-                            <ItemTitle className="text-base">{line.product.name}</ItemTitle>
+                            <div className="flex flex-wrap items-center gap-2">
+                              <ItemTitle className="text-base">{line.product.name}</ItemTitle>
+                              <ProductStorageBadge storageType={line.product.storageType} className="text-[10px]" />
+                            </div>
                             <p className="mt-0.5 text-xs text-muted-foreground">{line.ingredientName}</p>
                             {isMissing ? (
                               <p className="mt-2 text-sm text-amber-700 dark:text-amber-400">

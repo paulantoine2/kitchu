@@ -54,7 +54,6 @@ export const ModelName = {
   Unit: 'Unit',
   UnitRatio: 'UnitRatio',
   Ingredient: 'Ingredient',
-  StockEntry: 'StockEntry',
   IngredientUnit: 'IngredientUnit',
   ProductReference: 'ProductReference',
   Recipe: 'Recipe',
@@ -119,17 +118,6 @@ export const IngredientScalarFieldEnum = {
 export type IngredientScalarFieldEnum = (typeof IngredientScalarFieldEnum)[keyof typeof IngredientScalarFieldEnum]
 
 
-export const StockEntryScalarFieldEnum = {
-  id: 'id',
-  ingredientId: 'ingredientId',
-  quantity: 'quantity',
-  createdAt: 'createdAt',
-  updatedAt: 'updatedAt'
-} as const
-
-export type StockEntryScalarFieldEnum = (typeof StockEntryScalarFieldEnum)[keyof typeof StockEntryScalarFieldEnum]
-
-
 export const IngredientUnitScalarFieldEnum = {
   id: 'id',
   ingredientId: 'ingredientId',
@@ -149,6 +137,8 @@ export const ProductReferenceScalarFieldEnum = {
   brand: 'brand',
   name: 'name',
   imageUrl: 'imageUrl',
+  storageType: 'storageType',
+  stockQuantity: 'stockQuantity',
   packageQuantity: 'packageQuantity',
   packageUnitId: 'packageUnitId',
   packageToBaseFactor: 'packageToBaseFactor',

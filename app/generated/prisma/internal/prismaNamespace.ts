@@ -387,7 +387,6 @@ export const ModelName = {
   Unit: 'Unit',
   UnitRatio: 'UnitRatio',
   Ingredient: 'Ingredient',
-  StockEntry: 'StockEntry',
   IngredientUnit: 'IngredientUnit',
   ProductReference: 'ProductReference',
   Recipe: 'Recipe',
@@ -409,7 +408,7 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
     omit: GlobalOmitOptions
   }
   meta: {
-    modelProps: "unit" | "unitRatio" | "ingredient" | "stockEntry" | "ingredientUnit" | "productReference" | "recipe" | "cartItem" | "recipeIngredient" | "recipeStep"
+    modelProps: "unit" | "unitRatio" | "ingredient" | "ingredientUnit" | "productReference" | "recipe" | "cartItem" | "recipeIngredient" | "recipeStep"
     txIsolationLevel: TransactionIsolationLevel
   }
   model: {
@@ -632,80 +631,6 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         count: {
           args: Prisma.IngredientCountArgs<ExtArgs>
           result: runtime.Types.Utils.Optional<Prisma.IngredientCountAggregateOutputType> | number
-        }
-      }
-    }
-    StockEntry: {
-      payload: Prisma.$StockEntryPayload<ExtArgs>
-      fields: Prisma.StockEntryFieldRefs
-      operations: {
-        findUnique: {
-          args: Prisma.StockEntryFindUniqueArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$StockEntryPayload> | null
-        }
-        findUniqueOrThrow: {
-          args: Prisma.StockEntryFindUniqueOrThrowArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$StockEntryPayload>
-        }
-        findFirst: {
-          args: Prisma.StockEntryFindFirstArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$StockEntryPayload> | null
-        }
-        findFirstOrThrow: {
-          args: Prisma.StockEntryFindFirstOrThrowArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$StockEntryPayload>
-        }
-        findMany: {
-          args: Prisma.StockEntryFindManyArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$StockEntryPayload>[]
-        }
-        create: {
-          args: Prisma.StockEntryCreateArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$StockEntryPayload>
-        }
-        createMany: {
-          args: Prisma.StockEntryCreateManyArgs<ExtArgs>
-          result: BatchPayload
-        }
-        createManyAndReturn: {
-          args: Prisma.StockEntryCreateManyAndReturnArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$StockEntryPayload>[]
-        }
-        delete: {
-          args: Prisma.StockEntryDeleteArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$StockEntryPayload>
-        }
-        update: {
-          args: Prisma.StockEntryUpdateArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$StockEntryPayload>
-        }
-        deleteMany: {
-          args: Prisma.StockEntryDeleteManyArgs<ExtArgs>
-          result: BatchPayload
-        }
-        updateMany: {
-          args: Prisma.StockEntryUpdateManyArgs<ExtArgs>
-          result: BatchPayload
-        }
-        updateManyAndReturn: {
-          args: Prisma.StockEntryUpdateManyAndReturnArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$StockEntryPayload>[]
-        }
-        upsert: {
-          args: Prisma.StockEntryUpsertArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$StockEntryPayload>
-        }
-        aggregate: {
-          args: Prisma.StockEntryAggregateArgs<ExtArgs>
-          result: runtime.Types.Utils.Optional<Prisma.AggregateStockEntry>
-        }
-        groupBy: {
-          args: Prisma.StockEntryGroupByArgs<ExtArgs>
-          result: runtime.Types.Utils.Optional<Prisma.StockEntryGroupByOutputType>[]
-        }
-        count: {
-          args: Prisma.StockEntryCountArgs<ExtArgs>
-          result: runtime.Types.Utils.Optional<Prisma.StockEntryCountAggregateOutputType> | number
         }
       }
     }
@@ -1232,17 +1157,6 @@ export const IngredientScalarFieldEnum = {
 export type IngredientScalarFieldEnum = (typeof IngredientScalarFieldEnum)[keyof typeof IngredientScalarFieldEnum]
 
 
-export const StockEntryScalarFieldEnum = {
-  id: 'id',
-  ingredientId: 'ingredientId',
-  quantity: 'quantity',
-  createdAt: 'createdAt',
-  updatedAt: 'updatedAt'
-} as const
-
-export type StockEntryScalarFieldEnum = (typeof StockEntryScalarFieldEnum)[keyof typeof StockEntryScalarFieldEnum]
-
-
 export const IngredientUnitScalarFieldEnum = {
   id: 'id',
   ingredientId: 'ingredientId',
@@ -1262,6 +1176,8 @@ export const ProductReferenceScalarFieldEnum = {
   brand: 'brand',
   name: 'name',
   imageUrl: 'imageUrl',
+  storageType: 'storageType',
+  stockQuantity: 'stockQuantity',
   packageQuantity: 'packageQuantity',
   packageUnitId: 'packageUnitId',
   packageToBaseFactor: 'packageToBaseFactor',
@@ -1412,6 +1328,20 @@ export type ListDateTimeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaM
 
 
 /**
+ * Reference to a field of type 'ProductStorageType'
+ */
+export type EnumProductStorageTypeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'ProductStorageType'>
+    
+
+
+/**
+ * Reference to a field of type 'ProductStorageType[]'
+ */
+export type ListEnumProductStorageTypeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'ProductStorageType[]'>
+    
+
+
+/**
  * Reference to a field of type 'Int'
  */
 export type IntFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Int'>
@@ -1537,7 +1467,6 @@ export type GlobalOmitConfig = {
   unit?: Prisma.UnitOmit
   unitRatio?: Prisma.UnitRatioOmit
   ingredient?: Prisma.IngredientOmit
-  stockEntry?: Prisma.StockEntryOmit
   ingredientUnit?: Prisma.IngredientUnitOmit
   productReference?: Prisma.ProductReferenceOmit
   recipe?: Prisma.RecipeOmit

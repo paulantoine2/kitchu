@@ -1,42 +1,57 @@
-import { convertToBase, effectiveToBaseFactor, globalConversionFactor } from "@/lib/conversions";
+import { convertFromBase, convertToBase, effectiveToBaseFactor, globalConversionFactor } from "@/lib/conversions";
+import { isProductStorageType, type ProductStorageType } from "@/lib/product-storage";
 import type { IngredientDraft, IngredientRecord, RecipeDraft, UnitDraft, UnitRatioRecord, UnitRecord } from "@/components/kitchu/types";
-import { canDefineIngredientSpecificRatio, usableUnitsForIngredient } from "@/components/kitchu/unit-helpers";
+import { canDefineIngredientSpecificRatio } from "@/components/kitchu/unit-helpers";
 
-function draftAsIngredientRecord(draft: IngredientDraft, units: UnitRecord[]): IngredientRecord {
-  const baseUnit = units.find((unit) => unit.id === draft.baseUnitId)!;
-  return {
-    id: draft.id ?? "",
-    name: draft.name,
-    imageUrl: draft.imageUrl || null,
-    notes: draft.notes || null,
-    baseUnitId: draft.baseUnitId,
-    baseUnit,
-    units: draft.units
-      .filter((row) => row.unitId)
-      .map((row) => ({
-        id: row.key,
-        unitId: row.unitId,
-        toBaseFactor: row.toBaseFactor ? Number(row.toBaseFactor) : null,
-        unit: units.find((unit) => unit.id === row.unitId)!,
-      })),
-    products: [],
-    stock: null,
-  };
+function normalizeStorageType(value: unknown): ProductStorageType {
+  const candidate = typeof value === "string" ? value : "";
+  return isProductStorageType(candidate) ? candidate : "FRESH";
 }
 
-function stockQuantityInBase(draft: IngredientDraft, units: UnitRecord[], globalRatios: UnitRatioRecord[]) {
-  if (!draft.stockQuantity.trim()) return null;
+function productPackageToBaseFactor(
+  packageUnit: UnitRecord | undefined,
+  baseUnit: UnitRecord | undefined,
+  packageToBaseFactor: number | string | null | undefined,
+  units: UnitRecord[],
+  globalRatios: UnitRatioRecord[],
+) {
+  return effectiveToBaseFactor(packageUnit, baseUnit, packageToBaseFactor, globalRatios, {
+    allowSpecific: true,
+    units,
+  });
+}
 
-  const ingredientLike = draftAsIngredientRecord(draft, units);
-  const allowedUnit = usableUnitsForIngredient(ingredientLike, units, globalRatios).find(
-    (unit) => unit.unitId === draft.stockUnitId,
+export function productStockInPackageUnits(
+  stockInBase: number | null,
+  product: IngredientRecord["products"][number],
+  baseUnit: UnitRecord,
+  units: UnitRecord[],
+  globalRatios: UnitRatioRecord[],
+) {
+  if (stockInBase == null || stockInBase <= 0) return "";
+  const packageQuantity = convertFromBase(
+    stockInBase,
+    productPackageToBaseFactor(product.packageUnit, baseUnit, product.packageToBaseFactor, units, globalRatios),
   );
+  return packageQuantity === null ? "" : packageQuantity.toString();
+}
+
+function productStockInBase(
+  draft: IngredientDraft,
+  product: IngredientDraft["products"][number],
+  units: UnitRecord[],
+  globalRatios: UnitRatioRecord[],
+) {
+  if (!product.stockQuantity.trim()) return null;
+  if (!product.packageUnitId) {
+    throw new Error("Choisis l'unité colis pour renseigner le stock.");
+  }
+
+  const baseUnit = units.find((unit) => unit.id === draft.baseUnitId);
+  const packageUnit = units.find((unit) => unit.id === product.packageUnitId);
   const baseQuantity = convertToBase(
-    Number(draft.stockQuantity),
-    effectiveToBaseFactor(allowedUnit?.unit, ingredientLike.baseUnit, allowedUnit?.toBaseFactor, globalRatios, {
-      allowSpecific: true,
-      units,
-    }),
+    Number(product.stockQuantity),
+    productPackageToBaseFactor(packageUnit, baseUnit, product.packageToBaseFactor, units, globalRatios),
   );
   if (baseQuantity === null) {
     throw new Error("Unité de stock invalide.");
@@ -84,7 +99,6 @@ export function toIngredientPayload(draft: IngredientDraft, units: UnitRecord[],
     imageUrl: draft.imageUrl,
     notes: draft.notes,
     baseUnitId: draft.baseUnitId,
-    stockQuantity: stockQuantityInBase(draft, units, globalRatios),
     units: Array.from(payloadUnits.values()),
     products: draft.products
       .filter((product) => product.store || product.name)
@@ -94,6 +108,8 @@ export function toIngredientPayload(draft: IngredientDraft, units: UnitRecord[],
         brand: product.brand,
         name: product.name,
         imageUrl: product.imageUrl,
+        storageType: normalizeStorageType(product.storageType),
+        stockQuantity: productStockInBase(draft, product, units, globalRatios),
         packageQuantity: Number(product.packageQuantity),
         packageUnitId: product.packageUnitId,
         packageToBaseFactor:

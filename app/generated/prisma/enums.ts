@@ -18,3 +18,12 @@ export const UnitKind = {
 } as const
 
 export type UnitKind = (typeof UnitKind)[keyof typeof UnitKind]
+
+
+export const ProductStorageType = {
+  FRESH: 'FRESH',
+  FROZEN: 'FROZEN',
+  DRY: 'DRY'
+} as const
+
+export type ProductStorageType = (typeof ProductStorageType)[keyof typeof ProductStorageType]

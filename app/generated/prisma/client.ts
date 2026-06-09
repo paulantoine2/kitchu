@@ -57,11 +57,6 @@ export type UnitRatio = Prisma.UnitRatioModel
  */
 export type Ingredient = Prisma.IngredientModel
 /**
- * Model StockEntry
- * 
- */
-export type StockEntry = Prisma.StockEntryModel
-/**
  * Model IngredientUnit
  * 
  */

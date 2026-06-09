@@ -372,6 +372,8 @@ export function buildProductLinesForIngredient(
           brand: null,
           name: "Produit indisponible",
           imageUrl: null,
+          storageType: "FRESH",
+          stockQuantity: null,
           packageQuantity: 0,
           packageUnitId: ingredient.baseUnitId,
           packageToBaseFactor: null,

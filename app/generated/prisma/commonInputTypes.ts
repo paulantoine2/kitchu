@@ -181,6 +181,23 @@ export type FloatWithAggregatesFilter<$PrismaModel = never> = {
   _max?: Prisma.NestedFloatFilter<$PrismaModel>
 }
 
+export type EnumProductStorageTypeFilter<$PrismaModel = never> = {
+  equals?: $Enums.ProductStorageType | Prisma.EnumProductStorageTypeFieldRefInput<$PrismaModel>
+  in?: $Enums.ProductStorageType[] | Prisma.ListEnumProductStorageTypeFieldRefInput<$PrismaModel>
+  notIn?: $Enums.ProductStorageType[] | Prisma.ListEnumProductStorageTypeFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumProductStorageTypeFilter<$PrismaModel> | $Enums.ProductStorageType
+}
+
+export type EnumProductStorageTypeWithAggregatesFilter<$PrismaModel = never> = {
+  equals?: $Enums.ProductStorageType | Prisma.EnumProductStorageTypeFieldRefInput<$PrismaModel>
+  in?: $Enums.ProductStorageType[] | Prisma.ListEnumProductStorageTypeFieldRefInput<$PrismaModel>
+  notIn?: $Enums.ProductStorageType[] | Prisma.ListEnumProductStorageTypeFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumProductStorageTypeWithAggregatesFilter<$PrismaModel> | $Enums.ProductStorageType
+  _count?: Prisma.NestedIntFilter<$PrismaModel>
+  _min?: Prisma.NestedEnumProductStorageTypeFilter<$PrismaModel>
+  _max?: Prisma.NestedEnumProductStorageTypeFilter<$PrismaModel>
+}
+
 export type IntNullableFilter<$PrismaModel = never> = {
   equals?: number | Prisma.IntFieldRefInput<$PrismaModel> | null
   in?: number[] | Prisma.ListIntFieldRefInput<$PrismaModel> | null
@@ -413,6 +430,23 @@ export type NestedFloatWithAggregatesFilter<$PrismaModel = never> = {
   _sum?: Prisma.NestedFloatFilter<$PrismaModel>
   _min?: Prisma.NestedFloatFilter<$PrismaModel>
   _max?: Prisma.NestedFloatFilter<$PrismaModel>
+}
+
+export type NestedEnumProductStorageTypeFilter<$PrismaModel = never> = {
+  equals?: $Enums.ProductStorageType | Prisma.EnumProductStorageTypeFieldRefInput<$PrismaModel>
+  in?: $Enums.ProductStorageType[] | Prisma.ListEnumProductStorageTypeFieldRefInput<$PrismaModel>
+  notIn?: $Enums.ProductStorageType[] | Prisma.ListEnumProductStorageTypeFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumProductStorageTypeFilter<$PrismaModel> | $Enums.ProductStorageType
+}
+
+export type NestedEnumProductStorageTypeWithAggregatesFilter<$PrismaModel = never> = {
+  equals?: $Enums.ProductStorageType | Prisma.EnumProductStorageTypeFieldRefInput<$PrismaModel>
+  in?: $Enums.ProductStorageType[] | Prisma.ListEnumProductStorageTypeFieldRefInput<$PrismaModel>
+  notIn?: $Enums.ProductStorageType[] | Prisma.ListEnumProductStorageTypeFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumProductStorageTypeWithAggregatesFilter<$PrismaModel> | $Enums.ProductStorageType
+  _count?: Prisma.NestedIntFilter<$PrismaModel>
+  _min?: Prisma.NestedEnumProductStorageTypeFilter<$PrismaModel>
+  _max?: Prisma.NestedEnumProductStorageTypeFilter<$PrismaModel>
 }
 
 export type NestedIntNullableWithAggregatesFilter<$PrismaModel = never> = {

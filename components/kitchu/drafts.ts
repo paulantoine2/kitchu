@@ -1,4 +1,6 @@
 import type { HelloFreshImportResult } from "@/lib/hellofresh";
+import { isProductStorageType } from "@/lib/product-storage";
+import { productStockInPackageUnits } from "@/components/kitchu/payloads";
 import type {
   IngredientDraft,
   IngredientRecord,
@@ -6,6 +8,7 @@ import type {
   RecipeDraftIngredient,
   RecipeRecord,
   UnitDraft,
+  UnitRatioRecord,
   UnitRecord,
 } from "@/components/kitchu/types";
 
@@ -96,14 +99,17 @@ export function blankIngredient(baseUnitId = ""): IngredientDraft {
     imageUrl: "",
     notes: "",
     baseUnitId,
-    stockQuantity: "",
-    stockUnitId: baseUnitId,
     units: baseUnitId ? [{ key: key(), unitId: baseUnitId, toBaseFactor: "1" }] : [],
     products: [],
   };
 }
 
-export function ingredientToDraft(ingredient: IngredientRecord | undefined, defaultBaseUnitId: string): IngredientDraft {
+export function ingredientToDraft(
+  ingredient: IngredientRecord | undefined,
+  defaultBaseUnitId: string,
+  units: UnitRecord[] = [],
+  globalRatios: UnitRatioRecord[] = [],
+): IngredientDraft {
   if (!ingredient) return blankIngredient(defaultBaseUnitId);
   return {
     id: ingredient.id,
@@ -111,8 +117,6 @@ export function ingredientToDraft(ingredient: IngredientRecord | undefined, defa
     imageUrl: ingredient.imageUrl ?? "",
     notes: ingredient.notes ?? "",
     baseUnitId: ingredient.baseUnitId,
-    stockQuantity: ingredient.stock?.quantity.toString() ?? "",
-    stockUnitId: ingredient.baseUnitId,
     units: ingredient.units.map((unit) => ({
       key: unit.id,
       unitId: unit.unitId,
@@ -125,6 +129,14 @@ export function ingredientToDraft(ingredient: IngredientRecord | undefined, defa
       brand: product.brand ?? "",
       name: product.name,
       imageUrl: product.imageUrl ?? "",
+      storageType: isProductStorageType(product.storageType) ? product.storageType : "FRESH",
+      stockQuantity: productStockInPackageUnits(
+        product.stockQuantity,
+        product,
+        ingredient.baseUnit,
+        units,
+        globalRatios,
+      ),
       packageQuantity: product.packageQuantity.toString(),
       packageUnitId: product.packageUnitId,
       packageToBaseFactor: product.packageToBaseFactor?.toString() ?? "",

@@ -25,14 +25,16 @@ export function IngredientEditorPage({
   const { cartOpen, setCartOpen, cart } = useKitchuCart(props);
   const defaultBaseUnitId = canonicalBaseUnitForKind("MASS", props.units)?.id ?? props.units[0]?.id ?? "";
   const [ingredientDraft, setIngredientDraft] = useState<IngredientDraft>(() =>
-    initialIngredient ? ingredientToDraft(initialIngredient, defaultBaseUnitId) : blankIngredient(defaultBaseUnitId),
+    initialIngredient
+      ? ingredientToDraft(initialIngredient, defaultBaseUnitId, props.units, props.globalRatios)
+      : blankIngredient(defaultBaseUnitId),
   );
   const [notice, setNotice] = useState("");
   const [leaveDialogOpen, setLeaveDialogOpen] = useState(false);
   const [pendingNavigation, setPendingNavigation] = useState<(() => void) | null>(null);
 
   const baselineDraft = initialIngredient
-    ? ingredientToDraft(initialIngredient, defaultBaseUnitId)
+    ? ingredientToDraft(initialIngredient, defaultBaseUnitId, props.units, props.globalRatios)
     : blankIngredient(defaultBaseUnitId);
   const hasUnsavedChanges = isIngredientDraftDirty(ingredientDraft, baselineDraft);
 

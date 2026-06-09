@@ -27,12 +27,14 @@ export type AggregateProductReference = {
 }
 
 export type ProductReferenceAvgAggregateOutputType = {
+  stockQuantity: number | null
   packageQuantity: number | null
   packageToBaseFactor: number | null
   price: number | null
 }
 
 export type ProductReferenceSumAggregateOutputType = {
+  stockQuantity: number | null
   packageQuantity: number | null
   packageToBaseFactor: number | null
   price: number | null
@@ -45,6 +47,8 @@ export type ProductReferenceMinAggregateOutputType = {
   brand: string | null
   name: string | null
   imageUrl: string | null
+  storageType: $Enums.ProductStorageType | null
+  stockQuantity: number | null
   packageQuantity: number | null
   packageUnitId: string | null
   packageToBaseFactor: number | null
@@ -63,6 +67,8 @@ export type ProductReferenceMaxAggregateOutputType = {
   brand: string | null
   name: string | null
   imageUrl: string | null
+  storageType: $Enums.ProductStorageType | null
+  stockQuantity: number | null
   packageQuantity: number | null
   packageUnitId: string | null
   packageToBaseFactor: number | null
@@ -81,6 +87,8 @@ export type ProductReferenceCountAggregateOutputType = {
   brand: number
   name: number
   imageUrl: number
+  storageType: number
+  stockQuantity: number
   packageQuantity: number
   packageUnitId: number
   packageToBaseFactor: number
@@ -95,12 +103,14 @@ export type ProductReferenceCountAggregateOutputType = {
 
 
 export type ProductReferenceAvgAggregateInputType = {
+  stockQuantity?: true
   packageQuantity?: true
   packageToBaseFactor?: true
   price?: true
 }
 
 export type ProductReferenceSumAggregateInputType = {
+  stockQuantity?: true
   packageQuantity?: true
   packageToBaseFactor?: true
   price?: true
@@ -113,6 +123,8 @@ export type ProductReferenceMinAggregateInputType = {
   brand?: true
   name?: true
   imageUrl?: true
+  storageType?: true
+  stockQuantity?: true
   packageQuantity?: true
   packageUnitId?: true
   packageToBaseFactor?: true
@@ -131,6 +143,8 @@ export type ProductReferenceMaxAggregateInputType = {
   brand?: true
   name?: true
   imageUrl?: true
+  storageType?: true
+  stockQuantity?: true
   packageQuantity?: true
   packageUnitId?: true
   packageToBaseFactor?: true
@@ -149,6 +163,8 @@ export type ProductReferenceCountAggregateInputType = {
   brand?: true
   name?: true
   imageUrl?: true
+  storageType?: true
+  stockQuantity?: true
   packageQuantity?: true
   packageUnitId?: true
   packageToBaseFactor?: true
@@ -254,6 +270,8 @@ export type ProductReferenceGroupByOutputType = {
   brand: string | null
   name: string
   imageUrl: string | null
+  storageType: $Enums.ProductStorageType
+  stockQuantity: number | null
   packageQuantity: number
   packageUnitId: string
   packageToBaseFactor: number | null
@@ -295,6 +313,8 @@ export type ProductReferenceWhereInput = {
   brand?: Prisma.StringNullableFilter<"ProductReference"> | string | null
   name?: Prisma.StringFilter<"ProductReference"> | string
   imageUrl?: Prisma.StringNullableFilter<"ProductReference"> | string | null
+  storageType?: Prisma.EnumProductStorageTypeFilter<"ProductReference"> | $Enums.ProductStorageType
+  stockQuantity?: Prisma.FloatNullableFilter<"ProductReference"> | number | null
   packageQuantity?: Prisma.FloatFilter<"ProductReference"> | number
   packageUnitId?: Prisma.StringFilter<"ProductReference"> | string
   packageToBaseFactor?: Prisma.FloatNullableFilter<"ProductReference"> | number | null
@@ -315,6 +335,8 @@ export type ProductReferenceOrderByWithRelationInput = {
   brand?: Prisma.SortOrderInput | Prisma.SortOrder
   name?: Prisma.SortOrder
   imageUrl?: Prisma.SortOrderInput | Prisma.SortOrder
+  storageType?: Prisma.SortOrder
+  stockQuantity?: Prisma.SortOrderInput | Prisma.SortOrder
   packageQuantity?: Prisma.SortOrder
   packageUnitId?: Prisma.SortOrder
   packageToBaseFactor?: Prisma.SortOrderInput | Prisma.SortOrder
@@ -338,6 +360,8 @@ export type ProductReferenceWhereUniqueInput = Prisma.AtLeast<{
   brand?: Prisma.StringNullableFilter<"ProductReference"> | string | null
   name?: Prisma.StringFilter<"ProductReference"> | string
   imageUrl?: Prisma.StringNullableFilter<"ProductReference"> | string | null
+  storageType?: Prisma.EnumProductStorageTypeFilter<"ProductReference"> | $Enums.ProductStorageType
+  stockQuantity?: Prisma.FloatNullableFilter<"ProductReference"> | number | null
   packageQuantity?: Prisma.FloatFilter<"ProductReference"> | number
   packageUnitId?: Prisma.StringFilter<"ProductReference"> | string
   packageToBaseFactor?: Prisma.FloatNullableFilter<"ProductReference"> | number | null
@@ -358,6 +382,8 @@ export type ProductReferenceOrderByWithAggregationInput = {
   brand?: Prisma.SortOrderInput | Prisma.SortOrder
   name?: Prisma.SortOrder
   imageUrl?: Prisma.SortOrderInput | Prisma.SortOrder
+  storageType?: Prisma.SortOrder
+  stockQuantity?: Prisma.SortOrderInput | Prisma.SortOrder
   packageQuantity?: Prisma.SortOrder
   packageUnitId?: Prisma.SortOrder
   packageToBaseFactor?: Prisma.SortOrderInput | Prisma.SortOrder
@@ -384,6 +410,8 @@ export type ProductReferenceScalarWhereWithAggregatesInput = {
   brand?: Prisma.StringNullableWithAggregatesFilter<"ProductReference"> | string | null
   name?: Prisma.StringWithAggregatesFilter<"ProductReference"> | string
   imageUrl?: Prisma.StringNullableWithAggregatesFilter<"ProductReference"> | string | null
+  storageType?: Prisma.EnumProductStorageTypeWithAggregatesFilter<"ProductReference"> | $Enums.ProductStorageType
+  stockQuantity?: Prisma.FloatNullableWithAggregatesFilter<"ProductReference"> | number | null
   packageQuantity?: Prisma.FloatWithAggregatesFilter<"ProductReference"> | number
   packageUnitId?: Prisma.StringWithAggregatesFilter<"ProductReference"> | string
   packageToBaseFactor?: Prisma.FloatNullableWithAggregatesFilter<"ProductReference"> | number | null
@@ -401,6 +429,8 @@ export type ProductReferenceCreateInput = {
   brand?: string | null
   name: string
   imageUrl?: string | null
+  storageType?: $Enums.ProductStorageType
+  stockQuantity?: number | null
   packageQuantity: number
   packageToBaseFactor?: number | null
   price: number
@@ -420,6 +450,8 @@ export type ProductReferenceUncheckedCreateInput = {
   brand?: string | null
   name: string
   imageUrl?: string | null
+  storageType?: $Enums.ProductStorageType
+  stockQuantity?: number | null
   packageQuantity: number
   packageUnitId: string
   packageToBaseFactor?: number | null
@@ -437,6 +469,8 @@ export type ProductReferenceUpdateInput = {
   brand?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   name?: Prisma.StringFieldUpdateOperationsInput | string
   imageUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  storageType?: Prisma.EnumProductStorageTypeFieldUpdateOperationsInput | $Enums.ProductStorageType
+  stockQuantity?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   packageQuantity?: Prisma.FloatFieldUpdateOperationsInput | number
   packageToBaseFactor?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   price?: Prisma.FloatFieldUpdateOperationsInput | number
@@ -456,6 +490,8 @@ export type ProductReferenceUncheckedUpdateInput = {
   brand?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   name?: Prisma.StringFieldUpdateOperationsInput | string
   imageUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  storageType?: Prisma.EnumProductStorageTypeFieldUpdateOperationsInput | $Enums.ProductStorageType
+  stockQuantity?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   packageQuantity?: Prisma.FloatFieldUpdateOperationsInput | number
   packageUnitId?: Prisma.StringFieldUpdateOperationsInput | string
   packageToBaseFactor?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
@@ -474,6 +510,8 @@ export type ProductReferenceCreateManyInput = {
   brand?: string | null
   name: string
   imageUrl?: string | null
+  storageType?: $Enums.ProductStorageType
+  stockQuantity?: number | null
   packageQuantity: number
   packageUnitId: string
   packageToBaseFactor?: number | null
@@ -491,6 +529,8 @@ export type ProductReferenceUpdateManyMutationInput = {
   brand?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   name?: Prisma.StringFieldUpdateOperationsInput | string
   imageUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  storageType?: Prisma.EnumProductStorageTypeFieldUpdateOperationsInput | $Enums.ProductStorageType
+  stockQuantity?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   packageQuantity?: Prisma.FloatFieldUpdateOperationsInput | number
   packageToBaseFactor?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   price?: Prisma.FloatFieldUpdateOperationsInput | number
@@ -508,6 +548,8 @@ export type ProductReferenceUncheckedUpdateManyInput = {
   brand?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   name?: Prisma.StringFieldUpdateOperationsInput | string
   imageUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  storageType?: Prisma.EnumProductStorageTypeFieldUpdateOperationsInput | $Enums.ProductStorageType
+  stockQuantity?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   packageQuantity?: Prisma.FloatFieldUpdateOperationsInput | number
   packageUnitId?: Prisma.StringFieldUpdateOperationsInput | string
   packageToBaseFactor?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
@@ -536,6 +578,8 @@ export type ProductReferenceCountOrderByAggregateInput = {
   brand?: Prisma.SortOrder
   name?: Prisma.SortOrder
   imageUrl?: Prisma.SortOrder
+  storageType?: Prisma.SortOrder
+  stockQuantity?: Prisma.SortOrder
   packageQuantity?: Prisma.SortOrder
   packageUnitId?: Prisma.SortOrder
   packageToBaseFactor?: Prisma.SortOrder
@@ -548,6 +592,7 @@ export type ProductReferenceCountOrderByAggregateInput = {
 }
 
 export type ProductReferenceAvgOrderByAggregateInput = {
+  stockQuantity?: Prisma.SortOrder
   packageQuantity?: Prisma.SortOrder
   packageToBaseFactor?: Prisma.SortOrder
   price?: Prisma.SortOrder
@@ -560,6 +605,8 @@ export type ProductReferenceMaxOrderByAggregateInput = {
   brand?: Prisma.SortOrder
   name?: Prisma.SortOrder
   imageUrl?: Prisma.SortOrder
+  storageType?: Prisma.SortOrder
+  stockQuantity?: Prisma.SortOrder
   packageQuantity?: Prisma.SortOrder
   packageUnitId?: Prisma.SortOrder
   packageToBaseFactor?: Prisma.SortOrder
@@ -578,6 +625,8 @@ export type ProductReferenceMinOrderByAggregateInput = {
   brand?: Prisma.SortOrder
   name?: Prisma.SortOrder
   imageUrl?: Prisma.SortOrder
+  storageType?: Prisma.SortOrder
+  stockQuantity?: Prisma.SortOrder
   packageQuantity?: Prisma.SortOrder
   packageUnitId?: Prisma.SortOrder
   packageToBaseFactor?: Prisma.SortOrder
@@ -590,6 +639,7 @@ export type ProductReferenceMinOrderByAggregateInput = {
 }
 
 export type ProductReferenceSumOrderByAggregateInput = {
+  stockQuantity?: Prisma.SortOrder
   packageQuantity?: Prisma.SortOrder
   packageToBaseFactor?: Prisma.SortOrder
   price?: Prisma.SortOrder
@@ -679,12 +729,18 @@ export type ProductReferenceUncheckedUpdateManyWithoutIngredientNestedInput = {
   deleteMany?: Prisma.ProductReferenceScalarWhereInput | Prisma.ProductReferenceScalarWhereInput[]
 }
 
+export type EnumProductStorageTypeFieldUpdateOperationsInput = {
+  set?: $Enums.ProductStorageType
+}
+
 export type ProductReferenceCreateWithoutPackageUnitInput = {
   id?: string
   store: string
   brand?: string | null
   name: string
   imageUrl?: string | null
+  storageType?: $Enums.ProductStorageType
+  stockQuantity?: number | null
   packageQuantity: number
   packageToBaseFactor?: number | null
   price: number
@@ -703,6 +759,8 @@ export type ProductReferenceUncheckedCreateWithoutPackageUnitInput = {
   brand?: string | null
   name: string
   imageUrl?: string | null
+  storageType?: $Enums.ProductStorageType
+  stockQuantity?: number | null
   packageQuantity: number
   packageToBaseFactor?: number | null
   price: number
@@ -749,6 +807,8 @@ export type ProductReferenceScalarWhereInput = {
   brand?: Prisma.StringNullableFilter<"ProductReference"> | string | null
   name?: Prisma.StringFilter<"ProductReference"> | string
   imageUrl?: Prisma.StringNullableFilter<"ProductReference"> | string | null
+  storageType?: Prisma.EnumProductStorageTypeFilter<"ProductReference"> | $Enums.ProductStorageType
+  stockQuantity?: Prisma.FloatNullableFilter<"ProductReference"> | number | null
   packageQuantity?: Prisma.FloatFilter<"ProductReference"> | number
   packageUnitId?: Prisma.StringFilter<"ProductReference"> | string
   packageToBaseFactor?: Prisma.FloatNullableFilter<"ProductReference"> | number | null
@@ -766,6 +826,8 @@ export type ProductReferenceCreateWithoutIngredientInput = {
   brand?: string | null
   name: string
   imageUrl?: string | null
+  storageType?: $Enums.ProductStorageType
+  stockQuantity?: number | null
   packageQuantity: number
   packageToBaseFactor?: number | null
   price: number
@@ -783,6 +845,8 @@ export type ProductReferenceUncheckedCreateWithoutIngredientInput = {
   brand?: string | null
   name: string
   imageUrl?: string | null
+  storageType?: $Enums.ProductStorageType
+  stockQuantity?: number | null
   packageQuantity: number
   packageUnitId: string
   packageToBaseFactor?: number | null
@@ -827,6 +891,8 @@ export type ProductReferenceCreateManyPackageUnitInput = {
   brand?: string | null
   name: string
   imageUrl?: string | null
+  storageType?: $Enums.ProductStorageType
+  stockQuantity?: number | null
   packageQuantity: number
   packageToBaseFactor?: number | null
   price: number
@@ -843,6 +909,8 @@ export type ProductReferenceUpdateWithoutPackageUnitInput = {
   brand?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   name?: Prisma.StringFieldUpdateOperationsInput | string
   imageUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  storageType?: Prisma.EnumProductStorageTypeFieldUpdateOperationsInput | $Enums.ProductStorageType
+  stockQuantity?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   packageQuantity?: Prisma.FloatFieldUpdateOperationsInput | number
   packageToBaseFactor?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   price?: Prisma.FloatFieldUpdateOperationsInput | number
@@ -861,6 +929,8 @@ export type ProductReferenceUncheckedUpdateWithoutPackageUnitInput = {
   brand?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   name?: Prisma.StringFieldUpdateOperationsInput | string
   imageUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  storageType?: Prisma.EnumProductStorageTypeFieldUpdateOperationsInput | $Enums.ProductStorageType
+  stockQuantity?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   packageQuantity?: Prisma.FloatFieldUpdateOperationsInput | number
   packageToBaseFactor?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   price?: Prisma.FloatFieldUpdateOperationsInput | number
@@ -878,6 +948,8 @@ export type ProductReferenceUncheckedUpdateManyWithoutPackageUnitInput = {
   brand?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   name?: Prisma.StringFieldUpdateOperationsInput | string
   imageUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  storageType?: Prisma.EnumProductStorageTypeFieldUpdateOperationsInput | $Enums.ProductStorageType
+  stockQuantity?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   packageQuantity?: Prisma.FloatFieldUpdateOperationsInput | number
   packageToBaseFactor?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   price?: Prisma.FloatFieldUpdateOperationsInput | number
@@ -894,6 +966,8 @@ export type ProductReferenceCreateManyIngredientInput = {
   brand?: string | null
   name: string
   imageUrl?: string | null
+  storageType?: $Enums.ProductStorageType
+  stockQuantity?: number | null
   packageQuantity: number
   packageUnitId: string
   packageToBaseFactor?: number | null
@@ -911,6 +985,8 @@ export type ProductReferenceUpdateWithoutIngredientInput = {
   brand?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   name?: Prisma.StringFieldUpdateOperationsInput | string
   imageUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  storageType?: Prisma.EnumProductStorageTypeFieldUpdateOperationsInput | $Enums.ProductStorageType
+  stockQuantity?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   packageQuantity?: Prisma.FloatFieldUpdateOperationsInput | number
   packageToBaseFactor?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   price?: Prisma.FloatFieldUpdateOperationsInput | number
@@ -928,6 +1004,8 @@ export type ProductReferenceUncheckedUpdateWithoutIngredientInput = {
   brand?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   name?: Prisma.StringFieldUpdateOperationsInput | string
   imageUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  storageType?: Prisma.EnumProductStorageTypeFieldUpdateOperationsInput | $Enums.ProductStorageType
+  stockQuantity?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   packageQuantity?: Prisma.FloatFieldUpdateOperationsInput | number
   packageUnitId?: Prisma.StringFieldUpdateOperationsInput | string
   packageToBaseFactor?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
@@ -945,6 +1023,8 @@ export type ProductReferenceUncheckedUpdateManyWithoutIngredientInput = {
   brand?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   name?: Prisma.StringFieldUpdateOperationsInput | string
   imageUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  storageType?: Prisma.EnumProductStorageTypeFieldUpdateOperationsInput | $Enums.ProductStorageType
+  stockQuantity?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   packageQuantity?: Prisma.FloatFieldUpdateOperationsInput | number
   packageUnitId?: Prisma.StringFieldUpdateOperationsInput | string
   packageToBaseFactor?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
@@ -965,6 +1045,8 @@ export type ProductReferenceSelect<ExtArgs extends runtime.Types.Extensions.Inte
   brand?: boolean
   name?: boolean
   imageUrl?: boolean
+  storageType?: boolean
+  stockQuantity?: boolean
   packageQuantity?: boolean
   packageUnitId?: boolean
   packageToBaseFactor?: boolean
@@ -985,6 +1067,8 @@ export type ProductReferenceSelectCreateManyAndReturn<ExtArgs extends runtime.Ty
   brand?: boolean
   name?: boolean
   imageUrl?: boolean
+  storageType?: boolean
+  stockQuantity?: boolean
   packageQuantity?: boolean
   packageUnitId?: boolean
   packageToBaseFactor?: boolean
@@ -1005,6 +1089,8 @@ export type ProductReferenceSelectUpdateManyAndReturn<ExtArgs extends runtime.Ty
   brand?: boolean
   name?: boolean
   imageUrl?: boolean
+  storageType?: boolean
+  stockQuantity?: boolean
   packageQuantity?: boolean
   packageUnitId?: boolean
   packageToBaseFactor?: boolean
@@ -1025,6 +1111,8 @@ export type ProductReferenceSelectScalar = {
   brand?: boolean
   name?: boolean
   imageUrl?: boolean
+  storageType?: boolean
+  stockQuantity?: boolean
   packageQuantity?: boolean
   packageUnitId?: boolean
   packageToBaseFactor?: boolean
@@ -1036,7 +1124,7 @@ export type ProductReferenceSelectScalar = {
   updatedAt?: boolean
 }
 
-export type ProductReferenceOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "ingredientId" | "store" | "brand" | "name" | "imageUrl" | "packageQuantity" | "packageUnitId" | "packageToBaseFactor" | "price" | "url" | "barcode" | "notes" | "createdAt" | "updatedAt", ExtArgs["result"]["productReference"]>
+export type ProductReferenceOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "ingredientId" | "store" | "brand" | "name" | "imageUrl" | "storageType" | "stockQuantity" | "packageQuantity" | "packageUnitId" | "packageToBaseFactor" | "price" | "url" | "barcode" | "notes" | "createdAt" | "updatedAt", ExtArgs["result"]["productReference"]>
 export type ProductReferenceInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   ingredient?: boolean | Prisma.IngredientDefaultArgs<ExtArgs>
   packageUnit?: boolean | Prisma.UnitDefaultArgs<ExtArgs>
@@ -1063,6 +1151,8 @@ export type $ProductReferencePayload<ExtArgs extends runtime.Types.Extensions.In
     brand: string | null
     name: string
     imageUrl: string | null
+    storageType: $Enums.ProductStorageType
+    stockQuantity: number | null
     packageQuantity: number
     packageUnitId: string
     packageToBaseFactor: number | null
@@ -1503,6 +1593,8 @@ export interface ProductReferenceFieldRefs {
   readonly brand: Prisma.FieldRef<"ProductReference", 'String'>
   readonly name: Prisma.FieldRef<"ProductReference", 'String'>
   readonly imageUrl: Prisma.FieldRef<"ProductReference", 'String'>
+  readonly storageType: Prisma.FieldRef<"ProductReference", 'ProductStorageType'>
+  readonly stockQuantity: Prisma.FieldRef<"ProductReference", 'Float'>
   readonly packageQuantity: Prisma.FieldRef<"ProductReference", 'Float'>
   readonly packageUnitId: Prisma.FieldRef<"ProductReference", 'String'>
   readonly packageToBaseFactor: Prisma.FieldRef<"ProductReference", 'Float'>

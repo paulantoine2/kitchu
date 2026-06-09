@@ -5,6 +5,7 @@ import { useMemo, useState } from "react";
 import { Plus, Search, TriangleAlert } from "lucide-react";
 import { ingredientImageUrl } from "@/components/kitchu/images";
 import type { IngredientRecord } from "@/components/kitchu/types";
+import { compareProductStoragePriority, productStorageBadgeClass, productStorageLabels } from "@/lib/product-storage";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
@@ -19,6 +20,9 @@ import { formatNumber } from "@/lib/utils";
 function IngredientCard({ ingredient }: { ingredient: IngredientRecord }) {
   const imageUrl = ingredientImageUrl(ingredient);
   const hasProducts = ingredient.products.length > 0;
+  const stockedProducts = ingredient.products
+    .filter((product) => product.stockQuantity && product.stockQuantity > 0)
+    .sort((left, right) => compareProductStoragePriority(left.storageType, right.storageType));
 
   return (
     <Link href={`/ingredients/${ingredient.id}`}>
@@ -48,11 +52,16 @@ function IngredientCard({ ingredient }: { ingredient: IngredientRecord }) {
             <Badge variant="secondary">
               {ingredient.products.length} produit{ingredient.products.length !== 1 ? "s" : ""}
             </Badge>
-            {ingredient.stock && ingredient.stock.quantity > 0 && (
-              <Badge variant="outline">
-                Stock {formatNumber(ingredient.stock.quantity)} {ingredient.baseUnit.symbol}
+            {stockedProducts.map((product) => (
+              <Badge
+                key={product.id}
+                variant="secondary"
+                className={productStorageBadgeClass[product.storageType]}
+              >
+                {productStorageLabels[product.storageType]} · {formatNumber(product.stockQuantity!)}{" "}
+                {ingredient.baseUnit.symbol}
               </Badge>
-            )}
+            ))}
           </div>
         </CardContent>
       </Card>

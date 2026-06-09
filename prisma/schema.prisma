@@ -15,6 +15,12 @@ enum UnitKind {
   CUSTOM
 }
 
+enum ProductStorageType {
+  FRESH
+  FROZEN
+  DRY
+}
+
 model Unit {
   id                 String             @id @default(uuid())
   code               String             @unique
@@ -58,18 +64,8 @@ model Ingredient {
   units       IngredientUnit[]
   products    ProductReference[]
   recipeItems RecipeIngredient[]
-  stock       StockEntry?
   createdAt   DateTime           @default(now())
   updatedAt   DateTime           @updatedAt
-}
-
-model StockEntry {
-  id           String     @id @default(uuid())
-  ingredientId String     @unique
-  quantity     Float
-  ingredient   Ingredient @relation(fields: [ingredientId], references: [id], onDelete: Cascade)
-  createdAt    DateTime   @default(now())
-  updatedAt    DateTime   @updatedAt
 }
 
 model IngredientUnit {
@@ -86,23 +82,25 @@ model IngredientUnit {
 }
 
 model ProductReference {
-  id              String     @id @default(uuid())
-  ingredientId    String
-  store           String
-  brand           String?
-  name            String
-  imageUrl        String?
-  packageQuantity Float
-  packageUnitId   String
+  id                  String             @id @default(uuid())
+  ingredientId        String
+  store               String
+  brand               String?
+  name                String
+  imageUrl            String?
+  storageType         ProductStorageType @default(FRESH)
+  stockQuantity       Float?
+  packageQuantity     Float
+  packageUnitId       String
   packageToBaseFactor Float?
-  price           Float
-  url             String?
-  barcode         String?
-  notes           String?
-  ingredient      Ingredient @relation(fields: [ingredientId], references: [id], onDelete: Cascade)
-  packageUnit     Unit       @relation(fields: [packageUnitId], references: [id])
-  createdAt       DateTime   @default(now())
-  updatedAt       DateTime   @updatedAt
+  price               Float
+  url                 String?
+  barcode             String?
+  notes               String?
+  ingredient          Ingredient         @relation(fields: [ingredientId], references: [id], onDelete: Cascade)
+  packageUnit         Unit               @relation(fields: [packageUnitId], references: [id])
+  createdAt           DateTime           @default(now())
+  updatedAt           DateTime           @updatedAt
 }
 
 model Recipe {

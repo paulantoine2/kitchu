@@ -1,3 +1,4 @@
+import type { ProductStorageType } from "@/lib/product-storage";
 import type { RecipeImportStatus } from "@/components/hellofresh-importer";
 
 export type UnitRecord = {
@@ -41,6 +42,8 @@ export type IngredientRecord = {
     brand: string | null;
     name: string;
     imageUrl: string | null;
+    storageType: ProductStorageType;
+    stockQuantity: number | null;
     packageQuantity: number;
     packageUnitId: string;
     packageToBaseFactor: number | null;
@@ -117,8 +120,6 @@ export type IngredientDraft = {
   imageUrl: string;
   notes: string;
   baseUnitId: string;
-  stockQuantity: string;
-  stockUnitId: string;
   units: Array<{ key: string; unitId: string; toBaseFactor: string }>;
   products: Array<{
     key: string;
@@ -127,6 +128,8 @@ export type IngredientDraft = {
     brand: string;
     name: string;
     imageUrl: string;
+    storageType: ProductStorageType;
+    stockQuantity: string;
     packageQuantity: string;
     packageUnitId: string;
     packageToBaseFactor: string;

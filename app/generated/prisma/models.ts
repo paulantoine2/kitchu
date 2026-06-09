@@ -11,7 +11,6 @@
 export type * from './models/Unit'
 export type * from './models/UnitRatio'
 export type * from './models/Ingredient'
-export type * from './models/StockEntry'
 export type * from './models/IngredientUnit'
 export type * from './models/ProductReference'
 export type * from './models/Recipe'

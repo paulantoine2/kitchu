@@ -21,7 +21,11 @@ import { Separator } from "@/components/ui/separator";
 import { convertToBase, effectiveToBaseFactor, scaleQuantity } from "@/lib/conversions";
 import { cn, formatCurrency, formatNumber } from "@/lib/utils";
 import { ingredientImageUrl, recipeImageUrl } from "@/components/kitchu/images";
+import { ProductStorageBadge } from "@/components/kitchu/product-storage-badge";
 import type { CartRecipeEntry } from "@/components/kitchu/cart";
+import {
+  compareProductStoragePriority,
+} from "@/lib/product-storage";
 import {
   estimatePurchaseTotal,
   estimateRecipeViewCosts,
@@ -126,9 +130,11 @@ function RecipeHeaderPrice({
 
 function IngredientPurchaseDetails({
   estimate,
+  ingredient,
   applyStock,
 }: {
   estimate: RecipeCostEstimate;
+  ingredient: IngredientRecord;
   applyStock: boolean;
 }) {
   const purchasePlan = estimate.purchasePlan;
@@ -146,6 +152,9 @@ function IngredientPurchaseDetails({
       estimate.stockUsed > 0 ||
       estimate.cartLeftoverAvailable > 0 ||
       estimate.cartLeftoverUsed > 0);
+  const stockedProducts = ingredient.products
+    .filter((product) => product.stockQuantity && product.stockQuantity > 0)
+    .sort((left, right) => compareProductStoragePriority(left.storageType, right.storageType));
 
   return (
     <div className="flex w-full flex-col gap-2">
@@ -156,6 +165,13 @@ function IngredientPurchaseDetails({
               Stock {formatNumber(estimate.stockAvailable)} {estimate.baseUnit.symbol}
             </Badge>
           )}
+          {stockedProducts.map((product) => (
+            <Badge key={product.id} variant="outline" className="gap-1.5">
+              <ProductStorageBadge storageType={product.storageType} className="text-[10px]" />
+              {formatNumber(product.stockQuantity!)} {estimate.baseUnit.symbol}
+              {product.name.trim() ? ` · ${product.name}` : ""}
+            </Badge>
+          ))}
           {estimate.stockUsed > 0 && (
             <Badge variant="outline" className="border-emerald-500/30 text-emerald-700 dark:text-emerald-400">
               Stock utilisé {formatNumber(estimate.stockUsed)} {estimate.baseUnit.symbol}
@@ -229,7 +245,10 @@ function IngredientPurchaseDetails({
                 className="shrink-0"
               />
               <div className="min-w-0 flex-1">
-                <p className="truncate font-semibold leading-snug">{productItem.product.name}</p>
+                <div className="flex flex-wrap items-center gap-2">
+                  <p className="truncate font-semibold leading-snug">{productItem.product.name}</p>
+                  <ProductStorageBadge storageType={productItem.product.storageType} className="text-[10px]" />
+                </div>
                 <p className="mt-0.5 truncate text-xs text-muted-foreground">
                   {[productItem.product.store, productItem.product.brand].filter(Boolean).join(" · ")}
                 </p>
@@ -340,7 +359,11 @@ function RecipeIngredientsPanel({
                     <>
                       <Separator />
                       <ItemFooter className="p-3 pt-2.5">
-                        <IngredientPurchaseDetails estimate={estimate} applyStock={applyStock} />
+                        <IngredientPurchaseDetails
+                          estimate={estimate}
+                          ingredient={item.ingredient}
+                          applyStock={applyStock}
+                        />
                       </ItemFooter>
                     </>
                   )}

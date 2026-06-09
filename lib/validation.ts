@@ -1,4 +1,5 @@
 import { z } from "zod";
+import { isProductStorageType } from "@/lib/product-storage";
 
 const optionalText = z.string().trim().optional().transform((value) => value || null);
 const positiveNumber = z.coerce.number().positive();
@@ -41,6 +42,15 @@ export const ingredientPayloadSchema = z.object({
       brand: optionalText,
       name: z.string().trim().min(1, "Le nom produit est requis."),
       imageUrl: optionalText,
+      storageType: z.preprocess(
+        (value) => (isProductStorageType(typeof value === "string" ? value : "") ? value : "FRESH"),
+        z.enum(["FRESH", "FROZEN", "DRY"]),
+      ),
+      stockQuantity: z
+        .union([z.literal(""), z.coerce.number().nonnegative()])
+        .optional()
+        .nullable()
+        .transform((value) => (value === "" || value == null ? null : value)),
       packageQuantity: positiveNumber,
       packageUnitId: z.string().min(1, "Choisis l'unité du produit."),
       packageToBaseFactor: z
@@ -54,11 +64,6 @@ export const ingredientPayloadSchema = z.object({
       notes: optionalText,
     }),
   ),
-  stockQuantity: z
-    .union([z.literal(""), z.coerce.number().nonnegative()])
-    .optional()
-    .nullable()
-    .transform((value) => (value === "" || value == null ? null : value)),
 });
 
 export const recipePayloadSchema = z.object({
