@@ -482,3 +482,61 @@ export function sumPartial(values: Array<number | null>): PartialSum {
     isComplete: available.length === values.length,
   };
 }
+
+export type RecipeListPriceMode = "theoretical" | "purchase";
+
+export type RecipeListPriceSummary = {
+  perPortion: number | null;
+  total: number | null;
+  isComplete: boolean;
+};
+
+export function computeRecipeListPrice({
+  recipe,
+  portions,
+  ingredients,
+  globalRatios,
+  units,
+  stockByIngredientId,
+  cartItems,
+  isInCart,
+  recipes,
+  priceMode,
+}: {
+  recipe: RecipeRecord;
+  portions: number;
+  ingredients: IngredientRecord[];
+  globalRatios: UnitRatioRecord[];
+  units: UnitRecord[];
+  stockByIngredientId: Map<string, number>;
+  cartItems: CartRecipeEntry[];
+  isInCart: boolean;
+  recipes: RecipeRecord[];
+  priceMode: RecipeListPriceMode;
+}): RecipeListPriceSummary {
+  const estimates = estimateRecipeViewCosts({
+    recipe,
+    portions,
+    ingredients,
+    globalRatios,
+    units,
+    stockByIngredientId,
+    cartItems,
+    isInCart,
+    applyStock: true,
+    recipes,
+  });
+
+  const values =
+    priceMode === "theoretical"
+      ? estimates.map((estimate) => estimate.theoreticalPrice)
+      : estimates.map(estimatePurchaseTotal);
+  const sum = sumPartial(values);
+  const portionCount = Math.max(1, portions);
+
+  return {
+    perPortion: sum.total !== null ? sum.total / portionCount : null,
+    total: sum.total,
+    isComplete: sum.isComplete,
+  };
+}

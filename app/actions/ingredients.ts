@@ -1,12 +1,12 @@
 "use server";
 
-import { revalidatePath } from "next/cache";
 import { z } from "zod";
 import { prisma } from "@/lib/prisma";
 import { ingredientPayloadSchema } from "@/lib/validation";
 import { effectiveToBaseFactor, globalConversionFactor } from "@/lib/conversions";
 import { actionError } from "@/app/actions/shared";
 import { supportsIngredientSpecificRatio } from "@/app/actions/unit-helpers";
+import { revalidateKitchuPaths } from "@/lib/revalidate-kitchu";
 
 export async function saveIngredient(payload: unknown) {
   try {
@@ -140,7 +140,7 @@ export async function saveIngredient(payload: unknown) {
       },
     });
 
-    revalidatePath("/");
+    revalidateKitchuPaths({ ingredientId: fullIngredient.id });
     return {
       ok: true as const,
       id: fullIngredient.id,
@@ -198,7 +198,7 @@ export async function createIngredientQuick(
         products: { include: { packageUnit: true }, orderBy: { updatedAt: "desc" } },
       },
     });
-    revalidatePath("/");
+    revalidateKitchuPaths({ ingredientId: ingredient.id });
     return {
       ok: true as const,
       ingredient: {
@@ -250,7 +250,7 @@ export async function addIngredientUnitQuick(ingredientId: string, unitCode: str
       },
     });
 
-    revalidatePath("/");
+    revalidateKitchuPaths({ ingredientId: id });
     return {
       ok: true as const,
       ingredient: {
@@ -266,7 +266,7 @@ export async function addIngredientUnitQuick(ingredientId: string, unitCode: str
 export async function deleteIngredient(id: string) {
   try {
     await prisma.ingredient.delete({ where: { id } });
-    revalidatePath("/");
+    revalidateKitchuPaths({ ingredientId: id });
     return { ok: true as const };
   } catch {
     return {

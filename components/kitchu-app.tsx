@@ -1,4 +1,3 @@
-export { KitchuApp } from "@/components/kitchu/kitchu-app";
 export type {
   IngredientRecord,
   RecipeRecord,

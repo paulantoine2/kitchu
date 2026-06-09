@@ -1,11 +1,11 @@
 "use server";
 
-import { revalidatePath } from "next/cache";
 import { z } from "zod";
 import { prisma } from "@/lib/prisma";
 import { unitPayloadSchema, unitRatioPayloadSchema } from "@/lib/validation";
 import { globalConversionFactor } from "@/lib/conversions";
 import { actionError } from "@/app/actions/shared";
+import { revalidateKitchuPaths } from "@/lib/revalidate-kitchu";
 import {
   isHardcodedMeasurementUnit,
   normalizeConfigurableUnitRatio,
@@ -37,7 +37,7 @@ export async function saveUnit(payload: unknown) {
           },
         });
 
-    revalidatePath("/");
+    revalidateKitchuPaths({ unitId: unit.id });
     return { ok: true as const, id: unit.id };
   } catch (error) {
     return actionError(error);
@@ -65,7 +65,7 @@ export async function deleteUnit(id: string, options?: { force?: boolean }) {
     } else {
       await prisma.unit.delete({ where: { id: unitId } });
     }
-    revalidatePath("/");
+    revalidateKitchuPaths({ unitId });
     return { ok: true as const };
   } catch {
     return {
@@ -129,7 +129,7 @@ export async function saveUnitRatio(payload: unknown) {
           },
         });
 
-    revalidatePath("/");
+    revalidateKitchuPaths();
     return { ok: true as const, id: saved.id };
   } catch (error) {
     return actionError(error);
@@ -139,7 +139,7 @@ export async function saveUnitRatio(payload: unknown) {
 export async function deleteUnitRatio(id: string) {
   try {
     await prisma.unitRatio.delete({ where: { id } });
-    revalidatePath("/");
+    revalidateKitchuPaths();
     return { ok: true as const };
   } catch (error) {
     return actionError(error);

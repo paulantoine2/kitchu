@@ -1,9 +1,9 @@
 "use server";
 
-import { revalidatePath } from "next/cache";
 import { prisma } from "@/lib/prisma";
 import { recipePayloadSchema } from "@/lib/validation";
 import { actionError } from "@/app/actions/shared";
+import { revalidateKitchuPaths } from "@/lib/revalidate-kitchu";
 
 export async function saveRecipe(payload: unknown) {
   try {
@@ -54,7 +54,7 @@ export async function saveRecipe(payload: unknown) {
       return saved;
     });
 
-    revalidatePath("/");
+    revalidateKitchuPaths({ recipeId: recipe.id });
     return { ok: true as const, id: recipe.id };
   } catch (error) {
     return actionError(error);
@@ -64,7 +64,7 @@ export async function saveRecipe(payload: unknown) {
 export async function deleteRecipe(id: string) {
   try {
     await prisma.recipe.delete({ where: { id } });
-    revalidatePath("/");
+    revalidateKitchuPaths({ recipeId: id });
     return { ok: true as const };
   } catch (error) {
     return actionError(error);
