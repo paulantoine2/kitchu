@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { useState } from "react";
-import { Clock, ExternalLink, Pencil, ShoppingBag, ShoppingCart } from "lucide-react";
+import { ChevronDown, Clock, ExternalLink, Pencil, ShoppingBag, ShoppingCart } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
@@ -18,6 +18,7 @@ import {
   ItemMedia,
   ItemTitle,
 } from "@/components/ui/item";
+import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible";
 import { Separator } from "@/components/ui/separator";
 import { convertToBase, effectiveToBaseFactor, scaleQuantity } from "@/lib/conversions";
 import { cn, formatCurrency, formatNumber } from "@/lib/utils";
@@ -36,7 +37,12 @@ import {
 } from "@/components/kitchu/recipe-cost";
 import { RecipeMatchGauge } from "@/components/kitchu/recipe-match-gauge";
 import type { IngredientRecord, RecipeRecord, UnitRatioRecord, UnitRecord } from "@/components/kitchu/types";
-import { EntityImage, Field } from "@/components/kitchu/ui/shared";
+import {
+  EntityImage,
+  Field,
+  PartialEstimateIndicator,
+  type PartialEstimateSeverity,
+} from "@/components/kitchu/ui/shared";
 import { uniqueUnits } from "@/components/kitchu/utils";
 
 type RecipeIngredientRow = RecipeRecord["ingredients"][number];
@@ -81,6 +87,133 @@ function formatIngredientQuantity(item: RecipeIngredientRow, portions: number, g
   };
 }
 
+function isCoveredByInventory(estimate: RecipeCostEstimate, applyStock: boolean) {
+  return (
+    applyStock &&
+    estimate.toPurchaseBaseQuantity === 0 &&
+    (estimate.stockUsed > 0 || estimate.cartLeftoverUsed > 0)
+  );
+}
+
+function compactPurchaseSummary(
+  estimate: RecipeCostEstimate,
+  applyStock: boolean,
+): { label: string; price: string | null } {
+  if (isCoveredByInventory(estimate, applyStock)) {
+    return { label: "Couvert par le stock", price: formatCurrency(0) };
+  }
+
+  if (applyStock && estimate.toPurchaseBaseQuantity > 0) {
+    return {
+      label: `À acheter ${formatNumber(estimate.toPurchaseBaseQuantity)} ${estimate.baseUnit.symbol}`,
+      price: estimate.purchasePlan ? formatCurrency(estimate.purchasePlan.totalPrice) : null,
+    };
+  }
+
+  if (estimate.purchasePlan && estimate.purchasePlan.items.length > 0) {
+    return {
+      label: "À acheter",
+      price: formatCurrency(estimate.purchasePlan.totalPrice),
+    };
+  }
+
+  return {
+    label: estimate.missingReason ?? "Indisponible",
+    price: null,
+  };
+}
+
+function RecipeIngredientItem({
+  item,
+  quantity,
+  estimate,
+  showPurchaseDetails,
+  applyStock,
+  isPrimaryIngredientRow,
+}: {
+  item: RecipeIngredientRow;
+  quantity: ReturnType<typeof formatIngredientQuantity>;
+  estimate: RecipeCostEstimate | undefined;
+  showPurchaseDetails: boolean;
+  applyStock: boolean;
+  isPrimaryIngredientRow: boolean;
+}) {
+  const purchaseSummary = estimate ? compactPurchaseSummary(estimate, applyStock) : null;
+
+  const compactRow = (
+    <div className="flex items-start gap-3 p-3">
+      <ItemMedia variant="image">
+        <EntityImage src={ingredientImageUrl(item.ingredient)} label={item.ingredient.name} size="xs" />
+      </ItemMedia>
+      <ItemContent className="min-w-0 flex-1">
+        <div className="flex flex-wrap items-start justify-between gap-x-3 gap-y-1">
+          <div className="min-w-0 flex-1">
+            <ItemTitle className="text-base font-semibold">
+              {isPrimaryIngredientRow ? (
+                <Link href={ingredientHref(item.ingredient.id)} className={entityLinkClassName}>
+                  {item.ingredient.name}
+                </Link>
+              ) : (
+                <span>{item.ingredient.name}</span>
+              )}
+            </ItemTitle>
+            {purchaseSummary && (
+              <p className="mt-0.5 text-sm text-muted-foreground">{purchaseSummary.label}</p>
+            )}
+          </div>
+          <div className="flex shrink-0 items-start gap-2">
+            <div className="flex flex-col items-end gap-0.5 text-right">
+              <span className="text-sm font-semibold text-primary">{quantity.primary}</span>
+              {quantity.secondary && (
+                <span className="text-xs text-muted-foreground">{quantity.secondary}</span>
+              )}
+              {purchaseSummary?.price && (
+                <span className="text-sm font-semibold tabular-nums">{purchaseSummary.price}</span>
+              )}
+            </div>
+            {showPurchaseDetails && estimate && (
+              <CollapsibleTrigger
+                render={
+                  <Button
+                    variant="ghost"
+                    size="icon-sm"
+                    className="shrink-0"
+                    aria-label={`Détail d'achat pour ${item.ingredient.name}`}
+                  />
+                }
+              >
+                <ChevronDown />
+              </CollapsibleTrigger>
+            )}
+          </div>
+        </div>
+        {item.note && <ItemDescription className="mt-1">{item.note}</ItemDescription>}
+      </ItemContent>
+    </div>
+  );
+
+  if (!showPurchaseDetails || !estimate) {
+    return (
+      <Item variant="outline" size="sm" className="flex-col items-stretch gap-0 p-0">
+        {compactRow}
+      </Item>
+    );
+  }
+
+  return (
+    <Collapsible>
+      <Item variant="outline" size="sm" className="flex-col items-stretch gap-0 p-0">
+        {compactRow}
+        <CollapsibleContent className="flex flex-col">
+          <Separator />
+          <ItemFooter className="p-3 pt-2.5">
+            <IngredientPurchaseDetails estimate={estimate} ingredient={item.ingredient} applyStock={applyStock} />
+          </ItemFooter>
+        </CollapsibleContent>
+      </Item>
+    </Collapsible>
+  );
+}
 
 function RecipeHeaderPrice({
   label,
@@ -247,45 +380,51 @@ function IngredientPurchaseDetails({
         </div>
       ) : purchasePlan && purchasePlan.items.length > 0 ? (
         <div className="flex flex-col gap-2">
-          {purchasePlan.items.map((productItem) => (
-            <div
-              key={productItem.product.id}
-              className="flex w-full items-center gap-3 rounded-lg border border-border bg-card p-3 shadow-sm"
-            >
-              <EntityImage
-                src={productItem.product.imageUrl}
-                label={productItem.product.name}
-                size="sm"
-                className="shrink-0"
-              />
-              <div className="min-w-0 flex-1">
-                <div className="flex flex-wrap items-center gap-2">
-                  <Link
-                    href={productHref(ingredient.id, productItem.product.id)}
-                    className={cn("truncate font-semibold leading-snug", entityLinkClassName)}
-                  >
-                    {productItem.product.name}
-                  </Link>
-                  <ProductStorageBadge storageType={productItem.product.storageType} className="text-[10px]" />
-                </div>
-                <p className="mt-0.5 truncate text-xs text-muted-foreground">
-                  {[productItem.product.store, productItem.product.brand].filter(Boolean).join(" · ")}
-                </p>
-                <p className="mt-1 text-sm font-medium">
-                  {productItem.count}× {formatNumber(productItem.product.packageQuantity)}{" "}
-                  {productItem.product.packageUnit.symbol}
-                </p>
-              </div>
-              <div className="shrink-0 text-right">
-                <p className="text-base font-semibold">{formatCurrency(productItem.price)}</p>
-                {productItem.count > 1 && (
-                  <p className="text-xs text-muted-foreground">
-                    {formatCurrency(productItem.product.price)}/colis
-                  </p>
+          {purchasePlan.items.map((productItem) => {
+            const productLabel = productItem.product.name.trim() || estimate.ingredientName;
+            const productMeta = [productItem.product.store, productItem.product.brand]
+              .filter(Boolean)
+              .join(" · ");
+
+            return (
+              <Link
+                key={productItem.product.id}
+                href={productHref(ingredient.id, productItem.product.id)}
+                className={cn(
+                  "flex w-full items-center gap-3 rounded-lg border border-border bg-card p-3 shadow-sm transition-colors hover:border-primary/30 hover:bg-primary/5",
+                  entityLinkClassName,
                 )}
-              </div>
-            </div>
-          ))}
+              >
+                <EntityImage
+                  src={productItem.product.imageUrl}
+                  label={productLabel}
+                  size="sm"
+                  className="shrink-0"
+                />
+                <div className="min-w-0 flex-1">
+                  <div className="flex flex-wrap items-center gap-2">
+                    <span className="truncate font-semibold leading-snug">{productLabel}</span>
+                    <ProductStorageBadge storageType={productItem.product.storageType} className="text-[10px]" />
+                  </div>
+                  {productMeta && (
+                    <p className="mt-0.5 truncate text-xs text-muted-foreground">{productMeta}</p>
+                  )}
+                  <p className="mt-1 text-sm font-medium">
+                    {productItem.count}× {formatNumber(productItem.product.packageQuantity)}{" "}
+                    {productItem.product.packageUnit.symbol}
+                  </p>
+                </div>
+                <div className="shrink-0 text-right">
+                  <p className="text-base font-semibold">{formatCurrency(productItem.price)}</p>
+                  {productItem.count > 1 && (
+                    <p className="text-xs text-muted-foreground">
+                      {formatCurrency(productItem.product.price)}/colis
+                    </p>
+                  )}
+                </div>
+              </Link>
+            );
+          })}
         </div>
       ) : (
         <div className="rounded-lg border border-dashed border-border bg-muted/30 px-3 py-2.5 text-sm text-muted-foreground">
@@ -353,47 +492,18 @@ function RecipeIngredientsPanel({
               const quantity = formatIngredientQuantity(item, portions, globalRatios, units);
               const estimate = estimateByIngredientId.get(item.ingredientId);
               const isPrimaryRow = estimate && firstRowByIngredientId.get(item.ingredientId) === item.id;
-              const showPurchaseDetails = isPrimaryRow && estimate;
+              const showPurchaseDetails = Boolean(isPrimaryRow && estimate);
 
               return (
-                <Item key={item.id} variant="outline" size="sm" className="flex-col items-stretch gap-0 p-0">
-                  <div className="flex items-start gap-3 p-3">
-                    <ItemMedia variant="image">
-                      <EntityImage src={ingredientImageUrl(item.ingredient)} label={item.ingredient.name} size="xs" />
-                    </ItemMedia>
-                    <ItemContent className="min-w-0 flex-1">
-                      <div className="flex flex-wrap items-start justify-between gap-x-3 gap-y-1">
-                        <ItemTitle className="text-base font-semibold">
-                          <Link
-                            href={ingredientHref(item.ingredient.id)}
-                            className={entityLinkClassName}
-                          >
-                            {item.ingredient.name}
-                          </Link>
-                        </ItemTitle>
-                        <div className="flex shrink-0 flex-col items-end gap-0.5 text-right">
-                          <span className="text-sm font-semibold text-primary">{quantity.primary}</span>
-                          {quantity.secondary && (
-                            <span className="text-xs text-muted-foreground">{quantity.secondary}</span>
-                          )}
-                        </div>
-                      </div>
-                      {item.note && <ItemDescription className="mt-1">{item.note}</ItemDescription>}
-                    </ItemContent>
-                  </div>
-                  {showPurchaseDetails && estimate && (
-                    <>
-                      <Separator />
-                      <ItemFooter className="p-3 pt-2.5">
-                        <IngredientPurchaseDetails
-                          estimate={estimate}
-                          ingredient={item.ingredient}
-                          applyStock={applyStock}
-                        />
-                      </ItemFooter>
-                    </>
-                  )}
-                </Item>
+                <RecipeIngredientItem
+                  key={item.id}
+                  item={item}
+                  quantity={quantity}
+                  estimate={estimate}
+                  showPurchaseDetails={showPurchaseDetails}
+                  applyStock={applyStock}
+                  isPrimaryIngredientRow={Boolean(isPrimaryRow)}
+                />
               );
             })}
           </ItemGroup>
@@ -464,17 +574,28 @@ export function RecipeView({
   const theoreticalSum = sumPartial(estimates.map((estimate) => estimate.theoreticalPrice));
   const purchaseSum = sumPartial(estimates.map(estimatePurchaseTotal));
   const inventoryMatch = computeRecipeInventoryMatch(matchEstimates);
-  const hasPartialEstimate =
-    hasEstimates &&
-    (!theoreticalSum.isComplete ||
+  const estimateSeverity: PartialEstimateSeverity | null = (() => {
+    if (!hasEstimates) {
+      return null;
+    }
+    if (theoreticalSum.total === null && purchaseSum.total === null) {
+      return "critical";
+    }
+    if (
+      !theoreticalSum.isComplete ||
       !purchaseSum.isComplete ||
-      (inventoryMatch.percent !== null && !inventoryMatch.isComplete));
+      (inventoryMatch.percent !== null && !inventoryMatch.isComplete)
+    ) {
+      return "minor";
+    }
+    return null;
+  })();
 
   return (
     <section className="flex min-w-0 flex-col gap-6">
       <Card>
         <div className="grid items-start gap-4 md:grid-cols-[minmax(12rem,20rem)_minmax(0,1fr)] md:gap-6">
-          <div className="relative mx-4 mt-4 aspect-square overflow-hidden rounded-xl bg-primary/10 md:mx-0 md:mb-4 md:ml-4 md:mt-4">
+          <div className="relative mx-4 mt-4 aspect-[4/3] overflow-hidden rounded-xl bg-primary/10 md:mx-0 md:mb-4 md:ml-4 md:mt-4 md:aspect-square">
             {heroImageUrl ? (
               // eslint-disable-next-line @next/next/no-img-element
               <img src={heroImageUrl} alt={recipe.name} className="size-full object-cover" />
@@ -495,7 +616,7 @@ export function RecipeView({
               </div>
               <div className="flex items-start justify-between gap-4">
                 <div className="min-w-0 flex-1">
-                  <h2 className="text-2xl font-semibold leading-tight tracking-tight sm:text-3xl">{recipe.name}</h2>
+                  <h1 className="text-2xl font-semibold leading-tight tracking-tight sm:text-3xl">{recipe.name}</h1>
                   {recipe.description && (
                     <p className="mt-2 max-w-2xl text-sm leading-6 text-muted-foreground">{recipe.description}</p>
                   )}
@@ -524,11 +645,7 @@ export function RecipeView({
                 {recipe.prepMinutes === null && recipe.cookMinutes !== null && (
                   <span className="text-xs text-muted-foreground">{recipe.cookMinutes} min de cuisson</span>
                 )}
-                {hasPartialEstimate && (
-                  <Badge variant="outline" className="text-muted-foreground">
-                    Estimation partielle
-                  </Badge>
-                )}
+                <PartialEstimateIndicator severity={estimateSeverity} />
                 {recipe.sourceUrl && (
                   <Button
                     variant="outline"

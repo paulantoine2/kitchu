@@ -98,12 +98,12 @@ export function IngredientEditor({
   }
 
   return (
-    <section className="flex min-w-0 flex-col gap-4">
+    <section className="flex min-w-0 flex-col gap-4 pb-20">
       <Card>
         <CardHeader>
           <div className="flex min-w-0 items-center gap-3">
             <EntityImage src={draft.imageUrl} label={draft.name || "Ingrédient"} size="md" className="shrink-0" />
-            <h2 className="text-xl font-semibold">{draft.id ? "Modifier l'ingrédient" : "Nouvel ingrédient"}</h2>
+            <h1 className="text-xl font-semibold">{draft.id ? "Modifier l'ingrédient" : "Nouvel ingrédient"}</h1>
           </div>
         </CardHeader>
         <CardContent className="grid gap-3 md:grid-cols-[minmax(0,1fr)_220px]">

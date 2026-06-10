@@ -14,6 +14,12 @@ import {
   InputGroupInput,
 } from "@/components/ui/input-group";
 import {
+  Item,
+  ItemContent,
+  ItemGroup,
+  ItemTitle,
+} from "@/components/ui/item";
+import {
   Table,
   TableBody,
   TableCell,
@@ -21,6 +27,37 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
+
+function UnitMobileItem({ unit }: { unit: UnitRecord }) {
+  const isConfigurable = !isHardcodedMeasurementKind(unit.kind);
+
+  return (
+    <Item
+      variant="outline"
+      size="sm"
+      className={isConfigurable ? undefined : "text-muted-foreground"}
+      render={isConfigurable ? <Link href={`/units/${unit.id}`} /> : undefined}
+    >
+      <ItemContent className="min-w-0">
+        <div className="flex items-center gap-2">
+          <span className="shrink-0 font-semibold tabular-nums">{unit.symbol}</span>
+          <ItemTitle className="min-w-0 flex-1 truncate">{unit.name}</ItemTitle>
+        </div>
+        <div className="mt-1.5 flex flex-wrap gap-1.5">
+          <Badge variant="secondary" className="font-mono text-xs">
+            {unit.code}
+          </Badge>
+          <Badge variant="secondary">{unit.kind.toLowerCase()}</Badge>
+          {isConfigurable ? (
+            <Badge variant="secondary">Configurable</Badge>
+          ) : (
+            <Badge variant="secondary">Standard</Badge>
+          )}
+        </div>
+      </ItemContent>
+    </Item>
+  );
+}
 
 function UnitTableRow({ unit }: { unit: UnitRecord }) {
   const isConfigurable = !isHardcodedMeasurementKind(unit.kind);
@@ -76,7 +113,7 @@ export function UnitList({
     <div className="mx-auto max-w-[1480px] px-4 py-6 lg:px-8">
       <div className="mb-6 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
         <div>
-          <h2 className="text-xl font-semibold">Unités</h2>
+          <h1 className="text-xl font-semibold">Unités</h1>
           <p className="text-sm text-muted-foreground">
             {filteredUnits.length} unité{filteredUnits.length !== 1 ? "s" : ""}
             {configurableCount !== filteredUnits.length && (
@@ -84,7 +121,7 @@ export function UnitList({
             )}
           </p>
         </div>
-        <Button variant="secondary" size="sm" onClick={onNewUnit} className="shrink-0 self-start sm:self-auto">
+        <Button size="sm" onClick={onNewUnit} className="shrink-0 self-start sm:self-auto">
           <Plus data-icon="inline-start" />
           Nouvelle unité
         </Button>
@@ -108,24 +145,31 @@ export function UnitList({
           </EmptyDescription>
         </Empty>
       ) : (
-        <div className="overflow-hidden rounded-lg border border-border bg-card">
-          <Table>
-            <TableHeader>
-              <TableRow>
-                <TableHead>Symbole</TableHead>
-                <TableHead>Nom</TableHead>
-                <TableHead>Code</TableHead>
-                <TableHead>Type</TableHead>
-                <TableHead>Statut</TableHead>
-              </TableRow>
-            </TableHeader>
-            <TableBody>
-              {filteredUnits.map((unit) => (
-                <UnitTableRow key={unit.id} unit={unit} />
-              ))}
-            </TableBody>
-          </Table>
-        </div>
+        <>
+          <ItemGroup className="gap-2 md:hidden">
+            {filteredUnits.map((unit) => (
+              <UnitMobileItem key={unit.id} unit={unit} />
+            ))}
+          </ItemGroup>
+          <div className="hidden overflow-hidden rounded-lg border border-border bg-card md:block">
+            <Table>
+              <TableHeader>
+                <TableRow>
+                  <TableHead>Symbole</TableHead>
+                  <TableHead>Nom</TableHead>
+                  <TableHead>Code</TableHead>
+                  <TableHead>Type</TableHead>
+                  <TableHead>Statut</TableHead>
+                </TableRow>
+              </TableHeader>
+              <TableBody>
+                {filteredUnits.map((unit) => (
+                  <UnitTableRow key={unit.id} unit={unit} />
+                ))}
+              </TableBody>
+            </Table>
+          </div>
+        </>
       )}
     </div>
   );

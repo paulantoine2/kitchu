@@ -144,7 +144,7 @@ export function CartSheet({
     <Sheet open={open} onOpenChange={onOpenChange}>
       <SheetContent
         side="right"
-        className="flex w-full flex-col gap-0 overflow-hidden p-0 data-[side=right]:sm:max-w-2xl"
+        className="flex h-full w-full flex-col gap-0 overflow-hidden p-0 data-[side=right]:sm:max-w-2xl"
       >
         <SheetHeader className="border-b border-border px-4 py-4">
           <SheetTitle>Panier</SheetTitle>
@@ -203,17 +203,7 @@ export function CartSheet({
             <Separator />
 
             <section className="flex flex-col gap-3">
-              <div className="flex items-center justify-between gap-3">
-                <h3 className="text-sm font-semibold">Produits à acheter</h3>
-                {summary.totalPrice.total !== null && (
-                  <p className="text-sm font-semibold tabular-nums">
-                    {formatCurrency(summary.totalPrice.total)}
-                    {!summary.totalPrice.isComplete && (
-                      <span className="ml-1 text-xs font-normal text-muted-foreground">· partiel</span>
-                    )}
-                  </p>
-                )}
-              </div>
+              <h3 className="text-sm font-semibold">Produits à acheter</h3>
 
               {summary.productLines.length === 0 ? (
                 <div className="rounded-lg border border-dashed border-border bg-muted/30 px-3 py-4 text-sm text-muted-foreground">
@@ -291,7 +281,7 @@ export function CartSheet({
         )}
 
         {!isEmpty && (
-          <SheetFooter className="shrink-0 gap-3 border-t border-border bg-card/95 px-4 py-4">
+          <SheetFooter className="sticky bottom-0 z-10 mt-auto shrink-0 gap-3 border-t border-border bg-card/95 px-4 py-4 backdrop-blur supports-[padding:max(0px)]:pb-[max(1rem,env(safe-area-inset-bottom))]">
             <div className="flex w-full items-center justify-between gap-3 text-sm">
               <span className="font-medium">Total à payer</span>
               <span className="text-base font-semibold tabular-nums">

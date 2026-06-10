@@ -1,5 +1,6 @@
 "use client";
 
+import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
 import { cn } from "@/lib/utils";
 
 type RecipeMatchGaugeProps = {
@@ -66,7 +67,7 @@ export function RecipeMatchGauge({
   const shellPadding = framed ? (gaugeSize <= 44 ? 4 : 5) : compact ? 3 : 0;
   const outerSize = gaugeSize + shellPadding * 2;
 
-  return (
+  const gauge = (
     <div
       className={cn(
         "relative flex shrink-0 items-center justify-center transition-[box-shadow,colors] duration-300",
@@ -77,7 +78,7 @@ export function RecipeMatchGauge({
       )}
       style={{ width: outerSize, height: outerSize, padding: shellPadding || undefined }}
       role="img"
-      aria-label={`${displayPercent}%`}
+      aria-label={`Match stock : ${displayPercent} %`}
     >
       <div
         className="relative flex items-center justify-center"
@@ -132,5 +133,12 @@ export function RecipeMatchGauge({
         </span>
       </div>
     </div>
+  );
+
+  return (
+    <Tooltip>
+      <TooltipTrigger render={<span className="inline-flex" />}>{gauge}</TooltipTrigger>
+      <TooltipContent>Match stock : {displayPercent} %</TooltipContent>
+    </Tooltip>
   );
 }

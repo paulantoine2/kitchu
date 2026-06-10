@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { useMemo, useState } from "react";
+import { useMemo, useState, useSyncExternalStore } from "react";
 import { Plus, Search, ShoppingCart } from "lucide-react";
 import { ingredientImageUrl, recipeImageUrl } from "@/components/kitchu/images";
 import {
@@ -11,10 +11,10 @@ import {
 } from "@/components/kitchu/recipe-cost";
 import { RecipeMatchGauge } from "@/components/kitchu/recipe-match-gauge";
 import type { CartRecipeEntry, IngredientRecord, RecipeRecord, UnitRatioRecord, UnitRecord } from "@/components/kitchu/types";
-import { EntityImage, Field } from "@/components/kitchu/ui/shared";
+import { EntityImage, Field, PartialEstimateIndicator, type PartialEstimateSeverity } from "@/components/kitchu/ui/shared";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardFooter } from "@/components/ui/card";
+import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import {
   Combobox,
   ComboboxChip,
@@ -36,10 +36,82 @@ import { cn, formatCurrency } from "@/lib/utils";
 
 const DEFAULT_LIST_PORTIONS = 2;
 
+function subscribeToClientMount() {
+  return () => {};
+}
+
+function getClientMountedSnapshot() {
+  return true;
+}
+
+function getServerMountedSnapshot() {
+  return false;
+}
+
 type RecipeListSortMode = "match" | "alphabetical" | "price";
 
 function isRecipeListSortMode(value: string): value is RecipeListSortMode {
   return value === "match" || value === "alphabetical" || value === "price";
+}
+
+function PriceModeToggle({
+  priceMode,
+  onPriceModeChange,
+  className,
+}: {
+  priceMode: RecipeListPriceMode;
+  onPriceModeChange: (mode: RecipeListPriceMode) => void;
+  className?: string;
+}) {
+  const mounted = useSyncExternalStore(
+    subscribeToClientMount,
+    getClientMountedSnapshot,
+    getServerMountedSnapshot,
+  );
+
+  return (
+    <div
+      role="group"
+      aria-label="Basculer entre prix théorique et prix d'achat"
+      className={cn(
+        "flex shrink-0 items-center gap-2 rounded-full border border-border bg-card px-3 py-1.5",
+        className,
+      )}
+    >
+      <Label
+        className={cn(
+          "text-sm font-medium",
+          priceMode === "theoretical" ? "text-foreground" : "text-muted-foreground",
+        )}
+      >
+        Théorique
+      </Label>
+      {mounted ? (
+        <Switch
+          id="price-mode-toggle"
+          checked={priceMode === "purchase"}
+          onCheckedChange={(checked) => onPriceModeChange(checked ? "purchase" : "theoretical")}
+          aria-label="Basculer entre prix théorique et prix d'achat"
+        />
+      ) : (
+        <div
+          aria-hidden
+          className={cn(
+            "h-[18.4px] w-[32px] shrink-0 rounded-full bg-input",
+            priceMode === "purchase" && "bg-primary",
+          )}
+        />
+      )}
+      <Label
+        className={cn(
+          "text-sm font-medium",
+          priceMode === "purchase" ? "text-foreground" : "text-muted-foreground",
+        )}
+      >
+        Achat
+      </Label>
+    </div>
+  );
 }
 
 function RecipeCard({
@@ -61,14 +133,22 @@ function RecipeCard({
 }) {
   const imageUrl = recipeImageUrl(recipe);
   const totalMinutes = (recipe.prepMinutes ?? 0) + (recipe.cookMinutes ?? 0);
+  const estimateSeverity: PartialEstimateSeverity | null =
+    pricePerPortion === null ? "critical" : !priceComplete ? "minor" : null;
+
+  const cartButtonLabel = isInCart ? "Ajuster le panier" : "Ajouter au panier";
 
   return (
     <Card className="overflow-hidden transition-shadow hover:shadow-md">
-      <Link href={`/recipes/${recipe.id}`} className="block">
+      <Link
+        href={`/recipes/${recipe.id}`}
+        aria-label={`Voir la recette ${recipe.name}`}
+        className="block rounded-t-xl outline-none focus-visible:ring-3 focus-visible:ring-ring/50"
+      >
         <div className="relative aspect-[4/3] overflow-hidden bg-primary/10">
           {imageUrl ? (
             // eslint-disable-next-line @next/next/no-img-element
-            <img src={imageUrl} alt={recipe.name} className="size-full object-cover" />
+            <img src={imageUrl} alt="" className="size-full object-cover" />
           ) : (
             <div className="flex size-full items-center justify-center text-4xl font-semibold text-primary">
               {recipe.name.trim().charAt(0).toUpperCase() || "K"}
@@ -84,31 +164,25 @@ function RecipeCard({
             )
           )}
         </div>
-        <CardContent className="pt-3">
-          <h3 className="line-clamp-2 text-base font-semibold leading-snug">{recipe.name}</h3>
-          {totalMinutes > 0 && (
-            <p className="mt-1 text-xs text-muted-foreground">{totalMinutes} min</p>
-          )}
-          <div className="mt-3">
-            <p className="text-[11px] font-semibold uppercase tracking-wide text-muted-foreground">
-              {priceMode === "theoretical" ? "Prix théorique" : "Prix d'achat"}
-            </p>
-            <p className="mt-0.5 text-xl font-semibold tabular-nums">
-              {pricePerPortion !== null ? (
-                <>
-                  {formatCurrency(pricePerPortion)}
-                  <span className="text-sm font-medium text-muted-foreground">/portion</span>
-                </>
-              ) : (
-                "—"
-              )}
-            </p>
-            {!priceComplete && pricePerPortion !== null && (
-              <Badge variant="outline" className="mt-2 text-[10px] text-muted-foreground">
-                Estimation partielle
-              </Badge>
+        <CardHeader className="pt-3">
+          <CardTitle className="line-clamp-2 text-base leading-snug">{recipe.name}</CardTitle>
+          {totalMinutes > 0 && <CardDescription>{totalMinutes} min</CardDescription>}
+        </CardHeader>
+        <CardContent>
+          <p className="text-[11px] font-semibold uppercase tracking-wide text-muted-foreground">
+            {priceMode === "theoretical" ? "Prix théorique" : "Prix d'achat"}
+          </p>
+          <p className="mt-0.5 text-xl font-semibold tabular-nums">
+            {pricePerPortion !== null ? (
+              <>
+                {formatCurrency(pricePerPortion)}
+                <span className="text-sm font-medium text-muted-foreground">/portion</span>
+              </>
+            ) : (
+              "—"
             )}
-          </div>
+          </p>
+          <PartialEstimateIndicator severity={estimateSeverity} className="mt-2" />
         </CardContent>
       </Link>
       <CardFooter className="border-t bg-muted/30">
@@ -116,13 +190,11 @@ function RecipeCard({
           size="sm"
           variant={isInCart ? "secondary" : "default"}
           className="w-full"
-          onClick={(event) => {
-            event.preventDefault();
-            onAddToCart();
-          }}
+          aria-label={`${cartButtonLabel} : ${recipe.name}`}
+          onClick={onAddToCart}
         >
           <ShoppingCart data-icon="inline-start" />
-          {isInCart ? "Ajuster le panier" : "Ajouter au panier"}
+          {cartButtonLabel}
         </Button>
       </CardFooter>
     </Card>
@@ -274,19 +346,19 @@ export function RecipeList({
     <div className="mx-auto max-w-[1480px] px-4 py-6 lg:px-8">
       <div className="mb-6 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
         <div>
-          <h2 className="text-xl font-semibold">Recettes</h2>
+          <h1 className="text-xl font-semibold">Recettes</h1>
           <p className="text-sm text-muted-foreground">
             {filteredRecipes.length} recette{filteredRecipes.length !== 1 ? "s" : ""}
           </p>
         </div>
-        <Button variant="secondary" size="sm" onClick={onNewRecipe} className="shrink-0 self-start sm:self-auto">
+        <Button size="sm" onClick={onNewRecipe} className="shrink-0 self-start sm:self-auto">
           <Plus data-icon="inline-start" />
           Nouvelle recette
         </Button>
       </div>
 
-      <div className="mb-6 flex flex-col gap-3 sm:flex-row sm:items-end">
-        <div className="min-w-0 flex-1">
+      <div className="mb-4 flex flex-col gap-3">
+        <div className="min-w-0 w-full">
           <Combobox
             multiple
             items={recipeIngredientOptions}
@@ -339,59 +411,42 @@ export function RecipeList({
           </Combobox>
         </div>
 
-        <Field label="Portions" className="w-auto shrink-0">
-          <Input
-            type="number"
-            min={1}
-            value={listPortions}
-            onChange={(event) => setListPortions(Number(event.target.value) || 1)}
-            className="w-20 rounded-full bg-background"
-          />
-        </Field>
+        <div className="grid grid-cols-2 gap-3 sm:grid-cols-4">
+          <Field label="Portions">
+            <Input
+              type="number"
+              min={1}
+              value={listPortions}
+              onChange={(event) => setListPortions(Number(event.target.value) || 1)}
+              className="w-full rounded-full bg-background"
+            />
+          </Field>
 
-        <Field label="Tri" className="w-full shrink-0 sm:w-52">
-          <NativeSelect
-            value={sortMode}
-            onChange={(event) => {
-              const value = event.target.value;
-              if (isRecipeListSortMode(value)) {
-                setSortMode(value);
-              }
-            }}
-            aria-label="Trier les recettes"
-            className="w-full"
-          >
-            <NativeSelectOption value="match">Plus haut match</NativeSelectOption>
-            <NativeSelectOption value="alphabetical">Alphabétique</NativeSelectOption>
-            <NativeSelectOption value="price">Portion la moins chère</NativeSelectOption>
-          </NativeSelect>
-        </Field>
+          <Field label="Tri" className="col-span-1 sm:col-span-2">
+            <NativeSelect
+              value={sortMode}
+              onChange={(event) => {
+                const value = event.target.value;
+                if (isRecipeListSortMode(value)) {
+                  setSortMode(value);
+                }
+              }}
+              aria-label="Trier les recettes"
+              className="w-full"
+            >
+              <NativeSelectOption value="match">Plus haut match</NativeSelectOption>
+              <NativeSelectOption value="alphabetical">Alphabétique</NativeSelectOption>
+              <NativeSelectOption value="price">Portion la moins chère</NativeSelectOption>
+            </NativeSelect>
+          </Field>
 
-        <div className="flex shrink-0 items-center gap-2 rounded-full border border-border bg-card px-3 py-1.5">
-          <Label
-            htmlFor="price-mode-toggle"
-            className={cn(
-              "cursor-pointer text-sm font-medium",
-              priceMode === "theoretical" ? "text-foreground" : "text-muted-foreground",
-            )}
-          >
-            Théorique
-          </Label>
-          <Switch
-            id="price-mode-toggle"
-            checked={priceMode === "purchase"}
-            onCheckedChange={(checked) => setPriceMode(checked ? "purchase" : "theoretical")}
-            aria-label="Basculer entre prix théorique et prix d'achat"
-          />
-          <Label
-            htmlFor="price-mode-toggle"
-            className={cn(
-              "cursor-pointer text-sm font-medium",
-              priceMode === "purchase" ? "text-foreground" : "text-muted-foreground",
-            )}
-          >
-            Achat
-          </Label>
+          <div className="col-span-2 flex w-full items-end sm:col-span-1">
+            <PriceModeToggle
+              priceMode={priceMode}
+              onPriceModeChange={setPriceMode}
+              className="w-full justify-center sm:w-auto sm:justify-start"
+            />
+          </div>
         </div>
       </div>
 

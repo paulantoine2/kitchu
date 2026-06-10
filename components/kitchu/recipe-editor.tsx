@@ -340,7 +340,7 @@ export function RecipeEditor({
   const dialogProductComplete = isDialogProductComplete(dialogProduct);
 
   return (
-    <section className="flex min-w-0 flex-col gap-4">
+    <section className="flex min-w-0 flex-col gap-4 pb-20">
       <HelloFreshImporter busy={busy} onImport={onImport} onError={onImportError} />
       <Card>
         <CardHeader>
@@ -348,7 +348,7 @@ export function RecipeEditor({
             <div className="flex min-w-0 items-center gap-3">
               <EntityImage src={draftRecipeImageUrl(draft, ingredients)} label={draft.name || "Recette"} size="md" className="shrink-0" />
               <div className="min-w-0">
-                <h2 className="text-xl font-semibold">{draft.id ? "Modifier la recette" : "Nouvelle recette"}</h2>
+                <h1 className="text-xl font-semibold">{draft.id ? "Modifier la recette" : "Nouvelle recette"}</h1>
                 <p className="text-sm text-muted-foreground">Les quantités sont enregistrées pour une portion.</p>
               </div>
             </div>

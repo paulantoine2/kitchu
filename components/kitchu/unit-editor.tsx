@@ -116,12 +116,12 @@ export function UnitEditor({
   }
 
   return (
-    <section className="flex min-w-0 flex-col gap-4">
+    <section className="flex min-w-0 flex-col gap-4 pb-20">
       <Card>
         <CardHeader>
           <div className="flex flex-col gap-2 sm:flex-row sm:items-start sm:justify-between">
             <div className="min-w-0">
-              <h2 className="text-xl font-semibold">{draft.id ? "Modifier l'unité" : "Nouvelle unité"}</h2>
+              <h1 className="text-xl font-semibold">{draft.id ? "Modifier l'unité" : "Nouvelle unité"}</h1>
               <p className="text-sm text-muted-foreground">Base commune utilisée par les ingrédients.</p>
             </div>
             <Badge className="w-fit shrink-0">{units.length} unités</Badge>

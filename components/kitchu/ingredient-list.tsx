@@ -16,6 +16,13 @@ import {
   InputGroupInput,
 } from "@/components/ui/input-group";
 import {
+  Item,
+  ItemContent,
+  ItemGroup,
+  ItemMedia,
+  ItemTitle,
+} from "@/components/ui/item";
+import {
   Table,
   TableBody,
   TableCell,
@@ -24,6 +31,51 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { formatNumber } from "@/lib/utils";
+
+function IngredientMobileItem({ ingredient }: { ingredient: IngredientRecord }) {
+  const imageUrl = ingredientImageUrl(ingredient);
+  const hasProducts = ingredient.products.length > 0;
+  const stockedProducts = ingredient.products
+    .filter((product) => product.stockQuantity && product.stockQuantity > 0)
+    .sort((left, right) => compareProductStoragePriority(left.storageType, right.storageType));
+
+  return (
+    <Item variant="outline" size="sm" render={<Link href={`/ingredients/${ingredient.id}`} />}>
+      <ItemMedia variant="image">
+        <EntityImage src={imageUrl} label={ingredient.name} size="xs" />
+      </ItemMedia>
+      <ItemContent className="min-w-0">
+        <ItemTitle className="truncate">{ingredient.name}</ItemTitle>
+        <div className="mt-1.5 flex flex-wrap gap-1.5">
+          <Badge variant="secondary">{ingredient.baseUnit.symbol}</Badge>
+          {hasProducts ? (
+            <Badge variant="secondary">
+              {ingredient.products.length} produit{ingredient.products.length !== 1 ? "s" : ""}
+            </Badge>
+          ) : (
+            <Badge
+              variant="secondary"
+              className="gap-1 border-amber-500/30 bg-amber-500/10 text-amber-700 dark:text-amber-400"
+            >
+              <TriangleAlert />
+              Sans produit
+            </Badge>
+          )}
+          {stockedProducts.map((product) => (
+            <Badge
+              key={product.id}
+              variant="secondary"
+              className={productStorageBadgeClass[product.storageType]}
+            >
+              {productStorageLabels[product.storageType]} · {formatNumber(product.stockQuantity!)}{" "}
+              {ingredient.baseUnit.symbol}
+            </Badge>
+          ))}
+        </div>
+      </ItemContent>
+    </Item>
+  );
+}
 
 function IngredientTableRow({ ingredient }: { ingredient: IngredientRecord }) {
   const imageUrl = ingredientImageUrl(ingredient);
@@ -101,12 +153,12 @@ export function IngredientList({
     <div className="mx-auto max-w-[1480px] px-4 py-6 lg:px-8">
       <div className="mb-6 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
         <div>
-          <h2 className="text-xl font-semibold">Ingrédients</h2>
+          <h1 className="text-xl font-semibold">Ingrédients</h1>
           <p className="text-sm text-muted-foreground">
             {filteredIngredients.length} ingrédient{filteredIngredients.length !== 1 ? "s" : ""}
           </p>
         </div>
-        <Button variant="secondary" size="sm" onClick={onNewIngredient} className="shrink-0 self-start sm:self-auto">
+        <Button size="sm" onClick={onNewIngredient} className="shrink-0 self-start sm:self-auto">
           <Plus data-icon="inline-start" />
           Nouvel ingrédient
         </Button>
@@ -130,24 +182,31 @@ export function IngredientList({
           </EmptyDescription>
         </Empty>
       ) : (
-        <div className="overflow-hidden rounded-lg border border-border bg-card">
-          <Table>
-            <TableHeader>
-              <TableRow>
-                <TableHead className="w-12" />
-                <TableHead>Nom</TableHead>
-                <TableHead>Unité de base</TableHead>
-                <TableHead>Produits</TableHead>
-                <TableHead>Stock</TableHead>
-              </TableRow>
-            </TableHeader>
-            <TableBody>
-              {filteredIngredients.map((ingredient) => (
-                <IngredientTableRow key={ingredient.id} ingredient={ingredient} />
-              ))}
-            </TableBody>
-          </Table>
-        </div>
+        <>
+          <ItemGroup className="gap-2 md:hidden">
+            {filteredIngredients.map((ingredient) => (
+              <IngredientMobileItem key={ingredient.id} ingredient={ingredient} />
+            ))}
+          </ItemGroup>
+          <div className="hidden overflow-hidden rounded-lg border border-border bg-card md:block">
+            <Table>
+              <TableHeader>
+                <TableRow>
+                  <TableHead className="w-12" />
+                  <TableHead>Nom</TableHead>
+                  <TableHead>Unité de base</TableHead>
+                  <TableHead>Produits</TableHead>
+                  <TableHead>Stock</TableHead>
+                </TableRow>
+              </TableHeader>
+              <TableBody>
+                {filteredIngredients.map((ingredient) => (
+                  <IngredientTableRow key={ingredient.id} ingredient={ingredient} />
+                ))}
+              </TableBody>
+            </Table>
+          </div>
+        </>
       )}
     </div>
   );

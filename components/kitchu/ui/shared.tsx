@@ -2,6 +2,7 @@
 
 import { Plus, Save, Search, Trash2, TriangleAlert } from "lucide-react";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import {
@@ -15,7 +16,48 @@ import {
 } from "@/components/ui/input-group";
 import { Item, ItemActions, ItemContent, ItemDescription, ItemMedia, ItemTitle } from "@/components/ui/item";
 import { Spinner } from "@/components/ui/spinner";
+import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
 import { cn } from "@/lib/utils";
+
+export type PartialEstimateSeverity = "critical" | "minor";
+
+export function PartialEstimateIndicator({
+  severity,
+  className,
+}: {
+  severity: PartialEstimateSeverity | null;
+  className?: string;
+}) {
+  if (!severity) {
+    return null;
+  }
+
+  if (severity === "critical") {
+    return (
+      <Badge variant="outline" className={cn("text-[10px] text-muted-foreground", className)}>
+        Estimation partielle
+      </Badge>
+    );
+  }
+
+  return (
+    <Tooltip>
+      <TooltipTrigger
+        render={
+          <span
+            className={cn("inline-flex text-muted-foreground", className)}
+            aria-label="Estimation partielle"
+          />
+        }
+      >
+        <TriangleAlert />
+      </TooltipTrigger>
+      <TooltipContent>
+        Estimation partielle — certains ingrédients manquent de données produit
+      </TooltipContent>
+    </Tooltip>
+  );
+}
 
 export function EntityImage({
   src,
@@ -148,8 +190,8 @@ export function StickySave({
   onDelete?: () => void;
 }) {
   return (
-    <Card className="bg-card/95 py-3 shadow-lg backdrop-blur md:sticky md:bottom-4 md:z-10">
-      <div className="flex flex-col gap-3 px-(--card-spacing) sm:flex-row sm:items-center sm:justify-between">
+    <div className="sticky bottom-0 z-10 -mx-4 mt-4 border-t border-border bg-background/95 px-4 py-3 backdrop-blur supports-[padding:max(0px)]:pb-[max(0.75rem,env(safe-area-inset-bottom))] lg:-mx-8 lg:px-8">
+      <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
         <p className="min-h-5 min-w-0 flex-1 text-sm text-muted-foreground">{notice || "\u00a0"}</p>
         <div className="flex shrink-0 flex-wrap gap-2 sm:justify-end">
           {onDelete && (
@@ -164,7 +206,7 @@ export function StickySave({
           </Button>
         </div>
       </div>
-    </Card>
+    </div>
   );
 }
 
