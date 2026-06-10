@@ -30,10 +30,17 @@ import {
 import { Empty, EmptyDescription } from "@/components/ui/empty";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { NativeSelect, NativeSelectOption } from "@/components/ui/native-select";
 import { Switch } from "@/components/ui/switch";
 import { cn, formatCurrency } from "@/lib/utils";
 
 const DEFAULT_LIST_PORTIONS = 2;
+
+type RecipeListSortMode = "match" | "alphabetical" | "price";
+
+function isRecipeListSortMode(value: string): value is RecipeListSortMode {
+  return value === "match" || value === "alphabetical" || value === "price";
+}
 
 function RecipeCard({
   recipe,
@@ -146,6 +153,7 @@ export function RecipeList({
   onNewRecipe: () => void;
 }) {
   const [selectedIngredients, setSelectedIngredients] = useState<IngredientRecord[]>([]);
+  const [sortMode, setSortMode] = useState<RecipeListSortMode>("match");
   const [priceMode, setPriceMode] = useState<RecipeListPriceMode>("purchase");
   const [listPortions, setListPortions] = useState(DEFAULT_LIST_PORTIONS);
   const comboboxAnchorRef = useComboboxAnchor();
@@ -228,6 +236,40 @@ export function RecipeList({
     priceMode,
   ]);
 
+  const sortedRecipes = useMemo(() => {
+    const list = [...filteredRecipes];
+
+    list.sort((left, right) => {
+      const leftData = cardDataByRecipeId.get(left.id);
+      const rightData = cardDataByRecipeId.get(right.id);
+
+      if (sortMode === "alphabetical") {
+        return left.name.localeCompare(right.name, "fr");
+      }
+
+      if (sortMode === "match") {
+        const leftMatch = leftData?.matchPercent ?? -1;
+        const rightMatch = rightData?.matchPercent ?? -1;
+        return rightMatch - leftMatch;
+      }
+
+      const leftPrice = leftData?.perPortion;
+      const rightPrice = rightData?.perPortion;
+      if (leftPrice == null && rightPrice == null) {
+        return 0;
+      }
+      if (leftPrice == null) {
+        return 1;
+      }
+      if (rightPrice == null) {
+        return -1;
+      }
+      return leftPrice - rightPrice;
+    });
+
+    return list;
+  }, [filteredRecipes, cardDataByRecipeId, sortMode]);
+
   return (
     <div className="mx-auto max-w-[1480px] px-4 py-6 lg:px-8">
       <div className="mb-6 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
@@ -307,6 +349,24 @@ export function RecipeList({
           />
         </Field>
 
+        <Field label="Tri" className="w-full shrink-0 sm:w-52">
+          <NativeSelect
+            value={sortMode}
+            onChange={(event) => {
+              const value = event.target.value;
+              if (isRecipeListSortMode(value)) {
+                setSortMode(value);
+              }
+            }}
+            aria-label="Trier les recettes"
+            className="w-full"
+          >
+            <NativeSelectOption value="match">Plus haut match</NativeSelectOption>
+            <NativeSelectOption value="alphabetical">Alphabétique</NativeSelectOption>
+            <NativeSelectOption value="price">Portion la moins chère</NativeSelectOption>
+          </NativeSelect>
+        </Field>
+
         <div className="flex shrink-0 items-center gap-2 rounded-full border border-border bg-card px-3 py-1.5">
           <Label
             htmlFor="price-mode-toggle"
@@ -345,7 +405,7 @@ export function RecipeList({
         </Empty>
       ) : (
         <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
-          {filteredRecipes.map((recipe) => {
+          {sortedRecipes.map((recipe) => {
             const cardData = cardDataByRecipeId.get(recipe.id);
             return (
               <RecipeCard
