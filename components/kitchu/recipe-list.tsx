@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { useMemo, useState } from "react";
 import { Plus, Search, ShoppingCart } from "lucide-react";
-import { recipeImageUrl } from "@/components/kitchu/images";
+import { ingredientImageUrl, recipeImageUrl } from "@/components/kitchu/images";
 import {
   computeRecipeListMatch,
   computeRecipeListPrice,
@@ -11,17 +11,24 @@ import {
 } from "@/components/kitchu/recipe-cost";
 import { RecipeMatchGauge } from "@/components/kitchu/recipe-match-gauge";
 import type { CartRecipeEntry, IngredientRecord, RecipeRecord, UnitRatioRecord, UnitRecord } from "@/components/kitchu/types";
-import { Field } from "@/components/kitchu/ui/shared";
+import { EntityImage, Field } from "@/components/kitchu/ui/shared";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardFooter } from "@/components/ui/card";
+import {
+  Combobox,
+  ComboboxChip,
+  ComboboxChips,
+  ComboboxChipsInput,
+  ComboboxContent,
+  ComboboxEmpty,
+  ComboboxItem,
+  ComboboxList,
+  ComboboxValue,
+  useComboboxAnchor,
+} from "@/components/ui/combobox";
 import { Empty, EmptyDescription } from "@/components/ui/empty";
 import { Input } from "@/components/ui/input";
-import {
-  InputGroup,
-  InputGroupAddon,
-  InputGroupInput,
-} from "@/components/ui/input-group";
 import { Label } from "@/components/ui/label";
 import { Switch } from "@/components/ui/switch";
 import { cn, formatCurrency } from "@/lib/utils";
@@ -138,18 +145,37 @@ export function RecipeList({
   onAddToCart: (recipeId: string, portions: number) => void;
   onNewRecipe: () => void;
 }) {
-  const [search, setSearch] = useState("");
+  const [selectedIngredients, setSelectedIngredients] = useState<IngredientRecord[]>([]);
   const [priceMode, setPriceMode] = useState<RecipeListPriceMode>("purchase");
   const [listPortions, setListPortions] = useState(DEFAULT_LIST_PORTIONS);
+  const comboboxAnchorRef = useComboboxAnchor();
   const portionCount = Math.max(1, listPortions);
 
-  const filteredRecipes = useMemo(
-    () =>
-      recipes.filter((recipe) =>
-        recipe.name.toLowerCase().includes(search.toLowerCase()),
+  const recipeIngredientOptions = useMemo(() => {
+    const usedIngredientIds = new Set<string>();
+    for (const recipe of recipes) {
+      for (const item of recipe.ingredients) {
+        usedIngredientIds.add(item.ingredientId);
+      }
+    }
+    return ingredients
+      .filter((ingredient) => usedIngredientIds.has(ingredient.id))
+      .sort((left, right) => left.name.localeCompare(right.name, "fr"));
+  }, [recipes, ingredients]);
+
+  const hasActiveFilters = selectedIngredients.length > 0;
+
+  const filteredRecipes = useMemo(() => {
+    if (selectedIngredients.length === 0) {
+      return recipes;
+    }
+
+    return recipes.filter((recipe) =>
+      selectedIngredients.every((ingredient) =>
+        recipe.ingredients.some((item) => item.ingredientId === ingredient.id),
       ),
-    [recipes, search],
-  );
+    );
+  }, [recipes, selectedIngredients]);
 
   const cardDataByRecipeId = useMemo(() => {
     const entries = new Map<
@@ -218,16 +244,58 @@ export function RecipeList({
       </div>
 
       <div className="mb-6 flex flex-col gap-3 sm:flex-row sm:items-end">
-        <InputGroup className="flex-1 rounded-full">
-          <InputGroupAddon align="inline-start">
-            <Search />
-          </InputGroupAddon>
-          <InputGroupInput
-            value={search}
-            onChange={(event) => setSearch(event.target.value)}
-            placeholder="Rechercher une recette"
-          />
-        </InputGroup>
+        <div className="min-w-0 flex-1">
+          <Combobox
+            multiple
+            items={recipeIngredientOptions}
+            value={selectedIngredients}
+            itemToStringLabel={(item) => item.name}
+            itemToStringValue={(item) => item.name}
+            isItemEqualToValue={(left, right) => left.id === right.id}
+            onValueChange={(value) => setSelectedIngredients(value)}
+          >
+            <div
+              ref={comboboxAnchorRef}
+              className="flex min-h-9 w-full items-center gap-2 rounded-full border border-input bg-background px-3 py-1.5 shadow-xs transition-[color,box-shadow] focus-within:border-ring focus-within:ring-3 focus-within:ring-ring/50"
+            >
+              <Search className="size-4 shrink-0 text-muted-foreground" />
+              <ComboboxChips className="min-h-0 flex-1 gap-1 border-0 bg-transparent p-0 shadow-none focus-within:border-0 focus-within:ring-0 dark:bg-transparent">
+                <ComboboxValue>
+                  {(value: IngredientRecord[]) => (
+                    <>
+                      {value.map((ingredient) => (
+                        <ComboboxChip key={ingredient.id} aria-label={ingredient.name}>
+                          {ingredient.name}
+                        </ComboboxChip>
+                      ))}
+                      <ComboboxChipsInput
+                        placeholder={
+                          value.length === 0
+                            ? "Rechercher par ingrédient…"
+                            : "Ajouter un ingrédient…"
+                        }
+                        className="min-w-24 flex-1 bg-transparent"
+                      />
+                    </>
+                  )}
+                </ComboboxValue>
+              </ComboboxChips>
+            </div>
+            <ComboboxContent anchor={comboboxAnchorRef}>
+              <ComboboxEmpty>Aucun ingrédient trouvé.</ComboboxEmpty>
+              <ComboboxList>
+                {(option) => (
+                  <ComboboxItem key={option.id} value={option}>
+                    <div className="flex min-w-0 items-center gap-3">
+                      <EntityImage src={ingredientImageUrl(option)} label={option.name} size="sm" />
+                      <span className="truncate font-medium">{option.name}</span>
+                    </div>
+                  </ComboboxItem>
+                )}
+              </ComboboxList>
+            </ComboboxContent>
+          </Combobox>
+        </div>
 
         <Field label="Portions" className="w-auto shrink-0">
           <Input
@@ -270,7 +338,9 @@ export function RecipeList({
       {filteredRecipes.length === 0 ? (
         <Empty className="border-border bg-card">
           <EmptyDescription>
-            {search ? "Aucune recette ne correspond à votre recherche." : "Aucune recette pour le moment."}
+            {hasActiveFilters
+              ? "Aucune recette ne contient tous ces ingrédients."
+              : "Aucune recette pour le moment."}
           </EmptyDescription>
         </Empty>
       ) : (
