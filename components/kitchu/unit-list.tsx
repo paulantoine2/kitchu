@@ -67,7 +67,10 @@ function UnitTableRow({ unit }: { unit: UnitRecord }) {
       <TableCell className="font-semibold tabular-nums">{unit.symbol}</TableCell>
       <TableCell className="max-w-[280px] whitespace-normal">
         {isConfigurable ? (
-          <Link href={`/units/${unit.id}`} className="font-medium hover:underline">
+          <Link
+            href={`/units/${unit.id}`}
+            className="font-medium underline-offset-4 transition-colors hover:text-primary hover:underline"
+          >
             {unit.name}
           </Link>
         ) : (
@@ -110,11 +113,11 @@ export function UnitList({
   const configurableCount = filteredUnits.filter((unit) => !isHardcodedMeasurementKind(unit.kind)).length;
 
   return (
-    <div className="mx-auto max-w-[1480px] px-4 py-6 lg:px-8">
-      <div className="mb-6 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+    <div className="mx-auto max-w-[1480px] animate-fade-in px-4 py-8 lg:px-8">
+      <div className="mb-8 flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
         <div>
-          <h1 className="text-xl font-semibold">Unités</h1>
-          <p className="text-sm text-muted-foreground">
+          <h1 className="text-2xl font-semibold tracking-tight md:text-3xl">Unités</h1>
+          <p className="mt-1 text-sm text-muted-foreground">
             {filteredUnits.length} unité{filteredUnits.length !== 1 ? "s" : ""}
             {configurableCount !== filteredUnits.length && (
               <> · {configurableCount} configurable{configurableCount !== 1 ? "s" : ""}</>
@@ -139,19 +142,19 @@ export function UnitList({
       </InputGroup>
 
       {filteredUnits.length === 0 ? (
-        <Empty className="border-border bg-card">
+        <Empty className="border border-dashed border-border/80 bg-card/50 py-16">
           <EmptyDescription>
             {search ? "Aucune unité ne correspond à votre recherche." : "Aucune unité pour le moment."}
           </EmptyDescription>
         </Empty>
       ) : (
         <>
-          <ItemGroup className="gap-2 md:hidden">
+          <ItemGroup className="stagger-children gap-2 md:hidden">
             {filteredUnits.map((unit) => (
               <UnitMobileItem key={unit.id} unit={unit} />
             ))}
           </ItemGroup>
-          <div className="hidden overflow-hidden rounded-lg border border-border bg-card md:block">
+          <div className="hidden animate-fade-up overflow-hidden rounded-2xl bg-card shadow-soft ring-1 ring-foreground/[0.05] md:block dark:ring-foreground/[0.08]">
             <Table>
               <TableHeader>
                 <TableRow>

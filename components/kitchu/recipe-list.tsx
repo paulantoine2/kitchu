@@ -139,40 +139,44 @@ function RecipeCard({
   const cartButtonLabel = isInCart ? "Ajuster le panier" : "Ajouter au panier";
 
   return (
-    <Card className="overflow-hidden transition-shadow hover:shadow-md">
+    <Card className="group/recipe-card gap-3 overflow-hidden py-0 transition-[transform,box-shadow] duration-300 ease-out hover:-translate-y-1 hover:shadow-lifted has-data-[slot=card-footer]:pb-0">
       <Link
         href={`/recipes/${recipe.id}`}
         aria-label={`Voir la recette ${recipe.name}`}
-        className="block rounded-t-xl outline-none focus-visible:ring-3 focus-visible:ring-ring/50"
+        className="block rounded-t-2xl outline-none focus-visible:ring-3 focus-visible:ring-ring/50"
       >
-        <div className="relative aspect-[4/3] overflow-hidden bg-primary/10">
+        <div className="relative aspect-[4/3] overflow-hidden bg-accent">
           {imageUrl ? (
             // eslint-disable-next-line @next/next/no-img-element
-            <img src={imageUrl} alt="" className="size-full object-cover" />
+            <img
+              src={imageUrl}
+              alt=""
+              className="size-full object-cover transition-transform duration-500 ease-out group-hover/recipe-card:scale-[1.04]"
+            />
           ) : (
-            <div className="flex size-full items-center justify-center text-4xl font-semibold text-primary">
+            <div className="flex size-full items-center justify-center text-4xl font-semibold text-primary/70">
               {recipe.name.trim().charAt(0).toUpperCase() || "K"}
             </div>
           )}
           {isInCart ? (
-            <Badge className="absolute top-2 left-2 shadow-md">Dans le panier</Badge>
+            <Badge className="absolute top-3 left-3 shadow-soft">Dans le panier</Badge>
           ) : (
             matchPercent !== null && (
-              <div className="absolute top-2 left-2">
+              <div className="absolute top-3 left-3">
                 <RecipeMatchGauge percent={matchPercent} size={44} framed />
               </div>
             )
           )}
         </div>
-        <CardHeader className="pt-3">
-          <CardTitle className="line-clamp-2 text-base leading-snug">{recipe.name}</CardTitle>
+        <CardHeader className="pt-4">
+          <CardTitle className="line-clamp-2 text-lg leading-snug">{recipe.name}</CardTitle>
           {totalMinutes > 0 && <CardDescription>{totalMinutes} min</CardDescription>}
         </CardHeader>
-        <CardContent>
+        <CardContent className="pb-4">
           <p className="text-[11px] font-semibold uppercase tracking-wide text-muted-foreground">
             {priceMode === "theoretical" ? "Prix théorique" : "Prix d'achat"}
           </p>
-          <p className="mt-0.5 text-xl font-semibold tabular-nums">
+          <p className="mt-0.5 text-xl font-semibold tabular-nums tracking-tight">
             {pricePerPortion !== null ? (
               <>
                 {formatCurrency(pricePerPortion)}
@@ -185,7 +189,7 @@ function RecipeCard({
           <PartialEstimateIndicator severity={estimateSeverity} className="mt-2" />
         </CardContent>
       </Link>
-      <CardFooter className="border-t bg-muted/30">
+      <CardFooter className="border-t-0 bg-transparent pt-0">
         <Button
           size="sm"
           variant={isInCart ? "secondary" : "default"}
@@ -343,11 +347,11 @@ export function RecipeList({
   }, [filteredRecipes, cardDataByRecipeId, sortMode]);
 
   return (
-    <div className="mx-auto max-w-[1480px] px-4 py-6 lg:px-8">
-      <div className="mb-6 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+    <div className="mx-auto max-w-[1480px] animate-fade-in px-4 py-8 lg:px-8">
+      <div className="mb-8 flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
         <div>
-          <h1 className="text-xl font-semibold">Recettes</h1>
-          <p className="text-sm text-muted-foreground">
+          <h1 className="text-2xl font-semibold tracking-tight md:text-3xl">Recettes</h1>
+          <p className="mt-1 text-sm text-muted-foreground">
             {filteredRecipes.length} recette{filteredRecipes.length !== 1 ? "s" : ""}
           </p>
         </div>
@@ -451,15 +455,15 @@ export function RecipeList({
       </div>
 
       {filteredRecipes.length === 0 ? (
-        <Empty className="border-border bg-card">
+        <Empty className="border border-dashed border-border/80 bg-card/50 py-16">
           <EmptyDescription>
             {hasActiveFilters
               ? "Aucune recette ne contient tous ces ingrédients."
-              : "Aucune recette pour le moment."}
+              : "Aucune recette pour le moment. Créez votre première recette pour commencer."}
           </EmptyDescription>
         </Empty>
       ) : (
-        <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+        <div className="stagger-children grid gap-5 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
           {sortedRecipes.map((recipe) => {
             const cardData = cardDataByRecipeId.get(recipe.id);
             return (

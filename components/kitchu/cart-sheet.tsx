@@ -1,6 +1,6 @@
 "use client";
 
-import { Trash2 } from "lucide-react";
+import { ShoppingBasket, Trash2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Separator } from "@/components/ui/separator";
@@ -156,8 +156,14 @@ export function CartSheet({
         </SheetHeader>
 
         {isEmpty ? (
-          <div className="flex-1 px-4 py-10 text-center text-sm text-muted-foreground">
-            Votre panier est vide.
+          <div className="flex flex-1 animate-fade-up flex-col items-center justify-center gap-3 px-4 py-10 text-center">
+            <div className="flex size-14 items-center justify-center rounded-full bg-accent text-accent-foreground">
+              <ShoppingBasket className="size-6" />
+            </div>
+            <p className="text-sm font-medium">Votre panier est vide</p>
+            <p className="max-w-60 text-sm text-muted-foreground">
+              Ajoutez des recettes pour composer votre liste d&apos;achats.
+            </p>
           </div>
         ) : (
           <div className="flex min-h-0 flex-1 flex-col gap-6 overflow-y-auto px-4 py-4">
@@ -284,7 +290,7 @@ export function CartSheet({
           <SheetFooter className="sticky bottom-0 z-10 mt-auto shrink-0 gap-3 border-t border-border bg-card/95 px-4 py-4 backdrop-blur supports-[padding:max(0px)]:pb-[max(1rem,env(safe-area-inset-bottom))]">
             <div className="flex w-full items-center justify-between gap-3 text-sm">
               <span className="font-medium">Total à payer</span>
-              <span className="text-base font-semibold tabular-nums">
+              <span className="text-lg font-semibold tabular-nums tracking-tight">
                 {summary.totalPrice.total !== null ? formatCurrency(summary.totalPrice.total) : "—"}
                 {summary.totalPrice.total !== null && !summary.totalPrice.isComplete && (
                   <span className="ml-1 text-xs font-normal text-muted-foreground">· partiel</span>

@@ -85,7 +85,7 @@ export function RecipeEditorPage({
       onCartPortionsChange={cart.setPortions}
       onCartRemoveRecipe={cart.remove}
     >
-      <div className="mx-auto max-w-[1480px] px-4 py-6 lg:px-8">
+      <div className="mx-auto max-w-[1480px] px-4 py-8 lg:px-8">
         <Button
           variant="ghost"
           size="sm"

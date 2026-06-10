@@ -35,7 +35,7 @@ export function KitchuNotFoundPage() {
       onCartRemoveRecipe={() => {}}
     >
       <div className="mx-auto flex max-w-[1480px] flex-1 items-center justify-center px-4 py-16 lg:px-8">
-        <Empty className="max-w-md border-border bg-card">
+        <Empty className="max-w-md animate-fade-up rounded-2xl bg-card py-12 shadow-soft ring-1 ring-foreground/[0.05] dark:ring-foreground/[0.08]">
           <EmptyHeader>
             <EmptyMedia variant="icon">
               <FileQuestion />

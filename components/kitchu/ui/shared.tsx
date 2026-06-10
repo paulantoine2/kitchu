@@ -155,10 +155,10 @@ export function LibraryListItem({
       variant={active ? "outline" : "default"}
       size="xs"
       className={cn(
-        "w-full cursor-pointer border py-1.5 text-left transition-shadow",
+        "w-full cursor-pointer border py-1.5 text-left transition-[background-color,box-shadow,border-color] duration-200",
         active
-          ? "border-foreground bg-card shadow-md"
-          : "border-transparent hover:border-border hover:bg-card hover:shadow-sm",
+          ? "border-primary/30 bg-accent shadow-soft"
+          : "border-transparent hover:bg-muted/60",
       )}
       render={<button type="button" onClick={onClick} />}
     >

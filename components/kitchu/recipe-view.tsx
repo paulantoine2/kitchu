@@ -192,9 +192,12 @@ function RecipeIngredientItem({
     </div>
   );
 
+  const itemClassName =
+    "flex-col items-stretch gap-0 rounded-xl p-0 transition-colors duration-150 hover:bg-muted/40";
+
   if (!showPurchaseDetails || !estimate) {
     return (
-      <Item variant="outline" size="sm" className="flex-col items-stretch gap-0 p-0">
+      <Item size="sm" className={itemClassName}>
         {compactRow}
       </Item>
     );
@@ -202,10 +205,10 @@ function RecipeIngredientItem({
 
   return (
     <Collapsible>
-      <Item variant="outline" size="sm" className="flex-col items-stretch gap-0 p-0">
+      <Item size="sm" className={itemClassName}>
         {compactRow}
         <CollapsibleContent className="flex flex-col">
-          <Separator />
+          <Separator className="opacity-60" />
           <ItemFooter className="p-3 pt-2.5">
             <IngredientPurchaseDetails estimate={estimate} ingredient={item.ingredient} applyStock={applyStock} />
           </ItemFooter>
@@ -231,8 +234,8 @@ function RecipeHeaderPrice({
   return (
     <div
       className={cn(
-        "flex min-w-0 flex-1 flex-col rounded-lg border px-4 py-3",
-        emphasized ? "border-primary/25 bg-primary/5" : "border-border bg-card/80",
+        "flex min-w-0 flex-1 flex-col rounded-xl px-4 py-3.5",
+        emphasized ? "bg-accent" : "bg-muted/50",
         className,
       )}
     >
@@ -240,7 +243,7 @@ function RecipeHeaderPrice({
       <p
         className={cn(
           "mt-1 min-h-8 text-2xl font-semibold tabular-nums tracking-tight sm:text-3xl",
-          emphasized ? "text-primary" : "text-foreground",
+          emphasized ? "text-accent-foreground" : "text-foreground",
           perPortion === null && total === null && "invisible",
         )}
         aria-hidden={perPortion === null && total === null}
@@ -391,7 +394,7 @@ function IngredientPurchaseDetails({
                 key={productItem.product.id}
                 href={productHref(ingredient.id, productItem.product.id)}
                 className={cn(
-                  "flex w-full items-center gap-3 rounded-lg border border-border bg-card p-3 shadow-sm transition-colors hover:border-primary/30 hover:bg-primary/5",
+                  "flex w-full items-center gap-3 rounded-xl bg-muted/50 p-3 transition-colors duration-150 hover:bg-accent",
                   entityLinkClassName,
                 )}
               >
@@ -469,7 +472,7 @@ function RecipeIngredientsPanel({
             <ShoppingBag />
           </div>
           <div className="min-w-0 flex-1">
-            <CardTitle>Ingrédients</CardTitle>
+            <CardTitle className="text-lg">Ingrédients</CardTitle>
             <CardDescription>
               Quantités pour {portionCount} portion{portionCount > 1 ? "s" : ""}
               {hasEstimates
@@ -487,7 +490,7 @@ function RecipeIngredientsPanel({
             Aucun ingrédient dans cette recette.
           </div>
         ) : (
-          <ItemGroup className="gap-3">
+          <ItemGroup className="gap-0 divide-y divide-border/50">
             {sortedIngredients.map((item) => {
               const quantity = formatIngredientQuantity(item, portions, globalRatios, units);
               const estimate = estimateByIngredientId.get(item.ingredientId);
@@ -592,7 +595,7 @@ export function RecipeView({
   })();
 
   return (
-    <section className="flex min-w-0 flex-col gap-6">
+    <section className="flex min-w-0 animate-fade-in flex-col gap-6">
       <Card>
         <div className="grid items-start gap-4 md:grid-cols-[minmax(12rem,20rem)_minmax(0,1fr)] md:gap-6">
           <div className="relative mx-4 mt-4 aspect-[4/3] overflow-hidden rounded-xl bg-primary/10 md:mx-0 md:mb-4 md:ml-4 md:mt-4 md:aspect-square">
@@ -616,9 +619,9 @@ export function RecipeView({
               </div>
               <div className="flex items-start justify-between gap-4">
                 <div className="min-w-0 flex-1">
-                  <h1 className="text-2xl font-semibold leading-tight tracking-tight sm:text-3xl">{recipe.name}</h1>
+                  <h1 className="text-3xl font-semibold leading-tight tracking-tight sm:text-4xl">{recipe.name}</h1>
                   {recipe.description && (
-                    <p className="mt-2 max-w-2xl text-sm leading-6 text-muted-foreground">{recipe.description}</p>
+                    <p className="mt-3 max-w-2xl text-[15px] leading-7 text-muted-foreground">{recipe.description}</p>
                   )}
                 </div>
                 {hasEstimates && inventoryMatch.percent !== null && (
@@ -722,15 +725,18 @@ export function RecipeView({
 
         <Card>
           <CardHeader>
-            <CardTitle>Étapes</CardTitle>
+            <CardTitle className="text-lg">Étapes</CardTitle>
+            <CardDescription>
+              {sortedSteps.length} étape{sortedSteps.length > 1 ? "s" : ""} de préparation
+            </CardDescription>
           </CardHeader>
-          <CardContent className="flex flex-col gap-3">
+          <CardContent className="flex flex-col">
             {sortedSteps.map((step, index) => (
-              <div key={step.id} className="flex gap-3 rounded-lg border border-border bg-card p-3 shadow-sm">
-                <div className="flex size-8 shrink-0 items-center justify-center rounded-full bg-primary text-sm font-semibold text-primary-foreground">
+              <div key={step.id} className="group/step flex gap-4 py-3.5 first:pt-0 last:pb-0">
+                <div className="flex size-8 shrink-0 items-center justify-center rounded-full bg-accent text-sm font-semibold text-accent-foreground transition-colors duration-200 group-hover/step:bg-primary group-hover/step:text-primary-foreground">
                   {index + 1}
                 </div>
-                <p className="min-w-0 flex-1 pt-1 text-sm leading-6 text-foreground">{step.instruction}</p>
+                <p className="min-w-0 flex-1 pt-1 text-[15px] leading-7 text-foreground">{step.instruction}</p>
               </div>
             ))}
           </CardContent>

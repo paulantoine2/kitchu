@@ -97,11 +97,11 @@ export function IngredientEditor({
   }
 
   return (
-    <section className="mx-auto flex w-full max-w-3xl flex-col gap-12 pb-20">
+    <section className="mx-auto flex w-full max-w-3xl animate-fade-in flex-col gap-12 pb-20">
       <div>
         <div className="mb-6 flex min-w-0 items-center gap-4">
           <EntityImage src={draft.imageUrl} label={draft.name || "Ingrédient"} size="md" className="shrink-0" />
-          <h1 className="text-2xl font-semibold">{draft.id ? "Modifier l'ingrédient" : "Nouvel ingrédient"}</h1>
+          <h1 className="text-2xl font-semibold tracking-tight md:text-3xl">{draft.id ? "Modifier l'ingrédient" : "Nouvel ingrédient"}</h1>
         </div>
         <div className="flex flex-col gap-6">
           <Field label="Nom">

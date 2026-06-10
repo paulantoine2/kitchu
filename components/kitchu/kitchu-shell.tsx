@@ -41,14 +41,17 @@ export function KitchuShell({
 
   return (
     <main className="min-h-screen bg-background text-foreground">
-      <header className="sticky top-0 z-20 border-b border-border bg-card/95 backdrop-blur">
+      <header className="sticky top-0 z-20 border-b border-border/60 bg-background/85 backdrop-blur-md">
         <div className="mx-auto flex max-w-[1480px] min-w-0 flex-col gap-3 px-4 py-3 md:flex-row md:items-center md:justify-between md:gap-4 md:py-4 lg:px-8">
           <div className="flex min-w-0 items-center gap-3">
-            <Link href="/recipes" className="flex size-10 shrink-0 items-center justify-center rounded-lg bg-primary text-primary-foreground shadow-sm md:size-11">
+            <Link
+              href="/recipes"
+              className="flex size-10 shrink-0 items-center justify-center rounded-xl bg-gradient-to-br from-primary to-primary/80 text-primary-foreground shadow-soft transition-transform duration-200 ease-out hover:scale-105 active:scale-95 md:size-11"
+            >
               <ChefHat className="size-5 md:size-6" />
             </Link>
             <div className="min-w-0">
-              <p className="text-xl font-semibold tracking-normal md:text-2xl">Kitchu</p>
+              <p className="text-xl font-semibold tracking-tight md:text-2xl">Kitchu</p>
               <p className="hidden text-sm text-muted-foreground md:block">
                 Recettes, ingrédients, unités et produits réels.
               </p>
@@ -72,7 +75,7 @@ export function KitchuShell({
             </Button>
             <ModeToggle />
             <Tabs value={activeTab} className="min-w-0 flex-1 md:flex-none">
-              <TabsList className="h-auto w-full max-w-full rounded-full border border-border bg-card p-1 shadow-sm md:w-auto">
+              <TabsList className="h-auto w-full max-w-full rounded-full border border-border/60 bg-card p-1 shadow-soft md:w-auto">
                 <TabsTrigger
                   value="recipes"
                   className="flex-1 rounded-full px-2.5 md:flex-none md:px-4"

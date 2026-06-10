@@ -90,7 +90,10 @@ function IngredientTableRow({ ingredient }: { ingredient: IngredientRecord }) {
         <EntityImage src={imageUrl} label={ingredient.name} size="xs" />
       </TableCell>
       <TableCell className="max-w-[280px] whitespace-normal">
-        <Link href={`/ingredients/${ingredient.id}`} className="font-medium hover:underline">
+        <Link
+          href={`/ingredients/${ingredient.id}`}
+          className="font-medium underline-offset-4 transition-colors hover:text-primary hover:underline"
+        >
           {ingredient.name}
         </Link>
       </TableCell>
@@ -150,11 +153,11 @@ export function IngredientList({
   );
 
   return (
-    <div className="mx-auto max-w-[1480px] px-4 py-6 lg:px-8">
-      <div className="mb-6 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+    <div className="mx-auto max-w-[1480px] animate-fade-in px-4 py-8 lg:px-8">
+      <div className="mb-8 flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
         <div>
-          <h1 className="text-xl font-semibold">Ingrédients</h1>
-          <p className="text-sm text-muted-foreground">
+          <h1 className="text-2xl font-semibold tracking-tight md:text-3xl">Ingrédients</h1>
+          <p className="mt-1 text-sm text-muted-foreground">
             {filteredIngredients.length} ingrédient{filteredIngredients.length !== 1 ? "s" : ""}
           </p>
         </div>
@@ -176,19 +179,19 @@ export function IngredientList({
       </InputGroup>
 
       {filteredIngredients.length === 0 ? (
-        <Empty className="border-border bg-card">
+        <Empty className="border border-dashed border-border/80 bg-card/50 py-16">
           <EmptyDescription>
             {search ? "Aucun ingrédient ne correspond à votre recherche." : "Aucun ingrédient pour le moment."}
           </EmptyDescription>
         </Empty>
       ) : (
         <>
-          <ItemGroup className="gap-2 md:hidden">
+          <ItemGroup className="stagger-children gap-2 md:hidden">
             {filteredIngredients.map((ingredient) => (
               <IngredientMobileItem key={ingredient.id} ingredient={ingredient} />
             ))}
           </ItemGroup>
-          <div className="hidden overflow-hidden rounded-lg border border-border bg-card md:block">
+          <div className="hidden animate-fade-up overflow-hidden rounded-2xl bg-card shadow-soft ring-1 ring-foreground/[0.05] md:block dark:ring-foreground/[0.08]">
             <Table>
               <TableHeader>
                 <TableRow>

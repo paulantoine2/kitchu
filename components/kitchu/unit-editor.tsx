@@ -115,11 +115,11 @@ export function UnitEditor({
   }
 
   return (
-    <section className="mx-auto flex w-full max-w-3xl flex-col gap-12 pb-20">
+    <section className="mx-auto flex w-full max-w-3xl animate-fade-in flex-col gap-12 pb-20">
       <div>
         <div className="mb-6 flex flex-col gap-2 sm:flex-row sm:items-start sm:justify-between">
           <div className="min-w-0">
-            <h1 className="text-2xl font-semibold">{draft.id ? "Modifier l'unité" : "Nouvelle unité"}</h1>
+            <h1 className="text-2xl font-semibold tracking-tight md:text-3xl">{draft.id ? "Modifier l'unité" : "Nouvelle unité"}</h1>
             <p className="text-sm text-muted-foreground">Base commune utilisée par les ingrédients.</p>
           </div>
           <Badge className="w-fit shrink-0">{units.length} unités</Badge>

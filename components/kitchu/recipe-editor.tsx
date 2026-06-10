@@ -339,14 +339,14 @@ export function RecipeEditor({
   const dialogProductComplete = isDialogProductComplete(dialogProduct);
 
   return (
-    <section className="mx-auto flex w-full max-w-3xl flex-col gap-12 pb-20">
+    <section className="mx-auto flex w-full max-w-3xl animate-fade-in flex-col gap-12 pb-20">
       <HelloFreshImporter busy={busy} onImport={onImport} onError={onImportError} />
       <div>
         <div className="mb-6 flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
           <div className="flex min-w-0 items-center gap-4">
             <EntityImage src={draftRecipeImageUrl(draft, ingredients)} label={draft.name || "Recette"} size="md" className="shrink-0" />
             <div className="min-w-0">
-              <h1 className="text-2xl font-semibold">{draft.id ? "Modifier la recette" : "Nouvelle recette"}</h1>
+              <h1 className="text-2xl font-semibold tracking-tight md:text-3xl">{draft.id ? "Modifier la recette" : "Nouvelle recette"}</h1>
               <p className="text-sm text-muted-foreground">Les quantités sont enregistrées pour une portion.</p>
             </div>
           </div>
@@ -433,10 +433,10 @@ export function RecipeEditor({
             return (
               <div
                 key={row.key}
-                className={`rounded-xl border p-4 shadow-sm ${
+                className={`rounded-xl border p-4 shadow-soft transition-shadow duration-200 ${
                   row.importStatus && row.importStatus !== "matched"
                     ? "border-amber-200 bg-amber-50/50"
-                    : "border-border bg-card"
+                    : "border-border/60 bg-card"
                 }`}
               >
                 <div className="flex flex-col gap-4 lg:flex-row lg:items-end">
@@ -604,7 +604,7 @@ export function RecipeEditor({
         <div className="flex flex-col gap-3">
           {draft.steps.map((step, index) => (
             <div key={step.key} className="flex gap-3 sm:grid sm:grid-cols-[36px_1fr_auto] sm:items-center">
-              <div className="flex size-9 shrink-0 items-center justify-center rounded-full bg-primary text-sm font-semibold text-primary-foreground">
+              <div className="flex size-9 shrink-0 items-center justify-center rounded-full bg-accent text-sm font-semibold text-accent-foreground">
                 {index + 1}
               </div>
               <Input
