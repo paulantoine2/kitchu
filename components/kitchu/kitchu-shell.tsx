@@ -2,6 +2,8 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import { AnimatePresence, motion } from "framer-motion";
+import { cn } from "@/lib/utils";
 import { BookOpen, ChefHat, Package, ShoppingCart, Utensils } from "lucide-react";
 import { ModeToggle } from "@/components/mode-toggle";
 import { CartSheet } from "@/components/kitchu/cart-sheet";
@@ -40,8 +42,13 @@ export function KitchuShell({
   const pathname = usePathname();
 
   return (
-    <main className="min-h-screen bg-background text-foreground">
-      <header className="sticky top-0 z-20 border-b border-border bg-card/95 backdrop-blur">
+    <main
+      className={cn(
+        "min-h-screen bg-background text-foreground transition-all duration-300 ease-out",
+        cartOpen && "scale-[0.98] rounded-xl overflow-hidden opacity-80"
+      )}
+    >
+      <header className="sticky top-0 z-20 border-b border-white/10 bg-background/60 backdrop-blur-xl">
         <div className="mx-auto flex max-w-[1480px] min-w-0 flex-col gap-3 px-4 py-3 md:flex-row md:items-center md:justify-between md:gap-4 md:py-4 lg:px-8">
           <div className="flex min-w-0 items-center gap-3">
             <Link href="/recipes" className="flex size-10 shrink-0 items-center justify-center rounded-lg bg-primary text-primary-foreground shadow-sm md:size-11">
@@ -72,10 +79,10 @@ export function KitchuShell({
             </Button>
             <ModeToggle />
             <Tabs value={activeTab} className="min-w-0 flex-1 md:flex-none">
-              <TabsList className="h-auto w-full max-w-full rounded-full border border-border bg-card p-1 shadow-sm md:w-auto">
+              <TabsList className="h-auto w-full max-w-full md:w-auto">
                 <TabsTrigger
                   value="recipes"
-                  className="flex-1 rounded-full px-2.5 md:flex-none md:px-4"
+                  className="relative flex-1 rounded-full px-2.5 md:flex-none md:px-4"
                   nativeButton={false}
                   render={
                     <Link
@@ -85,12 +92,21 @@ export function KitchuShell({
                     />
                   }
                 >
-                  <BookOpen />
-                  <span className="hidden md:inline">Recettes</span>
+                  {activeTab === "recipes" && (
+                    <motion.div
+                      layoutId="active-tab-indicator"
+                      className="absolute inset-0 rounded-full bg-white shadow-[0_2px_8px_rgba(0,0,0,0.08)] dark:bg-input/30"
+                      transition={{ type: "spring", stiffness: 400, damping: 30 }}
+                    />
+                  )}
+                  <span className="relative z-10 flex items-center gap-1.5">
+                    <BookOpen />
+                    <span className="hidden md:inline">Recettes</span>
+                  </span>
                 </TabsTrigger>
                 <TabsTrigger
                   value="ingredients"
-                  className="flex-1 rounded-full px-2.5 md:flex-none md:px-4"
+                  className="relative flex-1 rounded-full px-2.5 md:flex-none md:px-4"
                   nativeButton={false}
                   render={
                     <Link
@@ -100,12 +116,21 @@ export function KitchuShell({
                     />
                   }
                 >
-                  <Utensils />
-                  <span className="hidden md:inline">Ingrédients</span>
+                  {activeTab === "ingredients" && (
+                    <motion.div
+                      layoutId="active-tab-indicator"
+                      className="absolute inset-0 rounded-full bg-white shadow-[0_2px_8px_rgba(0,0,0,0.08)] dark:bg-input/30"
+                      transition={{ type: "spring", stiffness: 400, damping: 30 }}
+                    />
+                  )}
+                  <span className="relative z-10 flex items-center gap-1.5">
+                    <Utensils />
+                    <span className="hidden md:inline">Ingrédients</span>
+                  </span>
                 </TabsTrigger>
                 <TabsTrigger
                   value="units"
-                  className="flex-1 rounded-full px-2.5 md:flex-none md:px-4"
+                  className="relative flex-1 rounded-full px-2.5 md:flex-none md:px-4"
                   nativeButton={false}
                   render={
                     <Link
@@ -115,8 +140,17 @@ export function KitchuShell({
                     />
                   }
                 >
-                  <Package />
-                  <span className="hidden md:inline">Unités</span>
+                  {activeTab === "units" && (
+                    <motion.div
+                      layoutId="active-tab-indicator"
+                      className="absolute inset-0 rounded-full bg-white shadow-[0_2px_8px_rgba(0,0,0,0.08)] dark:bg-input/30"
+                      transition={{ type: "spring", stiffness: 400, damping: 30 }}
+                    />
+                  )}
+                  <span className="relative z-10 flex items-center gap-1.5">
+                    <Package />
+                    <span className="hidden md:inline">Unités</span>
+                  </span>
                 </TabsTrigger>
               </TabsList>
             </Tabs>
@@ -124,7 +158,17 @@ export function KitchuShell({
         </div>
       </header>
 
-      {children}
+      <AnimatePresence mode="wait">
+        <motion.div
+          key={activeTab}
+          initial={{ opacity: 0, y: 10 }}
+          animate={{ opacity: 1, y: 0 }}
+          exit={{ opacity: 0, y: -10 }}
+          transition={{ duration: 0.2 }}
+        >
+          {children}
+        </motion.div>
+      </AnimatePresence>
 
       <CartSheet
         open={cartOpen}

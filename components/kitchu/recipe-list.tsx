@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { useMemo, useState, useSyncExternalStore } from "react";
-import { Plus, Search, ShoppingCart } from "lucide-react";
+import { BookOpen, Plus, Search, ShoppingCart } from "lucide-react";
 import { ingredientImageUrl, recipeImageUrl } from "@/components/kitchu/images";
 import {
   computeRecipeListMatch,
@@ -27,12 +27,14 @@ import {
   ComboboxValue,
   useComboboxAnchor,
 } from "@/components/ui/combobox";
-import { Empty, EmptyDescription } from "@/components/ui/empty";
+import { Empty, EmptyDescription, EmptyMedia, EmptyTitle } from "@/components/ui/empty";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { NativeSelect, NativeSelectOption } from "@/components/ui/native-select";
 import { Switch } from "@/components/ui/switch";
 import { cn, formatCurrency } from "@/lib/utils";
+
+import { AnimatePresence, motion } from "framer-motion";
 
 const DEFAULT_LIST_PORTIONS = 2;
 
@@ -139,65 +141,76 @@ function RecipeCard({
   const cartButtonLabel = isInCart ? "Ajuster le panier" : "Ajouter au panier";
 
   return (
-    <Card className="overflow-hidden transition-shadow hover:shadow-md">
-      <Link
-        href={`/recipes/${recipe.id}`}
-        aria-label={`Voir la recette ${recipe.name}`}
-        className="block rounded-t-xl outline-none focus-visible:ring-3 focus-visible:ring-ring/50"
-      >
-        <div className="relative aspect-[4/3] overflow-hidden bg-primary/10">
-          {imageUrl ? (
-            // eslint-disable-next-line @next/next/no-img-element
-            <img src={imageUrl} alt="" className="size-full object-cover" />
-          ) : (
-            <div className="flex size-full items-center justify-center text-4xl font-semibold text-primary">
-              {recipe.name.trim().charAt(0).toUpperCase() || "K"}
-            </div>
-          )}
-          {isInCart ? (
-            <Badge className="absolute top-2 left-2 shadow-md">Dans le panier</Badge>
-          ) : (
-            matchPercent !== null && (
-              <div className="absolute top-2 left-2">
-                <RecipeMatchGauge percent={matchPercent} size={44} framed />
-              </div>
-            )
-          )}
-        </div>
-        <CardHeader className="pt-3">
-          <CardTitle className="line-clamp-2 text-base leading-snug">{recipe.name}</CardTitle>
-          {totalMinutes > 0 && <CardDescription>{totalMinutes} min</CardDescription>}
-        </CardHeader>
-        <CardContent>
-          <p className="text-[11px] font-semibold uppercase tracking-wide text-muted-foreground">
-            {priceMode === "theoretical" ? "Prix théorique" : "Prix d'achat"}
-          </p>
-          <p className="mt-0.5 text-xl font-semibold tabular-nums">
-            {pricePerPortion !== null ? (
-              <>
-                {formatCurrency(pricePerPortion)}
-                <span className="text-sm font-medium text-muted-foreground">/portion</span>
-              </>
-            ) : (
-              "—"
-            )}
-          </p>
-          <PartialEstimateIndicator severity={estimateSeverity} className="mt-2" />
-        </CardContent>
-      </Link>
-      <CardFooter className="border-t bg-muted/30">
-        <Button
-          size="sm"
-          variant={isInCart ? "secondary" : "default"}
-          className="w-full"
-          aria-label={`${cartButtonLabel} : ${recipe.name}`}
-          onClick={onAddToCart}
+    <motion.div
+      layout
+      initial={{ opacity: 0, y: 20 }}
+      animate={{ opacity: 1, y: 0 }}
+      exit={{ opacity: 0, scale: 0.9 }}
+      whileHover={{ y: -4, scale: 1.01 }}
+      transition={{ type: "spring", stiffness: 300, damping: 30 }}
+      className="h-full"
+    >
+      <Card className="h-full overflow-hidden transition-shadow hover:shadow-lg">
+        <Link
+          href={`/recipes/${recipe.id}`}
+          aria-label={`Voir la recette ${recipe.name}`}
+          className="block rounded-t-3xl outline-none focus-visible:ring-3 focus-visible:ring-ring/50"
         >
-          <ShoppingCart data-icon="inline-start" />
-          {cartButtonLabel}
-        </Button>
-      </CardFooter>
-    </Card>
+          <div className="relative aspect-[4/3] overflow-hidden bg-primary/10">
+            {imageUrl ? (
+              // eslint-disable-next-line @next/next/no-img-element
+              <img src={imageUrl} alt="" className="size-full object-cover ring-1 ring-inset ring-black/5" />
+            ) : (
+              <div className="flex size-full items-center justify-center text-4xl font-semibold text-primary">
+                {recipe.name.trim().charAt(0).toUpperCase() || "K"}
+              </div>
+            )}
+            {isInCart ? (
+              <Badge className="absolute top-3 left-3 shadow-md">Dans le panier</Badge>
+            ) : (
+              matchPercent !== null && (
+                <div className="absolute top-3 left-3">
+                  <RecipeMatchGauge percent={matchPercent} size={44} framed />
+                </div>
+              )
+            )}
+          </div>
+          <CardHeader className="pt-4">
+            <CardTitle className="line-clamp-2 text-balance text-base leading-snug">{recipe.name}</CardTitle>
+            {totalMinutes > 0 && <CardDescription className="tabular-nums">{totalMinutes} min</CardDescription>}
+          </CardHeader>
+          <CardContent>
+            <p className="text-[11px] font-semibold uppercase tracking-wide text-muted-foreground">
+              {priceMode === "theoretical" ? "Prix théorique" : "Prix d'achat"}
+            </p>
+            <p className="mt-0.5 text-xl font-semibold tabular-nums">
+              {pricePerPortion !== null ? (
+                <>
+                  {formatCurrency(pricePerPortion)}
+                  <span className="text-sm font-medium text-muted-foreground">/portion</span>
+                </>
+              ) : (
+                "—"
+              )}
+            </p>
+            <PartialEstimateIndicator severity={estimateSeverity} className="mt-2" />
+          </CardContent>
+        </Link>
+        <CardFooter className="mt-auto border-t bg-muted/30">
+          <Button
+            size="sm"
+            variant={isInCart ? "secondary" : "default"}
+            className="w-full"
+            aria-label={`${cartButtonLabel} : ${recipe.name}`}
+            onClick={onAddToCart}
+            render={<motion.button whileTap={{ scale: 0.96 }} />}
+          >
+            <ShoppingCart data-icon="inline-start" />
+            {cartButtonLabel}
+          </Button>
+        </CardFooter>
+      </Card>
+    </motion.div>
   );
 }
 
@@ -351,7 +364,7 @@ export function RecipeList({
             {filteredRecipes.length} recette{filteredRecipes.length !== 1 ? "s" : ""}
           </p>
         </div>
-        <Button size="sm" onClick={onNewRecipe} className="shrink-0 self-start sm:self-auto">
+        <Button size="sm" onClick={onNewRecipe} className="shrink-0 self-start sm:self-auto" render={<motion.button whileTap={{ scale: 0.96 }} />}>
           <Plus data-icon="inline-start" />
           Nouvelle recette
         </Button>
@@ -370,7 +383,7 @@ export function RecipeList({
           >
             <div
               ref={comboboxAnchorRef}
-              className="flex min-h-9 w-full items-center gap-2 rounded-full border border-input bg-background px-3 py-1.5 shadow-xs transition-[color,box-shadow] focus-within:border-ring focus-within:ring-3 focus-within:ring-ring/50"
+              className="flex min-h-12 w-full items-center gap-2 rounded-xl border border-transparent bg-muted/40 px-4 py-2 transition-colors hover:bg-muted/60 focus-within:bg-background focus-within:ring-2 focus-within:ring-primary/20 focus-within:shadow-sm"
             >
               <Search className="size-4 shrink-0 text-muted-foreground" />
               <ComboboxChips className="min-h-0 flex-1 gap-1 border-0 bg-transparent p-0 shadow-none focus-within:border-0 focus-within:ring-0 dark:bg-transparent">
@@ -451,31 +464,40 @@ export function RecipeList({
       </div>
 
       {filteredRecipes.length === 0 ? (
-        <Empty className="border-border bg-card">
-          <EmptyDescription>
-            {hasActiveFilters
-              ? "Aucune recette ne contient tous ces ingrédients."
-              : "Aucune recette pour le moment."}
-          </EmptyDescription>
-        </Empty>
+        <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }}>
+          <Empty className="border-transparent bg-muted/20">
+            <EmptyMedia variant="icon"><BookOpen /></EmptyMedia>
+            <EmptyTitle>Aucune recette trouvée</EmptyTitle>
+            <EmptyDescription>
+              {hasActiveFilters
+                ? "Aucune recette ne contient tous ces ingrédients."
+                : "Commencez par créer votre première recette."}
+            </EmptyDescription>
+            <Button className="mt-4" onClick={onNewRecipe} render={<motion.button whileTap={{ scale: 0.96 }} />}>
+              Créer une recette
+            </Button>
+          </Empty>
+        </motion.div>
       ) : (
-        <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
-          {sortedRecipes.map((recipe) => {
-            const cardData = cardDataByRecipeId.get(recipe.id);
-            return (
-              <RecipeCard
-                key={recipe.id}
-                recipe={recipe}
-                priceMode={priceMode}
-                pricePerPortion={cardData?.perPortion ?? null}
-                priceComplete={cardData?.isComplete ?? false}
-                matchPercent={cardData?.matchPercent ?? null}
-                isInCart={isInCart(recipe.id)}
-                onAddToCart={() => onAddToCart(recipe.id, portionCount)}
-              />
-            );
-          })}
-        </div>
+        <motion.div layout className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+          <AnimatePresence mode="popLayout">
+            {sortedRecipes.map((recipe) => {
+              const cardData = cardDataByRecipeId.get(recipe.id);
+              return (
+                <RecipeCard
+                  key={recipe.id}
+                  recipe={recipe}
+                  priceMode={priceMode}
+                  pricePerPortion={cardData?.perPortion ?? null}
+                  priceComplete={cardData?.isComplete ?? false}
+                  matchPercent={cardData?.matchPercent ?? null}
+                  isInCart={isInCart(recipe.id)}
+                  onAddToCart={() => onAddToCart(recipe.id, portionCount)}
+                />
+              );
+            })}
+          </AnimatePresence>
+        </motion.div>
       )}
     </div>
   );

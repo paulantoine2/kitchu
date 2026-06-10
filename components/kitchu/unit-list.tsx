@@ -2,12 +2,12 @@
 
 import Link from "next/link";
 import { useMemo, useState } from "react";
-import { Plus, Search } from "lucide-react";
+import { Package, Plus, Search } from "lucide-react";
 import type { UnitRecord } from "@/components/kitchu/types";
 import { isHardcodedMeasurementKind } from "@/components/kitchu/unit-helpers";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { Empty, EmptyDescription } from "@/components/ui/empty";
+import { Empty, EmptyDescription, EmptyMedia, EmptyTitle } from "@/components/ui/empty";
 import {
   InputGroup,
   InputGroupAddon,
@@ -27,6 +27,8 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
+
+import { motion } from "framer-motion";
 
 function UnitMobileItem({ unit }: { unit: UnitRecord }) {
   const isConfigurable = !isHardcodedMeasurementKind(unit.kind);
@@ -110,7 +112,12 @@ export function UnitList({
   const configurableCount = filteredUnits.filter((unit) => !isHardcodedMeasurementKind(unit.kind)).length;
 
   return (
-    <div className="mx-auto max-w-[1480px] px-4 py-6 lg:px-8">
+    <motion.div
+      initial={{ opacity: 0, y: 10 }}
+      animate={{ opacity: 1, y: 0 }}
+      exit={{ opacity: 0 }}
+      className="mx-auto max-w-[1480px] px-4 py-6 lg:px-8"
+    >
       <div className="mb-6 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
         <div>
           <h1 className="text-xl font-semibold">Unités</h1>
@@ -121,7 +128,7 @@ export function UnitList({
             )}
           </p>
         </div>
-        <Button size="sm" onClick={onNewUnit} className="shrink-0 self-start sm:self-auto">
+        <Button size="sm" onClick={onNewUnit} className="shrink-0 self-start sm:self-auto" render={<motion.button whileTap={{ scale: 0.96 }} />}>
           <Plus data-icon="inline-start" />
           Nouvelle unité
         </Button>
@@ -139,11 +146,18 @@ export function UnitList({
       </InputGroup>
 
       {filteredUnits.length === 0 ? (
-        <Empty className="border-border bg-card">
-          <EmptyDescription>
-            {search ? "Aucune unité ne correspond à votre recherche." : "Aucune unité pour le moment."}
-          </EmptyDescription>
-        </Empty>
+        <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }}>
+          <Empty className="border-transparent bg-muted/20">
+            <EmptyMedia variant="icon"><Package /></EmptyMedia>
+            <EmptyTitle>Aucune unité trouvée</EmptyTitle>
+            <EmptyDescription>
+              {search ? "Aucune unité ne correspond à votre recherche." : "Commencez par ajouter votre première unité."}
+            </EmptyDescription>
+            <Button className="mt-4" onClick={onNewUnit} render={<motion.button whileTap={{ scale: 0.96 }} />}>
+              Ajouter une unité
+            </Button>
+          </Empty>
+        </motion.div>
       ) : (
         <>
           <ItemGroup className="gap-2 md:hidden">
@@ -151,7 +165,7 @@ export function UnitList({
               <UnitMobileItem key={unit.id} unit={unit} />
             ))}
           </ItemGroup>
-          <div className="hidden overflow-hidden rounded-lg border border-border bg-card md:block">
+          <div className="hidden overflow-hidden rounded-2xl border-transparent bg-card shadow-[0_2px_8px_rgba(0,0,0,0.04),0_12px_24px_rgba(0,0,0,0.04)] md:block">
             <Table>
               <TableHeader>
                 <TableRow>
@@ -171,6 +185,6 @@ export function UnitList({
           </div>
         </>
       )}
-    </div>
+    </motion.div>
   );
 }

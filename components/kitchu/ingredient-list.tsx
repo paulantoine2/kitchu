@@ -2,14 +2,14 @@
 
 import Link from "next/link";
 import { useMemo, useState } from "react";
-import { Plus, Search, TriangleAlert } from "lucide-react";
+import { Plus, Search, TriangleAlert, Utensils } from "lucide-react";
 import { ingredientImageUrl } from "@/components/kitchu/images";
 import type { IngredientRecord } from "@/components/kitchu/types";
 import { EntityImage } from "@/components/kitchu/ui/shared";
 import { compareProductStoragePriority, productStorageBadgeClass, productStorageLabels } from "@/lib/product-storage";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { Empty, EmptyDescription } from "@/components/ui/empty";
+import { Empty, EmptyDescription, EmptyMedia, EmptyTitle } from "@/components/ui/empty";
 import {
   InputGroup,
   InputGroupAddon,
@@ -31,6 +31,8 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { formatNumber } from "@/lib/utils";
+
+import { motion } from "framer-motion";
 
 function IngredientMobileItem({ ingredient }: { ingredient: IngredientRecord }) {
   const imageUrl = ingredientImageUrl(ingredient);
@@ -150,7 +152,12 @@ export function IngredientList({
   );
 
   return (
-    <div className="mx-auto max-w-[1480px] px-4 py-6 lg:px-8">
+    <motion.div
+      initial={{ opacity: 0, y: 10 }}
+      animate={{ opacity: 1, y: 0 }}
+      exit={{ opacity: 0 }}
+      className="mx-auto max-w-[1480px] px-4 py-6 lg:px-8"
+    >
       <div className="mb-6 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
         <div>
           <h1 className="text-xl font-semibold">Ingrédients</h1>
@@ -158,7 +165,7 @@ export function IngredientList({
             {filteredIngredients.length} ingrédient{filteredIngredients.length !== 1 ? "s" : ""}
           </p>
         </div>
-        <Button size="sm" onClick={onNewIngredient} className="shrink-0 self-start sm:self-auto">
+        <Button size="sm" onClick={onNewIngredient} className="shrink-0 self-start sm:self-auto" render={<motion.button whileTap={{ scale: 0.96 }} />}>
           <Plus data-icon="inline-start" />
           Nouvel ingrédient
         </Button>
@@ -176,11 +183,18 @@ export function IngredientList({
       </InputGroup>
 
       {filteredIngredients.length === 0 ? (
-        <Empty className="border-border bg-card">
-          <EmptyDescription>
-            {search ? "Aucun ingrédient ne correspond à votre recherche." : "Aucun ingrédient pour le moment."}
-          </EmptyDescription>
-        </Empty>
+        <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }}>
+          <Empty className="border-transparent bg-muted/20">
+            <EmptyMedia variant="icon"><Utensils /></EmptyMedia>
+            <EmptyTitle>Aucun ingrédient trouvé</EmptyTitle>
+            <EmptyDescription>
+              {search ? "Aucun ingrédient ne correspond à votre recherche." : "Commencez par ajouter votre premier ingrédient."}
+            </EmptyDescription>
+            <Button className="mt-4" onClick={onNewIngredient} render={<motion.button whileTap={{ scale: 0.96 }} />}>
+              Ajouter un ingrédient
+            </Button>
+          </Empty>
+        </motion.div>
       ) : (
         <>
           <ItemGroup className="gap-2 md:hidden">
@@ -188,7 +202,7 @@ export function IngredientList({
               <IngredientMobileItem key={ingredient.id} ingredient={ingredient} />
             ))}
           </ItemGroup>
-          <div className="hidden overflow-hidden rounded-lg border border-border bg-card md:block">
+          <div className="hidden overflow-hidden rounded-2xl border-transparent bg-card shadow-[0_2px_8px_rgba(0,0,0,0.04),0_12px_24px_rgba(0,0,0,0.04)] md:block">
             <Table>
               <TableHeader>
                 <TableRow>
@@ -208,6 +222,6 @@ export function IngredientList({
           </div>
         </>
       )}
-    </div>
+    </motion.div>
   );
 }

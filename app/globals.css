@@ -5,7 +5,7 @@
 @custom-variant dark (&:is(.dark *));
 
 :root {
-  --background: oklch(0.99 0.008 70);
+  --background: oklch(0.98 0.01 70);
   --foreground: oklch(0.22 0 0);
   --card: oklch(1 0 0);
   --card-foreground: oklch(0.22 0 0);
@@ -20,15 +20,15 @@
   --accent: oklch(0.96 0.03 12);
   --accent-foreground: oklch(0.45 0.18 12);
   --destructive: oklch(0.55 0.22 25);
-  --border: oklch(0.88 0 0);
-  --input: oklch(0.88 0 0);
+  --border: oklch(0.92 0 0);
+  --input: oklch(0.92 0 0);
   --ring: oklch(0.62 0.24 12 / 40%);
   --chart-1: oklch(0.87 0 0);
   --chart-2: oklch(0.556 0 0);
   --chart-3: oklch(0.439 0 0);
   --chart-4: oklch(0.371 0 0);
   --chart-5: oklch(0.269 0 0);
-  --radius: 0.625rem;
+  --radius: 1rem;
   --sidebar: oklch(0.985 0 0);
   --sidebar-foreground: oklch(0.145 0 0);
   --sidebar-primary: oklch(0.205 0 0);
@@ -138,7 +138,7 @@ select {
     @apply border-border outline-ring/50;
   }
   body {
-    @apply bg-background text-foreground;
+    @apply bg-black text-foreground;
   }
   html {
     @apply font-sans;
