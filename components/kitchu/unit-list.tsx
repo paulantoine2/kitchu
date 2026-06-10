@@ -4,41 +4,49 @@ import Link from "next/link";
 import { useMemo, useState } from "react";
 import { Plus, Search } from "lucide-react";
 import type { UnitRecord } from "@/components/kitchu/types";
+import { isHardcodedMeasurementKind } from "@/components/kitchu/unit-helpers";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent } from "@/components/ui/card";
 import { Empty, EmptyDescription } from "@/components/ui/empty";
 import {
   InputGroup,
   InputGroupAddon,
   InputGroupInput,
 } from "@/components/ui/input-group";
-import { isHardcodedMeasurementKind } from "@/components/kitchu/unit-helpers";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
 
-function UnitCard({ unit }: { unit: UnitRecord }) {
+function UnitTableRow({ unit }: { unit: UnitRecord }) {
   const isConfigurable = !isHardcodedMeasurementKind(unit.kind);
 
   return (
-    <Link href={isConfigurable ? `/units/${unit.id}` : "#"} className={isConfigurable ? undefined : "pointer-events-none"}>
-      <Card className="overflow-hidden transition-shadow hover:shadow-md">
-        <div className="flex aspect-[4/3] items-center justify-center bg-primary/10">
-          <div className="flex size-20 items-center justify-center rounded-xl bg-card text-3xl font-semibold shadow-sm ring-1 ring-foreground/10">
-            {unit.symbol}
-          </div>
-        </div>
-        <CardContent className="pt-3">
-          <h3 className="line-clamp-2 text-base font-semibold leading-snug">{unit.name}</h3>
-          <p className="mt-1 text-xs text-muted-foreground">
-            {unit.code} · {unit.kind.toLowerCase()}
-          </p>
-          {!isConfigurable && (
-            <Badge variant="secondary" className="mt-2">
-              Standard
-            </Badge>
-          )}
-        </CardContent>
-      </Card>
-    </Link>
+    <TableRow className={isConfigurable ? undefined : "text-muted-foreground"}>
+      <TableCell className="font-semibold tabular-nums">{unit.symbol}</TableCell>
+      <TableCell className="max-w-[280px] whitespace-normal">
+        {isConfigurable ? (
+          <Link href={`/units/${unit.id}`} className="font-medium hover:underline">
+            {unit.name}
+          </Link>
+        ) : (
+          <span className="font-medium">{unit.name}</span>
+        )}
+      </TableCell>
+      <TableCell className="font-mono text-xs">{unit.code}</TableCell>
+      <TableCell>{unit.kind.toLowerCase()}</TableCell>
+      <TableCell>
+        {isConfigurable ? (
+          <Badge variant="secondary">Configurable</Badge>
+        ) : (
+          <Badge variant="secondary">Standard</Badge>
+        )}
+      </TableCell>
+    </TableRow>
   );
 }
 
@@ -100,10 +108,23 @@ export function UnitList({
           </EmptyDescription>
         </Empty>
       ) : (
-        <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
-          {filteredUnits.map((unit) => (
-            <UnitCard key={unit.id} unit={unit} />
-          ))}
+        <div className="overflow-hidden rounded-lg border border-border bg-card">
+          <Table>
+            <TableHeader>
+              <TableRow>
+                <TableHead>Symbole</TableHead>
+                <TableHead>Nom</TableHead>
+                <TableHead>Code</TableHead>
+                <TableHead>Type</TableHead>
+                <TableHead>Statut</TableHead>
+              </TableRow>
+            </TableHeader>
+            <TableBody>
+              {filteredUnits.map((unit) => (
+                <UnitTableRow key={unit.id} unit={unit} />
+              ))}
+            </TableBody>
+          </Table>
         </div>
       )}
     </div>

@@ -5,19 +5,27 @@ import { useMemo, useState } from "react";
 import { Plus, Search, TriangleAlert } from "lucide-react";
 import { ingredientImageUrl } from "@/components/kitchu/images";
 import type { IngredientRecord } from "@/components/kitchu/types";
+import { EntityImage } from "@/components/kitchu/ui/shared";
 import { compareProductStoragePriority, productStorageBadgeClass, productStorageLabels } from "@/lib/product-storage";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent } from "@/components/ui/card";
 import { Empty, EmptyDescription } from "@/components/ui/empty";
 import {
   InputGroup,
   InputGroupAddon,
   InputGroupInput,
 } from "@/components/ui/input-group";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
 import { formatNumber } from "@/lib/utils";
 
-function IngredientCard({ ingredient }: { ingredient: IngredientRecord }) {
+function IngredientTableRow({ ingredient }: { ingredient: IngredientRecord }) {
   const imageUrl = ingredientImageUrl(ingredient);
   const hasProducts = ingredient.products.length > 0;
   const stockedProducts = ingredient.products
@@ -25,33 +33,34 @@ function IngredientCard({ ingredient }: { ingredient: IngredientRecord }) {
     .sort((left, right) => compareProductStoragePriority(left.storageType, right.storageType));
 
   return (
-    <Link href={`/ingredients/${ingredient.id}`}>
-      <Card className="overflow-hidden transition-shadow hover:shadow-md">
-        <div className="relative aspect-[4/3] overflow-hidden bg-primary/10">
-          {imageUrl ? (
-            // eslint-disable-next-line @next/next/no-img-element
-            <img src={imageUrl} alt={ingredient.name} className="size-full object-cover" />
-          ) : (
-            <div className="flex size-full items-center justify-center text-4xl font-semibold text-primary">
-              {ingredient.name.trim().charAt(0).toUpperCase() || "?"}
-            </div>
-          )}
-          {!hasProducts && (
-            <Badge
-              variant="secondary"
-              className="absolute top-2 right-2 gap-1 border-amber-500/30 bg-amber-500/10 text-amber-700 shadow-sm dark:text-amber-400"
-            >
-              <TriangleAlert className="size-3" />
-              Sans produit
-            </Badge>
-          )}
-        </div>
-        <CardContent className="pt-3">
-          <h3 className="line-clamp-2 text-base font-semibold leading-snug">{ingredient.name}</h3>
-          <div className="mt-2 flex flex-wrap gap-1.5">
-            <Badge variant="secondary">
-              {ingredient.products.length} produit{ingredient.products.length !== 1 ? "s" : ""}
-            </Badge>
+    <TableRow>
+      <TableCell className="w-12">
+        <EntityImage src={imageUrl} label={ingredient.name} size="xs" />
+      </TableCell>
+      <TableCell className="max-w-[280px] whitespace-normal">
+        <Link href={`/ingredients/${ingredient.id}`} className="font-medium hover:underline">
+          {ingredient.name}
+        </Link>
+      </TableCell>
+      <TableCell>{ingredient.baseUnit.symbol}</TableCell>
+      <TableCell>
+        {hasProducts ? (
+          <Badge variant="secondary">
+            {ingredient.products.length} produit{ingredient.products.length !== 1 ? "s" : ""}
+          </Badge>
+        ) : (
+          <Badge
+            variant="secondary"
+            className="gap-1 border-amber-500/30 bg-amber-500/10 text-amber-700 dark:text-amber-400"
+          >
+            <TriangleAlert />
+            Sans produit
+          </Badge>
+        )}
+      </TableCell>
+      <TableCell className="whitespace-normal">
+        {stockedProducts.length > 0 ? (
+          <div className="flex flex-wrap gap-1.5">
             {stockedProducts.map((product) => (
               <Badge
                 key={product.id}
@@ -63,9 +72,11 @@ function IngredientCard({ ingredient }: { ingredient: IngredientRecord }) {
               </Badge>
             ))}
           </div>
-        </CardContent>
-      </Card>
-    </Link>
+        ) : (
+          <span className="text-muted-foreground">—</span>
+        )}
+      </TableCell>
+    </TableRow>
   );
 }
 
@@ -119,10 +130,23 @@ export function IngredientList({
           </EmptyDescription>
         </Empty>
       ) : (
-        <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
-          {filteredIngredients.map((ingredient) => (
-            <IngredientCard key={ingredient.id} ingredient={ingredient} />
-          ))}
+        <div className="overflow-hidden rounded-lg border border-border bg-card">
+          <Table>
+            <TableHeader>
+              <TableRow>
+                <TableHead className="w-12" />
+                <TableHead>Nom</TableHead>
+                <TableHead>Unité de base</TableHead>
+                <TableHead>Produits</TableHead>
+                <TableHead>Stock</TableHead>
+              </TableRow>
+            </TableHeader>
+            <TableBody>
+              {filteredIngredients.map((ingredient) => (
+                <IngredientTableRow key={ingredient.id} ingredient={ingredient} />
+              ))}
+            </TableBody>
+          </Table>
         </div>
       )}
     </div>
