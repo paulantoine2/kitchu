@@ -5,7 +5,6 @@ import { Plus, Trash2 } from "lucide-react";
 import { ProductStorageBadge } from "@/components/kitchu/product-storage-badge";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { NativeSelect } from "@/components/ui/native-select";
 import { Textarea } from "@/components/ui/textarea";
@@ -98,15 +97,13 @@ export function IngredientEditor({
   }
 
   return (
-    <section className="flex min-w-0 flex-col gap-4 pb-20">
-      <Card>
-        <CardHeader>
-          <div className="flex min-w-0 items-center gap-3">
-            <EntityImage src={draft.imageUrl} label={draft.name || "Ingrédient"} size="md" className="shrink-0" />
-            <h1 className="text-xl font-semibold">{draft.id ? "Modifier l'ingrédient" : "Nouvel ingrédient"}</h1>
-          </div>
-        </CardHeader>
-        <CardContent className="grid gap-3 md:grid-cols-[minmax(0,1fr)_220px]">
+    <section className="mx-auto flex w-full max-w-3xl flex-col gap-12 pb-20">
+      <div>
+        <div className="mb-6 flex min-w-0 items-center gap-4">
+          <EntityImage src={draft.imageUrl} label={draft.name || "Ingrédient"} size="md" className="shrink-0" />
+          <h1 className="text-2xl font-semibold">{draft.id ? "Modifier l'ingrédient" : "Nouvel ingrédient"}</h1>
+        </div>
+        <div className="flex flex-col gap-6">
           <Field label="Nom">
             <Input value={draft.name} onChange={(event) => setDraft({ ...draft, name: event.target.value })} />
           </Field>
@@ -135,54 +132,52 @@ export function IngredientEditor({
               ))}
             </NativeSelect>
             {baseUnit && (
-              <p className="text-xs leading-5 text-muted-foreground">
+              <p className="text-sm text-muted-foreground">
                 Calculs en {measurementKindLabel(baseUnit.kind).toLowerCase()} via {baseUnit.symbol}.
               </p>
             )}
           </Field>
-          <Field label="Image" className="md:col-span-2">
+          <Field label="Image">
             <Input
               value={draft.imageUrl}
               onChange={(event) => setDraft({ ...draft, imageUrl: event.target.value })}
               placeholder="https://..."
             />
           </Field>
-          <Field label="Notes" className="md:col-span-2">
+          <Field label="Notes">
             <Textarea value={draft.notes} onChange={(event) => setDraft({ ...draft, notes: event.target.value })} />
           </Field>
-        </CardContent>
-      </Card>
+        </div>
+      </div>
 
-      <Card>
-        <CardHeader>
-          <div className="flex flex-col gap-3 md:flex-row md:items-start md:justify-between">
-            <div>
-              <h3 className="text-lg font-semibold">Ratios spécifiques</h3>
-              <p className="text-sm leading-5 text-muted-foreground">
-                {automaticUnitCount} unité{automaticUnitCount > 1 ? "s" : ""} disponible
-                {automaticUnitCount > 1 ? "s" : ""} automatiquement pour ce type de mesure. Ajoute seulement
-                les unités variables comme pièce, filet ou boîte.
-              </p>
-            </div>
-            <Button
-              variant="secondary"
-              size="sm"
-              onClick={() =>
-                setDraft((current) => ({
-                  ...current,
-                  units: [...current.units, { key: key(), unitId: "", toBaseFactor: "" }],
-                }))
-              }
-              className="shrink-0"
-            >
-              <Plus data-icon="inline-start" />
-              Ratio
-            </Button>
+      <div>
+        <div className="mb-6 flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
+          <div>
+            <h3 className="text-lg font-semibold">Ratios spécifiques</h3>
+            <p className="text-sm text-muted-foreground">
+              {automaticUnitCount} unité{automaticUnitCount > 1 ? "s" : ""} disponible
+              {automaticUnitCount > 1 ? "s" : ""} automatiquement pour ce type de mesure. Ajoute seulement
+              les unités variables comme pièce, filet ou boîte.
+            </p>
           </div>
-        </CardHeader>
-        <CardContent className="flex flex-col gap-3">
+          <Button
+            variant="secondary"
+            size="sm"
+            onClick={() =>
+              setDraft((current) => ({
+                ...current,
+                units: [...current.units, { key: key(), unitId: "", toBaseFactor: "" }],
+              }))
+            }
+            className="shrink-0"
+          >
+            <Plus data-icon="inline-start" />
+            Ratio
+          </Button>
+        </div>
+        <div className="flex flex-col gap-4">
           {specificRows.length === 0 && (
-            <div className="rounded-lg border border-dashed border-border bg-muted/30 p-6 text-center text-sm text-muted-foreground">
+            <div className="rounded-lg border border-dashed border-border bg-muted/30 p-8 text-center text-sm text-muted-foreground">
               Aucun ratio spécifique. Les unités du type de mesure sont déjà utilisables.
             </div>
           )}
@@ -194,39 +189,43 @@ export function IngredientEditor({
               units,
             });
             return (
-              <div key={row.key} className="grid gap-3 rounded-lg border border-border bg-card p-3 shadow-sm md:grid-cols-[minmax(0,1fr)_160px_minmax(0,1fr)_44px] md:items-end">
-                <Field label="Unité">
-                  <NativeSelect
-                    value={row.unitId}
-                    onChange={(event) => updateUnitChoice(row.key, event.target.value)}
-                  >
-                    <option value="">Choisir</option>
-                    {specificUnitOptions.map((option) => (
-                      <option key={option.id} value={option.id}>
-                        {option.name} ({option.symbol})
-                      </option>
-                    ))}
-                  </NativeSelect>
-                </Field>
-                <Field label="Ratio ingrédient">
-                  <Input
-                    type="number"
-                    min={0}
-                    step="0.01"
-                    value={allowsSpecificRatio ? row.toBaseFactor : ""}
-                    disabled={!allowsSpecificRatio}
-                    placeholder={allowsSpecificRatio ? "ex. 180" : "Auto"}
-                    onChange={(event) =>
-                      setDraft((current) => ({
-                        ...current,
-                        units: current.units.map((item) =>
-                          item.key === row.key ? { ...item, toBaseFactor: event.target.value } : item,
-                        ),
-                      }))
-                    }
-                  />
-                </Field>
-                <div className="flex min-w-0 items-end">
+              <div key={row.key} className="flex flex-col gap-4 rounded-xl border border-border bg-card p-4 shadow-sm sm:flex-row sm:items-end">
+                <div className="flex-1">
+                  <Field label="Unité">
+                    <NativeSelect
+                      value={row.unitId}
+                      onChange={(event) => updateUnitChoice(row.key, event.target.value)}
+                    >
+                      <option value="">Choisir</option>
+                      {specificUnitOptions.map((option) => (
+                        <option key={option.id} value={option.id}>
+                          {option.name} ({option.symbol})
+                        </option>
+                      ))}
+                    </NativeSelect>
+                  </Field>
+                </div>
+                <div className="flex-1">
+                  <Field label="Ratio ingrédient">
+                    <Input
+                      type="number"
+                      min={0}
+                      step="0.01"
+                      value={allowsSpecificRatio ? row.toBaseFactor : ""}
+                      disabled={!allowsSpecificRatio}
+                      placeholder={allowsSpecificRatio ? "ex. 180" : "Auto"}
+                      onChange={(event) =>
+                        setDraft((current) => ({
+                          ...current,
+                          units: current.units.map((item) =>
+                            item.key === row.key ? { ...item, toBaseFactor: event.target.value } : item,
+                          ),
+                        }))
+                      }
+                    />
+                  </Field>
+                </div>
+                <div className="flex min-w-0 flex-col gap-2 sm:flex-row sm:items-center">
                   {unit && baseUnit && effectiveFactor ? (
                     <Badge className="border-primary/20 bg-primary/10 text-primary">
                       1 {unit.symbol} = {formatNumber(effectiveFactor)} {baseUnit.symbol} · ingrédient
@@ -236,8 +235,6 @@ export function IngredientEditor({
                       {unit ? "Ratio spécifique requis" : "Choisir une unité variable"}
                     </Badge>
                   )}
-                </div>
-                <div className="flex items-end justify-end">
                   <Button
                     variant="ghost"
                     size="icon"
@@ -247,6 +244,7 @@ export function IngredientEditor({
                         units: current.units.filter((item) => item.key !== row.key),
                       }))
                     }
+                    className="self-end sm:self-auto"
                   >
                     <Trash2 />
                   </Button>
@@ -254,55 +252,53 @@ export function IngredientEditor({
               </div>
             );
           })}
-        </CardContent>
-      </Card>
+        </div>
+      </div>
 
-      <Card>
-        <CardHeader>
-          <div className="flex items-center justify-between gap-3">
-            <div>
-              <h3 className="text-lg font-semibold">Produits magasin</h3>
-              <p className="text-sm text-muted-foreground">
-                Chaque produit a une conservation (frais, surgelé, sec) et son propre stock à réutiliser en priorité.
-              </p>
-            </div>
-            <Button
-              variant="secondary"
-              size="sm"
-              onClick={() =>
-                setDraft((current) => ({
-                  ...current,
-                  products: [
-                    ...current.products,
-                    {
-                      key: key(),
-                      store: "",
-                      brand: "",
-                      name: "",
-                      imageUrl: "",
-                      storageType: "FRESH",
-                      stockQuantity: "",
-                      packageQuantity: "",
-                      packageUnitId: current.baseUnitId,
-                      packageToBaseFactor: "",
-                      price: "",
-                      url: "",
-                      barcode: "",
-                      notes: "",
-                    },
-                  ],
-                }))
-              }
-              className="shrink-0"
-            >
-              <Plus data-icon="inline-start" />
-              Produit
-            </Button>
+      <div>
+        <div className="mb-6 flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
+          <div>
+            <h3 className="text-lg font-semibold">Produits magasin</h3>
+            <p className="text-sm text-muted-foreground">
+              Chaque produit a une conservation (frais, surgelé, sec) et son propre stock à réutiliser en priorité.
+            </p>
           </div>
-        </CardHeader>
-        <CardContent className="flex flex-col gap-3">
+          <Button
+            variant="secondary"
+            size="sm"
+            onClick={() =>
+              setDraft((current) => ({
+                ...current,
+                products: [
+                  ...current.products,
+                  {
+                    key: key(),
+                    store: "",
+                    brand: "",
+                    name: "",
+                    imageUrl: "",
+                    storageType: "FRESH",
+                    stockQuantity: "",
+                    packageQuantity: "",
+                    packageUnitId: current.baseUnitId,
+                    packageToBaseFactor: "",
+                    price: "",
+                    url: "",
+                    barcode: "",
+                    notes: "",
+                  },
+                ],
+              }))
+            }
+            className="shrink-0"
+          >
+            <Plus data-icon="inline-start" />
+            Produit
+          </Button>
+        </div>
+        <div className="flex flex-col gap-6">
           {draft.products.length === 0 && (
-            <div className="rounded-lg border border-dashed border-border bg-muted/30 p-6 text-center text-sm text-muted-foreground">
+            <div className="rounded-lg border border-dashed border-border bg-muted/30 p-8 text-center text-sm text-muted-foreground">
               Aucun produit lié.
             </div>
           )}
@@ -331,78 +327,80 @@ export function IngredientEditor({
               <div
                 key={product.key}
                 id={product.id ? `product-${product.id}` : undefined}
-                className="flex scroll-mt-24 flex-col gap-4 rounded-lg border border-border bg-card p-4 shadow-sm"
+                className="flex scroll-mt-24 flex-col gap-6 rounded-xl border border-border bg-card p-5 shadow-sm sm:p-6"
               >
-                <div className="flex flex-wrap items-center gap-2">
-                  <ProductStorageBadge storageType={product.storageType} />
-                  {product.stockQuantity && Number(product.stockQuantity) > 0 && unit && (
-                    <Badge variant="outline">
-                      Stock {formatNumber(Number(product.stockQuantity))} {unit.symbol}
-                    </Badge>
-                  )}
+                <div className="flex flex-wrap items-center justify-between gap-4">
+                  <div className="flex flex-wrap items-center gap-2">
+                    <ProductStorageBadge storageType={product.storageType} />
+                    {product.stockQuantity && Number(product.stockQuantity) > 0 && unit && (
+                      <Badge variant="outline">
+                        Stock {formatNumber(Number(product.stockQuantity))} {unit.symbol}
+                      </Badge>
+                    )}
+                  </div>
+                  <Button
+                    variant="ghost"
+                    size="icon"
+                    onClick={() =>
+                      setDraft((current) => ({
+                        ...current,
+                        products: current.products.filter((item) => item.key !== product.key),
+                      }))
+                    }
+                  >
+                    <Trash2 />
+                  </Button>
                 </div>
-                <div className="flex flex-col gap-3 lg:flex-row lg:items-start">
+                <div className="flex flex-col gap-6 lg:flex-row lg:items-start">
                   <EntityImage src={product.imageUrl} label={product.name || "Produit"} size="sm" className="shrink-0" />
-                  <div className="grid min-w-0 flex-1 gap-3 sm:grid-cols-2 xl:grid-cols-3">
-                    <Field label="Magasin">
-                      <NativeSelect
-                        className="w-full"
-                        value={product.store}
-                        onChange={(event) => updateProduct(setDraft, product.key, { store: event.target.value })}
-                      >
-                        <option value="">Choisir</option>
-                        {KNOWN_STORES.map((store) => (
-                          <option key={store} value={store}>
-                            {store}
-                          </option>
-                        ))}
-                        {product.store && !knownStoreSet.has(product.store) && (
-                          <option value={product.store}>{product.store}</option>
-                        )}
-                      </NativeSelect>
-                    </Field>
-                    <Field label="Marque">
-                      <Input value={product.brand} onChange={(event) => updateProduct(setDraft, product.key, { brand: event.target.value })} />
-                    </Field>
-                    <Field label="Produit" className="sm:col-span-2 xl:col-span-1">
-                      <Input value={product.name} onChange={(event) => updateProduct(setDraft, product.key, { name: event.target.value })} />
-                    </Field>
-                    <Field label="Conservation">
-                      <NativeSelect
-                        value={isProductStorageType(product.storageType) ? product.storageType : "FRESH"}
-                        onChange={(event) => {
-                          const value = event.target.value;
-                          updateProduct(setDraft, product.key, {
-                            storageType: isProductStorageType(value) ? value : "FRESH",
-                          });
-                        }}
-                      >
-                        {PRODUCT_STORAGE_TYPES.map((storageType) => (
-                          <option key={storageType} value={storageType}>
-                            {productStorageLabels[storageType]}
-                          </option>
-                        ))}
-                      </NativeSelect>
-                    </Field>
-                  </div>
-                  <div className="flex justify-end lg:pt-6">
-                    <Button
-                      variant="ghost"
-                      size="icon"
-                      onClick={() =>
-                        setDraft((current) => ({
-                          ...current,
-                          products: current.products.filter((item) => item.key !== product.key),
-                        }))
-                      }
-                    >
-                      <Trash2 />
-                    </Button>
+                  <div className="flex min-w-0 flex-1 flex-col gap-6">
+                    <div className="grid gap-4 sm:grid-cols-2">
+                      <Field label="Magasin">
+                        <NativeSelect
+                          className="w-full"
+                          value={product.store}
+                          onChange={(event) => updateProduct(setDraft, product.key, { store: event.target.value })}
+                        >
+                          <option value="">Choisir</option>
+                          {KNOWN_STORES.map((store) => (
+                            <option key={store} value={store}>
+                              {store}
+                            </option>
+                          ))}
+                          {product.store && !knownStoreSet.has(product.store) && (
+                            <option value={product.store}>{product.store}</option>
+                          )}
+                        </NativeSelect>
+                      </Field>
+                      <Field label="Marque">
+                        <Input value={product.brand} onChange={(event) => updateProduct(setDraft, product.key, { brand: event.target.value })} />
+                      </Field>
+                      <Field label="Produit" className="sm:col-span-2">
+                        <Input value={product.name} onChange={(event) => updateProduct(setDraft, product.key, { name: event.target.value })} />
+                      </Field>
+                      <Field label="Conservation" className="sm:col-span-2">
+                        <NativeSelect
+                          value={isProductStorageType(product.storageType) ? product.storageType : "FRESH"}
+                          onChange={(event) => {
+                            const value = event.target.value;
+                            updateProduct(setDraft, product.key, {
+                              storageType: isProductStorageType(value) ? value : "FRESH",
+                            });
+                          }}
+                        >
+                          {PRODUCT_STORAGE_TYPES.map((storageType) => (
+                            <option key={storageType} value={storageType}>
+                              {productStorageLabels[storageType]}
+                            </option>
+                          ))}
+                        </NativeSelect>
+                      </Field>
+                    </div>
                   </div>
                 </div>
-                <div className="rounded-lg border border-border/70 bg-muted/20 p-3">
-                  <p className="mb-3 text-sm font-medium">Stock</p>
-                  <div className="grid gap-3 sm:grid-cols-[minmax(0,1fr)_120px] sm:items-end">
+                <div className="rounded-lg border border-border/70 bg-muted/20 p-4">
+                  <h4 className="mb-4 text-sm font-semibold">Stock</h4>
+                  <div className="grid gap-4 sm:grid-cols-2">
                     <Field label="Quantité en stock">
                       <Input
                         type="number"
@@ -421,14 +419,14 @@ export function IngredientEditor({
                     </Field>
                   </div>
                   {!product.packageUnitId && (
-                    <p className="mt-2 text-xs text-muted-foreground">
+                    <p className="mt-2 text-sm text-muted-foreground">
                       Choisis d&apos;abord l&apos;unité colis pour renseigner le stock.
                     </p>
                   )}
                 </div>
-                <div className="rounded-lg border border-border/70 bg-muted/20 p-3">
-                  <p className="mb-3 text-sm font-medium">Caractéristiques colis</p>
-                  <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
+                <div className="rounded-lg border border-border/70 bg-muted/20 p-4">
+                  <h4 className="mb-4 text-sm font-semibold">Caractéristiques colis</h4>
+                  <div className="grid gap-4 sm:grid-cols-2">
                     <Field label="Qté colis">
                       <Input
                         type="number"
@@ -486,7 +484,7 @@ export function IngredientEditor({
                     </Field>
                   </div>
                 </div>
-                <div className="grid gap-3 md:grid-cols-3">
+                <div className="grid gap-4 sm:grid-cols-2">
                   <Field label="Image">
                     <Input
                       value={product.imageUrl}
@@ -497,11 +495,11 @@ export function IngredientEditor({
                   <Field label="URL">
                     <Input value={product.url} onChange={(event) => updateProduct(setDraft, product.key, { url: event.target.value })} />
                   </Field>
-                  <Field label="Code-barres">
+                  <Field label="Code-barres" className="sm:col-span-2">
                     <Input value={product.barcode} onChange={(event) => updateProduct(setDraft, product.key, { barcode: event.target.value })} />
                   </Field>
                 </div>
-                <div className="flex flex-wrap items-center gap-2">
+                <div className="flex flex-wrap items-center gap-2 pt-2">
                   {standardPrice !== null && standardPriceUnit ? (
                     <Badge className="border-primary/20 bg-primary/10 text-primary">
                       {formatCurrency(standardPrice)} / {standardPriceUnit.symbol} ·{" "}
@@ -514,8 +512,8 @@ export function IngredientEditor({
               </div>
             );
           })}
-        </CardContent>
-      </Card>
+        </div>
+      </div>
 
       <StickySave busy={busy} notice={notice} onSave={onSave} onDelete={draft.id ? onDelete : undefined} />
     </section>

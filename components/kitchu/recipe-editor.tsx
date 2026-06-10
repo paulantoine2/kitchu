@@ -8,7 +8,6 @@ import { formatCurrency } from "@/lib/utils";
 import { HelloFreshImporter } from "@/components/hellofresh-importer";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import {
   Combobox,
   ComboboxContent,
@@ -340,30 +339,28 @@ export function RecipeEditor({
   const dialogProductComplete = isDialogProductComplete(dialogProduct);
 
   return (
-    <section className="flex min-w-0 flex-col gap-4 pb-20">
+    <section className="mx-auto flex w-full max-w-3xl flex-col gap-12 pb-20">
       <HelloFreshImporter busy={busy} onImport={onImport} onError={onImportError} />
-      <Card>
-        <CardHeader>
-          <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
-            <div className="flex min-w-0 items-center gap-3">
-              <EntityImage src={draftRecipeImageUrl(draft, ingredients)} label={draft.name || "Recette"} size="md" className="shrink-0" />
-              <div className="min-w-0">
-                <h1 className="text-xl font-semibold">{draft.id ? "Modifier la recette" : "Nouvelle recette"}</h1>
-                <p className="text-sm text-muted-foreground">Les quantités sont enregistrées pour une portion.</p>
-              </div>
-            </div>
-            <div className="flex shrink-0 flex-wrap items-center gap-2">
-              {onCancel && (
-                <Button variant="outline" onClick={onCancel}>
-                  <X data-icon="inline-start" />
-                  Fermer
-                </Button>
-              )}
+      <div>
+        <div className="mb-6 flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
+          <div className="flex min-w-0 items-center gap-4">
+            <EntityImage src={draftRecipeImageUrl(draft, ingredients)} label={draft.name || "Recette"} size="md" className="shrink-0" />
+            <div className="min-w-0">
+              <h1 className="text-2xl font-semibold">{draft.id ? "Modifier la recette" : "Nouvelle recette"}</h1>
+              <p className="text-sm text-muted-foreground">Les quantités sont enregistrées pour une portion.</p>
             </div>
           </div>
-        </CardHeader>
-        <CardContent className="flex flex-col gap-4">
-          <div className="grid gap-3 md:grid-cols-[minmax(0,1fr)_120px_120px]">
+          <div className="flex shrink-0 flex-wrap items-center gap-2">
+            {onCancel && (
+              <Button variant="outline" onClick={onCancel}>
+                <X data-icon="inline-start" />
+                Fermer
+              </Button>
+            )}
+          </div>
+        </div>
+        <div className="flex flex-col gap-6">
+          <div className="grid gap-4 sm:grid-cols-[minmax(0,1fr)_120px_120px]">
             <Field label="Titre">
               <Input value={draft.name} onChange={(event) => setDraft({ ...draft, name: event.target.value })} />
             </Field>
@@ -391,7 +388,7 @@ export function RecipeEditor({
               className="min-h-24"
             />
           </Field>
-          <div className="grid gap-3 md:grid-cols-2">
+          <div className="grid gap-4 sm:grid-cols-2">
             <Field label="Image">
               <Input
                 value={draft.imageUrl}
@@ -407,152 +404,158 @@ export function RecipeEditor({
               />
             </Field>
           </div>
-        </CardContent>
-      </Card>
+        </div>
+      </div>
 
-      <Card>
-        <CardHeader>
-          <div className="flex items-center justify-between gap-3">
-            <div>
-              <h3 className="text-lg font-semibold">Ingrédients</h3>
-              {importIssues > 0 && (
-                <p className="text-sm text-amber-700">
-                  {importIssues} ligne(s) importée(s) nécessitent une action.
-                </p>
-              )}
-            </div>
-            <Button
-              variant="secondary"
-              size="sm"
-              onClick={() => setDraft((current) => ({ ...current, ingredients: [...current.ingredients, blankRecipeIngredient()] }))}
-            >
-              <Plus data-icon="inline-start" />
-              Ligne
-            </Button>
+      <div>
+        <div className="mb-6 flex items-center justify-between gap-4">
+          <div>
+            <h3 className="text-lg font-semibold">Ingrédients</h3>
+            {importIssues > 0 && (
+              <p className="text-sm text-amber-700">
+                {importIssues} ligne(s) importée(s) nécessitent une action.
+              </p>
+            )}
           </div>
-        </CardHeader>
-        <CardContent className="flex flex-col gap-3">
+          <Button
+            variant="secondary"
+            size="sm"
+            onClick={() => setDraft((current) => ({ ...current, ingredients: [...current.ingredients, blankRecipeIngredient()] }))}
+          >
+            <Plus data-icon="inline-start" />
+            Ligne
+          </Button>
+        </div>
+        <div className="flex flex-col gap-4">
           {draft.ingredients.map((row, index) => {
             const ingredient = ingredientById.get(row.ingredientId);
             const allowedUnits = ingredient ? usableUnitsForIngredient(ingredient, units, globalRatios) : [];
             return (
               <div
                 key={row.key}
-                className={`rounded-lg border p-3 shadow-sm ${
+                className={`rounded-xl border p-4 shadow-sm ${
                   row.importStatus && row.importStatus !== "matched"
                     ? "border-amber-200 bg-amber-50/50"
                     : "border-border bg-card"
                 }`}
               >
-                <div className="grid gap-3 lg:grid-cols-[minmax(0,1.4fr)_100px_minmax(120px,150px)_minmax(0,1fr)_44px]">
-                  <Field label={`Ingrédient ${index + 1}`} showLabel={false}>
-                    <div className="flex min-w-0 items-center gap-2">
-                      <EntityImage
-                        src={ingredientImageUrl(ingredient) ?? row.ingredientImageUrl}
-                        label={row.ingredientName || "Ingrédient"}
-                        size="xs"
-                        className="shrink-0"
-                      />
-                      <div className="min-w-0 flex-1">
-                        <Combobox
-                        items={ingredients}
-                        value={ingredient ?? null}
-                        inputValue={row.ingredientName}
-                        itemToStringLabel={(item) => item.name}
-                        itemToStringValue={(item) => item.name}
-                        isItemEqualToValue={(a, b) => a.id === b.id}
-                        onInputValueChange={(value, details) => {
-                          const result = handleIngredientInputChange(row, value, details.reason);
-                          if (result === "cancel") {
-                            details.cancel();
-                          }
-                        }}
-                        onValueChange={(value, details) => {
-                          if (value) {
-                            selectRecipeIngredient(row.key, value);
-                            return;
-                          }
-                          if (details.reason === "clear-press") {
-                            updateRow(row.key, {
-                              ingredientId: "",
-                              ingredientName: "",
-                              unitId: "",
-                              importStatus: undefined,
-                            });
-                          }
-                        }}
-                      >
-                        <ComboboxInput placeholder="Chercher un ingrédient" showClear />
-                        <ComboboxContent>
-                          <ComboboxEmpty>Aucun ingrédient trouvé.</ComboboxEmpty>
-                          <ComboboxList>
-                            {(option) => (
-                              <ComboboxItem key={option.id} value={option}>
-                                <div className="flex min-w-0 items-center gap-3">
-                                  <EntityImage src={ingredientImageUrl(option)} label={option.name} size="sm" />
-                                  <div className="min-w-0">
-                                    <div className="truncate font-semibold">{option.name}</div>
-                                    <div className="truncate text-xs text-muted-foreground">
-                                      {usableUnitsForIngredient(option, units, globalRatios).length} unités
+                <div className="flex flex-col gap-4 lg:flex-row lg:items-end">
+                  <div className="flex-1">
+                    <Field label={`Ingrédient ${index + 1}`} showLabel={false}>
+                      <div className="flex min-w-0 items-center gap-2">
+                        <EntityImage
+                          src={ingredientImageUrl(ingredient) ?? row.ingredientImageUrl}
+                          label={row.ingredientName || "Ingrédient"}
+                          size="xs"
+                          className="shrink-0"
+                        />
+                        <div className="min-w-0 flex-1">
+                          <Combobox
+                          items={ingredients}
+                          value={ingredient ?? null}
+                          inputValue={row.ingredientName}
+                          itemToStringLabel={(item) => item.name}
+                          itemToStringValue={(item) => item.name}
+                          isItemEqualToValue={(a, b) => a.id === b.id}
+                          onInputValueChange={(value, details) => {
+                            const result = handleIngredientInputChange(row, value, details.reason);
+                            if (result === "cancel") {
+                              details.cancel();
+                            }
+                          }}
+                          onValueChange={(value, details) => {
+                            if (value) {
+                              selectRecipeIngredient(row.key, value);
+                              return;
+                            }
+                            if (details.reason === "clear-press") {
+                              updateRow(row.key, {
+                                ingredientId: "",
+                                ingredientName: "",
+                                unitId: "",
+                                importStatus: undefined,
+                              });
+                            }
+                          }}
+                        >
+                          <ComboboxInput placeholder="Chercher un ingrédient" showClear />
+                          <ComboboxContent>
+                            <ComboboxEmpty>Aucun ingrédient trouvé.</ComboboxEmpty>
+                            <ComboboxList>
+                              {(option) => (
+                                <ComboboxItem key={option.id} value={option}>
+                                  <div className="flex min-w-0 items-center gap-3">
+                                    <EntityImage src={ingredientImageUrl(option)} label={option.name} size="sm" />
+                                    <div className="min-w-0">
+                                      <div className="truncate font-semibold">{option.name}</div>
+                                      <div className="truncate text-xs text-muted-foreground">
+                                        {usableUnitsForIngredient(option, units, globalRatios).length} unités
+                                      </div>
                                     </div>
                                   </div>
-                                </div>
-                              </ComboboxItem>
-                            )}
-                          </ComboboxList>
-                        </ComboboxContent>
-                      </Combobox>
+                                </ComboboxItem>
+                              )}
+                            </ComboboxList>
+                          </ComboboxContent>
+                        </Combobox>
+                        </div>
+                        {row.importStatus === "ingredient_missing" && row.ingredientName.trim() && (
+                          <Button
+                            variant="outline"
+                            size="icon"
+                            title="Créer l'ingrédient"
+                            onClick={() => openIngredientDialog(row)}
+                            className="shrink-0"
+                          >
+                            <Plus data-icon="inline-start" />
+                          </Button>
+                        )}
+                        {!row.ingredientId && row.ingredientName.trim() && row.importStatus !== "ingredient_missing" && (
+                          <Button variant="outline" size="icon" onClick={() => openIngredientDialog(row)} className="shrink-0">
+                            <Plus data-icon="inline-start" />
+                          </Button>
+                        )}
                       </div>
-                      {row.importStatus === "ingredient_missing" && row.ingredientName.trim() && (
-                        <Button
-                          variant="outline"
-                          size="icon"
-                          title="Créer l'ingrédient"
-                          onClick={() => openIngredientDialog(row)}
-                          className="shrink-0"
-                        >
-                          <Plus data-icon="inline-start" />
-                        </Button>
-                      )}
-                      {!row.ingredientId && row.ingredientName.trim() && row.importStatus !== "ingredient_missing" && (
-                        <Button variant="outline" size="icon" onClick={() => openIngredientDialog(row)} className="shrink-0">
-                          <Plus data-icon="inline-start" />
-                        </Button>
-                      )}
-                    </div>
-                  </Field>
-                  <Field label="Qté / portion" showLabel={false}>
-                    <Input
-                      type="number"
-                      min={0}
-                      step="0.01"
-                      value={row.quantityPerServing}
-                      onChange={(event) => updateRow(row.key, { quantityPerServing: event.target.value })}
-                      placeholder="Qté"
-                    />
-                  </Field>
-                  <Field label="Unité" showLabel={false}>
-                    <NativeSelect
-                      value={row.unitId}
-                      onChange={(event) => selectRecipeUnit(row.key, event.target.value)}
-                      disabled={!ingredient}
-                    >
-                      <option value="">Choisir</option>
-                      {allowedUnits.map((item) => (
-                        <option key={item.unitId} value={item.unitId}>
-                          {item.unit.symbol}
-                        </option>
-                      ))}
-                    </NativeSelect>
-                  </Field>
-                  <Field label="Note" showLabel={false}>
-                    <Input
-                      value={row.note}
-                      onChange={(event) => updateRow(row.key, { note: event.target.value })}
-                      placeholder="Note"
-                    />
-                  </Field>
-                  <div className="flex items-end">
+                    </Field>
+                  </div>
+                  <div className="w-full lg:w-28">
+                    <Field label="Qté / portion" showLabel={false}>
+                      <Input
+                        type="number"
+                        min={0}
+                        step="0.01"
+                        value={row.quantityPerServing}
+                        onChange={(event) => updateRow(row.key, { quantityPerServing: event.target.value })}
+                        placeholder="Qté"
+                      />
+                    </Field>
+                  </div>
+                  <div className="w-full lg:w-36">
+                    <Field label="Unité" showLabel={false}>
+                      <NativeSelect
+                        value={row.unitId}
+                        onChange={(event) => selectRecipeUnit(row.key, event.target.value)}
+                        disabled={!ingredient}
+                      >
+                        <option value="">Choisir</option>
+                        {allowedUnits.map((item) => (
+                          <option key={item.unitId} value={item.unitId}>
+                            {item.unit.symbol}
+                          </option>
+                        ))}
+                      </NativeSelect>
+                    </Field>
+                  </div>
+                  <div className="flex-1">
+                    <Field label="Note" showLabel={false}>
+                      <Input
+                        value={row.note}
+                        onChange={(event) => updateRow(row.key, { note: event.target.value })}
+                        placeholder="Note"
+                      />
+                    </Field>
+                  </div>
+                  <div className="flex items-center justify-end">
                     <Button
                       variant="ghost"
                       size="icon"
@@ -569,11 +572,11 @@ export function RecipeEditor({
                   </div>
                 </div>
                 {row.importStatus === "unit_missing" && row.ingredientId && row.suggestedUnitCode && (
-                  <div className="mt-2 flex flex-wrap items-center gap-2 text-xs">
+                  <div className="mt-4 flex flex-wrap items-center gap-2 text-xs">
                     <Button
                       variant="outline"
                       size="sm"
-                      className="h-7 px-2 text-xs"
+                      className="h-8 px-3 text-xs"
                       onClick={() => onQuickAddUnit(row.key, row.ingredientId, row.suggestedUnitCode!)}
                     >
                       Ajouter l&apos;unité {row.suggestedUnitCode}
@@ -583,27 +586,25 @@ export function RecipeEditor({
               </div>
             );
           })}
-        </CardContent>
-      </Card>
+        </div>
+      </div>
 
-      <Card>
-        <CardHeader>
-          <div className="flex items-center justify-between gap-3">
-            <h3 className="text-lg font-semibold">Étapes</h3>
-            <Button
-              variant="secondary"
-              size="sm"
-              onClick={() => setDraft((current) => ({ ...current, steps: [...current.steps, { key: key(), instruction: "" }] }))}
-            >
-              <Plus data-icon="inline-start" />
-              Étape
-            </Button>
-          </div>
-        </CardHeader>
-        <CardContent className="flex flex-col gap-2">
+      <div>
+        <div className="mb-6 flex items-center justify-between gap-4">
+          <h3 className="text-lg font-semibold">Étapes</h3>
+          <Button
+            variant="secondary"
+            size="sm"
+            onClick={() => setDraft((current) => ({ ...current, steps: [...current.steps, { key: key(), instruction: "" }] }))}
+          >
+            <Plus data-icon="inline-start" />
+            Étape
+          </Button>
+        </div>
+        <div className="flex flex-col gap-3">
           {draft.steps.map((step, index) => (
-            <div key={step.key} className="flex gap-2 sm:grid sm:grid-cols-[34px_1fr_auto] sm:items-center">
-              <div className="flex size-8 shrink-0 items-center justify-center rounded-full bg-primary text-sm font-semibold text-primary-foreground sm:size-10">
+            <div key={step.key} className="flex gap-3 sm:grid sm:grid-cols-[36px_1fr_auto] sm:items-center">
+              <div className="flex size-9 shrink-0 items-center justify-center rounded-full bg-primary text-sm font-semibold text-primary-foreground">
                 {index + 1}
               </div>
               <Input
@@ -643,8 +644,8 @@ export function RecipeEditor({
               </div>
             </div>
           ))}
-        </CardContent>
-      </Card>
+        </div>
+      </div>
 
       <Dialog
         open={Boolean(ingredientDialog)}

@@ -4,7 +4,6 @@ import { useState } from "react";
 import { Save, Trash2 } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { NativeSelect } from "@/components/ui/native-select";
 import { formatNumber } from "@/lib/utils";
@@ -116,19 +115,17 @@ export function UnitEditor({
   }
 
   return (
-    <section className="flex min-w-0 flex-col gap-4 pb-20">
-      <Card>
-        <CardHeader>
-          <div className="flex flex-col gap-2 sm:flex-row sm:items-start sm:justify-between">
-            <div className="min-w-0">
-              <h1 className="text-xl font-semibold">{draft.id ? "Modifier l'unité" : "Nouvelle unité"}</h1>
-              <p className="text-sm text-muted-foreground">Base commune utilisée par les ingrédients.</p>
-            </div>
-            <Badge className="w-fit shrink-0">{units.length} unités</Badge>
+    <section className="mx-auto flex w-full max-w-3xl flex-col gap-12 pb-20">
+      <div>
+        <div className="mb-6 flex flex-col gap-2 sm:flex-row sm:items-start sm:justify-between">
+          <div className="min-w-0">
+            <h1 className="text-2xl font-semibold">{draft.id ? "Modifier l'unité" : "Nouvelle unité"}</h1>
+            <p className="text-sm text-muted-foreground">Base commune utilisée par les ingrédients.</p>
           </div>
-        </CardHeader>
-        <CardContent className="flex flex-col gap-4">
-          <div className="grid gap-3 md:grid-cols-3">
+          <Badge className="w-fit shrink-0">{units.length} unités</Badge>
+        </div>
+        <div className="flex flex-col gap-6">
+          <div className="grid gap-4 sm:grid-cols-3">
             <Field label="Nom">
               <Input
                 value={draft.name}
@@ -148,7 +145,7 @@ export function UnitEditor({
               />
             </Field>
           </div>
-          <div className="grid gap-3 md:grid-cols-[220px_minmax(0,1fr)] md:items-end">
+          <div className="grid gap-4 sm:grid-cols-[220px_minmax(0,1fr)] sm:items-end">
             <Field label="Famille">
               <NativeSelect
                 value={draft.kind}
@@ -165,34 +162,32 @@ export function UnitEditor({
               <Badge variant="outline">{configuredRatioCount} configurables</Badge>
             </div>
           </div>
-        </CardContent>
-      </Card>
+        </div>
+      </div>
 
-      <Card>
-        <CardHeader>
-          <div className="flex items-center justify-between gap-3">
-            <div>
-              <h3 className="text-lg font-semibold">Ratios vers masse / volume</h3>
-              <p className="text-sm text-muted-foreground">
-                Pour les autres unités, définis simplement leur équivalent en grammes et/ou en millilitres.
-              </p>
-            </div>
-            <Badge>Optionnel</Badge>
+      <div>
+        <div className="mb-6 flex items-center justify-between gap-4">
+          <div>
+            <h3 className="text-lg font-semibold">Ratios vers masse / volume</h3>
+            <p className="text-sm text-muted-foreground">
+              Pour les autres unités, définis simplement leur équivalent en grammes et/ou en millilitres.
+            </p>
           </div>
-        </CardHeader>
-        <CardContent className="flex flex-col gap-3">
+          <Badge>Optionnel</Badge>
+        </div>
+        <div className="flex flex-col gap-4">
           {!currentUnit && (
-            <div className="rounded-lg border border-dashed border-border bg-muted/30 p-6 text-center text-sm text-muted-foreground">
+            <div className="rounded-lg border border-dashed border-border bg-muted/30 p-8 text-center text-sm text-muted-foreground">
               Enregistre l&apos;unité avant d&apos;ajouter ses ratios.
             </div>
           )}
           {currentUnit && isHardcodedMeasurementKind(currentUnit.kind) && (
-            <div className="rounded-lg border border-dashed border-border bg-muted/30 p-6 text-center text-sm text-muted-foreground">
+            <div className="rounded-lg border border-dashed border-border bg-muted/30 p-8 text-center text-sm text-muted-foreground">
               Les conversions entre g/kg et ml/cl/l sont définies dans le code.
             </div>
           )}
           {currentUnit && !isHardcodedMeasurementKind(currentUnit.kind) && measurementTargets.length === 0 && (
-            <div className="rounded-lg border border-dashed border-border bg-muted/30 p-6 text-center text-sm text-muted-foreground">
+            <div className="rounded-lg border border-dashed border-border bg-muted/30 p-8 text-center text-sm text-muted-foreground">
               Les unités de base g et ml doivent exister pour ajouter des conversions globales.
             </div>
           )}
@@ -210,55 +205,53 @@ export function UnitEditor({
               />
             ))
           )}
-        </CardContent>
-      </Card>
+        </div>
+      </div>
 
       {showDeleteWarning && currentUnit && (
-        <Card className="border-primary/20 bg-primary/5">
-          <CardHeader>
-            <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
-              <div className="flex min-w-0 flex-col gap-1">
-                <Badge className="w-fit border-primary/20 bg-card text-primary">Action irréversible</Badge>
-                <h3 className="text-lg font-semibold text-primary">
-                  Supprimer l&apos;unité « {currentUnit.name} » ?
-                </h3>
-                <p className="text-sm leading-6 text-muted-foreground">
-                  Cette unité est encore liée à {formatImpactCount(impactedIngredients.length)}.
-                  Vérifie les changements ci-dessous avant de confirmer.
-                </p>
-              </div>
-              <Badge className="w-fit shrink-0 bg-card">{currentUnit.symbol}</Badge>
+        <div className="rounded-xl border border-primary/20 bg-primary/5 p-6">
+          <div className="mb-6 flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
+            <div className="flex min-w-0 flex-col gap-2">
+              <Badge className="w-fit border-primary/20 bg-card text-primary">Action irréversible</Badge>
+              <h3 className="text-xl font-semibold text-primary">
+                Supprimer l&apos;unité « {currentUnit.name} » ?
+              </h3>
+              <p className="text-sm leading-6 text-muted-foreground">
+                Cette unité est encore liée à {formatImpactCount(impactedIngredients.length)}.
+                Vérifie les changements ci-dessous avant de confirmer.
+              </p>
             </div>
-          </CardHeader>
-          <CardContent className="flex flex-col gap-4">
-            <div className="rounded-lg border border-primary/20 bg-card p-3 text-sm leading-6 text-muted-foreground">
+            <Badge className="w-fit shrink-0 bg-card">{currentUnit.symbol}</Badge>
+          </div>
+          <div className="flex flex-col gap-6">
+            <div className="rounded-lg border border-primary/20 bg-card p-4 text-sm leading-6 text-muted-foreground">
               En confirmant, Kitchu supprimera l&apos;unité et nettoiera automatiquement les références associées
               pour éviter des conversions incohérentes.
             </div>
-            <div className="flex flex-col gap-2">
+            <div className="flex flex-col gap-4">
               {impactedIngredients.map((impact) => (
                 <div
                   key={impact.ingredientId}
-                  className="rounded-lg border border-primary/20 bg-card p-3"
+                  className="rounded-lg border border-primary/20 bg-card p-4"
                 >
                   <div className="font-semibold">{impact.ingredientName}</div>
-                  <div className="mt-3 grid gap-2 md:grid-cols-2">
+                  <div className="mt-4 grid gap-4 sm:grid-cols-2">
                     {impact.reasons.map((reason) => (
                       <div
                         key={`${impact.ingredientId}-${reason.title}-${reason.detail}`}
-                        className="rounded-md border border-border bg-muted/30 p-3"
+                        className="rounded-lg border border-border bg-muted/30 p-4"
                       >
                         <div className="text-xs font-semibold uppercase tracking-wide text-primary">
                           {reason.title}
                         </div>
-                        <div className="mt-1 text-sm leading-5 text-muted-foreground">{reason.detail}</div>
+                        <div className="mt-2 text-sm leading-5 text-muted-foreground">{reason.detail}</div>
                       </div>
                     ))}
                   </div>
                 </div>
               ))}
             </div>
-            <div className="flex flex-col gap-2 sm:flex-row sm:justify-end">
+            <div className="mt-2 flex flex-col gap-3 sm:flex-row sm:justify-end">
               <Button variant="outline" onClick={() => setShowDeleteWarning(false)} disabled={busy}>
                 Garder l&apos;unité
               </Button>
@@ -267,8 +260,8 @@ export function UnitEditor({
                 Supprimer définitivement
               </Button>
             </div>
-          </CardContent>
-        </Card>
+          </div>
+        </div>
       )}
 
       {!showDeleteWarning && (
@@ -299,23 +292,25 @@ function MeasurementRatioEditorRow({
   const numericFactor = Number(factor);
 
   return (
-    <div className="grid gap-3 rounded-lg border border-border bg-card p-3 shadow-sm md:grid-cols-[minmax(0,1fr)_160px_minmax(0,1fr)_auto] md:items-end">
-      <div className="min-w-0">
+    <div className="flex flex-col gap-4 rounded-xl border border-border bg-card p-4 shadow-sm sm:flex-row sm:items-end">
+      <div className="flex-1 min-w-0">
         <div className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">Destination</div>
         <div className="mt-1 font-semibold">{targetLabel}</div>
         <div className="text-sm text-muted-foreground">{targetUnit.symbol}</div>
       </div>
-      <Field label="Ratio">
-        <Input
-          type="number"
-          min={0}
-          step="0.0001"
-          value={factor}
-          onChange={(event) => setFactor(event.target.value)}
-          placeholder={`ex. ${targetUnit.code === "ml" ? "5" : "100"}`}
-        />
-      </Field>
-      <div className="flex min-w-0 items-end">
+      <div className="flex-1">
+        <Field label="Ratio">
+          <Input
+            type="number"
+            min={0}
+            step="0.0001"
+            value={factor}
+            onChange={(event) => setFactor(event.target.value)}
+            placeholder={`ex. ${targetUnit.code === "ml" ? "5" : "100"}`}
+          />
+        </Field>
+      </div>
+      <div className="flex min-w-0 flex-col gap-2 sm:flex-row sm:items-center">
         <div className="flex flex-wrap gap-2">
           <Badge variant="outline">
             {factor && Number.isFinite(numericFactor) && numericFactor > 0
@@ -326,36 +321,36 @@ function MeasurementRatioEditorRow({
             <Badge variant="secondary">Stocké {ratio.storedTargetUnit.symbol}</Badge>
           )}
         </div>
-      </div>
-      <div className="flex items-end justify-end gap-1">
-        {ratio && (
+        <div className="flex items-center gap-1 self-end sm:self-auto">
+          {ratio && (
+            <Button
+              variant="ghost"
+              size="icon"
+              aria-label={`Supprimer le ratio ${targetLabel.toLowerCase()}`}
+              onClick={() => onDelete(ratio.id)}
+              disabled={busy}
+            >
+              <Trash2 />
+            </Button>
+          )}
           <Button
-            variant="ghost"
-            size="icon"
-            aria-label={`Supprimer le ratio ${targetLabel.toLowerCase()}`}
-            onClick={() => onDelete(ratio.id)}
-            disabled={busy}
+            size="sm"
+            className="shrink-0"
+            aria-label={`Enregistrer le ratio ${targetLabel.toLowerCase()}`}
+            onClick={() =>
+              onSave({
+                id: ratio?.id,
+                fromUnitId: currentUnit.id,
+                toUnitId: targetUnit.id,
+                factor,
+              })
+            }
+            disabled={busy || !factor || !Number.isFinite(numericFactor) || numericFactor <= 0}
           >
-            <Trash2 />
+            <Save data-icon="inline-start" />
+            Enregistrer
           </Button>
-        )}
-        <Button
-          size="sm"
-          className="shrink-0"
-          aria-label={`Enregistrer le ratio ${targetLabel.toLowerCase()}`}
-          onClick={() =>
-            onSave({
-              id: ratio?.id,
-              fromUnitId: currentUnit.id,
-              toUnitId: targetUnit.id,
-              factor,
-            })
-          }
-          disabled={busy || !factor || !Number.isFinite(numericFactor) || numericFactor <= 0}
-        >
-          <Save data-icon="inline-start" />
-          Enregistrer
-        </Button>
+        </div>
       </div>
     </div>
   );
