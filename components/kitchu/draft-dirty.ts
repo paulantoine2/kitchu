@@ -17,6 +17,7 @@ function recipeFingerprint(draft: RecipeDraft) {
       unitId: item.unitId,
       quantityPerServing: item.quantityPerServing,
       unitToBaseFactor: item.unitToBaseFactor,
+      preparationWeightRatio: item.preparationWeightRatio,
       note: item.note,
     })),
     steps: draft.steps.map((step) => step.instruction),
@@ -28,6 +29,7 @@ function ingredientFingerprint(draft: IngredientDraft) {
     name: draft.name,
     imageUrl: draft.imageUrl,
     notes: draft.notes,
+    preparationWeightRatio: draft.preparationWeightRatio,
     baseUnitId: draft.baseUnitId,
     units: draft.units.map((unit) => ({
       unitId: unit.unitId,

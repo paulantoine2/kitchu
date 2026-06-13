@@ -28,6 +28,7 @@ export type IngredientRecord = {
   name: string;
   imageUrl: string | null;
   notes: string | null;
+  preparationWeightRatio: number | null;
   baseUnitId: string;
   baseUnit: UnitRecord;
   units: Array<{
@@ -78,6 +79,7 @@ export type RecipeRecord = {
     unitId: string;
     quantityPerServing: number;
     unitToBaseFactor: number | null;
+    preparationWeightRatio: number | null;
     note: string | null;
     position: number;
     ingredient: IngredientRecord;
@@ -110,6 +112,7 @@ export type RecipeDraftIngredient = {
   unitId: string;
   quantityPerServing: string;
   unitToBaseFactor: string;
+  preparationWeightRatio: string;
   note: string;
   importStatus?: RecipeImportStatus;
   suggestedUnitCode?: string;
@@ -121,6 +124,7 @@ export type IngredientDraft = {
   name: string;
   imageUrl: string;
   notes: string;
+  preparationWeightRatio: string;
   baseUnitId: string;
   units: Array<{ key: string; unitId: string; toBaseFactor: string }>;
   products: Array<{

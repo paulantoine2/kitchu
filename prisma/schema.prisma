@@ -55,11 +55,12 @@ model UnitRatio {
 }
 
 model Ingredient {
-  id          String             @id @default(uuid())
-  name        String             @unique
-  imageUrl    String?
-  notes       String?
-  baseUnitId  String
+  id                       String             @id @default(uuid())
+  name                     String             @unique
+  imageUrl                 String?
+  notes                    String?
+  preparationWeightRatio   Float?
+  baseUnitId               String
   baseUnit    Unit               @relation("IngredientBaseUnit", fields: [baseUnitId], references: [id])
   units       IngredientUnit[]
   products    ProductReference[]
@@ -128,13 +129,14 @@ model CartItem {
 }
 
 model RecipeIngredient {
-  id                 String     @id @default(uuid())
-  recipeId           String
-  ingredientId       String
-  unitId             String
-  quantityPerServing Float
-  unitToBaseFactor   Float?
-  note               String?
+  id                       String     @id @default(uuid())
+  recipeId                 String
+  ingredientId             String
+  unitId                   String
+  quantityPerServing       Float
+  unitToBaseFactor         Float?
+  preparationWeightRatio   Float?
+  note                     String?
   position           Int
   recipe             Recipe     @relation(fields: [recipeId], references: [id], onDelete: Cascade)
   ingredient         Ingredient @relation(fields: [ingredientId], references: [id])

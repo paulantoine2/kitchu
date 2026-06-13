@@ -24,15 +24,35 @@ export type PartialEstimateSeverity = "critical" | "minor";
 export function PartialEstimateIndicator({
   severity,
   className,
+  compact = false,
 }: {
   severity: PartialEstimateSeverity | null;
   className?: string;
+  compact?: boolean;
 }) {
   if (!severity) {
     return null;
   }
 
   if (severity === "critical") {
+    if (compact) {
+      return (
+        <Tooltip>
+          <TooltipTrigger
+            render={
+              <span
+                className={cn("inline-flex shrink-0 text-destructive/70", className)}
+                aria-label="Estimation indisponible"
+              />
+            }
+          >
+            <TriangleAlert className="size-3.5" />
+          </TooltipTrigger>
+          <TooltipContent>Estimation indisponible — données produit manquantes</TooltipContent>
+        </Tooltip>
+      );
+    }
+
     return (
       <Badge variant="outline" className={cn("text-[10px] text-muted-foreground", className)}>
         Estimation partielle
@@ -45,12 +65,16 @@ export function PartialEstimateIndicator({
       <TooltipTrigger
         render={
           <span
-            className={cn("inline-flex text-muted-foreground", className)}
+            className={cn(
+              "inline-flex shrink-0 text-muted-foreground",
+              compact && "opacity-60",
+              className,
+            )}
             aria-label="Estimation partielle"
           />
         }
       >
-        <TriangleAlert />
+        <TriangleAlert className={compact ? "size-3.5" : undefined} />
       </TooltipTrigger>
       <TooltipContent>
         Estimation partielle — certains ingrédients manquent de données produit

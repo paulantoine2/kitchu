@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { useState } from "react";
-import { ChevronDown, Clock, ExternalLink, Pencil, ShoppingBag, ShoppingCart } from "lucide-react";
+import { ChevronDown, Clock, ExternalLink, Pencil, Scale, ShoppingBag, ShoppingCart } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
@@ -45,6 +45,10 @@ import {
   type PartialEstimateSeverity,
 } from "@/components/kitchu/ui/shared";
 import { uniqueUnits } from "@/components/kitchu/utils";
+import {
+  estimateRecipeWeightPerServing,
+  formatRecipeWeight,
+} from "@/components/kitchu/recipe-weight";
 
 type RecipeIngredientRow = RecipeRecord["ingredients"][number];
 
@@ -447,6 +451,7 @@ function RecipeIngredientsPanel({
   units,
   globalRatios,
   applyStock,
+  weightEstimate,
 }: {
   sortedIngredients: RecipeIngredientRow[];
   estimates: RecipeCostEstimate[];
@@ -454,6 +459,7 @@ function RecipeIngredientsPanel({
   units: UnitRecord[];
   globalRatios: UnitRatioRecord[];
   applyStock: boolean;
+  weightEstimate: ReturnType<typeof estimateRecipeWeightPerServing>;
 }) {
   const estimateByIngredientId = new Map(estimates.map((estimate) => [estimate.ingredientId, estimate]));
   const firstRowByIngredientId = new Map<string, string>();
@@ -465,6 +471,11 @@ function RecipeIngredientsPanel({
 
   const portionCount = Math.max(1, portions);
   const hasEstimates = estimates.length > 0;
+  const totalWeightLabel =
+    weightEstimate.gramsPerServing !== null
+      ? formatRecipeWeight(weightEstimate.gramsPerServing * portionCount)
+      : null;
+  const weightPerServingLabel = formatRecipeWeight(weightEstimate.gramsPerServing);
 
   return (
     <Card>
@@ -477,11 +488,21 @@ function RecipeIngredientsPanel({
             <CardTitle className="text-lg">Ingrédients</CardTitle>
             <CardDescription>
               Quantités pour {portionCount} portion{portionCount > 1 ? "s" : ""}
+              {weightPerServingLabel && (
+                <>
+                  {" "}
+                  — poids estimé {totalWeightLabel}
+                  {portionCount > 1 ? ` (${weightPerServingLabel}/portion)` : ""}
+                  {!weightEstimate.isComplete ? " (partiel)" : ""}.
+                </>
+              )}
               {hasEstimates
                 ? applyStock
-                  ? " — détail d'achat avec stock et restes du panier déduits."
-                  : " — détail d'achat par ingrédient."
-                : "."}
+                  ? " Détail d'achat avec stock et restes du panier déduits."
+                  : " Détail d'achat par ingrédient."
+                : !weightPerServingLabel
+                  ? "."
+                  : ""}
             </CardDescription>
           </div>
         </div>
@@ -579,6 +600,8 @@ export function RecipeView({
   const theoreticalSum = sumPartial(estimates.map((estimate) => estimate.theoreticalPrice));
   const purchaseSum = sumPartial(estimates.map(estimatePurchaseTotal));
   const inventoryMatch = computeRecipeInventoryMatch(matchEstimates);
+  const weightEstimate = estimateRecipeWeightPerServing(recipe, globalRatios, units);
+  const weightPerServingLabel = formatRecipeWeight(weightEstimate.gramsPerServing);
   const estimateSeverity: PartialEstimateSeverity | null = (() => {
     if (!hasEstimates) {
       return null;
@@ -612,13 +635,6 @@ export function RecipeView({
           </div>
           <div className="flex min-w-0 flex-col">
             <CardHeader className="gap-4 pb-4">
-              <div className="flex items-start justify-between gap-3">
-                <p className="text-xs font-semibold uppercase tracking-wide text-primary">Recette sélectionnée</p>
-                <Button onClick={onEdit} size="sm" className="shrink-0">
-                  <Pencil data-icon="inline-start" />
-                  Modifier
-                </Button>
-              </div>
               <div className="flex items-start justify-between gap-4">
                 <div className="min-w-0 flex-1">
                   <h1 className="text-3xl font-semibold leading-tight tracking-tight sm:text-4xl">{recipe.name}</h1>
@@ -626,9 +642,15 @@ export function RecipeView({
                     <p className="mt-3 max-w-2xl text-[15px] leading-7 text-muted-foreground">{recipe.description}</p>
                   )}
                 </div>
-                {hasEstimates && inventoryMatch.percent !== null && (
-                  <RecipeMatchGauge percent={inventoryMatch.percent} compact />
-                )}
+                <div className="flex shrink-0 items-start gap-3">
+                  {hasEstimates && inventoryMatch.percent !== null && (
+                    <RecipeMatchGauge percent={inventoryMatch.percent} compact />
+                  )}
+                  <Button onClick={onEdit} size="sm" className="shrink-0">
+                    <Pencil data-icon="inline-start" />
+                    Modifier
+                  </Button>
+                </div>
               </div>
               <div className="flex flex-wrap items-center gap-2">
                 <Badge variant="secondary">{sortedIngredients.length} ingrédients</Badge>
@@ -637,6 +659,13 @@ export function RecipeView({
                   <Badge variant="secondary">
                     <Clock data-icon="inline-start" />
                     {totalMinutes} min
+                  </Badge>
+                )}
+                {weightPerServingLabel && (
+                  <Badge variant="secondary">
+                    <Scale data-icon="inline-start" />
+                    {weightPerServingLabel}/portion
+                    {!weightEstimate.isComplete && " · partiel"}
                   </Badge>
                 )}
                 {recipe.prepMinutes !== null && recipe.cookMinutes !== null && (
@@ -723,6 +752,7 @@ export function RecipeView({
           units={uniqueUnits(ingredients)}
           globalRatios={globalRatios}
           applyStock={applyStock}
+          weightEstimate={weightEstimate}
         />
 
         <Card>

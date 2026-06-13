@@ -80,6 +80,7 @@ export async function saveIngredient(payload: unknown) {
               name: data.name,
               imageUrl: data.imageUrl,
               notes: data.notes,
+              preparationWeightRatio: data.preparationWeightRatio,
               baseUnitId: data.baseUnitId,
             },
           })
@@ -88,6 +89,7 @@ export async function saveIngredient(payload: unknown) {
               name: data.name,
               imageUrl: data.imageUrl,
               notes: data.notes,
+              preparationWeightRatio: data.preparationWeightRatio,
               baseUnitId: data.baseUnitId,
             },
           });

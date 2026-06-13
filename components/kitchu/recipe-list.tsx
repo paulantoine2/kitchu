@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { useMemo, useState, useSyncExternalStore } from "react";
-import { Plus, Search, ShoppingCart } from "lucide-react";
+import { Clock, Plus, Scale, Search, ShoppingCart } from "lucide-react";
 import { ingredientImageUrl, recipeImageUrl } from "@/components/kitchu/images";
 import {
   computeRecipeListMatch,
@@ -11,11 +11,15 @@ import {
 } from "@/components/kitchu/recipe-cost";
 import { RecipeMatchGauge } from "@/components/kitchu/recipe-match-gauge";
 import { useKitchuSearch } from "@/components/kitchu/kitchu-search";
+import {
+  estimateRecipeWeightPerServing,
+  formatRecipeWeight,
+} from "@/components/kitchu/recipe-weight";
 import type { CartRecipeEntry, IngredientRecord, RecipeRecord, UnitRatioRecord, UnitRecord } from "@/components/kitchu/types";
 import { EntityImage, Field, PartialEstimateIndicator, type PartialEstimateSeverity } from "@/components/kitchu/ui/shared";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
+import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import {
   Combobox,
   ComboboxChip,
@@ -117,17 +121,19 @@ function PriceModeToggle({
 
 function RecipeCard({
   recipe,
-  priceMode,
   pricePerPortion,
   priceComplete,
+  weightPerPortion,
+  weightComplete,
   matchPercent,
   isInCart,
   onAddToCart,
 }: {
   recipe: RecipeRecord;
-  priceMode: RecipeListPriceMode;
   pricePerPortion: number | null;
   priceComplete: boolean;
+  weightPerPortion: string | null;
+  weightComplete: boolean;
   matchPercent: number | null;
   isInCart: boolean;
   onAddToCart: () => void;
@@ -140,7 +146,7 @@ function RecipeCard({
   const cartButtonLabel = isInCart ? "Ajuster le panier" : "Ajouter au panier";
 
   return (
-    <Card className="group/recipe-card gap-3 overflow-hidden py-0 transition-[transform,box-shadow] duration-300 ease-out hover:-translate-y-1 hover:shadow-lifted has-data-[slot=card-footer]:pb-0">
+    <Card className="gap-2 overflow-hidden py-0 transition-shadow duration-200 hover:shadow-md has-data-[slot=card-footer]:pb-0">
       <Link
         href={`/recipes/${recipe.id}`}
         aria-label={`Voir la recette ${recipe.name}`}
@@ -152,7 +158,7 @@ function RecipeCard({
             <img
               src={imageUrl}
               alt=""
-              className="size-full object-cover transition-transform duration-500 ease-out group-hover/recipe-card:scale-[1.04]"
+              className="size-full object-cover"
             />
           ) : (
             <div className="flex size-full items-center justify-center text-4xl font-semibold text-primary/70">
@@ -169,28 +175,43 @@ function RecipeCard({
             )
           )}
         </div>
-        <CardHeader className="pt-4">
-          <CardTitle className="line-clamp-2 text-lg leading-snug">{recipe.name}</CardTitle>
-          {totalMinutes > 0 && <CardDescription>{totalMinutes} min</CardDescription>}
+        <CardHeader className="gap-1.5 pt-4 pb-0">
+          <CardTitle className="line-clamp-1 text-lg leading-snug">{recipe.name}</CardTitle>
+          {(totalMinutes > 0 || weightPerPortion) && (
+            <div className="flex flex-wrap items-center gap-1.5">
+              {totalMinutes > 0 && (
+                <Badge variant="secondary">
+                  <Clock data-icon="inline-start" />
+                  {totalMinutes} min
+                </Badge>
+              )}
+              {weightPerPortion && (
+                <Badge variant="secondary">
+                  <Scale data-icon="inline-start" />
+                  {weightPerPortion}/portion
+                  {!weightComplete && " · partiel"}
+                </Badge>
+              )}
+            </div>
+          )}
         </CardHeader>
-        <CardContent className="pb-4">
-          <p className="text-[11px] font-semibold uppercase tracking-wide text-muted-foreground">
-            {priceMode === "theoretical" ? "Prix théorique" : "Prix d'achat"}
-          </p>
-          <p className="mt-0.5 text-xl font-semibold tabular-nums tracking-tight">
-            {pricePerPortion !== null ? (
-              <>
-                {formatCurrency(pricePerPortion)}
-                <span className="text-sm font-medium text-muted-foreground">/portion</span>
-              </>
-            ) : (
-              "—"
-            )}
-          </p>
-          <PartialEstimateIndicator severity={estimateSeverity} className="mt-2" />
+        <CardContent className="pt-3 pb-0">
+          <div className="flex items-baseline gap-1.5">
+            <p className="text-xl font-semibold tabular-nums tracking-tight">
+              {pricePerPortion !== null ? (
+                <>
+                  {formatCurrency(pricePerPortion)}
+                  <span className="text-sm font-medium text-muted-foreground">/portion</span>
+                </>
+              ) : (
+                "—"
+              )}
+            </p>
+            <PartialEstimateIndicator severity={estimateSeverity} compact />
+          </div>
         </CardContent>
       </Link>
-      <CardFooter className="border-t-0 bg-transparent pt-0">
+      <CardFooter className="border-t-0 bg-transparent px-(--card-spacing) pt-0 pb-4">
         <Button
           size="sm"
           variant={isInCart ? "secondary" : "default"}
@@ -273,7 +294,13 @@ export function RecipeList({
   const cardDataByRecipeId = useMemo(() => {
     const entries = new Map<
       string,
-      { perPortion: number | null; isComplete: boolean; matchPercent: number | null }
+      {
+        perPortion: number | null;
+        isComplete: boolean;
+        weightPerPortion: string | null;
+        weightComplete: boolean;
+        matchPercent: number | null;
+      }
     >();
     for (const recipe of filteredRecipes) {
       const price = computeRecipeListPrice({
@@ -288,6 +315,7 @@ export function RecipeList({
         recipes: allRecipes,
         priceMode,
       });
+      const weight = estimateRecipeWeightPerServing(recipe, globalRatios, units);
       const match = isInCart(recipe.id)
         ? { percent: null }
         : computeRecipeListMatch({
@@ -304,6 +332,8 @@ export function RecipeList({
       entries.set(recipe.id, {
         perPortion: price.perPortion,
         isComplete: price.isComplete,
+        weightPerPortion: formatRecipeWeight(weight.gramsPerServing),
+        weightComplete: weight.isComplete,
         matchPercent: match.percent,
       });
     }
@@ -479,9 +509,10 @@ export function RecipeList({
               <RecipeCard
                 key={recipe.id}
                 recipe={recipe}
-                priceMode={priceMode}
                 pricePerPortion={cardData?.perPortion ?? null}
                 priceComplete={cardData?.isComplete ?? false}
+                weightPerPortion={cardData?.weightPerPortion ?? null}
+                weightComplete={cardData?.weightComplete ?? true}
                 matchPercent={cardData?.matchPercent ?? null}
                 isInCart={isInCart(recipe.id)}
                 onAddToCart={() => onAddToCart(recipe.id, portionCount)}

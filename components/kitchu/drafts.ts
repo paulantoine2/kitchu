@@ -31,6 +31,7 @@ export function helloFreshImportToDraft(result: HelloFreshImportResult): RecipeD
       unitId: match.unitId,
       quantityPerServing: match.amount > 0 ? String(match.amount) : "",
       unitToBaseFactor: "",
+      preparationWeightRatio: "",
       note: "",
       importStatus: match.status,
       suggestedUnitCode: match.suggestedUnitCode ?? undefined,
@@ -62,6 +63,7 @@ export function blankRecipeIngredient(): RecipeDraftIngredient {
     unitId: "",
     quantityPerServing: "",
     unitToBaseFactor: "",
+    preparationWeightRatio: "",
     note: "",
   };
 }
@@ -87,6 +89,7 @@ export function recipeToDraft(recipe?: RecipeRecord | null): RecipeDraft {
         unitId: item.unitId,
         quantityPerServing: item.quantityPerServing.toString(),
         unitToBaseFactor: item.unitToBaseFactor?.toString() ?? "",
+        preparationWeightRatio: item.preparationWeightRatio?.toString() ?? "",
         note: item.note ?? "",
       })),
     steps: recipe.steps
@@ -101,6 +104,7 @@ export function blankIngredient(baseUnitId = ""): IngredientDraft {
     name: "",
     imageUrl: "",
     notes: "",
+    preparationWeightRatio: "",
     baseUnitId,
     units: baseUnitId ? [{ key: key(), unitId: baseUnitId, toBaseFactor: "1" }] : [],
     products: [],
@@ -119,6 +123,7 @@ export function ingredientToDraft(
     name: ingredient.name,
     imageUrl: ingredient.imageUrl ?? "",
     notes: ingredient.notes ?? "",
+    preparationWeightRatio: ingredient.preparationWeightRatio?.toString() ?? "",
     baseUnitId: ingredient.baseUnitId,
     units: ingredient.units.map((unit) => ({
       key: unit.id,

@@ -75,6 +75,9 @@ export function toRecipePayload(draft: RecipeDraft) {
         unitId: item.unitId,
         quantityPerServing: Number(item.quantityPerServing),
         unitToBaseFactor: item.unitToBaseFactor.trim() ? Number(item.unitToBaseFactor) : null,
+        preparationWeightRatio: item.preparationWeightRatio.trim()
+          ? Number(item.preparationWeightRatio)
+          : null,
         note: item.note,
       })),
     steps: draft.steps
@@ -99,6 +102,9 @@ export function toIngredientPayload(draft: IngredientDraft, units: UnitRecord[],
     name: draft.name,
     imageUrl: draft.imageUrl,
     notes: draft.notes,
+    preparationWeightRatio: draft.preparationWeightRatio.trim()
+      ? Number(draft.preparationWeightRatio)
+      : null,
     baseUnitId: draft.baseUnitId,
     units: Array.from(payloadUnits.values()),
     products: draft.products

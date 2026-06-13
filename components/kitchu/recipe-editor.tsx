@@ -4,7 +4,7 @@ import { useState } from "react";
 import { GripVertical, Plus, Trash2, X } from "lucide-react";
 import { effectiveToBaseFactor, globalConversionFactor, pricePerBaseUnit } from "@/lib/conversions";
 import { PRODUCT_STORAGE_TYPES, isProductStorageType, productStorageLabels } from "@/lib/product-storage";
-import { formatCurrency } from "@/lib/utils";
+import { formatCurrency, formatNumber } from "@/lib/utils";
 import { HelloFreshImporter } from "@/components/hellofresh-importer";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -54,6 +54,10 @@ import {
   measurementKindLabel,
   usableUnitsForIngredient,
 } from "@/components/kitchu/unit-helpers";
+import {
+  estimateDraftRecipeWeightPerServing,
+  formatRecipeWeight,
+} from "@/components/kitchu/recipe-weight";
 import { move, standardUnitForPrice } from "@/components/kitchu/utils";
 
 const KNOWN_STORES = ["Leclerc", "Carrefour", "Intermarché", "Primeur"] as const;
@@ -258,6 +262,7 @@ export function RecipeEditor({
       ingredientId: ingredient.id,
       unitId: usableUnits[0]?.unitId ?? "",
       unitToBaseFactor: "",
+      preparationWeightRatio: "",
       importStatus: undefined,
     });
   }
@@ -274,6 +279,7 @@ export function RecipeEditor({
       ingredientId: match?.id ?? "",
       unitId: match ? usableUnits[0]?.unitId ?? "" : "",
       unitToBaseFactor: "",
+      preparationWeightRatio: "",
       importStatus: match || !value.trim() ? undefined : "ingredient_missing",
     });
   }
@@ -341,6 +347,8 @@ export function RecipeEditor({
       ? dialogProductDerivedPrice * dialogPreferredPriceFactor
       : dialogProductDerivedPrice;
   const dialogProductComplete = isDialogProductComplete(dialogProduct);
+  const weightEstimate = estimateDraftRecipeWeightPerServing(draft, ingredients, globalRatios, units);
+  const weightPerServingLabel = formatRecipeWeight(weightEstimate.gramsPerServing);
 
   return (
     <section className="mx-auto flex w-full max-w-3xl animate-fade-in flex-col gap-12 pb-20">
@@ -415,6 +423,12 @@ export function RecipeEditor({
         <div className="mb-6 flex items-center justify-between gap-4">
           <div>
             <h3 className="text-lg font-semibold">Ingrédients</h3>
+            {weightPerServingLabel && (
+              <p className="text-sm text-muted-foreground">
+                Poids estimé : {weightPerServingLabel}/portion
+                {!weightEstimate.isComplete && " (partiel)"}
+              </p>
+            )}
             {importIssues > 0 && (
               <p className="text-sm text-amber-700">
                 {importIssues} ligne(s) importée(s) nécessitent une action.
@@ -440,6 +454,8 @@ export function RecipeEditor({
                 ? canDefineIngredientSpecificRatio(selectedUnit, ingredient.baseUnit, globalRatios, units)
                 : false;
             const defaultUnitFactor = ingredient && row.unitId ? ingredientUnitToBaseFactor(ingredient, row.unitId) : null;
+            const allowsWeightRatioOverride = ingredient?.baseUnit.kind === "MASS";
+            const defaultWeightRatio = ingredient?.preparationWeightRatio;
             return (
               <div
                 key={row.key}
@@ -598,6 +614,26 @@ export function RecipeEditor({
                         ? `Moyenne ingrédient : ${defaultUnitFactor} ${ingredient?.baseUnit.symbol}. `
                         : ""}
                       Surcharge le poids d&apos;une pièce pour cette recette — par exemple une grosse ou une petite tomate.
+                    </p>
+                  </div>
+                )}
+                {allowsWeightRatioOverride && (
+                  <div className="mt-4 grid gap-2 sm:grid-cols-[minmax(0,180px)_1fr] sm:items-end">
+                    <Field label="Ratio de poids">
+                      <Input
+                        type="number"
+                        min={0}
+                        step="0.01"
+                        value={row.preparationWeightRatio}
+                        placeholder={defaultWeightRatio?.toString() ?? "1"}
+                        onChange={(event) => updateRow(row.key, { preparationWeightRatio: event.target.value })}
+                      />
+                    </Field>
+                    <p className="text-xs text-muted-foreground sm:pb-2">
+                      {defaultWeightRatio && defaultWeightRatio !== 1
+                        ? `Défaut ingrédient : ×${formatNumber(defaultWeightRatio)}. `
+                        : ""}
+                      Poids final / poids brut après préparation — par exemple ×2,25 pour des pâtes cuites.
                     </p>
                   </div>
                 )}

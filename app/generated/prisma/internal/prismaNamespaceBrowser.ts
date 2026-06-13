@@ -110,6 +110,7 @@ export const IngredientScalarFieldEnum = {
   name: 'name',
   imageUrl: 'imageUrl',
   notes: 'notes',
+  preparationWeightRatio: 'preparationWeightRatio',
   baseUnitId: 'baseUnitId',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
@@ -186,6 +187,7 @@ export const RecipeIngredientScalarFieldEnum = {
   unitId: 'unitId',
   quantityPerServing: 'quantityPerServing',
   unitToBaseFactor: 'unitToBaseFactor',
+  preparationWeightRatio: 'preparationWeightRatio',
   note: 'note',
   position: 'position'
 } as const

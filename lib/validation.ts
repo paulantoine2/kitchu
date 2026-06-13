@@ -3,6 +3,11 @@ import { isProductStorageType } from "@/lib/product-storage";
 
 const optionalText = z.string().trim().optional().transform((value) => value || null);
 const positiveNumber = z.coerce.number().positive();
+const optionalPositiveNumber = z
+  .union([z.literal(""), positiveNumber])
+  .optional()
+  .nullable()
+  .transform((value) => (value === "" || value == null ? null : value));
 const nonNegativeInteger = z.coerce.number().int().nonnegative().optional().nullable();
 
 export const unitPayloadSchema = z.object({
@@ -22,6 +27,7 @@ export const ingredientPayloadSchema = z.object({
   name: z.string().trim().min(1, "Le nom est requis."),
   imageUrl: optionalText,
   notes: optionalText,
+  preparationWeightRatio: optionalPositiveNumber,
   baseUnitId: z.string().min(1, "Choisis un type de mesure."),
   units: z
     .array(
@@ -85,6 +91,7 @@ export const recipePayloadSchema = z.object({
           .optional()
           .nullable()
           .transform((value) => (value === "" || value == null ? null : value)),
+        preparationWeightRatio: optionalPositiveNumber,
         note: optionalText,
       }),
     )

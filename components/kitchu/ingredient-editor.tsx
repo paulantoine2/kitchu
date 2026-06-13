@@ -147,6 +147,21 @@ export function IngredientEditor({
           <Field label="Notes">
             <Textarea value={draft.notes} onChange={(event) => setDraft({ ...draft, notes: event.target.value })} />
           </Field>
+          {baseUnit?.kind === "MASS" && (
+            <Field label="Ratio de poids à la préparation">
+              <Input
+                type="number"
+                min={0}
+                step="0.01"
+                value={draft.preparationWeightRatio}
+                placeholder="1"
+                onChange={(event) => setDraft({ ...draft, preparationWeightRatio: event.target.value })}
+              />
+              <p className="text-sm text-muted-foreground">
+                Poids final / poids brut après préparation. Laisse vide pour ×1 — par exemple ×2,25 pour des pâtes cuites.
+              </p>
+            </Field>
+          )}
         </div>
       </div>
 

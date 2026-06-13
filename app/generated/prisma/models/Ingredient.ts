@@ -20,8 +20,18 @@ export type IngredientModel = runtime.Types.Result.DefaultSelection<Prisma.$Ingr
 
 export type AggregateIngredient = {
   _count: IngredientCountAggregateOutputType | null
+  _avg: IngredientAvgAggregateOutputType | null
+  _sum: IngredientSumAggregateOutputType | null
   _min: IngredientMinAggregateOutputType | null
   _max: IngredientMaxAggregateOutputType | null
+}
+
+export type IngredientAvgAggregateOutputType = {
+  preparationWeightRatio: number | null
+}
+
+export type IngredientSumAggregateOutputType = {
+  preparationWeightRatio: number | null
 }
 
 export type IngredientMinAggregateOutputType = {
@@ -29,6 +39,7 @@ export type IngredientMinAggregateOutputType = {
   name: string | null
   imageUrl: string | null
   notes: string | null
+  preparationWeightRatio: number | null
   baseUnitId: string | null
   createdAt: Date | null
   updatedAt: Date | null
@@ -39,6 +50,7 @@ export type IngredientMaxAggregateOutputType = {
   name: string | null
   imageUrl: string | null
   notes: string | null
+  preparationWeightRatio: number | null
   baseUnitId: string | null
   createdAt: Date | null
   updatedAt: Date | null
@@ -49,6 +61,7 @@ export type IngredientCountAggregateOutputType = {
   name: number
   imageUrl: number
   notes: number
+  preparationWeightRatio: number
   baseUnitId: number
   createdAt: number
   updatedAt: number
@@ -56,11 +69,20 @@ export type IngredientCountAggregateOutputType = {
 }
 
 
+export type IngredientAvgAggregateInputType = {
+  preparationWeightRatio?: true
+}
+
+export type IngredientSumAggregateInputType = {
+  preparationWeightRatio?: true
+}
+
 export type IngredientMinAggregateInputType = {
   id?: true
   name?: true
   imageUrl?: true
   notes?: true
+  preparationWeightRatio?: true
   baseUnitId?: true
   createdAt?: true
   updatedAt?: true
@@ -71,6 +93,7 @@ export type IngredientMaxAggregateInputType = {
   name?: true
   imageUrl?: true
   notes?: true
+  preparationWeightRatio?: true
   baseUnitId?: true
   createdAt?: true
   updatedAt?: true
@@ -81,6 +104,7 @@ export type IngredientCountAggregateInputType = {
   name?: true
   imageUrl?: true
   notes?: true
+  preparationWeightRatio?: true
   baseUnitId?: true
   createdAt?: true
   updatedAt?: true
@@ -125,6 +149,18 @@ export type IngredientAggregateArgs<ExtArgs extends runtime.Types.Extensions.Int
   /**
    * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
    * 
+   * Select which fields to average
+  **/
+  _avg?: IngredientAvgAggregateInputType
+  /**
+   * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+   * 
+   * Select which fields to sum
+  **/
+  _sum?: IngredientSumAggregateInputType
+  /**
+   * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+   * 
    * Select which fields to find the minimum value
   **/
   _min?: IngredientMinAggregateInputType
@@ -155,6 +191,8 @@ export type IngredientGroupByArgs<ExtArgs extends runtime.Types.Extensions.Inter
   take?: number
   skip?: number
   _count?: IngredientCountAggregateInputType | true
+  _avg?: IngredientAvgAggregateInputType
+  _sum?: IngredientSumAggregateInputType
   _min?: IngredientMinAggregateInputType
   _max?: IngredientMaxAggregateInputType
 }
@@ -164,10 +202,13 @@ export type IngredientGroupByOutputType = {
   name: string
   imageUrl: string | null
   notes: string | null
+  preparationWeightRatio: number | null
   baseUnitId: string
   createdAt: Date
   updatedAt: Date
   _count: IngredientCountAggregateOutputType | null
+  _avg: IngredientAvgAggregateOutputType | null
+  _sum: IngredientSumAggregateOutputType | null
   _min: IngredientMinAggregateOutputType | null
   _max: IngredientMaxAggregateOutputType | null
 }
@@ -195,6 +236,7 @@ export type IngredientWhereInput = {
   name?: Prisma.StringFilter<"Ingredient"> | string
   imageUrl?: Prisma.StringNullableFilter<"Ingredient"> | string | null
   notes?: Prisma.StringNullableFilter<"Ingredient"> | string | null
+  preparationWeightRatio?: Prisma.FloatNullableFilter<"Ingredient"> | number | null
   baseUnitId?: Prisma.StringFilter<"Ingredient"> | string
   createdAt?: Prisma.DateTimeFilter<"Ingredient"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Ingredient"> | Date | string
@@ -209,6 +251,7 @@ export type IngredientOrderByWithRelationInput = {
   name?: Prisma.SortOrder
   imageUrl?: Prisma.SortOrderInput | Prisma.SortOrder
   notes?: Prisma.SortOrderInput | Prisma.SortOrder
+  preparationWeightRatio?: Prisma.SortOrderInput | Prisma.SortOrder
   baseUnitId?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
@@ -226,6 +269,7 @@ export type IngredientWhereUniqueInput = Prisma.AtLeast<{
   NOT?: Prisma.IngredientWhereInput | Prisma.IngredientWhereInput[]
   imageUrl?: Prisma.StringNullableFilter<"Ingredient"> | string | null
   notes?: Prisma.StringNullableFilter<"Ingredient"> | string | null
+  preparationWeightRatio?: Prisma.FloatNullableFilter<"Ingredient"> | number | null
   baseUnitId?: Prisma.StringFilter<"Ingredient"> | string
   createdAt?: Prisma.DateTimeFilter<"Ingredient"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Ingredient"> | Date | string
@@ -240,12 +284,15 @@ export type IngredientOrderByWithAggregationInput = {
   name?: Prisma.SortOrder
   imageUrl?: Prisma.SortOrderInput | Prisma.SortOrder
   notes?: Prisma.SortOrderInput | Prisma.SortOrder
+  preparationWeightRatio?: Prisma.SortOrderInput | Prisma.SortOrder
   baseUnitId?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   _count?: Prisma.IngredientCountOrderByAggregateInput
+  _avg?: Prisma.IngredientAvgOrderByAggregateInput
   _max?: Prisma.IngredientMaxOrderByAggregateInput
   _min?: Prisma.IngredientMinOrderByAggregateInput
+  _sum?: Prisma.IngredientSumOrderByAggregateInput
 }
 
 export type IngredientScalarWhereWithAggregatesInput = {
@@ -256,6 +303,7 @@ export type IngredientScalarWhereWithAggregatesInput = {
   name?: Prisma.StringWithAggregatesFilter<"Ingredient"> | string
   imageUrl?: Prisma.StringNullableWithAggregatesFilter<"Ingredient"> | string | null
   notes?: Prisma.StringNullableWithAggregatesFilter<"Ingredient"> | string | null
+  preparationWeightRatio?: Prisma.FloatNullableWithAggregatesFilter<"Ingredient"> | number | null
   baseUnitId?: Prisma.StringWithAggregatesFilter<"Ingredient"> | string
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"Ingredient"> | Date | string
   updatedAt?: Prisma.DateTimeWithAggregatesFilter<"Ingredient"> | Date | string
@@ -266,6 +314,7 @@ export type IngredientCreateInput = {
   name: string
   imageUrl?: string | null
   notes?: string | null
+  preparationWeightRatio?: number | null
   createdAt?: Date | string
   updatedAt?: Date | string
   baseUnit: Prisma.UnitCreateNestedOneWithoutBaseIngredientsInput
@@ -279,6 +328,7 @@ export type IngredientUncheckedCreateInput = {
   name: string
   imageUrl?: string | null
   notes?: string | null
+  preparationWeightRatio?: number | null
   baseUnitId: string
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -292,6 +342,7 @@ export type IngredientUpdateInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string
   imageUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  preparationWeightRatio?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   baseUnit?: Prisma.UnitUpdateOneRequiredWithoutBaseIngredientsNestedInput
@@ -305,6 +356,7 @@ export type IngredientUncheckedUpdateInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string
   imageUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  preparationWeightRatio?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   baseUnitId?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -318,6 +370,7 @@ export type IngredientCreateManyInput = {
   name: string
   imageUrl?: string | null
   notes?: string | null
+  preparationWeightRatio?: number | null
   baseUnitId: string
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -328,6 +381,7 @@ export type IngredientUpdateManyMutationInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string
   imageUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  preparationWeightRatio?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -337,6 +391,7 @@ export type IngredientUncheckedUpdateManyInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string
   imageUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  preparationWeightRatio?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   baseUnitId?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -357,9 +412,14 @@ export type IngredientCountOrderByAggregateInput = {
   name?: Prisma.SortOrder
   imageUrl?: Prisma.SortOrder
   notes?: Prisma.SortOrder
+  preparationWeightRatio?: Prisma.SortOrder
   baseUnitId?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
+}
+
+export type IngredientAvgOrderByAggregateInput = {
+  preparationWeightRatio?: Prisma.SortOrder
 }
 
 export type IngredientMaxOrderByAggregateInput = {
@@ -367,6 +427,7 @@ export type IngredientMaxOrderByAggregateInput = {
   name?: Prisma.SortOrder
   imageUrl?: Prisma.SortOrder
   notes?: Prisma.SortOrder
+  preparationWeightRatio?: Prisma.SortOrder
   baseUnitId?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
@@ -377,9 +438,14 @@ export type IngredientMinOrderByAggregateInput = {
   name?: Prisma.SortOrder
   imageUrl?: Prisma.SortOrder
   notes?: Prisma.SortOrder
+  preparationWeightRatio?: Prisma.SortOrder
   baseUnitId?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
+}
+
+export type IngredientSumOrderByAggregateInput = {
+  preparationWeightRatio?: Prisma.SortOrder
 }
 
 export type IngredientScalarRelationFilter = {
@@ -476,6 +542,7 @@ export type IngredientCreateWithoutBaseUnitInput = {
   name: string
   imageUrl?: string | null
   notes?: string | null
+  preparationWeightRatio?: number | null
   createdAt?: Date | string
   updatedAt?: Date | string
   units?: Prisma.IngredientUnitCreateNestedManyWithoutIngredientInput
@@ -488,6 +555,7 @@ export type IngredientUncheckedCreateWithoutBaseUnitInput = {
   name: string
   imageUrl?: string | null
   notes?: string | null
+  preparationWeightRatio?: number | null
   createdAt?: Date | string
   updatedAt?: Date | string
   units?: Prisma.IngredientUnitUncheckedCreateNestedManyWithoutIngredientInput
@@ -529,6 +597,7 @@ export type IngredientScalarWhereInput = {
   name?: Prisma.StringFilter<"Ingredient"> | string
   imageUrl?: Prisma.StringNullableFilter<"Ingredient"> | string | null
   notes?: Prisma.StringNullableFilter<"Ingredient"> | string | null
+  preparationWeightRatio?: Prisma.FloatNullableFilter<"Ingredient"> | number | null
   baseUnitId?: Prisma.StringFilter<"Ingredient"> | string
   createdAt?: Prisma.DateTimeFilter<"Ingredient"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Ingredient"> | Date | string
@@ -539,6 +608,7 @@ export type IngredientCreateWithoutUnitsInput = {
   name: string
   imageUrl?: string | null
   notes?: string | null
+  preparationWeightRatio?: number | null
   createdAt?: Date | string
   updatedAt?: Date | string
   baseUnit: Prisma.UnitCreateNestedOneWithoutBaseIngredientsInput
@@ -551,6 +621,7 @@ export type IngredientUncheckedCreateWithoutUnitsInput = {
   name: string
   imageUrl?: string | null
   notes?: string | null
+  preparationWeightRatio?: number | null
   baseUnitId: string
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -579,6 +650,7 @@ export type IngredientUpdateWithoutUnitsInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string
   imageUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  preparationWeightRatio?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   baseUnit?: Prisma.UnitUpdateOneRequiredWithoutBaseIngredientsNestedInput
@@ -591,6 +663,7 @@ export type IngredientUncheckedUpdateWithoutUnitsInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string
   imageUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  preparationWeightRatio?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   baseUnitId?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -603,6 +676,7 @@ export type IngredientCreateWithoutProductsInput = {
   name: string
   imageUrl?: string | null
   notes?: string | null
+  preparationWeightRatio?: number | null
   createdAt?: Date | string
   updatedAt?: Date | string
   baseUnit: Prisma.UnitCreateNestedOneWithoutBaseIngredientsInput
@@ -615,6 +689,7 @@ export type IngredientUncheckedCreateWithoutProductsInput = {
   name: string
   imageUrl?: string | null
   notes?: string | null
+  preparationWeightRatio?: number | null
   baseUnitId: string
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -643,6 +718,7 @@ export type IngredientUpdateWithoutProductsInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string
   imageUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  preparationWeightRatio?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   baseUnit?: Prisma.UnitUpdateOneRequiredWithoutBaseIngredientsNestedInput
@@ -655,6 +731,7 @@ export type IngredientUncheckedUpdateWithoutProductsInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string
   imageUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  preparationWeightRatio?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   baseUnitId?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -667,6 +744,7 @@ export type IngredientCreateWithoutRecipeItemsInput = {
   name: string
   imageUrl?: string | null
   notes?: string | null
+  preparationWeightRatio?: number | null
   createdAt?: Date | string
   updatedAt?: Date | string
   baseUnit: Prisma.UnitCreateNestedOneWithoutBaseIngredientsInput
@@ -679,6 +757,7 @@ export type IngredientUncheckedCreateWithoutRecipeItemsInput = {
   name: string
   imageUrl?: string | null
   notes?: string | null
+  preparationWeightRatio?: number | null
   baseUnitId: string
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -707,6 +786,7 @@ export type IngredientUpdateWithoutRecipeItemsInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string
   imageUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  preparationWeightRatio?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   baseUnit?: Prisma.UnitUpdateOneRequiredWithoutBaseIngredientsNestedInput
@@ -719,6 +799,7 @@ export type IngredientUncheckedUpdateWithoutRecipeItemsInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string
   imageUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  preparationWeightRatio?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   baseUnitId?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -731,6 +812,7 @@ export type IngredientCreateManyBaseUnitInput = {
   name: string
   imageUrl?: string | null
   notes?: string | null
+  preparationWeightRatio?: number | null
   createdAt?: Date | string
   updatedAt?: Date | string
 }
@@ -740,6 +822,7 @@ export type IngredientUpdateWithoutBaseUnitInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string
   imageUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  preparationWeightRatio?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   units?: Prisma.IngredientUnitUpdateManyWithoutIngredientNestedInput
@@ -752,6 +835,7 @@ export type IngredientUncheckedUpdateWithoutBaseUnitInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string
   imageUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  preparationWeightRatio?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   units?: Prisma.IngredientUnitUncheckedUpdateManyWithoutIngredientNestedInput
@@ -764,6 +848,7 @@ export type IngredientUncheckedUpdateManyWithoutBaseUnitInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string
   imageUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  preparationWeightRatio?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -822,6 +907,7 @@ export type IngredientSelect<ExtArgs extends runtime.Types.Extensions.InternalAr
   name?: boolean
   imageUrl?: boolean
   notes?: boolean
+  preparationWeightRatio?: boolean
   baseUnitId?: boolean
   createdAt?: boolean
   updatedAt?: boolean
@@ -837,6 +923,7 @@ export type IngredientSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Ex
   name?: boolean
   imageUrl?: boolean
   notes?: boolean
+  preparationWeightRatio?: boolean
   baseUnitId?: boolean
   createdAt?: boolean
   updatedAt?: boolean
@@ -848,6 +935,7 @@ export type IngredientSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Ex
   name?: boolean
   imageUrl?: boolean
   notes?: boolean
+  preparationWeightRatio?: boolean
   baseUnitId?: boolean
   createdAt?: boolean
   updatedAt?: boolean
@@ -859,12 +947,13 @@ export type IngredientSelectScalar = {
   name?: boolean
   imageUrl?: boolean
   notes?: boolean
+  preparationWeightRatio?: boolean
   baseUnitId?: boolean
   createdAt?: boolean
   updatedAt?: boolean
 }
 
-export type IngredientOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "name" | "imageUrl" | "notes" | "baseUnitId" | "createdAt" | "updatedAt", ExtArgs["result"]["ingredient"]>
+export type IngredientOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "name" | "imageUrl" | "notes" | "preparationWeightRatio" | "baseUnitId" | "createdAt" | "updatedAt", ExtArgs["result"]["ingredient"]>
 export type IngredientInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   baseUnit?: boolean | Prisma.UnitDefaultArgs<ExtArgs>
   units?: boolean | Prisma.Ingredient$unitsArgs<ExtArgs>
@@ -892,6 +981,7 @@ export type $IngredientPayload<ExtArgs extends runtime.Types.Extensions.Internal
     name: string
     imageUrl: string | null
     notes: string | null
+    preparationWeightRatio: number | null
     baseUnitId: string
     createdAt: Date
     updatedAt: Date
@@ -1326,6 +1416,7 @@ export interface IngredientFieldRefs {
   readonly name: Prisma.FieldRef<"Ingredient", 'String'>
   readonly imageUrl: Prisma.FieldRef<"Ingredient", 'String'>
   readonly notes: Prisma.FieldRef<"Ingredient", 'String'>
+  readonly preparationWeightRatio: Prisma.FieldRef<"Ingredient", 'Float'>
   readonly baseUnitId: Prisma.FieldRef<"Ingredient", 'String'>
   readonly createdAt: Prisma.FieldRef<"Ingredient", 'DateTime'>
   readonly updatedAt: Prisma.FieldRef<"Ingredient", 'DateTime'>

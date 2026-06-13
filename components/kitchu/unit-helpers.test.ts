@@ -28,6 +28,7 @@ const tomato: IngredientRecord = {
   name: "Tomate",
   imageUrl: null,
   notes: null,
+  preparationWeightRatio: null,
   baseUnitId: gram.id,
   baseUnit: gram,
   units: [
