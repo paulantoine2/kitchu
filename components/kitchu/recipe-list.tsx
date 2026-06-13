@@ -10,6 +10,7 @@ import {
   type RecipeListPriceMode,
 } from "@/components/kitchu/recipe-cost";
 import { RecipeMatchGauge } from "@/components/kitchu/recipe-match-gauge";
+import { useKitchuSearch } from "@/components/kitchu/kitchu-search";
 import type { CartRecipeEntry, IngredientRecord, RecipeRecord, UnitRatioRecord, UnitRecord } from "@/components/kitchu/types";
 import { EntityImage, Field, PartialEstimateIndicator, type PartialEstimateSeverity } from "@/components/kitchu/ui/shared";
 import { Badge } from "@/components/ui/badge";
@@ -228,6 +229,7 @@ export function RecipeList({
   onAddToCart: (recipeId: string, portions: number) => void;
   onNewRecipe: () => void;
 }) {
+  const { query } = useKitchuSearch();
   const [selectedIngredients, setSelectedIngredients] = useState<IngredientRecord[]>([]);
   const [sortMode, setSortMode] = useState<RecipeListSortMode>("match");
   const [priceMode, setPriceMode] = useState<RecipeListPriceMode>("purchase");
@@ -250,16 +252,23 @@ export function RecipeList({
   const hasActiveFilters = selectedIngredients.length > 0;
 
   const filteredRecipes = useMemo(() => {
-    if (selectedIngredients.length === 0) {
-      return recipes;
+    let list = recipes;
+
+    if (selectedIngredients.length > 0) {
+      list = list.filter((recipe) =>
+        selectedIngredients.every((ingredient) =>
+          recipe.ingredients.some((item) => item.ingredientId === ingredient.id),
+        ),
+      );
     }
 
-    return recipes.filter((recipe) =>
-      selectedIngredients.every((ingredient) =>
-        recipe.ingredients.some((item) => item.ingredientId === ingredient.id),
-      ),
-    );
-  }, [recipes, selectedIngredients]);
+    const normalizedQuery = query.trim().toLowerCase();
+    if (normalizedQuery) {
+      list = list.filter((recipe) => recipe.name.toLowerCase().includes(normalizedQuery));
+    }
+
+    return list;
+  }, [recipes, selectedIngredients, query]);
 
   const cardDataByRecipeId = useMemo(() => {
     const entries = new Map<

@@ -62,7 +62,6 @@ export function UnitEditorPage({
 
   return (
     <KitchuShell
-      activeTab="units"
       cartOpen={cartOpen}
       onCartOpenChange={setCartOpen}
       cartItemCount={cart.itemCount}

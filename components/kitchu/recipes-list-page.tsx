@@ -12,7 +12,6 @@ export function RecipesListPage(props: KitchuAppProps) {
 
   return (
     <KitchuShell
-      activeTab="recipes"
       cartOpen={cartOpen}
       onCartOpenChange={setCartOpen}
       cartItemCount={cart.itemCount}

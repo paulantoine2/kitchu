@@ -70,7 +70,6 @@ export function IngredientEditorPage({
 
   return (
     <KitchuShell
-      activeTab="ingredients"
       cartOpen={cartOpen}
       onCartOpenChange={setCartOpen}
       cartItemCount={cart.itemCount}

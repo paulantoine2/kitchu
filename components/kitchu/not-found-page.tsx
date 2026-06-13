@@ -26,7 +26,6 @@ export function KitchuNotFoundPage() {
 
   return (
     <KitchuShell
-      activeTab="recipes"
       cartOpen={cartOpen}
       onCartOpenChange={setCartOpen}
       cartItemCount={0}

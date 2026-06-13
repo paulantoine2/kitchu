@@ -1,18 +1,14 @@
 "use client";
 
 import Link from "next/link";
-import { useMemo, useState } from "react";
-import { Plus, Search } from "lucide-react";
+import { useMemo } from "react";
+import { Plus } from "lucide-react";
+import { useKitchuSearch } from "@/components/kitchu/kitchu-search";
 import type { UnitRecord } from "@/components/kitchu/types";
 import { isHardcodedMeasurementKind } from "@/components/kitchu/unit-helpers";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Empty, EmptyDescription } from "@/components/ui/empty";
-import {
-  InputGroup,
-  InputGroupAddon,
-  InputGroupInput,
-} from "@/components/ui/input-group";
 import {
   Item,
   ItemContent,
@@ -97,7 +93,7 @@ export function UnitList({
   units: UnitRecord[];
   onNewUnit: () => void;
 }) {
-  const [search, setSearch] = useState("");
+  const { query } = useKitchuSearch();
 
   const filteredUnits = useMemo(
     () =>
@@ -105,9 +101,9 @@ export function UnitList({
         [unit.name, unit.code, unit.symbol, unit.kind]
           .join(" ")
           .toLowerCase()
-          .includes(search.toLowerCase()),
+          .includes(query.toLowerCase()),
       ),
-    [units, search],
+    [units, query],
   );
 
   const configurableCount = filteredUnits.filter((unit) => !isHardcodedMeasurementKind(unit.kind)).length;
@@ -130,21 +126,10 @@ export function UnitList({
         </Button>
       </div>
 
-      <InputGroup className="mb-6 rounded-full">
-        <InputGroupAddon align="inline-start">
-          <Search />
-        </InputGroupAddon>
-        <InputGroupInput
-          value={search}
-          onChange={(event) => setSearch(event.target.value)}
-          placeholder="Rechercher une unité"
-        />
-      </InputGroup>
-
       {filteredUnits.length === 0 ? (
         <Empty className="border border-dashed border-border/80 bg-card/50 py-16">
           <EmptyDescription>
-            {search ? "Aucune unité ne correspond à votre recherche." : "Aucune unité pour le moment."}
+            {query ? "Aucune unité ne correspond à votre recherche." : "Aucune unité pour le moment."}
           </EmptyDescription>
         </Empty>
       ) : (

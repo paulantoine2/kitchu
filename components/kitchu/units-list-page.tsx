@@ -12,7 +12,6 @@ export function UnitsListPage(props: KitchuAppProps) {
 
   return (
     <KitchuShell
-      activeTab="units"
       cartOpen={cartOpen}
       onCartOpenChange={setCartOpen}
       cartItemCount={cart.itemCount}

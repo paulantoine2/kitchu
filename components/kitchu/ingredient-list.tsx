@@ -1,8 +1,9 @@
 "use client";
 
 import Link from "next/link";
-import { useMemo, useState } from "react";
-import { Plus, Search, TriangleAlert } from "lucide-react";
+import { useMemo } from "react";
+import { Plus, TriangleAlert } from "lucide-react";
+import { useKitchuSearch } from "@/components/kitchu/kitchu-search";
 import { ingredientImageUrl } from "@/components/kitchu/images";
 import type { IngredientRecord } from "@/components/kitchu/types";
 import { EntityImage } from "@/components/kitchu/ui/shared";
@@ -10,11 +11,6 @@ import { compareProductStoragePriority, productStorageBadgeClass, productStorage
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Empty, EmptyDescription } from "@/components/ui/empty";
-import {
-  InputGroup,
-  InputGroupAddon,
-  InputGroupInput,
-} from "@/components/ui/input-group";
 import {
   Item,
   ItemContent,
@@ -142,14 +138,14 @@ export function IngredientList({
   ingredients: IngredientRecord[];
   onNewIngredient: () => void;
 }) {
-  const [search, setSearch] = useState("");
+  const { query } = useKitchuSearch();
 
   const filteredIngredients = useMemo(
     () =>
       ingredients.filter((ingredient) =>
-        ingredient.name.toLowerCase().includes(search.toLowerCase()),
+        ingredient.name.toLowerCase().includes(query.toLowerCase()),
       ),
-    [ingredients, search],
+    [ingredients, query],
   );
 
   return (
@@ -167,21 +163,10 @@ export function IngredientList({
         </Button>
       </div>
 
-      <InputGroup className="mb-6 rounded-full">
-        <InputGroupAddon align="inline-start">
-          <Search />
-        </InputGroupAddon>
-        <InputGroupInput
-          value={search}
-          onChange={(event) => setSearch(event.target.value)}
-          placeholder="Rechercher un ingrédient"
-        />
-      </InputGroup>
-
       {filteredIngredients.length === 0 ? (
         <Empty className="border border-dashed border-border/80 bg-card/50 py-16">
           <EmptyDescription>
-            {search ? "Aucun ingrédient ne correspond à votre recherche." : "Aucun ingrédient pour le moment."}
+            {query ? "Aucun ingrédient ne correspond à votre recherche." : "Aucun ingrédient pour le moment."}
           </EmptyDescription>
         </Empty>
       ) : (

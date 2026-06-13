@@ -77,7 +77,6 @@ export function RecipeEditorPage({
 
   return (
     <KitchuShell
-      activeTab="recipes"
       cartOpen={cartOpen}
       onCartOpenChange={setCartOpen}
       cartItemCount={cart.itemCount}
