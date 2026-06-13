@@ -202,7 +202,7 @@ export function usableUnitsForIngredient(
   });
 }
 
-export const baseMeasurementKinds = ["MASS", "VOLUME", "COUNT"] as const;
+export const baseMeasurementKinds = ["MASS", "VOLUME"] as const;
 
 export function measurementKindLabel(kind: string) {
   switch (kind) {

@@ -6,7 +6,7 @@ import { describe, it } from "node:test";
 import { matchHelloFreshRecipe } from "./match";
 import { htmlInstructionsToText, parseHelloFreshRecipe, parseIsoDurationMinutes } from "./parse";
 import type { HelloFreshRecipe } from "./types";
-import { helloFreshUnitToCode } from "./units";
+import { helloFreshUnitToCode, suggestedBaseUnitCode } from "./units";
 
 const fixtureDir = dirname(fileURLToPath(import.meta.url));
 const sampleRecipe = JSON.parse(
@@ -20,6 +20,16 @@ describe("helloFreshUnitToCode", () => {
     assert.equal(helloFreshUnitToCode("sachet(s)"), "sachet");
     assert.equal(helloFreshUnitToCode("cs"), "cas");
     assert.equal(helloFreshUnitToCode("selon le goût"), null);
+  });
+});
+
+describe("suggestedBaseUnitCode", () => {
+  it("suggests mass or volume bases only", () => {
+    assert.equal(suggestedBaseUnitCode("piece"), "g");
+    assert.equal(suggestedBaseUnitCode("filet"), "g");
+    assert.equal(suggestedBaseUnitCode("boite"), "g");
+    assert.equal(suggestedBaseUnitCode("cas"), "ml");
+    assert.equal(suggestedBaseUnitCode(null), "g");
   });
 });
 

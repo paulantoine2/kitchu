@@ -23,14 +23,14 @@ const BASE_UNIT_BY_CODE: Record<string, string> = {
   kg: "g",
   ml: "ml",
   l: "ml",
-  piece: "piece",
-  sachet: "piece",
-  pot: "piece",
+  piece: "g",
+  sachet: "g",
+  pot: "g",
   cas: "ml",
   cac: "ml",
-  filet: "filet",
-  tranche: "piece",
-  boite: "boite",
+  filet: "g",
+  tranche: "g",
+  boite: "g",
 };
 
 export function normalizeHelloFreshUnitLabel(unit: string): string {

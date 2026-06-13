@@ -36,6 +36,9 @@ export async function saveIngredient(payload: unknown) {
     if (!baseUnit) {
       throw new Error("Choisis une unité de base valide.");
     }
+    if (baseUnit.kind !== "MASS" && baseUnit.kind !== "VOLUME") {
+      throw new Error("L'unité de base doit être une masse ou un volume.");
+    }
 
     const normalizedUnits = units.map((unit) => {
       const unitRecord = unitById.get(unit.unitId);
