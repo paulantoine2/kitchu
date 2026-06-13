@@ -30,6 +30,7 @@ export function helloFreshImportToDraft(result: HelloFreshImportResult): RecipeD
       ingredientImageUrl: match.imageUrl,
       unitId: match.unitId,
       quantityPerServing: match.amount > 0 ? String(match.amount) : "",
+      unitToBaseFactor: "",
       note: "",
       importStatus: match.status,
       suggestedUnitCode: match.suggestedUnitCode ?? undefined,
@@ -60,6 +61,7 @@ export function blankRecipeIngredient(): RecipeDraftIngredient {
     ingredientImageUrl: "",
     unitId: "",
     quantityPerServing: "",
+    unitToBaseFactor: "",
     note: "",
   };
 }
@@ -84,6 +86,7 @@ export function recipeToDraft(recipe?: RecipeRecord | null): RecipeDraft {
         ingredientImageUrl: item.ingredient.imageUrl ?? "",
         unitId: item.unitId,
         quantityPerServing: item.quantityPerServing.toString(),
+        unitToBaseFactor: item.unitToBaseFactor?.toString() ?? "",
         note: item.note ?? "",
       })),
     steps: recipe.steps

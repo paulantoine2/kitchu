@@ -1,4 +1,4 @@
-import { globalConversionFactor } from "@/lib/conversions";
+import { effectiveToBaseFactor, globalConversionFactor } from "@/lib/conversions";
 import type {
   IngredientRecord,
   IngredientUnitOption,
@@ -240,4 +240,24 @@ export function baseMeasurementOptions(units: UnitRecord[]) {
 
 export function formatImpactCount(count: number) {
   return `${count} ingrédient${count > 1 ? "s" : ""} impacté${count > 1 ? "s" : ""}`;
+}
+
+export function ingredientUnitToBaseFactor(ingredient: IngredientRecord, unitId: string) {
+  return ingredient.units.find((entry) => entry.unitId === unitId)?.toBaseFactor ?? null;
+}
+
+export function recipeLineToBaseFactor(
+  ingredient: IngredientRecord,
+  unit: UnitRecord | undefined,
+  unitId: string,
+  unitToBaseFactor: number | null | undefined,
+  globalRatios: UnitRatioRecord[],
+  units: UnitRecord[],
+) {
+  const defaultFactor = ingredientUnitToBaseFactor(ingredient, unitId);
+  const specificFactor = unitToBaseFactor ?? defaultFactor;
+  return effectiveToBaseFactor(unit, ingredient.baseUnit, specificFactor, globalRatios, {
+    allowSpecific: true,
+    units,
+  });
 }

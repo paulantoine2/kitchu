@@ -20,7 +20,8 @@ import {
 } from "@/components/ui/item";
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible";
 import { Separator } from "@/components/ui/separator";
-import { convertToBase, effectiveToBaseFactor, scaleQuantity } from "@/lib/conversions";
+import { convertToBase, scaleQuantity } from "@/lib/conversions";
+import { recipeLineToBaseFactor } from "@/components/kitchu/unit-helpers";
 import { cn, formatCurrency, formatNumber } from "@/lib/utils";
 import { ingredientImageUrl, recipeImageUrl } from "@/components/kitchu/images";
 import { ProductStorageBadge } from "@/components/kitchu/product-storage-badge";
@@ -67,12 +68,13 @@ function formatIngredientQuantity(item: RecipeIngredientRow, portions: number, g
     return { primary, secondary: null };
   }
 
-  const baseFactor = effectiveToBaseFactor(
+  const baseFactor = recipeLineToBaseFactor(
+    item.ingredient,
     item.unit,
-    item.ingredient.baseUnit,
-    item.ingredient.units.find((entry) => entry.unitId === item.unitId)?.toBaseFactor,
+    item.unitId,
+    item.unitToBaseFactor,
     globalRatios,
-    { allowSpecific: true, units },
+    units,
   );
   const baseQuantity = convertToBase(item.quantityPerServing, baseFactor);
 

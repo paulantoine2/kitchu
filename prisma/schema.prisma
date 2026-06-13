@@ -133,6 +133,7 @@ model RecipeIngredient {
   ingredientId       String
   unitId             String
   quantityPerServing Float
+  unitToBaseFactor   Float?
   note               String?
   position           Int
   recipe             Recipe     @relation(fields: [recipeId], references: [id], onDelete: Cascade)

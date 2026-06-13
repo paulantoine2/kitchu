@@ -48,7 +48,9 @@ import type {
 import { EntityImage, Field, StickySave } from "@/components/kitchu/ui/shared";
 import {
   baseMeasurementOptions,
+  canDefineIngredientSpecificRatio,
   canonicalBaseUnitForKind,
+  ingredientUnitToBaseFactor,
   measurementKindLabel,
   usableUnitsForIngredient,
 } from "@/components/kitchu/unit-helpers";
@@ -255,12 +257,13 @@ export function RecipeEditor({
       ingredientName: ingredient.name,
       ingredientId: ingredient.id,
       unitId: usableUnits[0]?.unitId ?? "",
+      unitToBaseFactor: "",
       importStatus: undefined,
     });
   }
 
   function selectRecipeUnit(rowKey: string, unitId: string) {
-    updateRow(rowKey, unitId ? { unitId, importStatus: undefined } : { unitId });
+    updateRow(rowKey, unitId ? { unitId, unitToBaseFactor: "", importStatus: undefined } : { unitId, unitToBaseFactor: "" });
   }
 
   function updateIngredientInput(rowKey: string, value: string) {
@@ -270,6 +273,7 @@ export function RecipeEditor({
       ingredientName: value,
       ingredientId: match?.id ?? "",
       unitId: match ? usableUnits[0]?.unitId ?? "" : "",
+      unitToBaseFactor: "",
       importStatus: match || !value.trim() ? undefined : "ingredient_missing",
     });
   }
@@ -430,6 +434,12 @@ export function RecipeEditor({
           {draft.ingredients.map((row, index) => {
             const ingredient = ingredientById.get(row.ingredientId);
             const allowedUnits = ingredient ? usableUnitsForIngredient(ingredient, units, globalRatios) : [];
+            const selectedUnit = units.find((unit) => unit.id === row.unitId);
+            const allowsSizeOverride =
+              ingredient && selectedUnit
+                ? canDefineIngredientSpecificRatio(selectedUnit, ingredient.baseUnit, globalRatios, units)
+                : false;
+            const defaultUnitFactor = ingredient && row.unitId ? ingredientUnitToBaseFactor(ingredient, row.unitId) : null;
             return (
               <div
                 key={row.key}
@@ -571,6 +581,26 @@ export function RecipeEditor({
                     </Button>
                   </div>
                 </div>
+                {allowsSizeOverride && (
+                  <div className="mt-4 grid gap-2 sm:grid-cols-[minmax(0,180px)_1fr] sm:items-end">
+                    <Field label={`Taille (${ingredient?.baseUnit.symbol})`}>
+                      <Input
+                        type="number"
+                        min={0}
+                        step="0.01"
+                        value={row.unitToBaseFactor}
+                        placeholder={defaultUnitFactor?.toString() ?? ""}
+                        onChange={(event) => updateRow(row.key, { unitToBaseFactor: event.target.value })}
+                      />
+                    </Field>
+                    <p className="text-xs text-muted-foreground sm:pb-2">
+                      {defaultUnitFactor
+                        ? `Moyenne ingrédient : ${defaultUnitFactor} ${ingredient?.baseUnit.symbol}. `
+                        : ""}
+                      Surcharge le poids d&apos;une pièce pour cette recette — par exemple une grosse ou une petite tomate.
+                    </p>
+                  </div>
+                )}
                 {row.importStatus === "unit_missing" && row.ingredientId && row.suggestedUnitCode && (
                   <div className="mt-4 flex flex-wrap items-center gap-2 text-xs">
                     <Button

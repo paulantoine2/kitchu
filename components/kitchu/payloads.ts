@@ -74,6 +74,7 @@ export function toRecipePayload(draft: RecipeDraft) {
         ingredientId: item.ingredientId,
         unitId: item.unitId,
         quantityPerServing: Number(item.quantityPerServing),
+        unitToBaseFactor: item.unitToBaseFactor.trim() ? Number(item.unitToBaseFactor) : null,
         note: item.note,
       })),
     steps: draft.steps

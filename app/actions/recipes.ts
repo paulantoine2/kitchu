@@ -40,6 +40,7 @@ export async function saveRecipe(payload: unknown) {
           ingredientId: item.ingredientId,
           unitId: item.unitId,
           quantityPerServing: item.quantityPerServing,
+          unitToBaseFactor: item.unitToBaseFactor,
           note: item.note,
           position,
         })),

@@ -16,6 +16,7 @@ function recipeFingerprint(draft: RecipeDraft) {
       ingredientId: item.ingredientId,
       unitId: item.unitId,
       quantityPerServing: item.quantityPerServing,
+      unitToBaseFactor: item.unitToBaseFactor,
       note: item.note,
     })),
     steps: draft.steps.map((step) => step.instruction),

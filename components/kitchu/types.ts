@@ -77,6 +77,7 @@ export type RecipeRecord = {
     ingredientId: string;
     unitId: string;
     quantityPerServing: number;
+    unitToBaseFactor: number | null;
     note: string | null;
     position: number;
     ingredient: IngredientRecord;
@@ -108,6 +109,7 @@ export type RecipeDraftIngredient = {
   ingredientImageUrl: string;
   unitId: string;
   quantityPerServing: string;
+  unitToBaseFactor: string;
   note: string;
   importStatus?: RecipeImportStatus;
   suggestedUnitCode?: string;

@@ -110,6 +110,7 @@ function recipe(
         ingredientId: ingredient.id,
         unitId: gram.id,
         quantityPerServing,
+        unitToBaseFactor: null,
         note: null,
         position: 0,
         ingredient,

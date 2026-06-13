@@ -1224,6 +1224,7 @@ export const RecipeIngredientScalarFieldEnum = {
   ingredientId: 'ingredientId',
   unitId: 'unitId',
   quantityPerServing: 'quantityPerServing',
+  unitToBaseFactor: 'unitToBaseFactor',
   note: 'note',
   position: 'position'
 } as const

@@ -80,6 +80,11 @@ export const recipePayloadSchema = z.object({
         ingredientId: z.string().min(1, "Choisis un ingrédient."),
         unitId: z.string().min(1, "Choisis une unité."),
         quantityPerServing: positiveNumber,
+        unitToBaseFactor: z
+          .union([z.literal(""), positiveNumber])
+          .optional()
+          .nullable()
+          .transform((value) => (value === "" || value == null ? null : value)),
         note: optionalText,
       }),
     )

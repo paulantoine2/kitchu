@@ -15,7 +15,7 @@ import {
 import { recipeToDraft } from "@/components/kitchu/drafts";
 import { ingredientImageUrl } from "@/components/kitchu/images";
 import type { IngredientRecord, RecipeDraft, RecipeRecord, UnitRatioRecord, UnitRecord } from "@/components/kitchu/types";
-import { usableUnitsForIngredient } from "@/components/kitchu/unit-helpers";
+import { recipeLineToBaseFactor } from "@/components/kitchu/unit-helpers";
 import { standardUnitForPrice } from "@/components/kitchu/utils";
 
 export type ProductOption = {
@@ -114,15 +114,17 @@ export function estimateRecipeCosts(
     const ingredient = ingredientById.get(row.ingredientId);
     if (!ingredient) continue;
 
-    const allowedUnit = usableUnitsForIngredient(ingredient, units, globalRatios).find(
-      (unit) => unit.unitId === row.unitId,
-    );
+    const unit = units.find((entry) => entry.id === row.unitId);
     const perServingBaseQuantity = convertToBase(
       Number(row.quantityPerServing),
-      effectiveToBaseFactor(allowedUnit?.unit, ingredient.baseUnit, allowedUnit?.toBaseFactor, globalRatios, {
-        allowSpecific: true,
+      recipeLineToBaseFactor(
+        ingredient,
+        unit,
+        row.unitId,
+        row.unitToBaseFactor.trim() ? Number(row.unitToBaseFactor) : null,
+        globalRatios,
         units,
-      }),
+      ),
     );
     if (!perServingBaseQuantity) continue;
 
