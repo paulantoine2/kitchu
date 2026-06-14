@@ -29,7 +29,7 @@ export function effectivePreparationWeightRatio(
   return candidate;
 }
 
-function ingredientMassInGrams(
+export function ingredientMassInGrams(
   item: RecipeIngredientRow,
   globalRatios: UnitRatioRecord[],
   units: UnitRecord[],

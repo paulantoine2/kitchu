@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { useMemo, useState, useSyncExternalStore } from "react";
-import { Clock, Plus, Scale, Search, ShoppingCart } from "lucide-react";
+import { Clock, Flame, Plus, Scale, Search, ShoppingCart } from "lucide-react";
 import { ingredientImageUrl, recipeImageUrl } from "@/components/kitchu/images";
 import {
   computeRecipeListMatch,
@@ -15,6 +15,10 @@ import {
   estimateRecipeWeightPerServing,
   formatRecipeWeight,
 } from "@/components/kitchu/recipe-weight";
+import {
+  estimateRecipeMacrosPerServing,
+  formatMacroCalories,
+} from "@/components/kitchu/recipe-macros";
 import type { CartRecipeEntry, IngredientRecord, RecipeRecord, UnitRatioRecord, UnitRecord } from "@/components/kitchu/types";
 import { EntityImage, Field, PartialEstimateIndicator, type PartialEstimateSeverity } from "@/components/kitchu/ui/shared";
 import { Badge } from "@/components/ui/badge";
@@ -125,6 +129,8 @@ function RecipeCard({
   priceComplete,
   weightPerPortion,
   weightComplete,
+  macroCaloriesPerPortion,
+  macroComplete,
   matchPercent,
   isInCart,
   onAddToCart,
@@ -134,6 +140,8 @@ function RecipeCard({
   priceComplete: boolean;
   weightPerPortion: string | null;
   weightComplete: boolean;
+  macroCaloriesPerPortion: string | null;
+  macroComplete: boolean;
   matchPercent: number | null;
   isInCart: boolean;
   onAddToCart: () => void;
@@ -177,7 +185,7 @@ function RecipeCard({
         </div>
         <CardHeader className="gap-1.5 pt-4 pb-0">
           <CardTitle className="line-clamp-1 text-lg leading-snug">{recipe.name}</CardTitle>
-          {(totalMinutes > 0 || weightPerPortion) && (
+          {(totalMinutes > 0 || weightPerPortion || macroCaloriesPerPortion) && (
             <div className="flex flex-wrap items-center gap-1.5">
               {totalMinutes > 0 && (
                 <Badge variant="secondary">
@@ -190,6 +198,13 @@ function RecipeCard({
                   <Scale data-icon="inline-start" />
                   {weightPerPortion}/portion
                   {!weightComplete && " · partiel"}
+                </Badge>
+              )}
+              {macroCaloriesPerPortion && (
+                <Badge variant="secondary">
+                  <Flame data-icon="inline-start" />
+                  {macroCaloriesPerPortion}/portion
+                  {!macroComplete && " · partiel"}
                 </Badge>
               )}
             </div>
@@ -299,6 +314,8 @@ export function RecipeList({
         isComplete: boolean;
         weightPerPortion: string | null;
         weightComplete: boolean;
+        macroCaloriesPerPortion: string | null;
+        macroComplete: boolean;
         matchPercent: number | null;
       }
     >();
@@ -316,6 +333,7 @@ export function RecipeList({
         priceMode,
       });
       const weight = estimateRecipeWeightPerServing(recipe, globalRatios, units);
+      const macros = estimateRecipeMacrosPerServing(recipe, globalRatios, units);
       const match = isInCart(recipe.id)
         ? { percent: null }
         : computeRecipeListMatch({
@@ -334,6 +352,8 @@ export function RecipeList({
         isComplete: price.isComplete,
         weightPerPortion: formatRecipeWeight(weight.gramsPerServing),
         weightComplete: weight.isComplete,
+        macroCaloriesPerPortion: formatMacroCalories(macros.perServing?.calories ?? null),
+        macroComplete: macros.isComplete,
         matchPercent: match.percent,
       });
     }
@@ -386,7 +406,7 @@ export function RecipeList({
   }, [filteredRecipes, cardDataByRecipeId, sortMode]);
 
   return (
-    <div className="mx-auto max-w-[1480px] animate-fade-in px-4 py-8 lg:px-8">
+    <div className="mx-auto max-w-[1120px] animate-fade-in px-4 py-8 lg:px-8">
       <div className="mb-8 flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
         <div>
           <h1 className="text-2xl font-semibold tracking-tight md:text-3xl">Recettes</h1>
@@ -502,7 +522,7 @@ export function RecipeList({
           </EmptyDescription>
         </Empty>
       ) : (
-        <div className="stagger-children grid gap-5 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+        <div className="stagger-children grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
           {sortedRecipes.map((recipe) => {
             const cardData = cardDataByRecipeId.get(recipe.id);
             return (
@@ -513,6 +533,8 @@ export function RecipeList({
                 priceComplete={cardData?.isComplete ?? false}
                 weightPerPortion={cardData?.weightPerPortion ?? null}
                 weightComplete={cardData?.weightComplete ?? true}
+                macroCaloriesPerPortion={cardData?.macroCaloriesPerPortion ?? null}
+                macroComplete={cardData?.macroComplete ?? true}
                 matchPercent={cardData?.matchPercent ?? null}
                 isInCart={isInCart(recipe.id)}
                 onAddToCart={() => onAddToCart(recipe.id, portionCount)}

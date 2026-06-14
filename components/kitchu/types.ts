@@ -23,12 +23,23 @@ export type MeasurementRatioRecord = UnitRatioRecord & {
   storedTargetUnit: UnitRecord;
 };
 
+export type MacroProfile = {
+  caloriesPer100g: number | null;
+  proteinPer100g: number | null;
+  carbsPer100g: number | null;
+  fatPer100g: number | null;
+};
+
 export type IngredientRecord = {
   id: string;
   name: string;
   imageUrl: string | null;
   notes: string | null;
   preparationWeightRatio: number | null;
+  caloriesPer100g: number | null;
+  proteinPer100g: number | null;
+  carbsPer100g: number | null;
+  fatPer100g: number | null;
   baseUnitId: string;
   baseUnit: UnitRecord;
   units: Array<{
@@ -52,6 +63,10 @@ export type IngredientRecord = {
     url: string | null;
     barcode: string | null;
     notes: string | null;
+    caloriesPer100g: number | null;
+    proteinPer100g: number | null;
+    carbsPer100g: number | null;
+    fatPer100g: number | null;
     packageUnit: UnitRecord;
   }>;
   stock: { quantity: number } | null;
@@ -125,6 +140,10 @@ export type IngredientDraft = {
   imageUrl: string;
   notes: string;
   preparationWeightRatio: string;
+  caloriesPer100g: string;
+  proteinPer100g: string;
+  carbsPer100g: string;
+  fatPer100g: string;
   baseUnitId: string;
   units: Array<{ key: string; unitId: string; toBaseFactor: string }>;
   products: Array<{
@@ -143,6 +162,10 @@ export type IngredientDraft = {
     url: string;
     barcode: string;
     notes: string;
+    caloriesPer100g: string;
+    proteinPer100g: string;
+    carbsPer100g: string;
+    fatPer100g: string;
   }>;
 };
 

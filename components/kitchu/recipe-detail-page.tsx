@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import { ArrowLeft } from "lucide-react";
+import { ArrowLeft, Pencil } from "lucide-react";
 import { KitchuShell } from "@/components/kitchu/kitchu-shell";
 import { RecipeView } from "@/components/kitchu/recipe-view";
 import { useKitchuCart } from "@/components/kitchu/use-kitchu-cart";
@@ -27,17 +27,26 @@ export function RecipeDetailPage({
       onCartPortionsChange={cart.setPortions}
       onCartRemoveRecipe={cart.remove}
     >
-      <div className="mx-auto max-w-[1480px] px-4 py-8 lg:px-8">
-        <Button
-          variant="ghost"
-          size="sm"
-          className="mb-4 -ml-2"
-          nativeButton={false}
-          render={<Link href="/recipes" />}
-        >
-          <ArrowLeft data-icon="inline-start" />
-          Retour aux recettes
-        </Button>
+      <div className="mx-auto max-w-[1120px] px-4 py-8 lg:px-8">
+        <div className="mb-4 flex flex-wrap items-center gap-2">
+          <Button
+            variant="ghost"
+            size="sm"
+            className="-ml-2"
+            nativeButton={false}
+            render={<Link href="/recipes" />}
+          >
+            <ArrowLeft data-icon="inline-start" />
+            Retour aux recettes
+          </Button>
+          <Button
+            size="sm"
+            onClick={() => router.push(`/recipes/${recipe.id}/edit`)}
+          >
+            <Pencil data-icon="inline-start" />
+            Modifier
+          </Button>
+        </div>
         <RecipeView
           recipe={recipe}
           recipes={props.recipes}
@@ -53,7 +62,6 @@ export function RecipeDetailPage({
             cart.addOrUpdate(recipe.id, portions);
             setCartOpen(true);
           }}
-          onEdit={() => router.push(`/recipes/${recipe.id}/edit`)}
         />
       </div>
     </KitchuShell>
