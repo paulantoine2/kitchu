@@ -1,25 +1,27 @@
 import { readFileSync } from "node:fs";
 import { join } from "node:path";
+import type { Prisma } from "../app/generated/prisma/client";
 import { prisma } from "../lib/prisma";
 
 type SeedSnapshot = {
   exportedAt: string;
   source: string;
-  units: Array<Record<string, unknown>>;
-  unitRatios: Array<Record<string, unknown>>;
-  ingredients: Array<Record<string, unknown>>;
-  ingredientUnits: Array<Record<string, unknown>>;
-  productReferences: Array<Record<string, unknown>>;
-  recipes: Array<Record<string, unknown>>;
-  recipeIngredients: Array<Record<string, unknown>>;
-  recipeSteps: Array<Record<string, unknown>>;
-  cartItems: Array<Record<string, unknown>>;
+  units: Prisma.UnitCreateManyInput[];
+  unitRatios: Prisma.UnitRatioCreateManyInput[];
+  ingredients: Prisma.IngredientCreateManyInput[];
+  ingredientUnits: Prisma.IngredientUnitCreateManyInput[];
+  productReferences: Prisma.ProductReferenceCreateManyInput[];
+  recipes: Prisma.RecipeCreateManyInput[];
+  recipeIngredients: Prisma.RecipeIngredientCreateManyInput[];
+  recipeSteps: Prisma.RecipeStepCreateManyInput[];
+  cartItems: Prisma.CartItemCreateManyInput[];
 };
 
 function loadSnapshot(): SeedSnapshot {
   const path = join(process.cwd(), "prisma/seed-data.json");
   const raw = readFileSync(path, "utf8");
-  return JSON.parse(raw) as SeedSnapshot;
+  const snapshot: SeedSnapshot = JSON.parse(raw);
+  return snapshot;
 }
 
 async function clearDatabase() {
@@ -34,58 +36,33 @@ async function clearDatabase() {
   await prisma.unit.deleteMany();
 }
 
-const DATE_FIELDS = new Set(["createdAt", "updatedAt"]);
-
-function normalizeRow(row: Record<string, unknown>): Record<string, unknown> {
-  const normalized = { ...row };
-
-  for (const field of DATE_FIELDS) {
-    const value = normalized[field];
-    if (typeof value === "string") {
-      normalized[field] = new Date(value.endsWith("Z") ? value : `${value}Z`);
-    }
-  }
-
-  return normalized;
-}
-
-function normalizeRows(rows: Array<Record<string, unknown>>) {
-  return rows.map((row) => normalizeRow(row));
-}
-
 async function seedFromSnapshot(snapshot: SeedSnapshot) {
   if (snapshot.units.length > 0) {
-    await prisma.unit.createMany({ data: normalizeRows(snapshot.units) });
+    await prisma.unit.createMany({ data: snapshot.units });
   }
   if (snapshot.unitRatios.length > 0) {
-    await prisma.unitRatio.createMany({ data: normalizeRows(snapshot.unitRatios) });
+    await prisma.unitRatio.createMany({ data: snapshot.unitRatios });
   }
   if (snapshot.ingredients.length > 0) {
-    await prisma.ingredient.createMany({ data: normalizeRows(snapshot.ingredients) });
+    await prisma.ingredient.createMany({ data: snapshot.ingredients });
   }
   if (snapshot.ingredientUnits.length > 0) {
-    await prisma.ingredientUnit.createMany({
-      data: normalizeRows(snapshot.ingredientUnits),
-    });
+    await prisma.ingredientUnit.createMany({ data: snapshot.ingredientUnits });
   }
   if (snapshot.productReferences.length > 0) {
-    await prisma.productReference.createMany({
-      data: normalizeRows(snapshot.productReferences),
-    });
+    await prisma.productReference.createMany({ data: snapshot.productReferences });
   }
   if (snapshot.recipes.length > 0) {
-    await prisma.recipe.createMany({ data: normalizeRows(snapshot.recipes) });
+    await prisma.recipe.createMany({ data: snapshot.recipes });
   }
   if (snapshot.recipeIngredients.length > 0) {
-    await prisma.recipeIngredient.createMany({
-      data: normalizeRows(snapshot.recipeIngredients),
-    });
+    await prisma.recipeIngredient.createMany({ data: snapshot.recipeIngredients });
   }
   if (snapshot.recipeSteps.length > 0) {
-    await prisma.recipeStep.createMany({ data: normalizeRows(snapshot.recipeSteps) });
+    await prisma.recipeStep.createMany({ data: snapshot.recipeSteps });
   }
   if (snapshot.cartItems.length > 0) {
-    await prisma.cartItem.createMany({ data: normalizeRows(snapshot.cartItems) });
+    await prisma.cartItem.createMany({ data: snapshot.cartItems });
   }
 }
 
