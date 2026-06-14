@@ -8,6 +8,7 @@ import { ingredientImageUrl } from "@/components/kitchu/images";
 import type { IngredientRecord } from "@/components/kitchu/types";
 import { EntityImage } from "@/components/kitchu/ui/shared";
 import { compareProductStoragePriority, productStorageBadgeClass, productStorageLabels } from "@/lib/product-storage";
+import { measurementKindLabel } from "@/components/kitchu/unit-helpers";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Empty, EmptyDescription } from "@/components/ui/empty";
@@ -43,7 +44,7 @@ function IngredientMobileItem({ ingredient }: { ingredient: IngredientRecord }) 
       <ItemContent className="min-w-0">
         <ItemTitle className="truncate">{ingredient.name}</ItemTitle>
         <div className="mt-1.5 flex flex-wrap gap-1.5">
-          <Badge variant="secondary">{ingredient.baseUnit.symbol}</Badge>
+          <Badge variant="secondary">{measurementKindLabel(ingredient.baseUnit.kind)}</Badge>
           {hasProducts ? (
             <Badge variant="secondary">
               {ingredient.products.length} produit{ingredient.products.length !== 1 ? "s" : ""}
@@ -93,7 +94,7 @@ function IngredientTableRow({ ingredient }: { ingredient: IngredientRecord }) {
           {ingredient.name}
         </Link>
       </TableCell>
-      <TableCell>{ingredient.baseUnit.symbol}</TableCell>
+      <TableCell>{measurementKindLabel(ingredient.baseUnit.kind)}</TableCell>
       <TableCell>
         {hasProducts ? (
           <Badge variant="secondary">
@@ -149,7 +150,7 @@ export function IngredientList({
   );
 
   return (
-    <div className="mx-auto max-w-[1480px] animate-fade-in px-4 py-8 lg:px-8">
+    <div className="mx-auto max-w-[1120px] animate-fade-in px-4 py-8 lg:px-8">
       <div className="mb-8 flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
         <div>
           <h1 className="text-2xl font-semibold tracking-tight md:text-3xl">Ingrédients</h1>

@@ -29,6 +29,10 @@ const tomato: IngredientRecord = {
   imageUrl: null,
   notes: null,
   preparationWeightRatio: null,
+  caloriesPer100g: null,
+  proteinPer100g: null,
+  carbsPer100g: null,
+  fatPer100g: null,
   baseUnitId: gram.id,
   baseUnit: gram,
   units: [

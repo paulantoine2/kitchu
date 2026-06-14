@@ -1,0 +1,3205 @@
+{
+  "exportedAt": "2026-06-14T17:56:16.594Z",
+  "source": "production",
+  "units": [
+    {
+      "id": "96c540be-d2b6-449b-8632-e0fe25092eec",
+      "code": "boite",
+      "name": "boîte",
+      "symbol": "boîte",
+      "kind": "PACKAGE",
+      "globalToBaseFactor": null,
+      "globalBaseUnitId": null,
+      "createdAt": "2026-06-05T21:23:10.4",
+      "updatedAt": "2026-06-13T22:02:50.614"
+    },
+    {
+      "id": "58bb493d-bec6-43f4-bc48-1e4e742cc382",
+      "code": "cac",
+      "name": "cuillère à café",
+      "symbol": "c. à c.",
+      "kind": "CUSTOM",
+      "globalToBaseFactor": null,
+      "globalBaseUnitId": null,
+      "createdAt": "2026-06-06T17:56:15.616",
+      "updatedAt": "2026-06-13T22:02:50.614"
+    },
+    {
+      "id": "7351b24d-2532-4b09-b15c-a3c0fb9172f1",
+      "code": "cas",
+      "name": "cuillère à soupe",
+      "symbol": "c. à s.",
+      "kind": "CUSTOM",
+      "globalToBaseFactor": null,
+      "globalBaseUnitId": null,
+      "createdAt": "2026-06-05T21:23:10.401",
+      "updatedAt": "2026-06-13T22:02:50.614"
+    },
+    {
+      "id": "0e201307-b483-4837-b493-d8f1eb92a662",
+      "code": "cl",
+      "name": "centilitre",
+      "symbol": "cl",
+      "kind": "VOLUME",
+      "globalToBaseFactor": null,
+      "globalBaseUnitId": null,
+      "createdAt": "2026-06-07T11:45:29",
+      "updatedAt": "2026-06-13T22:02:50.614"
+    },
+    {
+      "id": "a4d8c3ad-11e2-4756-bda5-0b319532a6f3",
+      "code": "filet",
+      "name": "filet",
+      "symbol": "filet",
+      "kind": "COUNT",
+      "globalToBaseFactor": null,
+      "globalBaseUnitId": null,
+      "createdAt": "2026-06-07T15:45:58.774",
+      "updatedAt": "2026-06-13T22:02:50.614"
+    },
+    {
+      "id": "8b9817e2-d85f-49a8-a343-3443fe14493c",
+      "code": "g",
+      "name": "gramme",
+      "symbol": "g",
+      "kind": "MASS",
+      "globalToBaseFactor": null,
+      "globalBaseUnitId": null,
+      "createdAt": "2026-06-07T11:45:29",
+      "updatedAt": "2026-06-13T22:02:50.614"
+    },
+    {
+      "id": "1d51431a-1abe-4ed4-b15e-fe2e7b018890",
+      "code": "kg",
+      "name": "kilogramme",
+      "symbol": "kg",
+      "kind": "MASS",
+      "globalToBaseFactor": null,
+      "globalBaseUnitId": null,
+      "createdAt": "2026-06-07T11:45:29",
+      "updatedAt": "2026-06-13T22:02:50.614"
+    },
+    {
+      "id": "39d40169-2325-42f3-b698-1233c4bbeb68",
+      "code": "l",
+      "name": "litre",
+      "symbol": "l",
+      "kind": "VOLUME",
+      "globalToBaseFactor": null,
+      "globalBaseUnitId": null,
+      "createdAt": "2026-06-07T11:45:29",
+      "updatedAt": "2026-06-13T22:02:50.614"
+    },
+    {
+      "id": "c47614f1-b104-4ba2-ae0f-44d6e576bf2c",
+      "code": "ml",
+      "name": "millilitre",
+      "symbol": "ml",
+      "kind": "VOLUME",
+      "globalToBaseFactor": null,
+      "globalBaseUnitId": null,
+      "createdAt": "2026-06-07T11:45:29",
+      "updatedAt": "2026-06-13T22:02:50.614"
+    },
+    {
+      "id": "a8f30dad-dd15-46f8-83ba-1bfed243fa9b",
+      "code": "piece",
+      "name": "pièce",
+      "symbol": "pièce",
+      "kind": "COUNT",
+      "globalToBaseFactor": null,
+      "globalBaseUnitId": null,
+      "createdAt": "2026-06-05T21:23:10.397",
+      "updatedAt": "2026-06-13T22:02:50.614"
+    },
+    {
+      "id": "b6951f61-2727-4ea0-961f-f533e385e2c2",
+      "code": "pot",
+      "name": "pot",
+      "symbol": "pot",
+      "kind": "PACKAGE",
+      "globalToBaseFactor": null,
+      "globalBaseUnitId": null,
+      "createdAt": "2026-06-07T15:45:58.777",
+      "updatedAt": "2026-06-13T22:02:50.614"
+    },
+    {
+      "id": "0eec415a-e47a-4b0c-bff8-dc361ae49657",
+      "code": "sachet",
+      "name": "sachet",
+      "symbol": "sachet",
+      "kind": "PACKAGE",
+      "globalToBaseFactor": null,
+      "globalBaseUnitId": null,
+      "createdAt": "2026-06-07T15:45:58.777",
+      "updatedAt": "2026-06-13T22:02:50.614"
+    },
+    {
+      "id": "46946529-89f3-49fc-b285-c6fb3cc9613d",
+      "code": "tranche",
+      "name": "tranche",
+      "symbol": "tranche",
+      "kind": "COUNT",
+      "globalToBaseFactor": null,
+      "globalBaseUnitId": null,
+      "createdAt": "2026-06-07T15:45:58.778",
+      "updatedAt": "2026-06-13T22:02:50.614"
+    }
+  ],
+  "unitRatios": [
+    {
+      "id": "fe403567-2baf-42d3-881f-2cfbd077200f",
+      "fromUnitId": "7351b24d-2532-4b09-b15c-a3c0fb9172f1",
+      "toUnitId": "c47614f1-b104-4ba2-ae0f-44d6e576bf2c",
+      "factor": 15,
+      "createdAt": "2026-06-07T11:45:29",
+      "updatedAt": "2026-06-13T22:02:50.918"
+    },
+    {
+      "id": "32e53800-2c90-42f8-a155-d8babb8be900",
+      "fromUnitId": "58bb493d-bec6-43f4-bc48-1e4e742cc382",
+      "toUnitId": "c47614f1-b104-4ba2-ae0f-44d6e576bf2c",
+      "factor": 5,
+      "createdAt": "2026-06-07T11:45:29",
+      "updatedAt": "2026-06-13T22:02:51.014"
+    }
+  ],
+  "ingredients": [
+    {
+      "id": "6a0c1090-2791-47a8-bf75-de29e3b2faf1",
+      "name": "Basilic",
+      "imageUrl": "https://img.hellofresh.com/hellofresh_s3/ingredient/6405bff4b0da194777986437-1cee0ee3.png",
+      "notes": null,
+      "baseUnitId": "8b9817e2-d85f-49a8-a343-3443fe14493c",
+      "createdAt": "2026-06-10T16:37:33.699",
+      "updatedAt": "2026-06-10T16:39:00.75",
+      "preparationWeightRatio": null,
+      "caloriesPer100g": 35.2,
+      "proteinPer100g": 3.15,
+      "carbsPer100g": 3.4,
+      "fatPer100g": 0.64
+    },
+    {
+      "id": "69499a73-8148-4599-94c5-29fd39798802",
+      "name": "Beurre",
+      "imageUrl": "https://img.hellofresh.com/hellofresh_s3/ingredient/63e5121aa0a0603e5708dcbe-9c2fda6a.png",
+      "notes": null,
+      "baseUnitId": "8b9817e2-d85f-49a8-a343-3443fe14493c",
+      "createdAt": "2026-06-07T20:21:03.82",
+      "updatedAt": "2026-06-07T20:56:52.809",
+      "preparationWeightRatio": null,
+      "caloriesPer100g": 753,
+      "proteinPer100g": 0.64,
+      "carbsPer100g": 0.71,
+      "fatPer100g": 83
+    },
+    {
+      "id": "3b2f321e-3eb5-40b4-af1d-78a0654f9d55",
+      "name": "Carotte",
+      "imageUrl": "https://img.hellofresh.com/hellofresh_s3/ingredient/6405bfbfb0da194777986386-1ee00f59.png",
+      "notes": null,
+      "baseUnitId": "8b9817e2-d85f-49a8-a343-3443fe14493c",
+      "createdAt": "2026-06-07T19:00:47.008",
+      "updatedAt": "2026-06-13T21:23:35.005",
+      "preparationWeightRatio": null,
+      "caloriesPer100g": 30.2,
+      "proteinPer100g": 0.78,
+      "carbsPer100g": 5.16,
+      "fatPer100g": 0.5
+    },
+    {
+      "id": "c1c0fcd4-93f8-46a6-befc-cfad4412dec6",
+      "name": "Chapelure panko",
+      "imageUrl": "https://img.hellofresh.com/hellofresh_s3/ingredient/64073bbb683721c9a32b074f-a98b1b04.png",
+      "notes": null,
+      "baseUnitId": "8b9817e2-d85f-49a8-a343-3443fe14493c",
+      "createdAt": "2026-06-07T21:46:56.725",
+      "updatedAt": "2026-06-07T21:46:56.725",
+      "preparationWeightRatio": null,
+      "caloriesPer100g": 365,
+      "proteinPer100g": 9.41,
+      "carbsPer100g": 74.3,
+      "fatPer100g": 1.6
+    },
+    {
+      "id": "4e702a96-72a1-4bdd-a14a-e0b6c1782a4d",
+      "name": "Ciboulette",
+      "imageUrl": "https://img.hellofresh.com/hellofresh_s3/ingredient/6405bf3caf4af6d531d50ad3-8219fd7d.png",
+      "notes": null,
+      "baseUnitId": "8b9817e2-d85f-49a8-a343-3443fe14493c",
+      "createdAt": "2026-06-07T21:55:37.987",
+      "updatedAt": "2026-06-07T21:55:37.987",
+      "preparationWeightRatio": null,
+      "caloriesPer100g": 30.8,
+      "proteinPer100g": 2.55,
+      "carbsPer100g": 2.85,
+      "fatPer100g": 0.46
+    },
+    {
+      "id": "33b11ca2-fa5d-4c23-8be9-4c295f370220",
+      "name": "Citron",
+      "imageUrl": "https://img.hellofresh.com/hellofresh_s3/ingredient/6405c011af4af6d531d50dcd-7e01dd35.png",
+      "notes": null,
+      "baseUnitId": "8b9817e2-d85f-49a8-a343-3443fe14493c",
+      "createdAt": "2026-06-07T19:00:49.679",
+      "updatedAt": "2026-06-13T21:23:35.005",
+      "preparationWeightRatio": null,
+      "caloriesPer100g": 24.3,
+      "proteinPer100g": 0.25,
+      "carbsPer100g": 1.56,
+      "fatPer100g": 0.5
+    },
+    {
+      "id": "9f387408-8b0d-4510-9ae0-6c788f988329",
+      "name": "Citronnelle moulue",
+      "imageUrl": "https://img.hellofresh.com/hellofresh_s3/ingredient/6405bf5daf4af6d531d50b71-80e6bcd7.png",
+      "notes": null,
+      "baseUnitId": "8b9817e2-d85f-49a8-a343-3443fe14493c",
+      "createdAt": "2026-06-07T17:00:13.967",
+      "updatedAt": "2026-06-07T17:00:13.967",
+      "preparationWeightRatio": null,
+      "caloriesPer100g": 99,
+      "proteinPer100g": 1.82,
+      "carbsPer100g": 25.31,
+      "fatPer100g": 0.49
+    },
+    {
+      "id": "321b3d93-8c29-4aa8-9380-addbefabc7fb",
+      "name": "Coriandre",
+      "imageUrl": "https://img.hellofresh.com/hellofresh_s3/ingredient/6405bf71b0da194777986281-db87ae2a.png",
+      "notes": null,
+      "baseUnitId": "8b9817e2-d85f-49a8-a343-3443fe14493c",
+      "createdAt": "2026-06-07T21:39:27.291",
+      "updatedAt": "2026-06-07T21:39:27.291",
+      "preparationWeightRatio": null,
+      "caloriesPer100g": 22.3,
+      "proteinPer100g": 2.13,
+      "carbsPer100g": 0.87,
+      "fatPer100g": 0.52
+    },
+    {
+      "id": "6a6c8779-bd7d-485e-9f4f-09a2756e45b9",
+      "name": "Courgette",
+      "imageUrl": "https://img.hellofresh.com/hellofresh_s3/ingredient/6405bf8bb9d07cd5d38d7b0c-bdb13a8b.png",
+      "notes": null,
+      "baseUnitId": "8b9817e2-d85f-49a8-a343-3443fe14493c",
+      "createdAt": "2026-06-10T16:31:37.918",
+      "updatedAt": "2026-06-13T21:23:35.005",
+      "preparationWeightRatio": null,
+      "caloriesPer100g": 16.7,
+      "proteinPer100g": 1.21,
+      "carbsPer100g": 1.75,
+      "fatPer100g": 0.32
+    },
+    {
+      "id": "097fce0e-909b-455f-a982-d92b93406ca3",
+      "name": "Crevettes",
+      "imageUrl": "https://img.hellofresh.com/hellofresh_s3/ingredient/64073cdc9c6d10cd16eab6fa-af579fe9.png",
+      "notes": null,
+      "baseUnitId": "8b9817e2-d85f-49a8-a343-3443fe14493c",
+      "createdAt": "2026-06-07T21:41:29.481",
+      "updatedAt": "2026-06-09T21:15:53.614",
+      "preparationWeightRatio": null,
+      "caloriesPer100g": 92.5,
+      "proteinPer100g": 18.3,
+      "carbsPer100g": 2.6,
+      "fatPer100g": 1.02
+    },
+    {
+      "id": "171e89c3-f829-48e1-bbb5-74188af1cd49",
+      "name": "Crème liquide",
+      "imageUrl": "https://img.hellofresh.com/hellofresh_s3/ingredient/64073ba6df6297bb5beef0f4-7d50c5e6.png",
+      "notes": null,
+      "baseUnitId": "c47614f1-b104-4ba2-ae0f-44d6e576bf2c",
+      "createdAt": "2026-06-07T21:50:27.24",
+      "updatedAt": "2026-06-07T21:52:13.602",
+      "preparationWeightRatio": null,
+      "caloriesPer100g": 293,
+      "proteinPer100g": 2.2,
+      "carbsPer100g": 3.69,
+      "fatPer100g": 30
+    },
+    {
+      "id": "63fd2005-d1df-4be2-8984-8c19fc9cde52",
+      "name": "Crème épaisse",
+      "imageUrl": "https://img.hellofresh.com/hellofresh_s3/ingredient/64073ba5683721c9a32b0730-aae19318.png",
+      "notes": null,
+      "baseUnitId": "c47614f1-b104-4ba2-ae0f-44d6e576bf2c",
+      "createdAt": "2026-06-08T20:26:07.091",
+      "updatedAt": "2026-06-08T20:26:07.091",
+      "preparationWeightRatio": null,
+      "caloriesPer100g": 285,
+      "proteinPer100g": 2.32,
+      "carbsPer100g": 1.38,
+      "fatPer100g": 29.9
+    },
+    {
+      "id": "c0ef1307-cb58-44ff-adc0-6a6217d4c1d9",
+      "name": "Cube de bouillon de légumes",
+      "imageUrl": "https://img.hellofresh.com/hellofresh_s3/ingredient/63e5122081b4b295e66f0256-4536b754.png",
+      "notes": null,
+      "baseUnitId": "8b9817e2-d85f-49a8-a343-3443fe14493c",
+      "createdAt": "2026-06-07T19:02:13.163",
+      "updatedAt": "2026-06-13T21:23:35.005",
+      "preparationWeightRatio": null,
+      "caloriesPer100g": 287,
+      "proteinPer100g": 9.66,
+      "carbsPer100g": 26,
+      "fatPer100g": 16
+    },
+    {
+      "id": "bda2ace3-d252-4ccf-a658-c00687faa9bb",
+      "name": "Curry jaune",
+      "imageUrl": "https://img.hellofresh.com/hellofresh_s3/ingredient/6405bf29af4af6d531d50a90-d8882287.png",
+      "notes": null,
+      "baseUnitId": "8b9817e2-d85f-49a8-a343-3443fe14493c",
+      "createdAt": "2026-06-07T19:01:01.81",
+      "updatedAt": "2026-06-07T19:36:15.823",
+      "preparationWeightRatio": null,
+      "caloriesPer100g": 301,
+      "proteinPer100g": 14.5,
+      "carbsPer100g": 2.63,
+      "fatPer100g": 14
+    },
+    {
+      "id": "8e0c86d1-5862-474b-b765-3aa90d5caa06",
+      "name": "Farine",
+      "imageUrl": "https://img.hellofresh.com/hellofresh_s3/ingredient/63e5123581b4b295e66f0261-0495e0c4.png",
+      "notes": null,
+      "baseUnitId": "8b9817e2-d85f-49a8-a343-3443fe14493c",
+      "createdAt": "2026-06-07T16:59:12.393",
+      "updatedAt": "2026-06-07T21:17:09.743",
+      "preparationWeightRatio": null,
+      "caloriesPer100g": 350,
+      "proteinPer100g": 9.03,
+      "carbsPer100g": 73.7,
+      "fatPer100g": 1
+    },
+    {
+      "id": "0cc9cff1-2466-468a-bc6a-6724844b1096",
+      "name": "Filet de dinde",
+      "imageUrl": "https://img.hellofresh.com/hellofresh_s3/ingredient/64b4fb6566be97d461e929ab-66b0536e.png",
+      "notes": null,
+      "baseUnitId": "8b9817e2-d85f-49a8-a343-3443fe14493c",
+      "createdAt": "2026-06-07T17:02:09.803",
+      "updatedAt": "2026-06-07T17:02:09.803",
+      "preparationWeightRatio": null,
+      "caloriesPer100g": 108,
+      "proteinPer100g": 22.6,
+      "carbsPer100g": 0,
+      "fatPer100g": 1.93
+    },
+    {
+      "id": "2ba815d7-2ef9-47b0-9405-8c4b47fd6578",
+      "name": "Filet de lieu noir",
+      "imageUrl": "https://img.hellofresh.com/hellofresh_s3/ingredient/67652e437de812ab262715fe-9cdf25c3.png",
+      "notes": null,
+      "baseUnitId": "8b9817e2-d85f-49a8-a343-3443fe14493c",
+      "createdAt": "2026-06-07T19:00:53.748",
+      "updatedAt": "2026-06-07T19:11:46.965",
+      "preparationWeightRatio": null,
+      "caloriesPer100g": 82.5,
+      "proteinPer100g": 18.8,
+      "carbsPer100g": 0,
+      "fatPer100g": 0.8
+    },
+    {
+      "id": "e8b3462b-75ab-4d07-9501-c9669e9ae0b9",
+      "name": "Filet de poulet",
+      "imageUrl": null,
+      "notes": null,
+      "baseUnitId": "8b9817e2-d85f-49a8-a343-3443fe14493c",
+      "createdAt": "2026-06-07T15:45:58.791",
+      "updatedAt": "2026-06-13T22:02:51.218",
+      "preparationWeightRatio": null,
+      "caloriesPer100g": 110,
+      "proteinPer100g": 23.4,
+      "carbsPer100g": 0,
+      "fatPer100g": 1.5
+    },
+    {
+      "id": "1a431fe9-4e04-443b-bbd1-65a6b28f0cad",
+      "name": "Filet de saumon",
+      "imageUrl": "https://img.hellofresh.com/hellofresh_s3/ingredient/64073bd29c6d10cd16eab652-bff4f266.png",
+      "notes": null,
+      "baseUnitId": "8b9817e2-d85f-49a8-a343-3443fe14493c",
+      "createdAt": "2026-06-10T16:35:11.703",
+      "updatedAt": "2026-06-10T16:35:11.703",
+      "preparationWeightRatio": null,
+      "caloriesPer100g": 166,
+      "proteinPer100g": 21,
+      "carbsPer100g": 0,
+      "fatPer100g": 9.17
+    },
+    {
+      "id": "ecedb7f9-4f33-4639-a586-80cd2231a6d4",
+      "name": "Gingembre frais",
+      "imageUrl": "https://img.hellofresh.com/hellofresh_s3/ingredient/6405bf3aaf4af6d531d50acd-a9ebb28f.png",
+      "notes": null,
+      "baseUnitId": "8b9817e2-d85f-49a8-a343-3443fe14493c",
+      "createdAt": "2026-06-07T21:38:06.986",
+      "updatedAt": "2026-06-07T21:38:06.986",
+      "preparationWeightRatio": null,
+      "caloriesPer100g": 33.3,
+      "proteinPer100g": 1.1,
+      "carbsPer100g": 3.4,
+      "fatPer100g": 1.1
+    },
+    {
+      "id": "3c9d898d-8925-4ca5-b5ea-4a0549d1d22b",
+      "name": "Gouda râpé",
+      "imageUrl": "https://img.hellofresh.com/hellofresh_s3/ingredient/642622b56153ff0f6d9ded1c-aaa126c3.png",
+      "notes": null,
+      "baseUnitId": "8b9817e2-d85f-49a8-a343-3443fe14493c",
+      "createdAt": "2026-06-07T20:19:50.886",
+      "updatedAt": "2026-06-07T20:23:36.25",
+      "preparationWeightRatio": null,
+      "caloriesPer100g": 374,
+      "proteinPer100g": 23.2,
+      "carbsPer100g": 0,
+      "fatPer100g": 31.5
+    },
+    {
+      "id": "7d889c4e-1667-4c7f-bfa8-c1fbea2cfadb",
+      "name": "Gousse d'ail",
+      "imageUrl": "https://img.hellofresh.com/hellofresh_s3/ingredient/686bd9ac700c002ea1507ade-991a807f.png",
+      "notes": null,
+      "baseUnitId": "8b9817e2-d85f-49a8-a343-3443fe14493c",
+      "createdAt": "2026-06-07T19:00:36.766",
+      "updatedAt": "2026-06-13T21:23:35.005",
+      "preparationWeightRatio": null,
+      "caloriesPer100g": 109,
+      "proteinPer100g": 5.31,
+      "carbsPer100g": 18.6,
+      "fatPer100g": 0.5
+    },
+    {
+      "id": "563bdfa3-1050-40ed-af21-62e0278e46e2",
+      "name": "Graines de sésame",
+      "imageUrl": "https://img.hellofresh.com/hellofresh_s3/ingredient/64073ba8683721c9a32b0737-bb43bb3c.png",
+      "notes": null,
+      "baseUnitId": "8b9817e2-d85f-49a8-a343-3443fe14493c",
+      "createdAt": "2026-06-07T21:55:10.342",
+      "updatedAt": "2026-06-07T21:55:10.342",
+      "preparationWeightRatio": null,
+      "caloriesPer100g": 606,
+      "proteinPer100g": 17.7,
+      "carbsPer100g": 12.8,
+      "fatPer100g": 49.7
+    },
+    {
+      "id": "4126438e-cc79-4b21-af88-4218a5cd8fbf",
+      "name": "Huile d'olive",
+      "imageUrl": "https://img.hellofresh.com/hellofresh_s3/ingredient/63e51230bc1d64f7b96e270e-24c7b904.png",
+      "notes": null,
+      "baseUnitId": "c47614f1-b104-4ba2-ae0f-44d6e576bf2c",
+      "createdAt": "2026-06-07T20:20:57.377",
+      "updatedAt": "2026-06-09T21:01:09.297",
+      "preparationWeightRatio": null,
+      "caloriesPer100g": 900,
+      "proteinPer100g": 0,
+      "carbsPer100g": 0,
+      "fatPer100g": 100
+    },
+    {
+      "id": "7adde27d-d068-4481-a4b3-2dc25dcf578e",
+      "name": "Huile de sésame",
+      "imageUrl": "https://img.hellofresh.com/hellofresh_s3/ingredient/64073bbb9c6d10cd16eab635-5cc49310.png",
+      "notes": null,
+      "baseUnitId": "c47614f1-b104-4ba2-ae0f-44d6e576bf2c",
+      "createdAt": "2026-06-07T15:11:53.429",
+      "updatedAt": "2026-06-07T15:23:21.471",
+      "preparationWeightRatio": null,
+      "caloriesPer100g": 900,
+      "proteinPer100g": 0,
+      "carbsPer100g": 0,
+      "fatPer100g": 100
+    },
+    {
+      "id": "89b1ad44-ebab-4a4b-8d9d-64cfe5b8292e",
+      "name": "Huile de tournesol",
+      "imageUrl": "https://img.hellofresh.com/hellofresh_s3/ingredient/63e5120f81b4b295e66f024c-65554524.png",
+      "notes": null,
+      "baseUnitId": "c47614f1-b104-4ba2-ae0f-44d6e576bf2c",
+      "createdAt": "2026-06-07T16:58:31.639",
+      "updatedAt": "2026-06-07T19:52:21.888",
+      "preparationWeightRatio": null,
+      "caloriesPer100g": 900,
+      "proteinPer100g": 0,
+      "carbsPer100g": 0,
+      "fatPer100g": 100
+    },
+    {
+      "id": "ae96c242-875e-4427-a287-6543aede3115",
+      "name": "Lait",
+      "imageUrl": "https://img.hellofresh.com/hellofresh_s3/ingredient/63e51229bc1d64f7b96e270b-65046296.png",
+      "notes": null,
+      "baseUnitId": "c47614f1-b104-4ba2-ae0f-44d6e576bf2c",
+      "createdAt": "2026-06-07T20:21:15.648",
+      "updatedAt": "2026-06-07T21:32:10.318",
+      "preparationWeightRatio": null,
+      "caloriesPer100g": 47.5,
+      "proteinPer100g": 3.46,
+      "carbsPer100g": 4.97,
+      "fatPer100g": 1.55
+    },
+    {
+      "id": "dafafab2-7d50-4ef9-af1a-1075a40153e5",
+      "name": "Lait de coco",
+      "imageUrl": "https://img.hellofresh.com/hellofresh_s3/ingredient/6405bfdfb0da1947779863ee-24cddedb.png",
+      "notes": null,
+      "baseUnitId": "c47614f1-b104-4ba2-ae0f-44d6e576bf2c",
+      "createdAt": "2026-06-07T19:02:00.378",
+      "updatedAt": "2026-06-07T19:53:18.153",
+      "preparationWeightRatio": null,
+      "caloriesPer100g": 199,
+      "proteinPer100g": 1.94,
+      "carbsPer100g": 4.29,
+      "fatPer100g": 19.2
+    },
+    {
+      "id": "9d36d464-6b25-4610-a62b-795af4f1dfab",
+      "name": "Lardons fumés",
+      "imageUrl": "https://img.hellofresh.com/hellofresh_s3/ingredient/65a8e85bcbafa858007bac2d-be2ea398.png",
+      "notes": null,
+      "baseUnitId": "8b9817e2-d85f-49a8-a343-3443fe14493c",
+      "createdAt": "2026-06-07T21:48:46.242",
+      "updatedAt": "2026-06-07T21:48:46.242",
+      "preparationWeightRatio": null,
+      "caloriesPer100g": 272,
+      "proteinPer100g": 16.7,
+      "carbsPer100g": 0.35,
+      "fatPer100g": 22.6
+    },
+    {
+      "id": "2cc8cc11-baa9-44cf-905d-b48c8ad52e75",
+      "name": "Mélange de légumes découpés",
+      "imageUrl": "https://img.hellofresh.com/hellofresh_s3/ingredient/6691c4d4857799fb13525473-d51e431c.png",
+      "notes": null,
+      "baseUnitId": "8b9817e2-d85f-49a8-a343-3443fe14493c",
+      "createdAt": "2026-06-07T15:12:48.1",
+      "updatedAt": "2026-06-07T15:12:48.1",
+      "preparationWeightRatio": null,
+      "caloriesPer100g": 27.9,
+      "proteinPer100g": 1.19,
+      "carbsPer100g": 4.08,
+      "fatPer100g": 0.25
+    },
+    {
+      "id": "8b9c5158-086d-4ad4-b497-9883ad5db556",
+      "name": "Noisettes grillées",
+      "imageUrl": "https://img.hellofresh.com/hellofresh_s3/ingredient/6405bfb7af4af6d531d50ca7-845a262f.png",
+      "notes": null,
+      "baseUnitId": "8b9817e2-d85f-49a8-a343-3443fe14493c",
+      "createdAt": "2026-06-10T16:38:18.28",
+      "updatedAt": "2026-06-10T16:38:18.28",
+      "preparationWeightRatio": null,
+      "caloriesPer100g": 684,
+      "proteinPer100g": 14.4,
+      "carbsPer100g": 8.81,
+      "fatPer100g": 62.4
+    },
+    {
+      "id": "accb3428-b86c-496d-9657-19fa2034e118",
+      "name": "Noix concassées",
+      "imageUrl": "https://img.hellofresh.com/hellofresh_s3/ingredient/645bc3d0a116286892337383-b95c1e6a.png",
+      "notes": null,
+      "baseUnitId": "8b9817e2-d85f-49a8-a343-3443fe14493c",
+      "createdAt": "2026-06-07T21:47:55.261",
+      "updatedAt": "2026-06-07T21:47:55.261",
+      "preparationWeightRatio": null,
+      "caloriesPer100g": 709,
+      "proteinPer100g": 13.3,
+      "carbsPer100g": 6.88,
+      "fatPer100g": 67.3
+    },
+    {
+      "id": "6d3a3b42-4519-455b-a347-b5f44a66b55f",
+      "name": "Noix de muscade",
+      "imageUrl": "https://img.hellofresh.com/hellofresh_s3/ingredient/6405bfb6b9d07cd5d38d7ba3-04cc9eff.png",
+      "notes": null,
+      "baseUnitId": "8b9817e2-d85f-49a8-a343-3443fe14493c",
+      "createdAt": "2026-06-07T20:19:19.343",
+      "updatedAt": "2026-06-07T21:34:32.503",
+      "preparationWeightRatio": null,
+      "caloriesPer100g": 506,
+      "proteinPer100g": 5.84,
+      "carbsPer100g": 27.4,
+      "fatPer100g": 36.3
+    },
+    {
+      "id": "79b2f420-c132-4001-8e3c-4d7e6f9e30bb",
+      "name": "Nouilles plates de riz",
+      "imageUrl": "https://img.hellofresh.com/hellofresh_s3/ingredient/6405bf68b9d07cd5d38d7a90-d8db3544.png",
+      "notes": null,
+      "baseUnitId": "8b9817e2-d85f-49a8-a343-3443fe14493c",
+      "createdAt": "2026-06-07T15:09:39.349",
+      "updatedAt": "2026-06-07T15:09:39.349",
+      "preparationWeightRatio": null,
+      "caloriesPer100g": 365,
+      "proteinPer100g": 7.44,
+      "carbsPer100g": 80.5,
+      "fatPer100g": 1
+    },
+    {
+      "id": "ae373d64-4a79-4192-9506-a73285c19230",
+      "name": "Oignon",
+      "imageUrl": "https://img.hellofresh.com/hellofresh_s3/ingredient/6405bff8b0da194777986443-b1d2a8c8.png",
+      "notes": null,
+      "baseUnitId": "8b9817e2-d85f-49a8-a343-3443fe14493c",
+      "createdAt": "2026-06-07T19:00:42.304",
+      "updatedAt": "2026-06-13T21:45:57.761",
+      "preparationWeightRatio": null,
+      "caloriesPer100g": 39,
+      "proteinPer100g": 1.1,
+      "carbsPer100g": 6.25,
+      "fatPer100g": 0.62
+    },
+    {
+      "id": "7217175c-76dc-4861-95c7-7c6eb5ec9bb0",
+      "name": "Orzo",
+      "imageUrl": "https://img.hellofresh.com/hellofresh_s3/ingredient/6405bff4b9d07cd5d38d7c6e-f40a541d.png",
+      "notes": null,
+      "baseUnitId": "8b9817e2-d85f-49a8-a343-3443fe14493c",
+      "createdAt": "2026-06-08T20:21:50.186",
+      "updatedAt": "2026-06-13T21:06:38.73",
+      "preparationWeightRatio": 3,
+      "caloriesPer100g": 364,
+      "proteinPer100g": 12,
+      "carbsPer100g": 72.7,
+      "fatPer100g": 1.6
+    },
+    {
+      "id": "ae639908-c351-4b1b-be82-df7eb90f8299",
+      "name": "Pain de campagne (Tranche)",
+      "imageUrl": "https://img.hellofresh.com/hellofresh_s3/ingredient/64073bc89c6d10cd16eab641-6fc795e6.png",
+      "notes": null,
+      "baseUnitId": "8b9817e2-d85f-49a8-a343-3443fe14493c",
+      "createdAt": "2026-06-07T20:20:26.87",
+      "updatedAt": "2026-06-13T21:23:35.005",
+      "preparationWeightRatio": null,
+      "caloriesPer100g": 253,
+      "proteinPer100g": 7.52,
+      "carbsPer100g": 50,
+      "fatPer100g": 1.3
+    },
+    {
+      "id": "cee769cd-2efa-408c-a2f1-17d4246aa8df",
+      "name": "Pak choï",
+      "imageUrl": "https://img.hellofresh.com/hellofresh_s3/ingredient/64073c24df6297bb5beef186-dcaa2aad.png",
+      "notes": null,
+      "baseUnitId": "8b9817e2-d85f-49a8-a343-3443fe14493c",
+      "createdAt": "2026-06-07T15:10:22.485",
+      "updatedAt": "2026-06-13T21:23:35.005",
+      "preparationWeightRatio": null,
+      "caloriesPer100g": 14.6,
+      "proteinPer100g": 1.5,
+      "carbsPer100g": 1.2,
+      "fatPer100g": 0.2
+    },
+    {
+      "id": "8f4d3e9c-fc99-4ffe-9082-63283f660630",
+      "name": "Pecorino râpé",
+      "imageUrl": "https://img.hellofresh.com/hellofresh_s3/ingredient/64073bb09c6d10cd16eab624-84bab609.png",
+      "notes": null,
+      "baseUnitId": "8b9817e2-d85f-49a8-a343-3443fe14493c",
+      "createdAt": "2026-06-07T21:50:57.5",
+      "updatedAt": "2026-06-07T21:50:57.5",
+      "preparationWeightRatio": null,
+      "caloriesPer100g": 383,
+      "proteinPer100g": 25.5,
+      "carbsPer100g": 1,
+      "fatPer100g": 31
+    },
+    {
+      "id": "20bc1b54-bf26-47e2-8ee6-7ead8d039d12",
+      "name": "Persil",
+      "imageUrl": "https://img.hellofresh.com/hellofresh_s3/ingredient/6405bf95b0da1947779862f8-3f0928f1.png",
+      "notes": null,
+      "baseUnitId": "8b9817e2-d85f-49a8-a343-3443fe14493c",
+      "createdAt": "2026-06-07T21:46:30.714",
+      "updatedAt": "2026-06-07T21:46:30.714",
+      "preparationWeightRatio": null,
+      "caloriesPer100g": 42.5,
+      "proteinPer100g": 2.97,
+      "carbsPer100g": 4.1,
+      "fatPer100g": 0.63
+    },
+    {
+      "id": "dd4fb943-dd9f-4aa3-8171-86ff9024297b",
+      "name": "Poireau",
+      "imageUrl": "https://cdn.intermarche.com/fr/Content/images/boitmal/produit/zoom/A00A90FD21582FE6367F94600453DA6E.jpg",
+      "notes": null,
+      "baseUnitId": "8b9817e2-d85f-49a8-a343-3443fe14493c",
+      "createdAt": "2026-06-07T15:45:58.791",
+      "updatedAt": "2026-06-13T22:02:51.317",
+      "preparationWeightRatio": null,
+      "caloriesPer100g": 32.3,
+      "proteinPer100g": 1.49,
+      "carbsPer100g": 4.9,
+      "fatPer100g": 0.25
+    },
+    {
+      "id": "559e31a8-05d2-4ea9-b044-773530367f22",
+      "name": "Pois chiches",
+      "imageUrl": null,
+      "notes": "Poids égoutté recommandé pour les recettes.",
+      "baseUnitId": "8b9817e2-d85f-49a8-a343-3443fe14493c",
+      "createdAt": "2026-06-07T15:45:58.79",
+      "updatedAt": "2026-06-13T22:02:51.117",
+      "preparationWeightRatio": null,
+      "caloriesPer100g": 111,
+      "proteinPer100g": 6.74,
+      "carbsPer100g": 15,
+      "fatPer100g": 2.68
+    },
+    {
+      "id": "baf9ca42-95e3-404a-941c-c2f73ec69a35",
+      "name": "Poivron",
+      "imageUrl": "https://img.hellofresh.com/hellofresh_s3/ingredient/6405bff3b9d07cd5d38d7c6b-c005bcad.png",
+      "notes": null,
+      "baseUnitId": "8b9817e2-d85f-49a8-a343-3443fe14493c",
+      "createdAt": "2026-06-08T20:20:19.889",
+      "updatedAt": "2026-06-13T21:23:35.005",
+      "preparationWeightRatio": null,
+      "caloriesPer100g": 28.5,
+      "proteinPer100g": 0.94,
+      "carbsPer100g": 4.71,
+      "fatPer100g": 0.43
+    },
+    {
+      "id": "79d817c5-a9ef-46d0-bfba-e647f47dd905",
+      "name": "Pommes de terre",
+      "imageUrl": "https://img.hellofresh.com/hellofresh_s3/ingredient/6405bf22b0da194777986166-63b67bc1.png",
+      "notes": null,
+      "baseUnitId": "8b9817e2-d85f-49a8-a343-3443fe14493c",
+      "createdAt": "2026-06-07T20:19:02.643",
+      "updatedAt": "2026-06-07T21:02:30.601",
+      "preparationWeightRatio": null,
+      "caloriesPer100g": 80,
+      "proteinPer100g": 2.02,
+      "carbsPer100g": 16.2,
+      "fatPer100g": 0.09
+    },
+    {
+      "id": "37ac0b1c-9a46-498d-ba87-9d9c2161cffd",
+      "name": "Rigatoni",
+      "imageUrl": "https://img.hellofresh.com/hellofresh_s3/ingredient/6405bf21af4af6d531d50a64-3e15f391.png",
+      "notes": null,
+      "baseUnitId": "8b9817e2-d85f-49a8-a343-3443fe14493c",
+      "createdAt": "2026-06-10T16:36:20.186",
+      "updatedAt": "2026-06-13T21:07:10.824",
+      "preparationWeightRatio": 3,
+      "caloriesPer100g": 364,
+      "proteinPer100g": 12,
+      "carbsPer100g": 72.7,
+      "fatPer100g": 1.6
+    },
+    {
+      "id": "142e18eb-e7ad-4713-9804-45ca98b5261c",
+      "name": "Riz",
+      "imageUrl": "https://img.hellofresh.com/hellofresh_s3/ingredient/6405bf80af4af6d531d50be2-3b24b62f.png",
+      "notes": null,
+      "baseUnitId": "8b9817e2-d85f-49a8-a343-3443fe14493c",
+      "createdAt": "2026-06-07T19:00:27.72",
+      "updatedAt": "2026-06-13T20:50:04.198",
+      "preparationWeightRatio": 2.4,
+      "caloriesPer100g": 350,
+      "proteinPer100g": 7.02,
+      "carbsPer100g": 77.5,
+      "fatPer100g": 0.79
+    },
+    {
+      "id": "cac474d1-28cc-4020-bdcd-57055f29b03e",
+      "name": "Roquette",
+      "imageUrl": "https://img.hellofresh.com/hellofresh_s3/ingredient/6405bf36b0da1947779861b1-3c3577c4.png",
+      "notes": null,
+      "baseUnitId": "8b9817e2-d85f-49a8-a343-3443fe14493c",
+      "createdAt": "2026-06-08T20:28:22.728",
+      "updatedAt": "2026-06-08T20:28:22.728",
+      "preparationWeightRatio": null,
+      "caloriesPer100g": 27.9,
+      "proteinPer100g": 2.58,
+      "carbsPer100g": 2.1,
+      "fatPer100g": 0.66
+    },
+    {
+      "id": "48760413-1842-4f8c-a709-a487208211fb",
+      "name": "Sauce poisson",
+      "imageUrl": "https://img.hellofresh.com/hellofresh_s3/ingredient/64073bacdf6297bb5beef105-86a77ff2.png",
+      "notes": null,
+      "baseUnitId": "c47614f1-b104-4ba2-ae0f-44d6e576bf2c",
+      "createdAt": "2026-06-07T21:43:14.135",
+      "updatedAt": "2026-06-07T21:43:14.135",
+      "preparationWeightRatio": null,
+      "caloriesPer100g": 81.2,
+      "proteinPer100g": 9.3,
+      "carbsPer100g": 10.9,
+      "fatPer100g": 0
+    },
+    {
+      "id": "ca805f4c-586c-4508-bd8c-132ea29c7e56",
+      "name": "Sauce soja",
+      "imageUrl": "https://img.hellofresh.com/hellofresh_s3/ingredient/64995662461c4ddf32309848-3b79bd3a.png",
+      "notes": null,
+      "baseUnitId": "c47614f1-b104-4ba2-ae0f-44d6e576bf2c",
+      "createdAt": "2026-06-07T17:01:32.375",
+      "updatedAt": "2026-06-07T21:35:09.194",
+      "preparationWeightRatio": null,
+      "caloriesPer100g": 39.9,
+      "proteinPer100g": 7.25,
+      "carbsPer100g": 1.72,
+      "fatPer100g": 0.5
+    },
+    {
+      "id": "66365c2a-d46b-4907-ad80-483906dc0521",
+      "name": "Spaghetti",
+      "imageUrl": "https://img.hellofresh.com/hellofresh_s3/ingredient/64998b934717a9ae7f5d192a-6f635d32.png",
+      "notes": null,
+      "baseUnitId": "8b9817e2-d85f-49a8-a343-3443fe14493c",
+      "createdAt": "2026-06-07T21:45:02.492",
+      "updatedAt": "2026-06-13T21:07:13.954",
+      "preparationWeightRatio": 3,
+      "caloriesPer100g": 364,
+      "proteinPer100g": 12,
+      "carbsPer100g": 72.7,
+      "fatPer100g": 1.6
+    },
+    {
+      "id": "8d2ea9d7-d392-4623-a377-2f915fa6960e",
+      "name": "Sucre",
+      "imageUrl": "https://img.hellofresh.com/hellofresh_s3/ingredient/64062ea8af4af6d531d50df6-c95c60f7.png",
+      "notes": null,
+      "baseUnitId": "8b9817e2-d85f-49a8-a343-3443fe14493c",
+      "createdAt": "2026-06-07T21:54:25.563",
+      "updatedAt": "2026-06-07T21:54:25.563",
+      "preparationWeightRatio": null,
+      "caloriesPer100g": 399,
+      "proteinPer100g": 0,
+      "carbsPer100g": 99.7,
+      "fatPer100g": 0
+    },
+    {
+      "id": "bef6e85e-1be9-49e1-ac87-c7a36aaf039a",
+      "name": "Sucrine",
+      "imageUrl": "https://img.hellofresh.com/hellofresh_s3/ingredient/6405bfaeaf4af6d531d50c81-8eb60378.png",
+      "notes": null,
+      "baseUnitId": "8b9817e2-d85f-49a8-a343-3443fe14493c",
+      "createdAt": "2026-06-07T20:20:40.661",
+      "updatedAt": "2026-06-13T21:23:35.005",
+      "preparationWeightRatio": null,
+      "caloriesPer100g": 16.6,
+      "proteinPer100g": 1.13,
+      "carbsPer100g": 2.58,
+      "fatPer100g": 0.3
+    },
+    {
+      "id": "58d3d04c-21c9-4d54-9777-bd418efda350",
+      "name": "Tomate",
+      "imageUrl": "https://img.hellofresh.com/hellofresh_s3/ingredient/6405bff3b0da194777986433-365dd5d0.png",
+      "notes": null,
+      "baseUnitId": "8b9817e2-d85f-49a8-a343-3443fe14493c",
+      "createdAt": "2026-06-10T16:33:35.495",
+      "updatedAt": "2026-06-13T20:43:47.245",
+      "preparationWeightRatio": null,
+      "caloriesPer100g": 17.5,
+      "proteinPer100g": 0.5,
+      "carbsPer100g": 3.42,
+      "fatPer100g": 0.5
+    },
+    {
+      "id": "0bafe6b6-887d-42f2-9583-88d20195c8be",
+      "name": "Tranches de poulet cuit",
+      "imageUrl": "https://img.hellofresh.com/hellofresh_s3/ingredient/64f1980471b62ce12833233b-410ea92b.png",
+      "notes": null,
+      "baseUnitId": "8b9817e2-d85f-49a8-a343-3443fe14493c",
+      "createdAt": "2026-06-07T20:20:02.961",
+      "updatedAt": "2026-06-13T21:23:35.005",
+      "preparationWeightRatio": null,
+      "caloriesPer100g": 105,
+      "proteinPer100g": 20.7,
+      "carbsPer100g": 1.39,
+      "fatPer100g": 1.79
+    },
+    {
+      "id": "251a66a8-37a5-4a6d-be02-8b6bba89ce2e",
+      "name": "Vinaigre balsamique blanc",
+      "imageUrl": "https://img.hellofresh.com/hellofresh_s3/ingredient/63e5122a81b4b295e66f025d-285d9a8a.png",
+      "notes": null,
+      "baseUnitId": "c47614f1-b104-4ba2-ae0f-44d6e576bf2c",
+      "createdAt": "2026-06-07T16:59:46.278",
+      "updatedAt": "2026-06-07T16:59:46.278",
+      "preparationWeightRatio": null,
+      "caloriesPer100g": 91.7,
+      "proteinPer100g": 0.69,
+      "carbsPer100g": 18,
+      "fatPer100g": 0.6
+    },
+    {
+      "id": "2668d8d6-b202-456d-b6f5-e3753c8d5066",
+      "name": "Vinaigre balsamique noir",
+      "imageUrl": "https://img.hellofresh.com/hellofresh_s3/ingredient/63e5121c81b4b295e66f0253-457fa48d.png",
+      "notes": null,
+      "baseUnitId": "c47614f1-b104-4ba2-ae0f-44d6e576bf2c",
+      "createdAt": "2026-06-07T20:21:22.826",
+      "updatedAt": "2026-06-07T21:35:23.163",
+      "preparationWeightRatio": null,
+      "caloriesPer100g": 91.7,
+      "proteinPer100g": 0.69,
+      "carbsPer100g": 18,
+      "fatPer100g": 0.6
+    },
+    {
+      "id": "e4f3c8b0-4339-4e52-afbd-3903aa14dba4",
+      "name": "Échalote",
+      "imageUrl": "https://img.hellofresh.com/hellofresh_s3/ingredient/6405bfc5b9d07cd5d38d7bce-c7e46e41.png",
+      "notes": null,
+      "baseUnitId": "8b9817e2-d85f-49a8-a343-3443fe14493c",
+      "createdAt": "2026-06-07T21:38:49.174",
+      "updatedAt": "2026-06-13T21:23:35.005",
+      "preparationWeightRatio": null,
+      "caloriesPer100g": 61.7,
+      "proteinPer100g": 1.81,
+      "carbsPer100g": 12.2,
+      "fatPer100g": 0.5
+    },
+    {
+      "id": "ce7cc729-a5d0-40f3-ae6f-fecbb6ec30ff",
+      "name": "Épices italiennes",
+      "imageUrl": "https://img.hellofresh.com/hellofresh_s3/ingredient/6405bfa5af4af6d531d50c60-235ba062.png",
+      "notes": null,
+      "baseUnitId": "8b9817e2-d85f-49a8-a343-3443fe14493c",
+      "createdAt": "2026-06-08T20:24:06.491",
+      "updatedAt": "2026-06-08T20:24:06.491",
+      "preparationWeightRatio": null,
+      "caloriesPer100g": 283,
+      "proteinPer100g": 11.5,
+      "carbsPer100g": 23.1,
+      "fatPer100g": 7.2
+    },
+    {
+      "id": "2119bfe4-702e-4f6b-8dd7-7a4467fa4602",
+      "name": "Épinards",
+      "imageUrl": "https://img.hellofresh.com/hellofresh_s3/ingredient/6405bf3aaf4af6d531d50acf-9d3e3090.png",
+      "notes": null,
+      "baseUnitId": "8b9817e2-d85f-49a8-a343-3443fe14493c",
+      "createdAt": "2026-06-07T19:01:35.809",
+      "updatedAt": "2026-06-07T19:50:02.712",
+      "preparationWeightRatio": null,
+      "caloriesPer100g": 33.3,
+      "proteinPer100g": 2.68,
+      "carbsPer100g": 3.06,
+      "fatPer100g": 0.39
+    }
+  ],
+  "ingredientUnits": [
+    {
+      "id": "7ff36e03-eecf-477f-8cc7-a94a522c41e9",
+      "ingredientId": "79b2f420-c132-4001-8e3c-4d7e6f9e30bb",
+      "unitId": "8b9817e2-d85f-49a8-a343-3443fe14493c",
+      "toBaseFactor": null,
+      "createdAt": "2026-06-07T15:09:39.353",
+      "updatedAt": "2026-06-07T15:09:39.353"
+    },
+    {
+      "id": "e5a0450b-1c4a-46fc-b92f-8990e0a061c3",
+      "ingredientId": "2cc8cc11-baa9-44cf-905d-b48c8ad52e75",
+      "unitId": "8b9817e2-d85f-49a8-a343-3443fe14493c",
+      "toBaseFactor": null,
+      "createdAt": "2026-06-07T15:12:48.101",
+      "updatedAt": "2026-06-07T15:12:48.101"
+    },
+    {
+      "id": "7e98ee86-219e-4e0a-9081-32a2c3d96c3a",
+      "ingredientId": "7adde27d-d068-4481-a4b3-2dc25dcf578e",
+      "unitId": "c47614f1-b104-4ba2-ae0f-44d6e576bf2c",
+      "toBaseFactor": null,
+      "createdAt": "2026-06-07T15:23:21.473",
+      "updatedAt": "2026-06-07T15:23:21.473"
+    },
+    {
+      "id": "c5c1f1b2-d420-4da8-bb92-d60771c8180e",
+      "ingredientId": "251a66a8-37a5-4a6d-be02-8b6bba89ce2e",
+      "unitId": "c47614f1-b104-4ba2-ae0f-44d6e576bf2c",
+      "toBaseFactor": null,
+      "createdAt": "2026-06-07T16:59:46.279",
+      "updatedAt": "2026-06-07T16:59:46.279"
+    },
+    {
+      "id": "001c34bf-4aa7-4a05-acbd-59837879ba66",
+      "ingredientId": "9f387408-8b0d-4510-9ae0-6c788f988329",
+      "unitId": "8b9817e2-d85f-49a8-a343-3443fe14493c",
+      "toBaseFactor": null,
+      "createdAt": "2026-06-07T17:00:13.969",
+      "updatedAt": "2026-06-07T17:00:13.969"
+    },
+    {
+      "id": "07c1c693-f6c8-4102-bddf-a375185bdee7",
+      "ingredientId": "9f387408-8b0d-4510-9ae0-6c788f988329",
+      "unitId": "a8f30dad-dd15-46f8-83ba-1bfed243fa9b",
+      "toBaseFactor": 1,
+      "createdAt": "2026-06-07T17:00:13.969",
+      "updatedAt": "2026-06-07T17:00:13.969"
+    },
+    {
+      "id": "435c4d9a-234e-48d3-b277-b39655334f68",
+      "ingredientId": "0cc9cff1-2466-468a-bc6a-6724844b1096",
+      "unitId": "8b9817e2-d85f-49a8-a343-3443fe14493c",
+      "toBaseFactor": null,
+      "createdAt": "2026-06-07T17:02:09.803",
+      "updatedAt": "2026-06-07T17:02:09.803"
+    },
+    {
+      "id": "378e0244-0419-4e04-89ca-cd51bf83f5d6",
+      "ingredientId": "cee769cd-2efa-408c-a2f1-17d4246aa8df",
+      "unitId": "a8f30dad-dd15-46f8-83ba-1bfed243fa9b",
+      "toBaseFactor": null,
+      "createdAt": "2026-06-07T17:46:58.522",
+      "updatedAt": "2026-06-07T17:46:58.522"
+    },
+    {
+      "id": "96008604-95d6-4e38-8d96-eb48a0097f5d",
+      "ingredientId": "3b2f321e-3eb5-40b4-af1d-78a0654f9d55",
+      "unitId": "a8f30dad-dd15-46f8-83ba-1bfed243fa9b",
+      "toBaseFactor": null,
+      "createdAt": "2026-06-07T19:05:19.488",
+      "updatedAt": "2026-06-07T19:05:19.488"
+    },
+    {
+      "id": "3d56e13a-6238-4fe6-9f9a-70bd1556db93",
+      "ingredientId": "7d889c4e-1667-4c7f-bfa8-c1fbea2cfadb",
+      "unitId": "a8f30dad-dd15-46f8-83ba-1bfed243fa9b",
+      "toBaseFactor": null,
+      "createdAt": "2026-06-07T19:10:20.092",
+      "updatedAt": "2026-06-07T19:10:20.092"
+    },
+    {
+      "id": "692ca49a-ef2f-4a8c-b7c7-35d47c72f2d2",
+      "ingredientId": "2ba815d7-2ef9-47b0-9405-8c4b47fd6578",
+      "unitId": "8b9817e2-d85f-49a8-a343-3443fe14493c",
+      "toBaseFactor": null,
+      "createdAt": "2026-06-07T19:11:46.966",
+      "updatedAt": "2026-06-07T19:11:46.966"
+    },
+    {
+      "id": "6a20380f-c566-4543-a0c2-06b3065ea64f",
+      "ingredientId": "2ba815d7-2ef9-47b0-9405-8c4b47fd6578",
+      "unitId": "a8f30dad-dd15-46f8-83ba-1bfed243fa9b",
+      "toBaseFactor": 110,
+      "createdAt": "2026-06-07T19:11:46.966",
+      "updatedAt": "2026-06-07T19:11:46.966"
+    },
+    {
+      "id": "aa4b47f3-ad05-45b4-9000-1eb6ef2a32ca",
+      "ingredientId": "bda2ace3-d252-4ccf-a658-c00687faa9bb",
+      "unitId": "8b9817e2-d85f-49a8-a343-3443fe14493c",
+      "toBaseFactor": null,
+      "createdAt": "2026-06-07T19:36:15.83",
+      "updatedAt": "2026-06-07T19:36:15.83"
+    },
+    {
+      "id": "8b8a4cec-7b3c-449a-8e67-c2c3e8e7bfb4",
+      "ingredientId": "bda2ace3-d252-4ccf-a658-c00687faa9bb",
+      "unitId": "a8f30dad-dd15-46f8-83ba-1bfed243fa9b",
+      "toBaseFactor": 1,
+      "createdAt": "2026-06-07T19:36:15.83",
+      "updatedAt": "2026-06-07T19:36:15.83"
+    },
+    {
+      "id": "68eb7f51-46e9-4e5a-ad16-fbe512c3c338",
+      "ingredientId": "2119bfe4-702e-4f6b-8dd7-7a4467fa4602",
+      "unitId": "8b9817e2-d85f-49a8-a343-3443fe14493c",
+      "toBaseFactor": null,
+      "createdAt": "2026-06-07T19:50:02.713",
+      "updatedAt": "2026-06-07T19:50:02.713"
+    },
+    {
+      "id": "1ecf9aa4-11e0-4c7b-990b-fd674d7797ec",
+      "ingredientId": "89b1ad44-ebab-4a4b-8d9d-64cfe5b8292e",
+      "unitId": "c47614f1-b104-4ba2-ae0f-44d6e576bf2c",
+      "toBaseFactor": null,
+      "createdAt": "2026-06-07T19:52:21.889",
+      "updatedAt": "2026-06-07T19:52:21.889"
+    },
+    {
+      "id": "6f00d099-823e-4497-8fe6-3187abd79c53",
+      "ingredientId": "dafafab2-7d50-4ef9-af1a-1075a40153e5",
+      "unitId": "c47614f1-b104-4ba2-ae0f-44d6e576bf2c",
+      "toBaseFactor": null,
+      "createdAt": "2026-06-07T19:53:18.154",
+      "updatedAt": "2026-06-07T19:53:18.154"
+    },
+    {
+      "id": "e20dbb62-8a0b-4465-839d-c56f91740a7a",
+      "ingredientId": "c0ef1307-cb58-44ff-adc0-6a6217d4c1d9",
+      "unitId": "a8f30dad-dd15-46f8-83ba-1bfed243fa9b",
+      "toBaseFactor": null,
+      "createdAt": "2026-06-07T19:56:31.585",
+      "updatedAt": "2026-06-07T19:56:31.585"
+    },
+    {
+      "id": "73e30845-379f-4ea0-856d-c379da65938e",
+      "ingredientId": "3c9d898d-8925-4ca5-b5ea-4a0549d1d22b",
+      "unitId": "8b9817e2-d85f-49a8-a343-3443fe14493c",
+      "toBaseFactor": null,
+      "createdAt": "2026-06-07T20:23:36.251",
+      "updatedAt": "2026-06-07T20:23:36.251"
+    },
+    {
+      "id": "b010d606-a89f-4c78-ab79-c79bd0b0a4f6",
+      "ingredientId": "3c9d898d-8925-4ca5-b5ea-4a0549d1d22b",
+      "unitId": "a8f30dad-dd15-46f8-83ba-1bfed243fa9b",
+      "toBaseFactor": 1,
+      "createdAt": "2026-06-07T20:23:36.251",
+      "updatedAt": "2026-06-07T20:23:36.251"
+    },
+    {
+      "id": "74e1aa32-cae2-4850-90b8-f02279dec117",
+      "ingredientId": "69499a73-8148-4599-94c5-29fd39798802",
+      "unitId": "8b9817e2-d85f-49a8-a343-3443fe14493c",
+      "toBaseFactor": null,
+      "createdAt": "2026-06-07T20:56:52.811",
+      "updatedAt": "2026-06-07T20:56:52.811"
+    },
+    {
+      "id": "a353f617-6c59-4a8a-b545-35d11f54e27f",
+      "ingredientId": "79d817c5-a9ef-46d0-bfba-e647f47dd905",
+      "unitId": "8b9817e2-d85f-49a8-a343-3443fe14493c",
+      "toBaseFactor": null,
+      "createdAt": "2026-06-07T21:02:30.602",
+      "updatedAt": "2026-06-07T21:02:30.602"
+    },
+    {
+      "id": "932aac2e-a95e-4dc0-97a2-ff660c27584a",
+      "ingredientId": "0bafe6b6-887d-42f2-9583-88d20195c8be",
+      "unitId": "a8f30dad-dd15-46f8-83ba-1bfed243fa9b",
+      "toBaseFactor": null,
+      "createdAt": "2026-06-07T21:06:34.508",
+      "updatedAt": "2026-06-07T21:06:34.508"
+    },
+    {
+      "id": "d489edbe-8814-469f-9230-fba23d11ac6a",
+      "ingredientId": "8e0c86d1-5862-474b-b765-3aa90d5caa06",
+      "unitId": "8b9817e2-d85f-49a8-a343-3443fe14493c",
+      "toBaseFactor": null,
+      "createdAt": "2026-06-07T21:17:09.744",
+      "updatedAt": "2026-06-07T21:17:09.744"
+    },
+    {
+      "id": "9ab49349-f871-413b-b286-676446d3b16c",
+      "ingredientId": "ae639908-c351-4b1b-be82-df7eb90f8299",
+      "unitId": "a8f30dad-dd15-46f8-83ba-1bfed243fa9b",
+      "toBaseFactor": null,
+      "createdAt": "2026-06-07T21:25:24.089",
+      "updatedAt": "2026-06-07T21:25:24.089"
+    },
+    {
+      "id": "20bcc2ee-c0d3-408d-83d9-0fd9ecf58931",
+      "ingredientId": "bef6e85e-1be9-49e1-ac87-c7a36aaf039a",
+      "unitId": "a8f30dad-dd15-46f8-83ba-1bfed243fa9b",
+      "toBaseFactor": null,
+      "createdAt": "2026-06-07T21:26:47.001",
+      "updatedAt": "2026-06-07T21:26:47.001"
+    },
+    {
+      "id": "3e9c66bb-456d-4e24-ade9-bb9e95728fee",
+      "ingredientId": "ae96c242-875e-4427-a287-6543aede3115",
+      "unitId": "c47614f1-b104-4ba2-ae0f-44d6e576bf2c",
+      "toBaseFactor": null,
+      "createdAt": "2026-06-07T21:32:10.319",
+      "updatedAt": "2026-06-07T21:32:10.319"
+    },
+    {
+      "id": "119e709b-f31a-45f8-98ab-874f909aed6c",
+      "ingredientId": "6d3a3b42-4519-455b-a347-b5f44a66b55f",
+      "unitId": "8b9817e2-d85f-49a8-a343-3443fe14493c",
+      "toBaseFactor": null,
+      "createdAt": "2026-06-07T21:34:32.504",
+      "updatedAt": "2026-06-07T21:34:32.504"
+    },
+    {
+      "id": "99804919-22b6-4079-861e-904535f12e3a",
+      "ingredientId": "ca805f4c-586c-4508-bd8c-132ea29c7e56",
+      "unitId": "c47614f1-b104-4ba2-ae0f-44d6e576bf2c",
+      "toBaseFactor": null,
+      "createdAt": "2026-06-07T21:35:09.194",
+      "updatedAt": "2026-06-07T21:35:09.194"
+    },
+    {
+      "id": "22dcff98-ea4e-4c65-a922-1d20c1901831",
+      "ingredientId": "2668d8d6-b202-456d-b6f5-e3753c8d5066",
+      "unitId": "c47614f1-b104-4ba2-ae0f-44d6e576bf2c",
+      "toBaseFactor": null,
+      "createdAt": "2026-06-07T21:35:23.164",
+      "updatedAt": "2026-06-07T21:35:23.164"
+    },
+    {
+      "id": "e8c203e6-8a04-4a70-8efc-a780c7bd1c3d",
+      "ingredientId": "ecedb7f9-4f33-4639-a586-80cd2231a6d4",
+      "unitId": "8b9817e2-d85f-49a8-a343-3443fe14493c",
+      "toBaseFactor": null,
+      "createdAt": "2026-06-07T21:38:06.987",
+      "updatedAt": "2026-06-07T21:38:06.987"
+    },
+    {
+      "id": "a6fdc7fb-75ad-48b6-abb5-b146832c4a1a",
+      "ingredientId": "e4f3c8b0-4339-4e52-afbd-3903aa14dba4",
+      "unitId": "a8f30dad-dd15-46f8-83ba-1bfed243fa9b",
+      "toBaseFactor": null,
+      "createdAt": "2026-06-07T21:38:49.175",
+      "updatedAt": "2026-06-07T21:38:49.175"
+    },
+    {
+      "id": "487b5375-08c7-46bc-80f0-b951dd9468a6",
+      "ingredientId": "321b3d93-8c29-4aa8-9380-addbefabc7fb",
+      "unitId": "8b9817e2-d85f-49a8-a343-3443fe14493c",
+      "toBaseFactor": null,
+      "createdAt": "2026-06-07T21:39:27.292",
+      "updatedAt": "2026-06-07T21:39:27.292"
+    },
+    {
+      "id": "2361981e-8a18-401f-abfa-e0cc018b9e59",
+      "ingredientId": "321b3d93-8c29-4aa8-9380-addbefabc7fb",
+      "unitId": "a8f30dad-dd15-46f8-83ba-1bfed243fa9b",
+      "toBaseFactor": 1,
+      "createdAt": "2026-06-07T21:39:27.292",
+      "updatedAt": "2026-06-07T21:39:27.292"
+    },
+    {
+      "id": "37c125df-3d3a-4f9a-9fac-7a1f3e96012c",
+      "ingredientId": "48760413-1842-4f8c-a709-a487208211fb",
+      "unitId": "c47614f1-b104-4ba2-ae0f-44d6e576bf2c",
+      "toBaseFactor": null,
+      "createdAt": "2026-06-07T21:43:14.136",
+      "updatedAt": "2026-06-07T21:43:14.136"
+    },
+    {
+      "id": "50bbdd1d-e24b-4eca-ba30-120e99574709",
+      "ingredientId": "20bc1b54-bf26-47e2-8ee6-7ead8d039d12",
+      "unitId": "8b9817e2-d85f-49a8-a343-3443fe14493c",
+      "toBaseFactor": null,
+      "createdAt": "2026-06-07T21:46:30.715",
+      "updatedAt": "2026-06-07T21:46:30.715"
+    },
+    {
+      "id": "f82c252b-82ad-4252-afeb-efc2b3500cc1",
+      "ingredientId": "20bc1b54-bf26-47e2-8ee6-7ead8d039d12",
+      "unitId": "a8f30dad-dd15-46f8-83ba-1bfed243fa9b",
+      "toBaseFactor": 1,
+      "createdAt": "2026-06-07T21:46:30.715",
+      "updatedAt": "2026-06-07T21:46:30.715"
+    },
+    {
+      "id": "a123c80e-efb6-4ab9-8ec1-c86e0c05b321",
+      "ingredientId": "c1c0fcd4-93f8-46a6-befc-cfad4412dec6",
+      "unitId": "8b9817e2-d85f-49a8-a343-3443fe14493c",
+      "toBaseFactor": null,
+      "createdAt": "2026-06-07T21:46:56.726",
+      "updatedAt": "2026-06-07T21:46:56.726"
+    },
+    {
+      "id": "51ef0fea-dc91-435e-83d0-89be021a09f4",
+      "ingredientId": "accb3428-b86c-496d-9657-19fa2034e118",
+      "unitId": "8b9817e2-d85f-49a8-a343-3443fe14493c",
+      "toBaseFactor": null,
+      "createdAt": "2026-06-07T21:47:55.262",
+      "updatedAt": "2026-06-07T21:47:55.262"
+    },
+    {
+      "id": "d0b3bd41-c796-4c0f-8e35-cade971ab291",
+      "ingredientId": "accb3428-b86c-496d-9657-19fa2034e118",
+      "unitId": "a8f30dad-dd15-46f8-83ba-1bfed243fa9b",
+      "toBaseFactor": 1,
+      "createdAt": "2026-06-07T21:47:55.262",
+      "updatedAt": "2026-06-07T21:47:55.262"
+    },
+    {
+      "id": "0db5647d-1c01-4a05-921a-3d9220d2cb2f",
+      "ingredientId": "9d36d464-6b25-4610-a62b-795af4f1dfab",
+      "unitId": "8b9817e2-d85f-49a8-a343-3443fe14493c",
+      "toBaseFactor": null,
+      "createdAt": "2026-06-07T21:48:46.243",
+      "updatedAt": "2026-06-07T21:48:46.243"
+    },
+    {
+      "id": "292c0973-d657-4c1e-9525-3eaf56bc253f",
+      "ingredientId": "8f4d3e9c-fc99-4ffe-9082-63283f660630",
+      "unitId": "8b9817e2-d85f-49a8-a343-3443fe14493c",
+      "toBaseFactor": null,
+      "createdAt": "2026-06-07T21:50:57.502",
+      "updatedAt": "2026-06-07T21:50:57.502"
+    },
+    {
+      "id": "ddf58837-1aa4-4675-8d47-5c198a198700",
+      "ingredientId": "171e89c3-f829-48e1-bbb5-74188af1cd49",
+      "unitId": "c47614f1-b104-4ba2-ae0f-44d6e576bf2c",
+      "toBaseFactor": null,
+      "createdAt": "2026-06-07T21:52:13.603",
+      "updatedAt": "2026-06-07T21:52:13.603"
+    },
+    {
+      "id": "d75c2621-ed62-410e-b478-fa721e2b9366",
+      "ingredientId": "8d2ea9d7-d392-4623-a377-2f915fa6960e",
+      "unitId": "8b9817e2-d85f-49a8-a343-3443fe14493c",
+      "toBaseFactor": null,
+      "createdAt": "2026-06-07T21:54:25.564",
+      "updatedAt": "2026-06-07T21:54:25.564"
+    },
+    {
+      "id": "36b15549-3373-47ad-b712-4e55c907bc20",
+      "ingredientId": "563bdfa3-1050-40ed-af21-62e0278e46e2",
+      "unitId": "8b9817e2-d85f-49a8-a343-3443fe14493c",
+      "toBaseFactor": null,
+      "createdAt": "2026-06-07T21:55:10.343",
+      "updatedAt": "2026-06-07T21:55:10.343"
+    },
+    {
+      "id": "9cd6d254-4345-4840-8193-0cd2788acb6b",
+      "ingredientId": "4e702a96-72a1-4bdd-a14a-e0b6c1782a4d",
+      "unitId": "8b9817e2-d85f-49a8-a343-3443fe14493c",
+      "toBaseFactor": null,
+      "createdAt": "2026-06-07T21:55:37.988",
+      "updatedAt": "2026-06-07T21:55:37.988"
+    },
+    {
+      "id": "3c655990-09dd-40cc-acc9-46c38688dde4",
+      "ingredientId": "4e702a96-72a1-4bdd-a14a-e0b6c1782a4d",
+      "unitId": "a8f30dad-dd15-46f8-83ba-1bfed243fa9b",
+      "toBaseFactor": 1,
+      "createdAt": "2026-06-07T21:55:37.988",
+      "updatedAt": "2026-06-07T21:55:37.988"
+    },
+    {
+      "id": "d079812a-25e0-4080-bb7e-d994266d9cb5",
+      "ingredientId": "69499a73-8148-4599-94c5-29fd39798802",
+      "unitId": "7351b24d-2532-4b09-b15c-a3c0fb9172f1",
+      "toBaseFactor": null,
+      "createdAt": "2026-06-07T21:58:59.727",
+      "updatedAt": "2026-06-07T21:58:59.727"
+    },
+    {
+      "id": "d0aa3625-01ee-463b-948f-e2545dca17a2",
+      "ingredientId": "baf9ca42-95e3-404a-941c-c2f73ec69a35",
+      "unitId": "a8f30dad-dd15-46f8-83ba-1bfed243fa9b",
+      "toBaseFactor": null,
+      "createdAt": "2026-06-08T20:20:19.92",
+      "updatedAt": "2026-06-08T20:20:19.92"
+    },
+    {
+      "id": "10f5716d-c5cb-46e4-9b42-a296d4f72d4d",
+      "ingredientId": "ce7cc729-a5d0-40f3-ae6f-fecbb6ec30ff",
+      "unitId": "8b9817e2-d85f-49a8-a343-3443fe14493c",
+      "toBaseFactor": null,
+      "createdAt": "2026-06-08T20:24:06.514",
+      "updatedAt": "2026-06-08T20:24:06.514"
+    },
+    {
+      "id": "5d589e83-88ac-457c-a1a7-6d5b02fb5cfb",
+      "ingredientId": "ce7cc729-a5d0-40f3-ae6f-fecbb6ec30ff",
+      "unitId": "a8f30dad-dd15-46f8-83ba-1bfed243fa9b",
+      "toBaseFactor": 1,
+      "createdAt": "2026-06-08T20:24:06.514",
+      "updatedAt": "2026-06-08T20:24:06.514"
+    },
+    {
+      "id": "cf14256d-f42f-4daa-bf8b-ace303026422",
+      "ingredientId": "63fd2005-d1df-4be2-8984-8c19fc9cde52",
+      "unitId": "c47614f1-b104-4ba2-ae0f-44d6e576bf2c",
+      "toBaseFactor": null,
+      "createdAt": "2026-06-08T20:26:07.113",
+      "updatedAt": "2026-06-08T20:26:07.113"
+    },
+    {
+      "id": "d4d0a0d4-0e8e-4cd9-9980-5c2b513bdb4f",
+      "ingredientId": "63fd2005-d1df-4be2-8984-8c19fc9cde52",
+      "unitId": "a8f30dad-dd15-46f8-83ba-1bfed243fa9b",
+      "toBaseFactor": 1,
+      "createdAt": "2026-06-08T20:26:07.113",
+      "updatedAt": "2026-06-08T20:26:07.113"
+    },
+    {
+      "id": "b618ab71-c4ba-4c87-ab29-5a4fda1615c4",
+      "ingredientId": "cac474d1-28cc-4020-bdcd-57055f29b03e",
+      "unitId": "8b9817e2-d85f-49a8-a343-3443fe14493c",
+      "toBaseFactor": null,
+      "createdAt": "2026-06-08T20:28:22.752",
+      "updatedAt": "2026-06-08T20:28:22.752"
+    },
+    {
+      "id": "43064ab0-990a-4015-a30f-f79f4af00419",
+      "ingredientId": "33b11ca2-fa5d-4c23-8be9-4c295f370220",
+      "unitId": "a8f30dad-dd15-46f8-83ba-1bfed243fa9b",
+      "toBaseFactor": null,
+      "createdAt": "2026-06-09T20:56:20.807",
+      "updatedAt": "2026-06-09T20:56:20.807"
+    },
+    {
+      "id": "67671872-6bb6-4897-9a03-1466380a2d93",
+      "ingredientId": "4126438e-cc79-4b21-af88-4218a5cd8fbf",
+      "unitId": "c47614f1-b104-4ba2-ae0f-44d6e576bf2c",
+      "toBaseFactor": null,
+      "createdAt": "2026-06-09T21:01:09.492",
+      "updatedAt": "2026-06-09T21:01:09.492"
+    },
+    {
+      "id": "8a965db8-31e0-4458-9569-074d792b5881",
+      "ingredientId": "097fce0e-909b-455f-a982-d92b93406ca3",
+      "unitId": "8b9817e2-d85f-49a8-a343-3443fe14493c",
+      "toBaseFactor": null,
+      "createdAt": "2026-06-09T21:15:53.806",
+      "updatedAt": "2026-06-09T21:15:53.806"
+    },
+    {
+      "id": "deb9c1cd-df8b-48ad-9ab0-6bade7b571f1",
+      "ingredientId": "6a6c8779-bd7d-485e-9f4f-09a2756e45b9",
+      "unitId": "a8f30dad-dd15-46f8-83ba-1bfed243fa9b",
+      "toBaseFactor": null,
+      "createdAt": "2026-06-10T16:31:37.947",
+      "updatedAt": "2026-06-10T16:31:37.947"
+    },
+    {
+      "id": "7d692100-10a1-4474-8b42-4cad164a8e06",
+      "ingredientId": "1a431fe9-4e04-443b-bbd1-65a6b28f0cad",
+      "unitId": "8b9817e2-d85f-49a8-a343-3443fe14493c",
+      "toBaseFactor": null,
+      "createdAt": "2026-06-10T16:35:11.726",
+      "updatedAt": "2026-06-10T16:35:11.726"
+    },
+    {
+      "id": "d80c4c6f-2191-4fde-a769-9af93b531ee3",
+      "ingredientId": "1a431fe9-4e04-443b-bbd1-65a6b28f0cad",
+      "unitId": "a8f30dad-dd15-46f8-83ba-1bfed243fa9b",
+      "toBaseFactor": 1,
+      "createdAt": "2026-06-10T16:35:11.726",
+      "updatedAt": "2026-06-10T16:35:11.726"
+    },
+    {
+      "id": "a6d8df65-c3c3-4051-a292-afa5a14238dc",
+      "ingredientId": "8b9c5158-086d-4ad4-b497-9883ad5db556",
+      "unitId": "8b9817e2-d85f-49a8-a343-3443fe14493c",
+      "toBaseFactor": null,
+      "createdAt": "2026-06-10T16:38:18.303",
+      "updatedAt": "2026-06-10T16:38:18.303"
+    },
+    {
+      "id": "6e53db84-3df8-4ea8-92fe-5e86b7cb6d31",
+      "ingredientId": "6a0c1090-2791-47a8-bf75-de29e3b2faf1",
+      "unitId": "8b9817e2-d85f-49a8-a343-3443fe14493c",
+      "toBaseFactor": null,
+      "createdAt": "2026-06-10T16:39:00.771",
+      "updatedAt": "2026-06-10T16:39:00.771"
+    },
+    {
+      "id": "e3026d22-6da2-487f-b5f6-59cb565a9da0",
+      "ingredientId": "58d3d04c-21c9-4d54-9777-bd418efda350",
+      "unitId": "8b9817e2-d85f-49a8-a343-3443fe14493c",
+      "toBaseFactor": null,
+      "createdAt": "2026-06-13T20:43:47.438",
+      "updatedAt": "2026-06-13T20:43:47.438"
+    },
+    {
+      "id": "cd3ce7f3-fbbf-4a7a-a49b-41023cfc193e",
+      "ingredientId": "58d3d04c-21c9-4d54-9777-bd418efda350",
+      "unitId": "a8f30dad-dd15-46f8-83ba-1bfed243fa9b",
+      "toBaseFactor": 160,
+      "createdAt": "2026-06-13T20:43:47.438",
+      "updatedAt": "2026-06-13T20:43:47.438"
+    },
+    {
+      "id": "f26d157f-baa7-478b-9508-c4296472ad1c",
+      "ingredientId": "142e18eb-e7ad-4713-9804-45ca98b5261c",
+      "unitId": "8b9817e2-d85f-49a8-a343-3443fe14493c",
+      "toBaseFactor": null,
+      "createdAt": "2026-06-13T20:50:04.399",
+      "updatedAt": "2026-06-13T20:50:04.399"
+    },
+    {
+      "id": "da1d8270-f31e-46b1-9b86-90fb97653ef8",
+      "ingredientId": "7217175c-76dc-4861-95c7-7c6eb5ec9bb0",
+      "unitId": "8b9817e2-d85f-49a8-a343-3443fe14493c",
+      "toBaseFactor": null,
+      "createdAt": "2026-06-13T21:06:38.927",
+      "updatedAt": "2026-06-13T21:06:38.927"
+    },
+    {
+      "id": "85b80e9b-4287-43c4-acc7-02bd3258bfb9",
+      "ingredientId": "37ac0b1c-9a46-498d-ba87-9d9c2161cffd",
+      "unitId": "8b9817e2-d85f-49a8-a343-3443fe14493c",
+      "toBaseFactor": null,
+      "createdAt": "2026-06-13T21:07:11.021",
+      "updatedAt": "2026-06-13T21:07:11.021"
+    },
+    {
+      "id": "907e1ecc-8019-428c-8f5d-c2fd47304c5a",
+      "ingredientId": "66365c2a-d46b-4907-ad80-483906dc0521",
+      "unitId": "8b9817e2-d85f-49a8-a343-3443fe14493c",
+      "toBaseFactor": null,
+      "createdAt": "2026-06-13T21:07:14.142",
+      "updatedAt": "2026-06-13T21:07:14.142"
+    },
+    {
+      "id": "76035864-4048-4462-ab15-5c20d9135800",
+      "ingredientId": "33b11ca2-fa5d-4c23-8be9-4c295f370220",
+      "unitId": "8b9817e2-d85f-49a8-a343-3443fe14493c",
+      "toBaseFactor": null,
+      "createdAt": "2026-06-13T21:23:34.905",
+      "updatedAt": "2026-06-13T21:23:34.905"
+    },
+    {
+      "id": "ab4e81ab-7426-4786-80b0-53417bb13970",
+      "ingredientId": "e4f3c8b0-4339-4e52-afbd-3903aa14dba4",
+      "unitId": "8b9817e2-d85f-49a8-a343-3443fe14493c",
+      "toBaseFactor": null,
+      "createdAt": "2026-06-13T21:23:34.905",
+      "updatedAt": "2026-06-13T21:23:34.905"
+    },
+    {
+      "id": "81cc44ac-ea8d-40da-91f5-39128479620d",
+      "ingredientId": "0bafe6b6-887d-42f2-9583-88d20195c8be",
+      "unitId": "8b9817e2-d85f-49a8-a343-3443fe14493c",
+      "toBaseFactor": null,
+      "createdAt": "2026-06-13T21:23:34.905",
+      "updatedAt": "2026-06-13T21:23:34.905"
+    },
+    {
+      "id": "256ad9f2-d0c6-480e-aa7e-8316dee2ec12",
+      "ingredientId": "cee769cd-2efa-408c-a2f1-17d4246aa8df",
+      "unitId": "8b9817e2-d85f-49a8-a343-3443fe14493c",
+      "toBaseFactor": null,
+      "createdAt": "2026-06-13T21:23:34.905",
+      "updatedAt": "2026-06-13T21:23:34.905"
+    },
+    {
+      "id": "53bb1e34-0b04-4122-8cf8-cc08d2f8515d",
+      "ingredientId": "6a6c8779-bd7d-485e-9f4f-09a2756e45b9",
+      "unitId": "8b9817e2-d85f-49a8-a343-3443fe14493c",
+      "toBaseFactor": null,
+      "createdAt": "2026-06-13T21:23:34.905",
+      "updatedAt": "2026-06-13T21:23:34.905"
+    },
+    {
+      "id": "6c20abf7-7716-4302-99dd-95b3ff910962",
+      "ingredientId": "baf9ca42-95e3-404a-941c-c2f73ec69a35",
+      "unitId": "8b9817e2-d85f-49a8-a343-3443fe14493c",
+      "toBaseFactor": null,
+      "createdAt": "2026-06-13T21:23:34.905",
+      "updatedAt": "2026-06-13T21:23:34.905"
+    },
+    {
+      "id": "0b3afeb7-6d2b-40c5-846b-534620d5760f",
+      "ingredientId": "ae639908-c351-4b1b-be82-df7eb90f8299",
+      "unitId": "8b9817e2-d85f-49a8-a343-3443fe14493c",
+      "toBaseFactor": null,
+      "createdAt": "2026-06-13T21:23:34.905",
+      "updatedAt": "2026-06-13T21:23:34.905"
+    },
+    {
+      "id": "726d7336-8f9c-4a2b-b3c8-151a173919d0",
+      "ingredientId": "7d889c4e-1667-4c7f-bfa8-c1fbea2cfadb",
+      "unitId": "8b9817e2-d85f-49a8-a343-3443fe14493c",
+      "toBaseFactor": null,
+      "createdAt": "2026-06-13T21:23:34.905",
+      "updatedAt": "2026-06-13T21:23:34.905"
+    },
+    {
+      "id": "dc3b9bef-029f-4f0f-9b9b-39cddb172e06",
+      "ingredientId": "bef6e85e-1be9-49e1-ac87-c7a36aaf039a",
+      "unitId": "8b9817e2-d85f-49a8-a343-3443fe14493c",
+      "toBaseFactor": null,
+      "createdAt": "2026-06-13T21:23:34.905",
+      "updatedAt": "2026-06-13T21:23:34.905"
+    },
+    {
+      "id": "469a4f68-7d4a-44ba-bf68-4e0e3839fffa",
+      "ingredientId": "3b2f321e-3eb5-40b4-af1d-78a0654f9d55",
+      "unitId": "8b9817e2-d85f-49a8-a343-3443fe14493c",
+      "toBaseFactor": null,
+      "createdAt": "2026-06-13T21:23:34.905",
+      "updatedAt": "2026-06-13T21:23:34.905"
+    },
+    {
+      "id": "c35d5977-3f32-4800-a56a-a7714e66545b",
+      "ingredientId": "c0ef1307-cb58-44ff-adc0-6a6217d4c1d9",
+      "unitId": "8b9817e2-d85f-49a8-a343-3443fe14493c",
+      "toBaseFactor": null,
+      "createdAt": "2026-06-13T21:23:34.905",
+      "updatedAt": "2026-06-13T21:23:34.905"
+    },
+    {
+      "id": "554ca8d4-035b-49ba-981a-523bc1c65f5b",
+      "ingredientId": "ae373d64-4a79-4192-9506-a73285c19230",
+      "unitId": "8b9817e2-d85f-49a8-a343-3443fe14493c",
+      "toBaseFactor": null,
+      "createdAt": "2026-06-13T21:45:57.953",
+      "updatedAt": "2026-06-13T21:45:57.953"
+    },
+    {
+      "id": "1c4c6107-d430-46f6-9715-9841be74d598",
+      "ingredientId": "ae373d64-4a79-4192-9506-a73285c19230",
+      "unitId": "a8f30dad-dd15-46f8-83ba-1bfed243fa9b",
+      "toBaseFactor": 100,
+      "createdAt": "2026-06-13T21:45:57.953",
+      "updatedAt": "2026-06-13T21:45:57.953"
+    },
+    {
+      "id": "7f02f1a2-a298-417a-a5c6-037fbf946f19",
+      "ingredientId": "559e31a8-05d2-4ea9-b044-773530367f22",
+      "unitId": "8b9817e2-d85f-49a8-a343-3443fe14493c",
+      "toBaseFactor": null,
+      "createdAt": "2026-06-13T22:02:51.516",
+      "updatedAt": "2026-06-13T22:02:51.516"
+    },
+    {
+      "id": "b62e76ef-d200-4c94-8ad1-b32d5d28c63a",
+      "ingredientId": "559e31a8-05d2-4ea9-b044-773530367f22",
+      "unitId": "96c540be-d2b6-449b-8632-e0fe25092eec",
+      "toBaseFactor": 265,
+      "createdAt": "2026-06-13T22:02:51.617",
+      "updatedAt": "2026-06-13T22:02:51.617"
+    },
+    {
+      "id": "d1a72a35-4ded-407e-b57d-5b8d3b18335a",
+      "ingredientId": "e8b3462b-75ab-4d07-9501-c9669e9ae0b9",
+      "unitId": "8b9817e2-d85f-49a8-a343-3443fe14493c",
+      "toBaseFactor": null,
+      "createdAt": "2026-06-13T22:02:51.715",
+      "updatedAt": "2026-06-13T22:02:51.715"
+    },
+    {
+      "id": "80cce254-01f1-4439-9a29-05abd7a46937",
+      "ingredientId": "e8b3462b-75ab-4d07-9501-c9669e9ae0b9",
+      "unitId": "a4d8c3ad-11e2-4756-bda5-0b319532a6f3",
+      "toBaseFactor": 150,
+      "createdAt": "2026-06-13T22:02:51.814",
+      "updatedAt": "2026-06-13T22:02:51.814"
+    },
+    {
+      "id": "6ff2216f-7c7e-4066-83a3-4a3b0e90ba8f",
+      "ingredientId": "dd4fb943-dd9f-4aa3-8171-86ff9024297b",
+      "unitId": "8b9817e2-d85f-49a8-a343-3443fe14493c",
+      "toBaseFactor": null,
+      "createdAt": "2026-06-13T22:02:51.914",
+      "updatedAt": "2026-06-13T22:02:51.914"
+    },
+    {
+      "id": "f743e3f1-6f7b-4a6d-b5bf-6ba18d9e1a9d",
+      "ingredientId": "dd4fb943-dd9f-4aa3-8171-86ff9024297b",
+      "unitId": "a8f30dad-dd15-46f8-83ba-1bfed243fa9b",
+      "toBaseFactor": 180,
+      "createdAt": "2026-06-13T22:02:52.014",
+      "updatedAt": "2026-06-13T22:02:52.014"
+    }
+  ],
+  "productReferences": [
+    {
+      "id": "a1af236d-a6be-4171-9234-536434b11949",
+      "ingredientId": "e8b3462b-75ab-4d07-9501-c9669e9ae0b9",
+      "store": "Leclerc",
+      "brand": "Volaille française",
+      "name": "Filets de poulet",
+      "imageUrl": null,
+      "packageQuantity": 1,
+      "packageUnitId": "1d51431a-1abe-4ed4-b15e-fe2e7b018890",
+      "packageToBaseFactor": null,
+      "price": 11.9,
+      "url": null,
+      "barcode": null,
+      "notes": null,
+      "createdAt": "2026-06-13T22:02:52.313",
+      "updatedAt": "2026-06-13T22:02:52.313",
+      "storageType": "FRESH",
+      "stockQuantity": null,
+      "caloriesPer100g": null,
+      "proteinPer100g": null,
+      "carbsPer100g": null,
+      "fatPer100g": null
+    },
+    {
+      "id": "46f52fbb-7b7b-4d93-9188-f9125365a548",
+      "ingredientId": "559e31a8-05d2-4ea9-b044-773530367f22",
+      "store": "Carrefour",
+      "brand": "Carrefour Bio",
+      "name": "Pois chiches conserve",
+      "imageUrl": null,
+      "packageQuantity": 1,
+      "packageUnitId": "96c540be-d2b6-449b-8632-e0fe25092eec",
+      "packageToBaseFactor": 265,
+      "price": 1.29,
+      "url": null,
+      "barcode": null,
+      "notes": null,
+      "createdAt": "2026-06-13T22:02:52.313",
+      "updatedAt": "2026-06-13T22:02:52.313",
+      "storageType": "FRESH",
+      "stockQuantity": null,
+      "caloriesPer100g": null,
+      "proteinPer100g": null,
+      "carbsPer100g": null,
+      "fatPer100g": null
+    }
+  ],
+  "recipes": [
+    {
+      "id": "186edddd-cfeb-46bd-a8ad-adf9fd3e0730",
+      "name": "Aiguillettes de poulet façon teriyaki",
+      "imageUrl": "https://img.hellofresh.com/hellofresh_s3/image/HF211116_R204_W01_FR_QFR20161831-6_KB_Main_low-8acf8a3f.jpg",
+      "description": "avec des légumes poêlés & du riz",
+      "sourceUrl": "https://www.hellofresh.fr/recipes/aiguillettes-de-poulet-facon-teriyaki-64d3b20ec6d2a3702a70fd91",
+      "prepMinutes": 25,
+      "cookMinutes": null,
+      "createdAt": "2026-06-07T21:55:53.376",
+      "updatedAt": "2026-06-07T21:57:11.251"
+    },
+    {
+      "id": "4b2f4e67-be45-4cd8-aa13-050dcec9e4cf",
+      "name": "Bol pois chiches poulet",
+      "imageUrl": null,
+      "description": "Une base simple pour valider les conversions par ingrédient.",
+      "sourceUrl": null,
+      "prepMinutes": 10,
+      "cookMinutes": 15,
+      "createdAt": "2026-06-13T22:02:52.705",
+      "updatedAt": "2026-06-13T22:02:52.705"
+    },
+    {
+      "id": "1b585088-37b9-497c-b06d-c7665259f557",
+      "name": "Croque rustique poulet, poireau & béchamel",
+      "imageUrl": "https://img.hellofresh.com/hellofresh_s3/image/HF_Y25_R229_W07_FR_RFR17309-11_Main_F1_high-26b76cb6.jpg",
+      "description": "avec des frites croustillantes maison",
+      "sourceUrl": "https://www.hellofresh.fr/recipes/croque-rustique-poulet-and-bechamel-poireau-facon-bistrot-672890add49f300fd6163068",
+      "prepMinutes": 45,
+      "cookMinutes": 30,
+      "createdAt": "2026-06-07T20:21:40.996",
+      "updatedAt": "2026-06-08T19:57:58.841"
+    },
+    {
+      "id": "81cfd026-ef01-49be-ba49-349a2d2784d9",
+      "name": "Curry thaï léger aux crevettes & coco",
+      "imageUrl": "https://img.hellofresh.com/hellofresh_s3/image/HF_Y24_R216_W08_FR_RFR19041_1_edit_color_Main_high-96149b30.jpg",
+      "description": "avec des herbes fraîches & du riz",
+      "sourceUrl": "https://www.hellofresh.fr/recipes/curry-thai-leger-aux-crevettes-and-coco-659fa2ebcbafa858007ae93e",
+      "prepMinutes": 35,
+      "cookMinutes": 25,
+      "createdAt": "2026-06-07T21:43:19.701",
+      "updatedAt": "2026-06-07T21:43:19.701"
+    },
+    {
+      "id": "850facbd-0c9a-409f-998f-fbc3015646b9",
+      "name": "Les fameuses pâtes carbo à la française",
+      "imageUrl": "https://img.hellofresh.com/hellofresh_s3/image/HF_Y24_R215_W14_FR_QFR20334-1_Main__1high-971f8614.jpg",
+      "description": "avec des lardons, de la crème & un pangrattato",
+      "sourceUrl": "https://www.hellofresh.fr/recipes/les-fameuses-pates-carbo-a-la-francaise-6548fff5d637bf067f0a12af",
+      "prepMinutes": 25,
+      "cookMinutes": 20,
+      "createdAt": "2026-06-07T21:50:59.843",
+      "updatedAt": "2026-06-07T21:50:59.843"
+    },
+    {
+      "id": "27483b4e-69a6-4af3-99c8-3d39453bd095",
+      "name": "Lieu, épinards & coco façon curry",
+      "imageUrl": "https://img.hellofresh.com/hellofresh_s3/image/HF_Y25_R222_W08_FR_RFR38349-2_MAIN_8_high-2c6d2aed.jpg",
+      "description": "avec des carottes & du citron",
+      "sourceUrl": "https://www.hellofresh.fr/recipes/lieu-epinards-and-coco-facon-curry-690b0bfb9140c7b54ff22ca6",
+      "prepMinutes": 30,
+      "cookMinutes": 25,
+      "createdAt": "2026-06-07T19:02:30.242",
+      "updatedAt": "2026-06-07T19:02:30.242"
+    },
+    {
+      "id": "42435298-5df7-411b-95b1-6594a63cc11f",
+      "name": "Orzo & crevettes sauce ail, citron & persil",
+      "imageUrl": "https://img.hellofresh.com/hellofresh_s3/image/HF210426_R205_W24_FR_EQFR20162000-1_MB_Main_low-fea9855f.jpg",
+      "description": "avec du poivron & une salade roquette-mâche",
+      "sourceUrl": "https://www.hellofresh.fr/recipes/orzo-and-crevettes-sauce-ail-citron-and-persil-62666cf7d36e63ae840fae24",
+      "prepMinutes": 25,
+      "cookMinutes": null,
+      "createdAt": "2026-06-08T20:29:12.976",
+      "updatedAt": "2026-06-08T20:29:12.976"
+    },
+    {
+      "id": "45f12732-984f-4adf-98d5-6b4a48bd85f9",
+      "name": "Poulet à la crème de poireau & muscade",
+      "imageUrl": "https://img.hellofresh.com/hellofresh_s3/image/HF211008_R217_W47_FR_QFR20161847-1_MB_Main_low-252f64a0.jpg",
+      "description": "avec du fromage italien & du riz",
+      "sourceUrl": "https://www.hellofresh.fr/recipes/poulet-a-la-creme-de-poireau-and-muscade-64073f3b683721c9a32b08df",
+      "prepMinutes": 25,
+      "cookMinutes": 20,
+      "createdAt": "2026-06-07T21:59:33.704",
+      "updatedAt": "2026-06-07T21:59:33.704"
+    },
+    {
+      "id": "6c62cacc-f5dd-4ab1-9314-975aa613088a",
+      "name": "Saumon en papillote & pistou maison",
+      "imageUrl": "https://img.hellofresh.com/hellofresh_s3/image/HF200727_R209_W37_FR_RFR16681721-1_MB_Main_low-e267c7bf.jpg",
+      "description": "avec de la courgette & des rigatoni",
+      "sourceUrl": "https://www.hellofresh.fr/recipes/saumon-en-papillote-and-pistou-maison-625fbe3806486938dc2f4584",
+      "prepMinutes": 40,
+      "cookMinutes": 35,
+      "createdAt": "2026-06-10T16:38:38.135",
+      "updatedAt": "2026-06-13T20:41:58.14"
+    }
+  ],
+  "recipeIngredients": [
+    {
+      "id": "1034d326-e2be-4501-ba40-c111dc8c4e28",
+      "recipeId": "186edddd-cfeb-46bd-a8ad-adf9fd3e0730",
+      "ingredientId": "142e18eb-e7ad-4713-9804-45ca98b5261c",
+      "unitId": "8b9817e2-d85f-49a8-a343-3443fe14493c",
+      "quantityPerServing": 65,
+      "note": null,
+      "position": 0,
+      "unitToBaseFactor": null,
+      "preparationWeightRatio": null
+    },
+    {
+      "id": "d5b72021-9fc2-4c6e-bd26-ae30db2a033d",
+      "recipeId": "186edddd-cfeb-46bd-a8ad-adf9fd3e0730",
+      "ingredientId": "ae373d64-4a79-4192-9506-a73285c19230",
+      "unitId": "a8f30dad-dd15-46f8-83ba-1bfed243fa9b",
+      "quantityPerServing": 0.5,
+      "note": null,
+      "position": 1,
+      "unitToBaseFactor": null,
+      "preparationWeightRatio": null
+    },
+    {
+      "id": "86d84d2b-4eaa-4527-8edf-281f3c633e2e",
+      "recipeId": "186edddd-cfeb-46bd-a8ad-adf9fd3e0730",
+      "ingredientId": "3b2f321e-3eb5-40b4-af1d-78a0654f9d55",
+      "unitId": "a8f30dad-dd15-46f8-83ba-1bfed243fa9b",
+      "quantityPerServing": 0.5,
+      "note": null,
+      "position": 2,
+      "unitToBaseFactor": null,
+      "preparationWeightRatio": null
+    },
+    {
+      "id": "c0e7399f-c3be-4166-bce6-80cb008f6a84",
+      "recipeId": "186edddd-cfeb-46bd-a8ad-adf9fd3e0730",
+      "ingredientId": "dd4fb943-dd9f-4aa3-8171-86ff9024297b",
+      "unitId": "a8f30dad-dd15-46f8-83ba-1bfed243fa9b",
+      "quantityPerServing": 0.5,
+      "note": null,
+      "position": 3,
+      "unitToBaseFactor": null,
+      "preparationWeightRatio": null
+    },
+    {
+      "id": "4f3cc9b4-e443-413c-8179-f38252b2811c",
+      "recipeId": "186edddd-cfeb-46bd-a8ad-adf9fd3e0730",
+      "ingredientId": "4e702a96-72a1-4bdd-a14a-e0b6c1782a4d",
+      "unitId": "8b9817e2-d85f-49a8-a343-3443fe14493c",
+      "quantityPerServing": 5,
+      "note": null,
+      "position": 4,
+      "unitToBaseFactor": null,
+      "preparationWeightRatio": null
+    },
+    {
+      "id": "49632837-47ba-46cd-9e79-2ae5b0ed0edf",
+      "recipeId": "186edddd-cfeb-46bd-a8ad-adf9fd3e0730",
+      "ingredientId": "7d889c4e-1667-4c7f-bfa8-c1fbea2cfadb",
+      "unitId": "a8f30dad-dd15-46f8-83ba-1bfed243fa9b",
+      "quantityPerServing": 1,
+      "note": null,
+      "position": 5,
+      "unitToBaseFactor": null,
+      "preparationWeightRatio": null
+    },
+    {
+      "id": "b94ccd24-f8e2-470f-9cb8-53e4a672d997",
+      "recipeId": "186edddd-cfeb-46bd-a8ad-adf9fd3e0730",
+      "ingredientId": "ecedb7f9-4f33-4639-a586-80cd2231a6d4",
+      "unitId": "8b9817e2-d85f-49a8-a343-3443fe14493c",
+      "quantityPerServing": 1,
+      "note": null,
+      "position": 6,
+      "unitToBaseFactor": null,
+      "preparationWeightRatio": null
+    },
+    {
+      "id": "8edb6536-4381-4099-ad3a-cd16ca871745",
+      "recipeId": "186edddd-cfeb-46bd-a8ad-adf9fd3e0730",
+      "ingredientId": "ca805f4c-586c-4508-bd8c-132ea29c7e56",
+      "unitId": "c47614f1-b104-4ba2-ae0f-44d6e576bf2c",
+      "quantityPerServing": 20,
+      "note": null,
+      "position": 7,
+      "unitToBaseFactor": null,
+      "preparationWeightRatio": null
+    },
+    {
+      "id": "bcbff723-9925-4796-84d0-1eb8bef9d83a",
+      "recipeId": "186edddd-cfeb-46bd-a8ad-adf9fd3e0730",
+      "ingredientId": "7adde27d-d068-4481-a4b3-2dc25dcf578e",
+      "unitId": "c47614f1-b104-4ba2-ae0f-44d6e576bf2c",
+      "quantityPerServing": 5,
+      "note": null,
+      "position": 8,
+      "unitToBaseFactor": null,
+      "preparationWeightRatio": null
+    },
+    {
+      "id": "4ca8819f-aaad-4513-ace0-be24d7719a62",
+      "recipeId": "186edddd-cfeb-46bd-a8ad-adf9fd3e0730",
+      "ingredientId": "e8b3462b-75ab-4d07-9501-c9669e9ae0b9",
+      "unitId": "a8f30dad-dd15-46f8-83ba-1bfed243fa9b",
+      "quantityPerServing": 1,
+      "note": null,
+      "position": 9,
+      "unitToBaseFactor": null,
+      "preparationWeightRatio": null
+    },
+    {
+      "id": "96143e24-3555-4087-922c-df35fd3a08a8",
+      "recipeId": "186edddd-cfeb-46bd-a8ad-adf9fd3e0730",
+      "ingredientId": "563bdfa3-1050-40ed-af21-62e0278e46e2",
+      "unitId": "8b9817e2-d85f-49a8-a343-3443fe14493c",
+      "quantityPerServing": 3,
+      "note": null,
+      "position": 10,
+      "unitToBaseFactor": null,
+      "preparationWeightRatio": null
+    },
+    {
+      "id": "2eebfb1a-e2c5-4f4b-be31-1b3a3aeeed9e",
+      "recipeId": "186edddd-cfeb-46bd-a8ad-adf9fd3e0730",
+      "ingredientId": "4126438e-cc79-4b21-af88-4218a5cd8fbf",
+      "unitId": "7351b24d-2532-4b09-b15c-a3c0fb9172f1",
+      "quantityPerServing": 0.5,
+      "note": null,
+      "position": 11,
+      "unitToBaseFactor": null,
+      "preparationWeightRatio": null
+    },
+    {
+      "id": "5f3e0915-6083-4acd-afa9-7273648813c1",
+      "recipeId": "186edddd-cfeb-46bd-a8ad-adf9fd3e0730",
+      "ingredientId": "8d2ea9d7-d392-4623-a377-2f915fa6960e",
+      "unitId": "8b9817e2-d85f-49a8-a343-3443fe14493c",
+      "quantityPerServing": 1,
+      "note": null,
+      "position": 12,
+      "unitToBaseFactor": null,
+      "preparationWeightRatio": null
+    },
+    {
+      "id": "07f021ff-7bbf-449c-88bb-c5c50eb95677",
+      "recipeId": "1b585088-37b9-497c-b06d-c7665259f557",
+      "ingredientId": "79d817c5-a9ef-46d0-bfba-e647f47dd905",
+      "unitId": "8b9817e2-d85f-49a8-a343-3443fe14493c",
+      "quantityPerServing": 250,
+      "note": null,
+      "position": 0,
+      "unitToBaseFactor": null,
+      "preparationWeightRatio": null
+    },
+    {
+      "id": "5ec098af-c65c-4a4f-8cfb-3c3c5583918a",
+      "recipeId": "1b585088-37b9-497c-b06d-c7665259f557",
+      "ingredientId": "7d889c4e-1667-4c7f-bfa8-c1fbea2cfadb",
+      "unitId": "a8f30dad-dd15-46f8-83ba-1bfed243fa9b",
+      "quantityPerServing": 0.5,
+      "note": null,
+      "position": 1,
+      "unitToBaseFactor": null,
+      "preparationWeightRatio": null
+    },
+    {
+      "id": "d1302ac3-9af4-48fe-8c2f-3d3eb2f0495b",
+      "recipeId": "1b585088-37b9-497c-b06d-c7665259f557",
+      "ingredientId": "dd4fb943-dd9f-4aa3-8171-86ff9024297b",
+      "unitId": "a8f30dad-dd15-46f8-83ba-1bfed243fa9b",
+      "quantityPerServing": 0.5,
+      "note": null,
+      "position": 2,
+      "unitToBaseFactor": null,
+      "preparationWeightRatio": null
+    },
+    {
+      "id": "c9fca89a-b421-44e9-9fc9-6e9bdc093dbf",
+      "recipeId": "1b585088-37b9-497c-b06d-c7665259f557",
+      "ingredientId": "6d3a3b42-4519-455b-a347-b5f44a66b55f",
+      "unitId": "8b9817e2-d85f-49a8-a343-3443fe14493c",
+      "quantityPerServing": 1,
+      "note": null,
+      "position": 3,
+      "unitToBaseFactor": null,
+      "preparationWeightRatio": null
+    },
+    {
+      "id": "b8e67d54-9be7-4c5d-89a5-dd57bd1ab42a",
+      "recipeId": "1b585088-37b9-497c-b06d-c7665259f557",
+      "ingredientId": "3c9d898d-8925-4ca5-b5ea-4a0549d1d22b",
+      "unitId": "8b9817e2-d85f-49a8-a343-3443fe14493c",
+      "quantityPerServing": 30,
+      "note": null,
+      "position": 4,
+      "unitToBaseFactor": null,
+      "preparationWeightRatio": null
+    },
+    {
+      "id": "b1c714db-fc02-4c4b-89f7-377208ad03af",
+      "recipeId": "1b585088-37b9-497c-b06d-c7665259f557",
+      "ingredientId": "0bafe6b6-887d-42f2-9583-88d20195c8be",
+      "unitId": "a8f30dad-dd15-46f8-83ba-1bfed243fa9b",
+      "quantityPerServing": 1,
+      "note": null,
+      "position": 5,
+      "unitToBaseFactor": null,
+      "preparationWeightRatio": null
+    },
+    {
+      "id": "5512ee8d-1788-4402-9aac-e0ff4674a887",
+      "recipeId": "1b585088-37b9-497c-b06d-c7665259f557",
+      "ingredientId": "ae639908-c351-4b1b-be82-df7eb90f8299",
+      "unitId": "a8f30dad-dd15-46f8-83ba-1bfed243fa9b",
+      "quantityPerServing": 2,
+      "note": null,
+      "position": 6,
+      "unitToBaseFactor": null,
+      "preparationWeightRatio": null
+    },
+    {
+      "id": "38cc17f3-e6d8-4e05-b7e3-70ce13499270",
+      "recipeId": "1b585088-37b9-497c-b06d-c7665259f557",
+      "ingredientId": "bef6e85e-1be9-49e1-ac87-c7a36aaf039a",
+      "unitId": "a8f30dad-dd15-46f8-83ba-1bfed243fa9b",
+      "quantityPerServing": 0.5,
+      "note": null,
+      "position": 7,
+      "unitToBaseFactor": null,
+      "preparationWeightRatio": null
+    },
+    {
+      "id": "f34fab83-58a2-4f30-a0d8-7603bea0fb19",
+      "recipeId": "1b585088-37b9-497c-b06d-c7665259f557",
+      "ingredientId": "4126438e-cc79-4b21-af88-4218a5cd8fbf",
+      "unitId": "7351b24d-2532-4b09-b15c-a3c0fb9172f1",
+      "quantityPerServing": 1,
+      "note": null,
+      "position": 8,
+      "unitToBaseFactor": null,
+      "preparationWeightRatio": null
+    },
+    {
+      "id": "e6ef2a80-1230-455c-b86c-906f39b27b42",
+      "recipeId": "1b585088-37b9-497c-b06d-c7665259f557",
+      "ingredientId": "69499a73-8148-4599-94c5-29fd39798802",
+      "unitId": "8b9817e2-d85f-49a8-a343-3443fe14493c",
+      "quantityPerServing": 15,
+      "note": null,
+      "position": 9,
+      "unitToBaseFactor": null,
+      "preparationWeightRatio": null
+    },
+    {
+      "id": "4b7bf0cd-1060-4f77-a706-d92c0e81862a",
+      "recipeId": "1b585088-37b9-497c-b06d-c7665259f557",
+      "ingredientId": "8e0c86d1-5862-474b-b765-3aa90d5caa06",
+      "unitId": "8b9817e2-d85f-49a8-a343-3443fe14493c",
+      "quantityPerServing": 15,
+      "note": null,
+      "position": 10,
+      "unitToBaseFactor": null,
+      "preparationWeightRatio": null
+    },
+    {
+      "id": "0ad556ae-9a87-4f01-b250-d69d2f8c70cd",
+      "recipeId": "1b585088-37b9-497c-b06d-c7665259f557",
+      "ingredientId": "ae96c242-875e-4427-a287-6543aede3115",
+      "unitId": "c47614f1-b104-4ba2-ae0f-44d6e576bf2c",
+      "quantityPerServing": 150,
+      "note": null,
+      "position": 11,
+      "unitToBaseFactor": null,
+      "preparationWeightRatio": null
+    },
+    {
+      "id": "f5c588b1-e34c-4b0d-a1fb-b674f393ddaa",
+      "recipeId": "1b585088-37b9-497c-b06d-c7665259f557",
+      "ingredientId": "2668d8d6-b202-456d-b6f5-e3753c8d5066",
+      "unitId": "58bb493d-bec6-43f4-bc48-1e4e742cc382",
+      "quantityPerServing": 1,
+      "note": null,
+      "position": 12,
+      "unitToBaseFactor": null,
+      "preparationWeightRatio": null
+    },
+    {
+      "id": "6f3dab2e-0b1c-4713-aef5-99bc2fe9b645",
+      "recipeId": "27483b4e-69a6-4af3-99c8-3d39453bd095",
+      "ingredientId": "142e18eb-e7ad-4713-9804-45ca98b5261c",
+      "unitId": "8b9817e2-d85f-49a8-a343-3443fe14493c",
+      "quantityPerServing": 75,
+      "note": null,
+      "position": 0,
+      "unitToBaseFactor": null,
+      "preparationWeightRatio": null
+    },
+    {
+      "id": "907130f4-7549-4127-aafe-d3043bbe47b4",
+      "recipeId": "27483b4e-69a6-4af3-99c8-3d39453bd095",
+      "ingredientId": "7d889c4e-1667-4c7f-bfa8-c1fbea2cfadb",
+      "unitId": "a8f30dad-dd15-46f8-83ba-1bfed243fa9b",
+      "quantityPerServing": 0.5,
+      "note": null,
+      "position": 1,
+      "unitToBaseFactor": null,
+      "preparationWeightRatio": null
+    },
+    {
+      "id": "a1efba46-a4c9-4525-a6ea-43025d936d07",
+      "recipeId": "27483b4e-69a6-4af3-99c8-3d39453bd095",
+      "ingredientId": "ae373d64-4a79-4192-9506-a73285c19230",
+      "unitId": "a8f30dad-dd15-46f8-83ba-1bfed243fa9b",
+      "quantityPerServing": 0.5,
+      "note": null,
+      "position": 2,
+      "unitToBaseFactor": null,
+      "preparationWeightRatio": null
+    },
+    {
+      "id": "062c59e7-1cd5-41b4-929b-d9eae6c1473f",
+      "recipeId": "27483b4e-69a6-4af3-99c8-3d39453bd095",
+      "ingredientId": "3b2f321e-3eb5-40b4-af1d-78a0654f9d55",
+      "unitId": "a8f30dad-dd15-46f8-83ba-1bfed243fa9b",
+      "quantityPerServing": 0.5,
+      "note": null,
+      "position": 3,
+      "unitToBaseFactor": null,
+      "preparationWeightRatio": null
+    },
+    {
+      "id": "249c1bff-e63c-49d3-a0fc-fd85d90841e6",
+      "recipeId": "27483b4e-69a6-4af3-99c8-3d39453bd095",
+      "ingredientId": "33b11ca2-fa5d-4c23-8be9-4c295f370220",
+      "unitId": "a8f30dad-dd15-46f8-83ba-1bfed243fa9b",
+      "quantityPerServing": 0.25,
+      "note": null,
+      "position": 4,
+      "unitToBaseFactor": null,
+      "preparationWeightRatio": null
+    },
+    {
+      "id": "c1d92a9b-72cd-4e76-b679-76ce0d40d0d1",
+      "recipeId": "27483b4e-69a6-4af3-99c8-3d39453bd095",
+      "ingredientId": "2ba815d7-2ef9-47b0-9405-8c4b47fd6578",
+      "unitId": "8b9817e2-d85f-49a8-a343-3443fe14493c",
+      "quantityPerServing": 100,
+      "note": null,
+      "position": 5,
+      "unitToBaseFactor": null,
+      "preparationWeightRatio": null
+    },
+    {
+      "id": "eed9beb5-1189-4654-be77-22a74784a901",
+      "recipeId": "27483b4e-69a6-4af3-99c8-3d39453bd095",
+      "ingredientId": "bda2ace3-d252-4ccf-a658-c00687faa9bb",
+      "unitId": "8b9817e2-d85f-49a8-a343-3443fe14493c",
+      "quantityPerServing": 0.5,
+      "note": null,
+      "position": 6,
+      "unitToBaseFactor": null,
+      "preparationWeightRatio": null
+    },
+    {
+      "id": "718220c2-1d1c-4b0b-a6c4-5db69250ed06",
+      "recipeId": "27483b4e-69a6-4af3-99c8-3d39453bd095",
+      "ingredientId": "2119bfe4-702e-4f6b-8dd7-7a4467fa4602",
+      "unitId": "8b9817e2-d85f-49a8-a343-3443fe14493c",
+      "quantityPerServing": 100,
+      "note": null,
+      "position": 7,
+      "unitToBaseFactor": null,
+      "preparationWeightRatio": null
+    },
+    {
+      "id": "b90a6919-ec63-4324-9be9-7f4d824f200b",
+      "recipeId": "27483b4e-69a6-4af3-99c8-3d39453bd095",
+      "ingredientId": "dafafab2-7d50-4ef9-af1a-1075a40153e5",
+      "unitId": "c47614f1-b104-4ba2-ae0f-44d6e576bf2c",
+      "quantityPerServing": 100,
+      "note": null,
+      "position": 8,
+      "unitToBaseFactor": null,
+      "preparationWeightRatio": null
+    },
+    {
+      "id": "713fdf98-f7e5-4eda-a19d-947454108004",
+      "recipeId": "27483b4e-69a6-4af3-99c8-3d39453bd095",
+      "ingredientId": "89b1ad44-ebab-4a4b-8d9d-64cfe5b8292e",
+      "unitId": "58bb493d-bec6-43f4-bc48-1e4e742cc382",
+      "quantityPerServing": 1,
+      "note": null,
+      "position": 9,
+      "unitToBaseFactor": null,
+      "preparationWeightRatio": null
+    },
+    {
+      "id": "fd304c92-6669-4a1c-b672-ad9a6bd218d1",
+      "recipeId": "27483b4e-69a6-4af3-99c8-3d39453bd095",
+      "ingredientId": "c0ef1307-cb58-44ff-adc0-6a6217d4c1d9",
+      "unitId": "a8f30dad-dd15-46f8-83ba-1bfed243fa9b",
+      "quantityPerServing": 0.25,
+      "note": null,
+      "position": 10,
+      "unitToBaseFactor": null,
+      "preparationWeightRatio": null
+    },
+    {
+      "id": "7e5497c1-74ea-44d6-83d8-34fbf29cbfe2",
+      "recipeId": "42435298-5df7-411b-95b1-6594a63cc11f",
+      "ingredientId": "7d889c4e-1667-4c7f-bfa8-c1fbea2cfadb",
+      "unitId": "a8f30dad-dd15-46f8-83ba-1bfed243fa9b",
+      "quantityPerServing": 1,
+      "note": null,
+      "position": 0,
+      "unitToBaseFactor": null,
+      "preparationWeightRatio": null
+    },
+    {
+      "id": "b748b12f-c432-43e9-9595-a5f6086cb205",
+      "recipeId": "42435298-5df7-411b-95b1-6594a63cc11f",
+      "ingredientId": "baf9ca42-95e3-404a-941c-c2f73ec69a35",
+      "unitId": "a8f30dad-dd15-46f8-83ba-1bfed243fa9b",
+      "quantityPerServing": 0.5,
+      "note": null,
+      "position": 1,
+      "unitToBaseFactor": null,
+      "preparationWeightRatio": null
+    },
+    {
+      "id": "7c901483-80dd-46fa-bc89-4d2e1a43cb31",
+      "recipeId": "42435298-5df7-411b-95b1-6594a63cc11f",
+      "ingredientId": "33b11ca2-fa5d-4c23-8be9-4c295f370220",
+      "unitId": "a8f30dad-dd15-46f8-83ba-1bfed243fa9b",
+      "quantityPerServing": 0.25,
+      "note": null,
+      "position": 2,
+      "unitToBaseFactor": null,
+      "preparationWeightRatio": null
+    },
+    {
+      "id": "2180289b-c716-477c-a4e6-e15a29be8d12",
+      "recipeId": "42435298-5df7-411b-95b1-6594a63cc11f",
+      "ingredientId": "097fce0e-909b-455f-a982-d92b93406ca3",
+      "unitId": "8b9817e2-d85f-49a8-a343-3443fe14493c",
+      "quantityPerServing": 80,
+      "note": null,
+      "position": 3,
+      "unitToBaseFactor": null,
+      "preparationWeightRatio": null
+    },
+    {
+      "id": "f5fe85e6-ee34-4ee8-8782-4ad425142f7a",
+      "recipeId": "42435298-5df7-411b-95b1-6594a63cc11f",
+      "ingredientId": "7217175c-76dc-4861-95c7-7c6eb5ec9bb0",
+      "unitId": "8b9817e2-d85f-49a8-a343-3443fe14493c",
+      "quantityPerServing": 70,
+      "note": null,
+      "position": 4,
+      "unitToBaseFactor": null,
+      "preparationWeightRatio": null
+    },
+    {
+      "id": "43d18871-2650-45fc-a0ca-67eec8b7039d",
+      "recipeId": "42435298-5df7-411b-95b1-6594a63cc11f",
+      "ingredientId": "ce7cc729-a5d0-40f3-ae6f-fecbb6ec30ff",
+      "unitId": "8b9817e2-d85f-49a8-a343-3443fe14493c",
+      "quantityPerServing": 2,
+      "note": null,
+      "position": 5,
+      "unitToBaseFactor": null,
+      "preparationWeightRatio": null
+    },
+    {
+      "id": "2bd89058-beaf-48ba-91d5-0818953920a6",
+      "recipeId": "42435298-5df7-411b-95b1-6594a63cc11f",
+      "ingredientId": "20bc1b54-bf26-47e2-8ee6-7ead8d039d12",
+      "unitId": "8b9817e2-d85f-49a8-a343-3443fe14493c",
+      "quantityPerServing": 2,
+      "note": null,
+      "position": 6,
+      "unitToBaseFactor": null,
+      "preparationWeightRatio": null
+    },
+    {
+      "id": "397be323-64fa-462a-82cc-5193d12abbc1",
+      "recipeId": "42435298-5df7-411b-95b1-6594a63cc11f",
+      "ingredientId": "63fd2005-d1df-4be2-8984-8c19fc9cde52",
+      "unitId": "7351b24d-2532-4b09-b15c-a3c0fb9172f1",
+      "quantityPerServing": 5,
+      "note": null,
+      "position": 7,
+      "unitToBaseFactor": null,
+      "preparationWeightRatio": null
+    },
+    {
+      "id": "87d6c795-f193-4220-9b1b-fcf00af5afb0",
+      "recipeId": "42435298-5df7-411b-95b1-6594a63cc11f",
+      "ingredientId": "8f4d3e9c-fc99-4ffe-9082-63283f660630",
+      "unitId": "8b9817e2-d85f-49a8-a343-3443fe14493c",
+      "quantityPerServing": 15,
+      "note": null,
+      "position": 8,
+      "unitToBaseFactor": null,
+      "preparationWeightRatio": null
+    },
+    {
+      "id": "85297e88-aa37-459c-bd75-b5a83b5debca",
+      "recipeId": "42435298-5df7-411b-95b1-6594a63cc11f",
+      "ingredientId": "cac474d1-28cc-4020-bdcd-57055f29b03e",
+      "unitId": "8b9817e2-d85f-49a8-a343-3443fe14493c",
+      "quantityPerServing": 20,
+      "note": null,
+      "position": 9,
+      "unitToBaseFactor": null,
+      "preparationWeightRatio": null
+    },
+    {
+      "id": "a6714e26-5e37-42d9-95cd-408d92c78fab",
+      "recipeId": "42435298-5df7-411b-95b1-6594a63cc11f",
+      "ingredientId": "c0ef1307-cb58-44ff-adc0-6a6217d4c1d9",
+      "unitId": "a8f30dad-dd15-46f8-83ba-1bfed243fa9b",
+      "quantityPerServing": 0.25,
+      "note": null,
+      "position": 10,
+      "unitToBaseFactor": null,
+      "preparationWeightRatio": null
+    },
+    {
+      "id": "40c5ee9f-7a72-451d-af19-92fbd71476ba",
+      "recipeId": "42435298-5df7-411b-95b1-6594a63cc11f",
+      "ingredientId": "4126438e-cc79-4b21-af88-4218a5cd8fbf",
+      "unitId": "7351b24d-2532-4b09-b15c-a3c0fb9172f1",
+      "quantityPerServing": 0.5,
+      "note": null,
+      "position": 11,
+      "unitToBaseFactor": null,
+      "preparationWeightRatio": null
+    },
+    {
+      "id": "93edc2d2-4716-4cb1-ac62-2b2b08834089",
+      "recipeId": "42435298-5df7-411b-95b1-6594a63cc11f",
+      "ingredientId": "69499a73-8148-4599-94c5-29fd39798802",
+      "unitId": "7351b24d-2532-4b09-b15c-a3c0fb9172f1",
+      "quantityPerServing": 1,
+      "note": null,
+      "position": 12,
+      "unitToBaseFactor": null,
+      "preparationWeightRatio": null
+    },
+    {
+      "id": "3cfab628-b089-4a88-9b45-775d1c53bf65",
+      "recipeId": "42435298-5df7-411b-95b1-6594a63cc11f",
+      "ingredientId": "251a66a8-37a5-4a6d-be02-8b6bba89ce2e",
+      "unitId": "c47614f1-b104-4ba2-ae0f-44d6e576bf2c",
+      "quantityPerServing": 0.5,
+      "note": null,
+      "position": 13,
+      "unitToBaseFactor": null,
+      "preparationWeightRatio": null
+    },
+    {
+      "id": "c4b64b54-c4ce-4153-83fa-9c49c3dc6185",
+      "recipeId": "45f12732-984f-4adf-98d5-6b4a48bd85f9",
+      "ingredientId": "dd4fb943-dd9f-4aa3-8171-86ff9024297b",
+      "unitId": "a8f30dad-dd15-46f8-83ba-1bfed243fa9b",
+      "quantityPerServing": 0.5,
+      "note": null,
+      "position": 0,
+      "unitToBaseFactor": null,
+      "preparationWeightRatio": null
+    },
+    {
+      "id": "01fba54f-d620-4a85-be17-d7562cc3b3b7",
+      "recipeId": "45f12732-984f-4adf-98d5-6b4a48bd85f9",
+      "ingredientId": "142e18eb-e7ad-4713-9804-45ca98b5261c",
+      "unitId": "8b9817e2-d85f-49a8-a343-3443fe14493c",
+      "quantityPerServing": 75,
+      "note": null,
+      "position": 1,
+      "unitToBaseFactor": null,
+      "preparationWeightRatio": null
+    },
+    {
+      "id": "db14b7e0-a493-40ae-9292-a7d38cd8c8e4",
+      "recipeId": "45f12732-984f-4adf-98d5-6b4a48bd85f9",
+      "ingredientId": "e8b3462b-75ab-4d07-9501-c9669e9ae0b9",
+      "unitId": "a8f30dad-dd15-46f8-83ba-1bfed243fa9b",
+      "quantityPerServing": 1,
+      "note": null,
+      "position": 2,
+      "unitToBaseFactor": null,
+      "preparationWeightRatio": null
+    },
+    {
+      "id": "c6cb80b1-a19d-47b4-81f5-78879f540848",
+      "recipeId": "45f12732-984f-4adf-98d5-6b4a48bd85f9",
+      "ingredientId": "7d889c4e-1667-4c7f-bfa8-c1fbea2cfadb",
+      "unitId": "a8f30dad-dd15-46f8-83ba-1bfed243fa9b",
+      "quantityPerServing": 1,
+      "note": null,
+      "position": 3,
+      "unitToBaseFactor": null,
+      "preparationWeightRatio": null
+    },
+    {
+      "id": "be5b0c82-992e-4584-a791-f58c0edd736b",
+      "recipeId": "45f12732-984f-4adf-98d5-6b4a48bd85f9",
+      "ingredientId": "20bc1b54-bf26-47e2-8ee6-7ead8d039d12",
+      "unitId": "8b9817e2-d85f-49a8-a343-3443fe14493c",
+      "quantityPerServing": 5,
+      "note": null,
+      "position": 4,
+      "unitToBaseFactor": null,
+      "preparationWeightRatio": null
+    },
+    {
+      "id": "52a14a2a-1216-4489-aa9e-97c45d0a951b",
+      "recipeId": "45f12732-984f-4adf-98d5-6b4a48bd85f9",
+      "ingredientId": "171e89c3-f829-48e1-bbb5-74188af1cd49",
+      "unitId": "c47614f1-b104-4ba2-ae0f-44d6e576bf2c",
+      "quantityPerServing": 100,
+      "note": null,
+      "position": 5,
+      "unitToBaseFactor": null,
+      "preparationWeightRatio": null
+    },
+    {
+      "id": "65d6a4af-81d7-4fd1-bb96-511b2f566bc1",
+      "recipeId": "45f12732-984f-4adf-98d5-6b4a48bd85f9",
+      "ingredientId": "8f4d3e9c-fc99-4ffe-9082-63283f660630",
+      "unitId": "8b9817e2-d85f-49a8-a343-3443fe14493c",
+      "quantityPerServing": 20,
+      "note": null,
+      "position": 6,
+      "unitToBaseFactor": null,
+      "preparationWeightRatio": null
+    },
+    {
+      "id": "5c8dd521-05fe-4f62-a63f-ec56ed946cfd",
+      "recipeId": "45f12732-984f-4adf-98d5-6b4a48bd85f9",
+      "ingredientId": "6d3a3b42-4519-455b-a347-b5f44a66b55f",
+      "unitId": "8b9817e2-d85f-49a8-a343-3443fe14493c",
+      "quantityPerServing": 1,
+      "note": null,
+      "position": 7,
+      "unitToBaseFactor": null,
+      "preparationWeightRatio": null
+    },
+    {
+      "id": "a18add1d-94bc-49d0-883c-325342f8bc09",
+      "recipeId": "45f12732-984f-4adf-98d5-6b4a48bd85f9",
+      "ingredientId": "4126438e-cc79-4b21-af88-4218a5cd8fbf",
+      "unitId": "7351b24d-2532-4b09-b15c-a3c0fb9172f1",
+      "quantityPerServing": 0.5,
+      "note": null,
+      "position": 8,
+      "unitToBaseFactor": null,
+      "preparationWeightRatio": null
+    },
+    {
+      "id": "5880932a-fe55-4aa4-b279-4b774041ddf7",
+      "recipeId": "45f12732-984f-4adf-98d5-6b4a48bd85f9",
+      "ingredientId": "69499a73-8148-4599-94c5-29fd39798802",
+      "unitId": "8b9817e2-d85f-49a8-a343-3443fe14493c",
+      "quantityPerServing": 5,
+      "note": null,
+      "position": 9,
+      "unitToBaseFactor": null,
+      "preparationWeightRatio": null
+    },
+    {
+      "id": "34a51ced-5eb8-4198-8cb5-b16742e614fd",
+      "recipeId": "4b2f4e67-be45-4cd8-aa13-050dcec9e4cf",
+      "ingredientId": "559e31a8-05d2-4ea9-b044-773530367f22",
+      "unitId": "8b9817e2-d85f-49a8-a343-3443fe14493c",
+      "quantityPerServing": 120,
+      "note": null,
+      "position": 0,
+      "unitToBaseFactor": null,
+      "preparationWeightRatio": null
+    },
+    {
+      "id": "57f1e8d9-c390-46fe-adcc-c32ddae34363",
+      "recipeId": "4b2f4e67-be45-4cd8-aa13-050dcec9e4cf",
+      "ingredientId": "e8b3462b-75ab-4d07-9501-c9669e9ae0b9",
+      "unitId": "a4d8c3ad-11e2-4756-bda5-0b319532a6f3",
+      "quantityPerServing": 1,
+      "note": null,
+      "position": 1,
+      "unitToBaseFactor": null,
+      "preparationWeightRatio": null
+    },
+    {
+      "id": "3f506200-45d8-4c77-940e-2afae9a47cbe",
+      "recipeId": "4b2f4e67-be45-4cd8-aa13-050dcec9e4cf",
+      "ingredientId": "dd4fb943-dd9f-4aa3-8171-86ff9024297b",
+      "unitId": "a8f30dad-dd15-46f8-83ba-1bfed243fa9b",
+      "quantityPerServing": 0.5,
+      "note": null,
+      "position": 2,
+      "unitToBaseFactor": null,
+      "preparationWeightRatio": null
+    },
+    {
+      "id": "d8b5a333-f73e-467c-9523-37b306acbdf9",
+      "recipeId": "6c62cacc-f5dd-4ab1-9314-975aa613088a",
+      "ingredientId": "6a6c8779-bd7d-485e-9f4f-09a2756e45b9",
+      "unitId": "a8f30dad-dd15-46f8-83ba-1bfed243fa9b",
+      "quantityPerServing": 0.5,
+      "note": null,
+      "position": 0,
+      "unitToBaseFactor": null,
+      "preparationWeightRatio": null
+    },
+    {
+      "id": "c137feab-dcc9-478f-825e-0507e7d71732",
+      "recipeId": "6c62cacc-f5dd-4ab1-9314-975aa613088a",
+      "ingredientId": "7d889c4e-1667-4c7f-bfa8-c1fbea2cfadb",
+      "unitId": "a8f30dad-dd15-46f8-83ba-1bfed243fa9b",
+      "quantityPerServing": 0.5,
+      "note": null,
+      "position": 1,
+      "unitToBaseFactor": null,
+      "preparationWeightRatio": null
+    },
+    {
+      "id": "3158dc7f-57a1-47cc-b137-4c35a49979e4",
+      "recipeId": "6c62cacc-f5dd-4ab1-9314-975aa613088a",
+      "ingredientId": "33b11ca2-fa5d-4c23-8be9-4c295f370220",
+      "unitId": "a8f30dad-dd15-46f8-83ba-1bfed243fa9b",
+      "quantityPerServing": 0.5,
+      "note": null,
+      "position": 2,
+      "unitToBaseFactor": null,
+      "preparationWeightRatio": null
+    },
+    {
+      "id": "19481884-de25-45d3-94b6-5be026395c3e",
+      "recipeId": "6c62cacc-f5dd-4ab1-9314-975aa613088a",
+      "ingredientId": "58d3d04c-21c9-4d54-9777-bd418efda350",
+      "unitId": "a8f30dad-dd15-46f8-83ba-1bfed243fa9b",
+      "quantityPerServing": 0.5,
+      "note": null,
+      "position": 3,
+      "unitToBaseFactor": null,
+      "preparationWeightRatio": null
+    },
+    {
+      "id": "ec8f6ba7-2d7d-46e4-a790-4287a2604054",
+      "recipeId": "6c62cacc-f5dd-4ab1-9314-975aa613088a",
+      "ingredientId": "1a431fe9-4e04-443b-bbd1-65a6b28f0cad",
+      "unitId": "8b9817e2-d85f-49a8-a343-3443fe14493c",
+      "quantityPerServing": 150,
+      "note": null,
+      "position": 4,
+      "unitToBaseFactor": null,
+      "preparationWeightRatio": null
+    },
+    {
+      "id": "c0ad3cbc-868f-49cf-aa36-ab4d9155d00e",
+      "recipeId": "6c62cacc-f5dd-4ab1-9314-975aa613088a",
+      "ingredientId": "37ac0b1c-9a46-498d-ba87-9d9c2161cffd",
+      "unitId": "8b9817e2-d85f-49a8-a343-3443fe14493c",
+      "quantityPerServing": 90,
+      "note": null,
+      "position": 5,
+      "unitToBaseFactor": null,
+      "preparationWeightRatio": null
+    },
+    {
+      "id": "a459877f-67a5-43f7-8911-bd3d4eb7a0b8",
+      "recipeId": "6c62cacc-f5dd-4ab1-9314-975aa613088a",
+      "ingredientId": "6a0c1090-2791-47a8-bf75-de29e3b2faf1",
+      "unitId": "8b9817e2-d85f-49a8-a343-3443fe14493c",
+      "quantityPerServing": 10,
+      "note": null,
+      "position": 6,
+      "unitToBaseFactor": null,
+      "preparationWeightRatio": null
+    },
+    {
+      "id": "9ec328dc-0a7a-44d6-9f51-dac16cc0beb8",
+      "recipeId": "6c62cacc-f5dd-4ab1-9314-975aa613088a",
+      "ingredientId": "8b9c5158-086d-4ad4-b497-9883ad5db556",
+      "unitId": "8b9817e2-d85f-49a8-a343-3443fe14493c",
+      "quantityPerServing": 5,
+      "note": null,
+      "position": 7,
+      "unitToBaseFactor": null,
+      "preparationWeightRatio": null
+    },
+    {
+      "id": "b7dddd0e-ac0c-4b5d-9a08-35f19796e348",
+      "recipeId": "6c62cacc-f5dd-4ab1-9314-975aa613088a",
+      "ingredientId": "4126438e-cc79-4b21-af88-4218a5cd8fbf",
+      "unitId": "7351b24d-2532-4b09-b15c-a3c0fb9172f1",
+      "quantityPerServing": 2.5,
+      "note": null,
+      "position": 8,
+      "unitToBaseFactor": null,
+      "preparationWeightRatio": null
+    },
+    {
+      "id": "b0a886a6-77c9-48e7-a39c-8fbe86c17875",
+      "recipeId": "6c62cacc-f5dd-4ab1-9314-975aa613088a",
+      "ingredientId": "69499a73-8148-4599-94c5-29fd39798802",
+      "unitId": "8b9817e2-d85f-49a8-a343-3443fe14493c",
+      "quantityPerServing": 10,
+      "note": null,
+      "position": 9,
+      "unitToBaseFactor": null,
+      "preparationWeightRatio": null
+    },
+    {
+      "id": "23a13307-968c-4477-b2e2-caf37d28163c",
+      "recipeId": "81cfd026-ef01-49be-ba49-349a2d2784d9",
+      "ingredientId": "142e18eb-e7ad-4713-9804-45ca98b5261c",
+      "unitId": "8b9817e2-d85f-49a8-a343-3443fe14493c",
+      "quantityPerServing": 75,
+      "note": null,
+      "position": 0,
+      "unitToBaseFactor": null,
+      "preparationWeightRatio": null
+    },
+    {
+      "id": "7d375253-9664-4b34-8206-b4bdbca05451",
+      "recipeId": "81cfd026-ef01-49be-ba49-349a2d2784d9",
+      "ingredientId": "e4f3c8b0-4339-4e52-afbd-3903aa14dba4",
+      "unitId": "a8f30dad-dd15-46f8-83ba-1bfed243fa9b",
+      "quantityPerServing": 0.5,
+      "note": null,
+      "position": 1,
+      "unitToBaseFactor": null,
+      "preparationWeightRatio": null
+    },
+    {
+      "id": "91d870b1-53bc-47ca-8369-71180e09376a",
+      "recipeId": "81cfd026-ef01-49be-ba49-349a2d2784d9",
+      "ingredientId": "7d889c4e-1667-4c7f-bfa8-c1fbea2cfadb",
+      "unitId": "a8f30dad-dd15-46f8-83ba-1bfed243fa9b",
+      "quantityPerServing": 0.5,
+      "note": null,
+      "position": 2,
+      "unitToBaseFactor": null,
+      "preparationWeightRatio": null
+    },
+    {
+      "id": "85c5085b-0496-40fb-bc8d-d7703d1c81ec",
+      "recipeId": "81cfd026-ef01-49be-ba49-349a2d2784d9",
+      "ingredientId": "ecedb7f9-4f33-4639-a586-80cd2231a6d4",
+      "unitId": "8b9817e2-d85f-49a8-a343-3443fe14493c",
+      "quantityPerServing": 10,
+      "note": null,
+      "position": 3,
+      "unitToBaseFactor": null,
+      "preparationWeightRatio": null
+    },
+    {
+      "id": "a3bc0d74-071c-4cba-812c-1949c0b4bf9c",
+      "recipeId": "81cfd026-ef01-49be-ba49-349a2d2784d9",
+      "ingredientId": "3b2f321e-3eb5-40b4-af1d-78a0654f9d55",
+      "unitId": "a8f30dad-dd15-46f8-83ba-1bfed243fa9b",
+      "quantityPerServing": 0.5,
+      "note": null,
+      "position": 4,
+      "unitToBaseFactor": null,
+      "preparationWeightRatio": null
+    },
+    {
+      "id": "cb132ef1-a292-4b00-a670-95648bac9bfe",
+      "recipeId": "81cfd026-ef01-49be-ba49-349a2d2784d9",
+      "ingredientId": "321b3d93-8c29-4aa8-9380-addbefabc7fb",
+      "unitId": "8b9817e2-d85f-49a8-a343-3443fe14493c",
+      "quantityPerServing": 5,
+      "note": null,
+      "position": 5,
+      "unitToBaseFactor": null,
+      "preparationWeightRatio": null
+    },
+    {
+      "id": "a52ebe92-aa67-4661-bd28-37c4535e4ef4",
+      "recipeId": "81cfd026-ef01-49be-ba49-349a2d2784d9",
+      "ingredientId": "33b11ca2-fa5d-4c23-8be9-4c295f370220",
+      "unitId": "a8f30dad-dd15-46f8-83ba-1bfed243fa9b",
+      "quantityPerServing": 0.25,
+      "note": null,
+      "position": 6,
+      "unitToBaseFactor": null,
+      "preparationWeightRatio": null
+    },
+    {
+      "id": "f2adc7f9-0bd0-4d73-9537-ad9f43c78500",
+      "recipeId": "81cfd026-ef01-49be-ba49-349a2d2784d9",
+      "ingredientId": "097fce0e-909b-455f-a982-d92b93406ca3",
+      "unitId": "8b9817e2-d85f-49a8-a343-3443fe14493c",
+      "quantityPerServing": 80,
+      "note": null,
+      "position": 7,
+      "unitToBaseFactor": null,
+      "preparationWeightRatio": null
+    },
+    {
+      "id": "2a6ec6a2-ee53-46e3-9067-3aab11633075",
+      "recipeId": "81cfd026-ef01-49be-ba49-349a2d2784d9",
+      "ingredientId": "bda2ace3-d252-4ccf-a658-c00687faa9bb",
+      "unitId": "8b9817e2-d85f-49a8-a343-3443fe14493c",
+      "quantityPerServing": 0.5,
+      "note": null,
+      "position": 8,
+      "unitToBaseFactor": null,
+      "preparationWeightRatio": null
+    },
+    {
+      "id": "c470f61d-bee4-4fae-b0f2-ca453c35c5d0",
+      "recipeId": "81cfd026-ef01-49be-ba49-349a2d2784d9",
+      "ingredientId": "dafafab2-7d50-4ef9-af1a-1075a40153e5",
+      "unitId": "c47614f1-b104-4ba2-ae0f-44d6e576bf2c",
+      "quantityPerServing": 90,
+      "note": null,
+      "position": 9,
+      "unitToBaseFactor": null,
+      "preparationWeightRatio": null
+    },
+    {
+      "id": "e1192633-217d-4e8b-9a08-78b71eae3084",
+      "recipeId": "81cfd026-ef01-49be-ba49-349a2d2784d9",
+      "ingredientId": "48760413-1842-4f8c-a709-a487208211fb",
+      "unitId": "c47614f1-b104-4ba2-ae0f-44d6e576bf2c",
+      "quantityPerServing": 5,
+      "note": null,
+      "position": 10,
+      "unitToBaseFactor": null,
+      "preparationWeightRatio": null
+    },
+    {
+      "id": "7c41f665-402d-41a3-9128-ed4ee8e0a734",
+      "recipeId": "81cfd026-ef01-49be-ba49-349a2d2784d9",
+      "ingredientId": "89b1ad44-ebab-4a4b-8d9d-64cfe5b8292e",
+      "unitId": "7351b24d-2532-4b09-b15c-a3c0fb9172f1",
+      "quantityPerServing": 1,
+      "note": "Non inclus dans la livraison",
+      "position": 11,
+      "unitToBaseFactor": null,
+      "preparationWeightRatio": null
+    },
+    {
+      "id": "fec9fc47-a27b-4e64-a979-ac1f3a26e485",
+      "recipeId": "850facbd-0c9a-409f-998f-fbc3015646b9",
+      "ingredientId": "66365c2a-d46b-4907-ad80-483906dc0521",
+      "unitId": "8b9817e2-d85f-49a8-a343-3443fe14493c",
+      "quantityPerServing": 90,
+      "note": null,
+      "position": 0,
+      "unitToBaseFactor": null,
+      "preparationWeightRatio": null
+    },
+    {
+      "id": "14d1bbcc-83df-4304-816e-c80b542f7067",
+      "recipeId": "850facbd-0c9a-409f-998f-fbc3015646b9",
+      "ingredientId": "7d889c4e-1667-4c7f-bfa8-c1fbea2cfadb",
+      "unitId": "a8f30dad-dd15-46f8-83ba-1bfed243fa9b",
+      "quantityPerServing": 0.5,
+      "note": null,
+      "position": 1,
+      "unitToBaseFactor": null,
+      "preparationWeightRatio": null
+    },
+    {
+      "id": "17940597-5ccb-4892-bf34-19a25a5dd708",
+      "recipeId": "850facbd-0c9a-409f-998f-fbc3015646b9",
+      "ingredientId": "ae373d64-4a79-4192-9506-a73285c19230",
+      "unitId": "a8f30dad-dd15-46f8-83ba-1bfed243fa9b",
+      "quantityPerServing": 0.5,
+      "note": null,
+      "position": 2,
+      "unitToBaseFactor": null,
+      "preparationWeightRatio": null
+    },
+    {
+      "id": "aca36a92-33f1-47fd-8259-5904ed08ca20",
+      "recipeId": "850facbd-0c9a-409f-998f-fbc3015646b9",
+      "ingredientId": "20bc1b54-bf26-47e2-8ee6-7ead8d039d12",
+      "unitId": "8b9817e2-d85f-49a8-a343-3443fe14493c",
+      "quantityPerServing": 0.5,
+      "note": null,
+      "position": 3,
+      "unitToBaseFactor": null,
+      "preparationWeightRatio": null
+    },
+    {
+      "id": "8c288477-ecc7-4e61-9751-326edf7150c0",
+      "recipeId": "850facbd-0c9a-409f-998f-fbc3015646b9",
+      "ingredientId": "c1c0fcd4-93f8-46a6-befc-cfad4412dec6",
+      "unitId": "8b9817e2-d85f-49a8-a343-3443fe14493c",
+      "quantityPerServing": 10,
+      "note": null,
+      "position": 4,
+      "unitToBaseFactor": null,
+      "preparationWeightRatio": null
+    },
+    {
+      "id": "4007c834-001d-45c0-814e-6d683e855b96",
+      "recipeId": "850facbd-0c9a-409f-998f-fbc3015646b9",
+      "ingredientId": "accb3428-b86c-496d-9657-19fa2034e118",
+      "unitId": "8b9817e2-d85f-49a8-a343-3443fe14493c",
+      "quantityPerServing": 20,
+      "note": null,
+      "position": 5,
+      "unitToBaseFactor": null,
+      "preparationWeightRatio": null
+    },
+    {
+      "id": "bae97e3f-1ad9-4da9-83f3-9a2692b95225",
+      "recipeId": "850facbd-0c9a-409f-998f-fbc3015646b9",
+      "ingredientId": "9d36d464-6b25-4610-a62b-795af4f1dfab",
+      "unitId": "8b9817e2-d85f-49a8-a343-3443fe14493c",
+      "quantityPerServing": 75,
+      "note": null,
+      "position": 6,
+      "unitToBaseFactor": null,
+      "preparationWeightRatio": null
+    },
+    {
+      "id": "71e811bf-8f20-4e7d-a3c0-04b7ff44d524",
+      "recipeId": "850facbd-0c9a-409f-998f-fbc3015646b9",
+      "ingredientId": "171e89c3-f829-48e1-bbb5-74188af1cd49",
+      "unitId": "c47614f1-b104-4ba2-ae0f-44d6e576bf2c",
+      "quantityPerServing": 50,
+      "note": null,
+      "position": 7,
+      "unitToBaseFactor": null,
+      "preparationWeightRatio": null
+    },
+    {
+      "id": "c2eadcfa-2524-4ea8-91a1-b514dcf25bba",
+      "recipeId": "850facbd-0c9a-409f-998f-fbc3015646b9",
+      "ingredientId": "8f4d3e9c-fc99-4ffe-9082-63283f660630",
+      "unitId": "8b9817e2-d85f-49a8-a343-3443fe14493c",
+      "quantityPerServing": 20,
+      "note": null,
+      "position": 8,
+      "unitToBaseFactor": null,
+      "preparationWeightRatio": null
+    },
+    {
+      "id": "28c281ff-aa16-4818-8a43-fd82aaf0cbd3",
+      "recipeId": "850facbd-0c9a-409f-998f-fbc3015646b9",
+      "ingredientId": "c0ef1307-cb58-44ff-adc0-6a6217d4c1d9",
+      "unitId": "a8f30dad-dd15-46f8-83ba-1bfed243fa9b",
+      "quantityPerServing": 0.25,
+      "note": null,
+      "position": 9,
+      "unitToBaseFactor": null,
+      "preparationWeightRatio": null
+    },
+    {
+      "id": "42fc17ba-77f8-4663-8819-0c6c05c7a0a5",
+      "recipeId": "850facbd-0c9a-409f-998f-fbc3015646b9",
+      "ingredientId": "69499a73-8148-4599-94c5-29fd39798802",
+      "unitId": "8b9817e2-d85f-49a8-a343-3443fe14493c",
+      "quantityPerServing": 5,
+      "note": null,
+      "position": 10,
+      "unitToBaseFactor": null,
+      "preparationWeightRatio": null
+    },
+    {
+      "id": "c719fa8f-2bd4-4019-8b10-1b2145dd5b80",
+      "recipeId": "850facbd-0c9a-409f-998f-fbc3015646b9",
+      "ingredientId": "4126438e-cc79-4b21-af88-4218a5cd8fbf",
+      "unitId": "7351b24d-2532-4b09-b15c-a3c0fb9172f1",
+      "quantityPerServing": 1,
+      "note": null,
+      "position": 11,
+      "unitToBaseFactor": null,
+      "preparationWeightRatio": null
+    }
+  ],
+  "recipeSteps": [
+    {
+      "id": "d924520a-7cd3-4b2c-9bbf-715a3c267aaf",
+      "recipeId": "186edddd-cfeb-46bd-a8ad-adf9fd3e0730",
+      "position": 0,
+      "instruction": "• Veillez à bien respecter les quantités indiquées à gauche pour préparer votre recette !\n• Portez une casserole d’eau salée à ébullition et faites-y cuire le riz 12-14 min.\n• Égouttez-le et réservez-le à couvert."
+    },
+    {
+      "id": "246a4f38-4ae3-4767-a9d1-efd094d06f78",
+      "recipeId": "186edddd-cfeb-46bd-a8ad-adf9fd3e0730",
+      "position": 1,
+      "instruction": "• Pendant ce temps, coupez l'oignon en fines demi-lunes. Épluchez et râpez la carotte.\n• Coupez le poireau en quatre dans l'épaisseur, lavez-le bien, puis ciselez-le finement.\n• Faites chauffer un filet d'huile d'olive à feu moyen-vif dans un wok ou une sauteuse. Faites-y revenir les légumes 4-6 min à couvert. Remuez régulièrement.\nCONSEIL : Vous pouvez faire cuire les légumes plus longtemps si vous les préférez fondants."
+    },
+    {
+      "id": "5877d862-7002-4adf-b443-6070cadec65a",
+      "recipeId": "186edddd-cfeb-46bd-a8ad-adf9fd3e0730",
+      "position": 2,
+      "instruction": "• En attendant, ciselez la ciboulette et l'ail séparément.\n• Râpez le gingembre (ça pique ! Dosez-le selon votre goût).\n• Dans un bol, mélangez l'ail et le gingembre avec la sauce soja (voir CONSEIL), l'huile de sésame et, par personne : 1 cs de sucre et 30 ml d'eau.\n• Coupez le poulet en 3 aiguillettes.\nCONSEIL : Si vous faites attention à votre consommation de sel ou n'aimez pas manger trop salé, réduisez la quantité de sauce soja et ne salez pas le plat par la suite."
+    },
+    {
+      "id": "1d69b367-82f4-419d-83ef-7f477dccf7ff",
+      "recipeId": "186edddd-cfeb-46bd-a8ad-adf9fd3e0730",
+      "position": 3,
+      "instruction": "• Faites chauffer un filet d'huile d'olive dans une poêle à feu moyen-vif et faites-y cuire le poulet 2-4 min.\n• Ajoutez la sauce et laissez-la réduire 1-2 min à feu vif, ou jusqu'à ce qu'elle soit légèrement nappante (ajoutez un peu d'eau si besoin).\n• Servez le riz dans des assiettes creuses et disposez les légumes et le poulet en sauce par-dessus.\n• Saupoudrez de ciboulette et de graines de sésame."
+    },
+    {
+      "id": "a49e8ac9-732b-471c-8a3c-d4ba03fbf339",
+      "recipeId": "1b585088-37b9-497c-b06d-c7665259f557",
+      "position": 0,
+      "instruction": "• Veillez à bien respecter les quantités indiquées à gauche pour préparer votre recette !\n• Préchauffez le four à 230°C (210°C chaleur tournante).\n• Lavez les pommes de terre et coupez-les en frites de 1 cm. Placez-les sur une plaque recouverte de papier sulfurisé. Essuyez-les avec de l’essuie-tout pour qu'elles soient croustillantes. Ajoutez un filet d'huile d'olive, salez et poivrez.\n• Mélangez les frites, et enfournez-les 25-30 min, ou jusqu’à ce qu’elles soient dorées et croustillantes. Remuez à mi-cuisson."
+    },
+    {
+      "id": "b7f00364-9046-4d19-ba72-566d6c0c617c",
+      "recipeId": "1b585088-37b9-497c-b06d-c7665259f557",
+      "position": 1,
+      "instruction": "•\nCiselez l'ail. Coupez le poireau en deux dans l'épaisseur, lavez-le bien, puis coupez-le en fines demi-lunes.\n• Faites chauffer un filet d’huile d’olive dans une poêle à feu moyen-vif. Faites-y revenir le poireau et l'ail 5-6 min. Salez et poivrez, puis râpez un peu de noix de muscade par-dessus."
+    },
+    {
+      "id": "14d37f3b-5805-4b83-b17c-2cb5b6f83cef",
+      "recipeId": "1b585088-37b9-497c-b06d-c7665259f557",
+      "position": 2,
+      "instruction": "• Ajoutez dans la poêle des poireaux 15 g de beurre par personne à feu moyen.\n• Ajoutez 15 g de farine par personne, puis faites cuire le tout 2-3 min en remuant.\n• Réduisez le feu et ajoutez ⅓ du lait. Remuez constamment avec un fouet. Lorsque le lait est entièrement absorbé, répétez l’opération avec le reste du lait. Augmentez le feu et laissez cuire doucement 3-4 min afin que la sauce épaississe.\n• Ajoutez ¾ du fromage râpé et mélangez bien."
+    },
+    {
+      "id": "ffc36d1c-a1f8-4e2b-b3e3-caa9f37677e9",
+      "recipeId": "1b585088-37b9-497c-b06d-c7665259f557",
+      "position": 3,
+      "instruction": "• Coupez les tranches de poulet en deux dans la longueur.\n• Placez les morceaux de poulet sur la moitié des tranches de pain.\n• Étalez un peu de la sauce aux poireaux sur les tranches de pain restantes."
+    },
+    {
+      "id": "d0856b3d-3092-4b75-a553-acc853f08c5b",
+      "recipeId": "1b585088-37b9-497c-b06d-c7665259f557",
+      "position": 4,
+      "instruction": "• Assemblez chaque tranche de pain au poulet-poireau avec chaque tranche de pain au poireau pour former 1 croque par personne.\n• Placez-les sur une plaque recouverte de papier sulfurisé. Saupoudrez les croques du reste de fromage.\n• Enfournez-les 8-10 min dans la partie haute du four, ou jusqu’à ce que le fromage soit fondu."
+    },
+    {
+      "id": "d7881234-58a2-415c-80d5-94e5f527faf2",
+      "recipeId": "1b585088-37b9-497c-b06d-c7665259f557",
+      "position": 5,
+      "instruction": "• Coupez la sucrine en fines lanières.\n• Faites une vinaigrette en mélangeant un peu de vinaigre balsamique avec un filet d’huile d’olive dans un saladier. Salez et poivrez.\n• Ajoutez la sucrine. Mélangez bien.\n• Coupez les croques en 2 dans la diagonale.\n• Servez-en 4 moitiés par personne avec la salade et les frites dans les assiettes, et savourez ce plat !"
+    },
+    {
+      "id": "39680c8f-4e33-4511-92b0-b974bbdad6a6",
+      "recipeId": "27483b4e-69a6-4af3-99c8-3d39453bd095",
+      "position": 0,
+      "instruction": "• Veillez à bien respecter les quantités indiquées à gauche pour préparer votre recette !\n• Portez une casserole d'eau salée à ébullition pour le riz.\n• Ciselez l'ail et l'oignon.\n• Épluchez et coupez la carotte en fines demi-lunes.\n• Lavez bien le citron et prélevez-en le zeste avec une râpe fine, puis coupez-le en quartiers.\n• Coupez le lieu en dés de 3 cm."
+    },
+    {
+      "id": "e481a3d0-9fed-463b-b27e-6154daee01af",
+      "recipeId": "27483b4e-69a6-4af3-99c8-3d39453bd095",
+      "position": 1,
+      "instruction": "• Faites chauffer un filet d'huile de tournesol dans un wok ou une sauteuse à feu moyen-vif.\n• Ajoutez-y l'oignon, l'ail, la carotte et ½ sachet de curry (ça pique ! Dosez-le selon votre goût) par personne. Faites-les revenir 3-4 min."
+    },
+    {
+      "id": "5ac4b5b9-eca2-4da0-83dd-b46ed9e92893",
+      "recipeId": "27483b4e-69a6-4af3-99c8-3d39453bd095",
+      "position": 2,
+      "instruction": "• Pendant ce temps, lavez bien les épinards. Secouez le paquet de lait de coco afin que les éventuels grumeaux se décomposent.\n• Baissez le feu du wok sur moyen. Par-dessus, déchirez les épinards, émiettez ¼ de cube de bouillon par personne et versez le lait de coco.\n• Ajoutez un petit filet d'eau si la sauce est trop épaisse. Faites mijoter le tout 10-15 min, ou jusqu'à ce que la carotte soit fondante."
+    },
+    {
+      "id": "a6be0aa1-d667-45cf-b972-d62044340ed1",
+      "recipeId": "27483b4e-69a6-4af3-99c8-3d39453bd095",
+      "position": 3,
+      "instruction": "• Pendant ce temps, faites cuire le riz dans la casserole 12-14 min, ou jusqu'à ce qu'il soit tendre.\n• Égouttez-le, puis réservez-le à couvert. Salez et poivrez-le."
+    },
+    {
+      "id": "381df30d-161f-4e62-a58a-cf22ad3f15fe",
+      "recipeId": "27483b4e-69a6-4af3-99c8-3d39453bd095",
+      "position": 4,
+      "instruction": "• Une fois la carotte cuite, ajoutez le poisson au wok et poursuivez la cuisson 3-4 min, ou jusqu'à ce que la chair du poisson ne soit plus translucide et qu'il soit cuit à cœur (voir L'ASTUCE).\n• Ajoutez une pincée de zestes de citron (selon votre goût) et rectifiez l'assaisonnement en sel et poivre.\nL'ASTUCE DU CHEF : Prolongez la cuisson de quelques minutes si nécessaire."
+    },
+    {
+      "id": "12da091e-4bc3-4e86-86b8-5c56a4528658",
+      "recipeId": "27483b4e-69a6-4af3-99c8-3d39453bd095",
+      "position": 5,
+      "instruction": "• Répartissez le riz et le curry de lieu dans des assiettes creuses.\n• Servez avec ¼ de citron par personne (vous pouvez presser quelques gouttes de jus de citron par-dessus si vous le souhaitez)."
+    },
+    {
+      "id": "445c0709-1763-46a6-9294-fc9a609a7c57",
+      "recipeId": "42435298-5df7-411b-95b1-6594a63cc11f",
+      "position": 0,
+      "instruction": "• Veillez à bien respecter les quantités indiquées à gauche pour préparer votre recette !\n• Préparez le bouillon avec de l'eau chaude.\n• Ciselez finement l’ail.\n• Épépinez et coupez le poivron en petits dés.\n• Lavez bien le citron et prélevez-en le zeste à l’aide d'une râpe, puis pressez-en le jus.\n• Dans un bol, mélangez les crevettes avec la moitié de l’ail et, par personne : 1 cc d’huile d’olive et 1 cc de jus de citron. Salez et poivrez."
+    },
+    {
+      "id": "b90ff8dc-5840-4bed-b918-51f18bb72284",
+      "recipeId": "42435298-5df7-411b-95b1-6594a63cc11f",
+      "position": 1,
+      "instruction": "• Faites fondre le beurre dans une sauteuse à feu moyen-vif. Ajoutez l’orzo, le poivron, 1½ cc d’épices italiennes par personne et le reste d’ail. Faites cuire 1-2 min en remuant.\n• Déglacez avec le vinaigre de vin blanc (ou avec du vin blanc si vous en avez).\n• À feu moyen-doux, ajoutez le bouillon, couvrez et laissez mijoter 10-12 min jusqu’à ce que l’orzo soit cuit. Ajoutez un peu d’eau ou de bouillon s'il n'y a plus de liquide et que l'orzo n'est pas cuit. Ôtez le couvercle lorsqu'il reste 2 min de cuisson."
+    },
+    {
+      "id": "3da88624-7d3e-40d8-9d68-f26fac2f6a63",
+      "recipeId": "42435298-5df7-411b-95b1-6594a63cc11f",
+      "position": 2,
+      "instruction": "• Pendant ce temps, faites revenir les crevettes 4-5 min dans une poêle à feu moyen-vif ou jusqu’à ce qu’elles soient dorées. Réservez à couvert hors du feu.\n• Effeuillez et ciselez finement le persil.\n• Au bout des 10-12 min de cuisson de l'orzo, ajoutez la crème fraîche, le fromage italien et 1-2 cc de zestes de citron par personne (selon votre goût) à l’orzo. Salez, poivrez et mélangez."
+    },
+    {
+      "id": "27a40a89-8046-4de2-9dc1-18c566f50f47",
+      "recipeId": "42435298-5df7-411b-95b1-6594a63cc11f",
+      "position": 3,
+      "instruction": "• Servez le mélange de roquette et mâche dans des assiettes creuses. Arrosez d’un filet d’huile d’olive.\n• Servez l’orzo, puis les crevettes par-dessus. Arrosez de quelques gouttes de jus de citron et si vous le souhaitez d'un dernier filet d'huile d'olive. Saupoudrez de persil."
+    },
+    {
+      "id": "33466559-60ec-470b-ac43-9733fa22a172",
+      "recipeId": "45f12732-984f-4adf-98d5-6b4a48bd85f9",
+      "position": 0,
+      "instruction": "• Veillez à bien respecter les quantités indiquées à gauche pour préparer votre recette !\n• Portez une casserole d'eau salée à ébullition pour le riz.\n• Coupez le poireau en deux dans l'épaisseur, lavez-le bien et coupez-le en très fines demi-lunes.\n• Faites cuire le riz 12-14 min dans la casserole. Égouttez-le et réservez-le sans couvercle."
+    },
+    {
+      "id": "ae414cef-151f-4c74-8ae6-c5db69dc6d8c",
+      "recipeId": "45f12732-984f-4adf-98d5-6b4a48bd85f9",
+      "position": 1,
+      "instruction": "• Coupez le poulet en dés de 2 cm.\n• Faites chauffer un filet d’huile d’olive dans un wok ou une sauteuse à feu moyen-vif. Faites-y dorer le poulet 3-4 min sur tous les côtés : il ne doit pas encore être totalement cuit à ce stade. Salez et poivrez.\n• Réservez-le hors de la sauteuse."
+    },
+    {
+      "id": "11dc3cb8-163e-4c21-9d00-5b55a1bcff76",
+      "recipeId": "45f12732-984f-4adf-98d5-6b4a48bd85f9",
+      "position": 2,
+      "instruction": "• Remettez la sauteuse à feu moyen-vif et faites-y fondre une noix de beurre. Ajoutez-y le poireau, salez et poivrez. Baissez le feu à moyen, couvrez et faites cuire 8-10 min de plus, ou jusqu'à ce qu'il soit fondant.\n• Pendant ce temps, ciselez l’ail et le persil séparément."
+    },
+    {
+      "id": "1f57e084-3f40-4e80-96e6-5dab933125a1",
+      "recipeId": "45f12732-984f-4adf-98d5-6b4a48bd85f9",
+      "position": 3,
+      "instruction": "• Une fois le poireau cuit et fondant, retirez le couvercle. Ajoutez le poulet, l’ail, la crème et la moitié du fromage râpé (voir CONSEIL).\n• Râpez un peu de noix de muscade par-dessus (selon votre goût). Mélangez et laissez réduire 5 min à feu doux.\n• Servez le riz dans les assiettes et versez le poulet et sa crème de poireau par-dessus.\n• Saupoudrez de persil et du reste de fromage râpé.\nCONSEIL : Si vous souhaitez un peu plus de « peps » dans votre sauce, ajoutez-y ½ cc de moutarde par personne !"
+    },
+    {
+      "id": "b742e895-8b6f-43f7-b2a5-94c6d563812c",
+      "recipeId": "4b2f4e67-be45-4cd8-aa13-050dcec9e4cf",
+      "position": 0,
+      "instruction": "Émincer le poireau et le faire revenir doucement."
+    },
+    {
+      "id": "9280df7c-f4ec-464e-85c6-65df08504d95",
+      "recipeId": "4b2f4e67-be45-4cd8-aa13-050dcec9e4cf",
+      "position": 1,
+      "instruction": "Ajouter le poulet, puis les pois chiches égouttés."
+    },
+    {
+      "id": "64cec328-08aa-4917-b95a-c85d183d80ad",
+      "recipeId": "4b2f4e67-be45-4cd8-aa13-050dcec9e4cf",
+      "position": 2,
+      "instruction": "Assaisonner et servir chaud."
+    },
+    {
+      "id": "287ab8dd-c577-4d49-a22e-7127e3327c0a",
+      "recipeId": "6c62cacc-f5dd-4ab1-9314-975aa613088a",
+      "position": 0,
+      "instruction": "Veillez à bien respecter les quantités indiquées à gauche pour préparer votre recette !\nPréchauffez le four à 200°C (180°C chaleur tournante). Portez une grande casserole d'eau salée à ébullition.\nÀ l'aide d'un éplucheur, taillez de longs rubans de courgette (voir CONSEIL).\nCiselez l'ail et réservez-le dans un petit bol.\nCoupez le citron en quartiers.\nCONSEIL: Finissez la découpe du cœur des courgettes au couteau en détaillant de fines lamelles lorsque celui-ci devient moins ferme."
+    },
+    {
+      "id": "7121d7ef-9460-4954-bed8-1232a52c5393",
+      "recipeId": "6c62cacc-f5dd-4ab1-9314-975aa613088a",
+      "position": 1,
+      "instruction": "Coupez la tomate en demi-lunes.\nCoupez 2 rectangles de papier d'aluminium. Disposez un pavé de saumon au milieu de chaque rectangle.\nRépartissez la moitié des demi-lunes de tomate par-dessus. Salez et poivrez.\nFermez les papillotes en pinçant ensemble les extrémités du papier d'aluminium. Enfournez 15-20 min sur une plaque de cuisson.\nCONSEIL: Le saumon est cuit lorsque sa chair est ferme et opaque."
+    },
+    {
+      "id": "1de59707-15fe-4040-b6ca-c0f148c16c1a",
+      "recipeId": "6c62cacc-f5dd-4ab1-9314-975aa613088a",
+      "position": 2,
+      "instruction": "Une fois l'eau à ébullition, faites cuire les rigatoni 10-12 min.\nÉgouttez-les, ajoutez une noix de beurre, pressez le jus d'un quartier de citron par personne, mélangez et réservez à couvert."
+    },
+    {
+      "id": "aea4894f-8f91-4112-a159-28994af25cca",
+      "recipeId": "6c62cacc-f5dd-4ab1-9314-975aa613088a",
+      "position": 3,
+      "instruction": "Faites chauffer un filet d’huile d’olive à feu moyen-vif dans une sauteuse. Faites-y revenir la moitié de l’ail et les rubans de courgette 5-7 min, jusqu’à ce qu’ils soient légèrement dorés.\nAjoutez le reste de tomate, et faites revenir le tout 1 min de plus. Salez, poivrez et réservez à couvert."
+    },
+    {
+      "id": "e66df60a-d277-4a39-9944-63164aaad70c",
+      "recipeId": "6c62cacc-f5dd-4ab1-9314-975aa613088a",
+      "position": 4,
+      "instruction": "Pendant ce temps, effeuillez et ciselez très finement le basilic. Ajoutez-le au bol avec le reste d'ail.\nAjoutez 1½ cs d'huile d'olive par personne et mélangez une trentaine de secondes à l'aide d'une cuillère (voir CONSEIL). Salez et poivrez.\nConcassez les noisettes.\nCONSEIL: Si vous avez un mortier, vous pouvez aussi mélanger ensemble l'ail, le basilic et l'huile à l'aide du pilon."
+    },
+    {
+      "id": "0e3420b8-1ba9-40f7-a96f-1f4bcef59211",
+      "recipeId": "6c62cacc-f5dd-4ab1-9314-975aa613088a",
+      "position": 5,
+      "instruction": "Servez les rigatoni dans des assiettes creuses. Placez les rubans de courgette par-dessus.\nOuvrez la papillote et déposez le saumon avec ses tomates à côté des pâtes.\nRépartissez la sauce pistou sur le saumon et les pâtes et saupoudrez le tout de noisettes. Servez avec le reste des quartiers de citron."
+    },
+    {
+      "id": "75824608-dc1d-45cd-ab5e-6084aeed5a1b",
+      "recipeId": "81cfd026-ef01-49be-ba49-349a2d2784d9",
+      "position": 0,
+      "instruction": "• Veillez à bien respecter les quantités indiquées à gauche pour préparer votre recette !\n• Portez une grande casserole d'eau salée à ébullition pour le riz.\n• Ciselez l'échalote et l'ail. Râpez finement le gingembre (ça pique ! Dosez-le selon votre goût). Épluchez la carotte et coupez-la en très fines demi-lunes de 3 mm.\n• Effeuillez et ciselez la coriandre et le basilic thaï. Coupez le citron en quartiers."
+    },
+    {
+      "id": "c974cdaf-0171-4d24-87a9-700dad70c2dd",
+      "recipeId": "81cfd026-ef01-49be-ba49-349a2d2784d9",
+      "position": 1,
+      "instruction": "• Faites cuire le riz 12-14 min dans la casserole, ou jusqu’à ce qu’il soit tendre.\n• Égouttez-le et réservez-le à couvert jusqu’au service."
+    },
+    {
+      "id": "f6f3c059-8047-404f-b45c-f7562b136ba7",
+      "recipeId": "81cfd026-ef01-49be-ba49-349a2d2784d9",
+      "position": 2,
+      "instruction": "• Épongez les crevettes avec un essuie-tout.\n• Faites chauffer un filet d'huile de tournesol dans un wok ou une sauteuse à feu moyen-vif.\n• Faites-y revenir les crevettes 4-5 min avec ½ cc de curry vert par personne (ça pique ! Dosez-le selon votre goût) ou jusqu'à ce qu'elles soient bien dorées, puis réservez-les hors du wok."
+    },
+    {
+      "id": "76416b55-5909-469c-8e0d-24595afaf306",
+      "recipeId": "81cfd026-ef01-49be-ba49-349a2d2784d9",
+      "position": 3,
+      "instruction": "• Remettez le wok sur feu moyen avec un petit filet d'huile et faites-y revenir l’échalote, l’ail, le gingembre et ½ cc de curry vert par personne 2 min.\n• Ajoutez-y la carotte, 1 cs d'eau par personne, et faites-la cuire 8-10 min à couvert, en remuant de temps en temps.\nCONSEIL : Si cela accroche, ajoutez un petit filet d'eau supplémentaire."
+    },
+    {
+      "id": "7eb48934-172b-469f-bf2d-8e0ffd36c994",
+      "recipeId": "81cfd026-ef01-49be-ba49-349a2d2784d9",
+      "position": 4,
+      "instruction": "• Secouez le paquet de lait de coco jusqu’à ce que les éventuels grumeaux se décomposent.\n• Ajoutez-le, ainsi que ¼ sachet de sauce poisson par personne au wok. Mélangez, puis couvrez et laissez mijoter 5-6 min, ou jusqu'à ce que les carottes soient fondantes.\n• Ajoutez les crevettes et prolongez la cuisson de 2 min.\n• Retirez le wok du feu."
+    },
+    {
+      "id": "f4672bd9-1b5d-4d4c-9bb0-32dafa1edba1",
+      "recipeId": "81cfd026-ef01-49be-ba49-349a2d2784d9",
+      "position": 5,
+      "instruction": "• Servez le riz et le curry thaï dans les assiettes. Saupoudrez le tout de coriandre et de basilic thaï.\n• Pressez quelques gouttes de citron sur l'ensemble du plat (selon votre goût)."
+    },
+    {
+      "id": "667c6262-a10d-4a57-a34c-7f8c17b69c72",
+      "recipeId": "850facbd-0c9a-409f-998f-fbc3015646b9",
+      "position": 0,
+      "instruction": "• Veillez à bien respecter les quantités indiquées à gauche pour préparer votre recette !\n• Portez une grande casserole d'eau à ébullition avec ¼ cube de bouillon par personne pour les pâtes.\n• Ciselez l'ail et l'oignon. Effeuillez et ciselez le persil.\n• Faites cuire les spaghetti 10-12 min. Égouttez-les en conservant un peu d'eau de cuisson (½ louche par personne environ) et réservez-les sans couvercle."
+    },
+    {
+      "id": "3adb9def-3e1c-4a08-b15f-9bee77f925e0",
+      "recipeId": "850facbd-0c9a-409f-998f-fbc3015646b9",
+      "position": 1,
+      "instruction": "• Faites fondre une noix de beurre avec un filet d'huile d'olive dans une sauteuse à feu moyen-vif.\n• Faites-y dorer 10 g de chapelure par personne et les noix 4-5 min.\n• Salez, poivrez, ajoutez le persil et mélangez. Réservez dans un bol.\nLE SAVIEZ-VOUS ? Le pangrattato est une préparation italienne, à base de chapelure et d’huile d’olive, utilisée pour apporter du croustillant et de la saveur aux plats."
+    },
+    {
+      "id": "7b50b7f1-4ac5-42a7-9fd1-01928fdc852e",
+      "recipeId": "850facbd-0c9a-409f-998f-fbc3015646b9",
+      "position": 2,
+      "instruction": "• Faites à nouveau chauffer la sauteuse à feu moyen-vif. Faites-y revenir les lardons, l'oignon et l’ail 6-8 min.\n• Ajoutez-y les spaghetti, la crème, l'eau de cuisson réservée ainsi que la moitié du pecorino.\n• Remuez bien et faites chauffer 1-2 min, ou jusqu'à ce que le tout soit bien mélangé et que les pâtes soient crémeuses."
+    },
+    {
+      "id": "aa06f9eb-c280-475f-ae49-4c273c63cacd",
+      "recipeId": "850facbd-0c9a-409f-998f-fbc3015646b9",
+      "position": 3,
+      "instruction": "• Servez les pâtes carbo dans les assiettes.\n• Saupoudrez du reste de pecorino et de pangrattato (selon votre goût).\n• Dégustez sans trop attendre, tant que les pâtes sont bien crémeuses !"
+    }
+  ],
+  "cartItems": [
+    {
+      "id": "4869f15d-6eea-40fe-84af-83b3eb1dec0d",
+      "recipeId": "1b585088-37b9-497c-b06d-c7665259f557",
+      "portions": 4,
+      "createdAt": "2026-06-10T19:22:56.792",
+      "updatedAt": "2026-06-10T19:22:56.792"
+    },
+    {
+      "id": "20cd7841-a925-49b4-9721-2b1a65824b0f",
+      "recipeId": "850facbd-0c9a-409f-998f-fbc3015646b9",
+      "portions": 4,
+      "createdAt": "2026-06-10T19:23:09.062",
+      "updatedAt": "2026-06-10T19:23:09.062"
+    },
+    {
+      "id": "5da65605-11c9-479a-bd52-5e728cd10ee1",
+      "recipeId": "81cfd026-ef01-49be-ba49-349a2d2784d9",
+      "portions": 4,
+      "createdAt": "2026-06-10T19:23:22.4",
+      "updatedAt": "2026-06-10T19:23:22.4"
+    }
+  ]
+}

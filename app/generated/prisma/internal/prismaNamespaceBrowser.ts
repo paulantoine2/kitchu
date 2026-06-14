@@ -111,6 +111,10 @@ export const IngredientScalarFieldEnum = {
   imageUrl: 'imageUrl',
   notes: 'notes',
   preparationWeightRatio: 'preparationWeightRatio',
+  caloriesPer100g: 'caloriesPer100g',
+  proteinPer100g: 'proteinPer100g',
+  carbsPer100g: 'carbsPer100g',
+  fatPer100g: 'fatPer100g',
   baseUnitId: 'baseUnitId',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
@@ -147,6 +151,10 @@ export const ProductReferenceScalarFieldEnum = {
   url: 'url',
   barcode: 'barcode',
   notes: 'notes',
+  caloriesPer100g: 'caloriesPer100g',
+  proteinPer100g: 'proteinPer100g',
+  carbsPer100g: 'carbsPer100g',
+  fatPer100g: 'fatPer100g',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 } as const

@@ -30,6 +30,10 @@ function ingredientFingerprint(draft: IngredientDraft) {
     imageUrl: draft.imageUrl,
     notes: draft.notes,
     preparationWeightRatio: draft.preparationWeightRatio,
+    caloriesPer100g: draft.caloriesPer100g,
+    proteinPer100g: draft.proteinPer100g,
+    carbsPer100g: draft.carbsPer100g,
+    fatPer100g: draft.fatPer100g,
     baseUnitId: draft.baseUnitId,
     units: draft.units.map((unit) => ({
       unitId: unit.unitId,
@@ -49,6 +53,10 @@ function ingredientFingerprint(draft: IngredientDraft) {
       url: product.url,
       barcode: product.barcode,
       notes: product.notes,
+      caloriesPer100g: product.caloriesPer100g,
+      proteinPer100g: product.proteinPer100g,
+      carbsPer100g: product.carbsPer100g,
+      fatPer100g: product.fatPer100g,
     })),
   };
 }

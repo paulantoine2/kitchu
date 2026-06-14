@@ -10,8 +10,16 @@
     "test": "node --import tsx --test 'lib/**/*.test.ts'",
     "db:generate": "prisma generate",
     "db:migrate": "prisma migrate dev",
+    "db:migrate:deploy": "prisma migrate deploy",
+    "db:status": "prisma migrate status",
     "db:seed": "tsx prisma/seed.ts",
-    "env:pull": "pnpm dlx vercel env pull .env.local --environment=production --yes && node scripts/clean-env-local.mjs",
+    "db:seed:export": "node scripts/export-prod-seed.mjs",
+    "db:seed:sync": "pnpm db:seed:export && pnpm db:seed",
+    "db:local": "prisma dev --name kitchu --detach",
+    "db:local:stop": "prisma dev stop kitchu",
+    "db:local:env": "node scripts/write-local-db-env.mjs",
+    "db:local:setup": "pnpm db:local && pnpm db:local:env && pnpm db:migrate:deploy && pnpm db:seed",
+    "env:pull": "pnpm dlx vercel env pull .env.production.local --environment=production --yes && node scripts/clean-pulled-env.mjs .env.production.local",
     "postinstall": "prisma generate"
   },
   "prisma": {

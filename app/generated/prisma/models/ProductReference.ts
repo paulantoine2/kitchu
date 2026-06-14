@@ -31,6 +31,10 @@ export type ProductReferenceAvgAggregateOutputType = {
   packageQuantity: number | null
   packageToBaseFactor: number | null
   price: number | null
+  caloriesPer100g: number | null
+  proteinPer100g: number | null
+  carbsPer100g: number | null
+  fatPer100g: number | null
 }
 
 export type ProductReferenceSumAggregateOutputType = {
@@ -38,6 +42,10 @@ export type ProductReferenceSumAggregateOutputType = {
   packageQuantity: number | null
   packageToBaseFactor: number | null
   price: number | null
+  caloriesPer100g: number | null
+  proteinPer100g: number | null
+  carbsPer100g: number | null
+  fatPer100g: number | null
 }
 
 export type ProductReferenceMinAggregateOutputType = {
@@ -56,6 +64,10 @@ export type ProductReferenceMinAggregateOutputType = {
   url: string | null
   barcode: string | null
   notes: string | null
+  caloriesPer100g: number | null
+  proteinPer100g: number | null
+  carbsPer100g: number | null
+  fatPer100g: number | null
   createdAt: Date | null
   updatedAt: Date | null
 }
@@ -76,6 +88,10 @@ export type ProductReferenceMaxAggregateOutputType = {
   url: string | null
   barcode: string | null
   notes: string | null
+  caloriesPer100g: number | null
+  proteinPer100g: number | null
+  carbsPer100g: number | null
+  fatPer100g: number | null
   createdAt: Date | null
   updatedAt: Date | null
 }
@@ -96,6 +112,10 @@ export type ProductReferenceCountAggregateOutputType = {
   url: number
   barcode: number
   notes: number
+  caloriesPer100g: number
+  proteinPer100g: number
+  carbsPer100g: number
+  fatPer100g: number
   createdAt: number
   updatedAt: number
   _all: number
@@ -107,6 +127,10 @@ export type ProductReferenceAvgAggregateInputType = {
   packageQuantity?: true
   packageToBaseFactor?: true
   price?: true
+  caloriesPer100g?: true
+  proteinPer100g?: true
+  carbsPer100g?: true
+  fatPer100g?: true
 }
 
 export type ProductReferenceSumAggregateInputType = {
@@ -114,6 +138,10 @@ export type ProductReferenceSumAggregateInputType = {
   packageQuantity?: true
   packageToBaseFactor?: true
   price?: true
+  caloriesPer100g?: true
+  proteinPer100g?: true
+  carbsPer100g?: true
+  fatPer100g?: true
 }
 
 export type ProductReferenceMinAggregateInputType = {
@@ -132,6 +160,10 @@ export type ProductReferenceMinAggregateInputType = {
   url?: true
   barcode?: true
   notes?: true
+  caloriesPer100g?: true
+  proteinPer100g?: true
+  carbsPer100g?: true
+  fatPer100g?: true
   createdAt?: true
   updatedAt?: true
 }
@@ -152,6 +184,10 @@ export type ProductReferenceMaxAggregateInputType = {
   url?: true
   barcode?: true
   notes?: true
+  caloriesPer100g?: true
+  proteinPer100g?: true
+  carbsPer100g?: true
+  fatPer100g?: true
   createdAt?: true
   updatedAt?: true
 }
@@ -172,6 +208,10 @@ export type ProductReferenceCountAggregateInputType = {
   url?: true
   barcode?: true
   notes?: true
+  caloriesPer100g?: true
+  proteinPer100g?: true
+  carbsPer100g?: true
+  fatPer100g?: true
   createdAt?: true
   updatedAt?: true
   _all?: true
@@ -279,6 +319,10 @@ export type ProductReferenceGroupByOutputType = {
   url: string | null
   barcode: string | null
   notes: string | null
+  caloriesPer100g: number | null
+  proteinPer100g: number | null
+  carbsPer100g: number | null
+  fatPer100g: number | null
   createdAt: Date
   updatedAt: Date
   _count: ProductReferenceCountAggregateOutputType | null
@@ -322,6 +366,10 @@ export type ProductReferenceWhereInput = {
   url?: Prisma.StringNullableFilter<"ProductReference"> | string | null
   barcode?: Prisma.StringNullableFilter<"ProductReference"> | string | null
   notes?: Prisma.StringNullableFilter<"ProductReference"> | string | null
+  caloriesPer100g?: Prisma.FloatNullableFilter<"ProductReference"> | number | null
+  proteinPer100g?: Prisma.FloatNullableFilter<"ProductReference"> | number | null
+  carbsPer100g?: Prisma.FloatNullableFilter<"ProductReference"> | number | null
+  fatPer100g?: Prisma.FloatNullableFilter<"ProductReference"> | number | null
   createdAt?: Prisma.DateTimeFilter<"ProductReference"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"ProductReference"> | Date | string
   ingredient?: Prisma.XOR<Prisma.IngredientScalarRelationFilter, Prisma.IngredientWhereInput>
@@ -344,6 +392,10 @@ export type ProductReferenceOrderByWithRelationInput = {
   url?: Prisma.SortOrderInput | Prisma.SortOrder
   barcode?: Prisma.SortOrderInput | Prisma.SortOrder
   notes?: Prisma.SortOrderInput | Prisma.SortOrder
+  caloriesPer100g?: Prisma.SortOrderInput | Prisma.SortOrder
+  proteinPer100g?: Prisma.SortOrderInput | Prisma.SortOrder
+  carbsPer100g?: Prisma.SortOrderInput | Prisma.SortOrder
+  fatPer100g?: Prisma.SortOrderInput | Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   ingredient?: Prisma.IngredientOrderByWithRelationInput
@@ -369,6 +421,10 @@ export type ProductReferenceWhereUniqueInput = Prisma.AtLeast<{
   url?: Prisma.StringNullableFilter<"ProductReference"> | string | null
   barcode?: Prisma.StringNullableFilter<"ProductReference"> | string | null
   notes?: Prisma.StringNullableFilter<"ProductReference"> | string | null
+  caloriesPer100g?: Prisma.FloatNullableFilter<"ProductReference"> | number | null
+  proteinPer100g?: Prisma.FloatNullableFilter<"ProductReference"> | number | null
+  carbsPer100g?: Prisma.FloatNullableFilter<"ProductReference"> | number | null
+  fatPer100g?: Prisma.FloatNullableFilter<"ProductReference"> | number | null
   createdAt?: Prisma.DateTimeFilter<"ProductReference"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"ProductReference"> | Date | string
   ingredient?: Prisma.XOR<Prisma.IngredientScalarRelationFilter, Prisma.IngredientWhereInput>
@@ -391,6 +447,10 @@ export type ProductReferenceOrderByWithAggregationInput = {
   url?: Prisma.SortOrderInput | Prisma.SortOrder
   barcode?: Prisma.SortOrderInput | Prisma.SortOrder
   notes?: Prisma.SortOrderInput | Prisma.SortOrder
+  caloriesPer100g?: Prisma.SortOrderInput | Prisma.SortOrder
+  proteinPer100g?: Prisma.SortOrderInput | Prisma.SortOrder
+  carbsPer100g?: Prisma.SortOrderInput | Prisma.SortOrder
+  fatPer100g?: Prisma.SortOrderInput | Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   _count?: Prisma.ProductReferenceCountOrderByAggregateInput
@@ -419,6 +479,10 @@ export type ProductReferenceScalarWhereWithAggregatesInput = {
   url?: Prisma.StringNullableWithAggregatesFilter<"ProductReference"> | string | null
   barcode?: Prisma.StringNullableWithAggregatesFilter<"ProductReference"> | string | null
   notes?: Prisma.StringNullableWithAggregatesFilter<"ProductReference"> | string | null
+  caloriesPer100g?: Prisma.FloatNullableWithAggregatesFilter<"ProductReference"> | number | null
+  proteinPer100g?: Prisma.FloatNullableWithAggregatesFilter<"ProductReference"> | number | null
+  carbsPer100g?: Prisma.FloatNullableWithAggregatesFilter<"ProductReference"> | number | null
+  fatPer100g?: Prisma.FloatNullableWithAggregatesFilter<"ProductReference"> | number | null
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"ProductReference"> | Date | string
   updatedAt?: Prisma.DateTimeWithAggregatesFilter<"ProductReference"> | Date | string
 }
@@ -437,6 +501,10 @@ export type ProductReferenceCreateInput = {
   url?: string | null
   barcode?: string | null
   notes?: string | null
+  caloriesPer100g?: number | null
+  proteinPer100g?: number | null
+  carbsPer100g?: number | null
+  fatPer100g?: number | null
   createdAt?: Date | string
   updatedAt?: Date | string
   ingredient: Prisma.IngredientCreateNestedOneWithoutProductsInput
@@ -459,6 +527,10 @@ export type ProductReferenceUncheckedCreateInput = {
   url?: string | null
   barcode?: string | null
   notes?: string | null
+  caloriesPer100g?: number | null
+  proteinPer100g?: number | null
+  carbsPer100g?: number | null
+  fatPer100g?: number | null
   createdAt?: Date | string
   updatedAt?: Date | string
 }
@@ -477,6 +549,10 @@ export type ProductReferenceUpdateInput = {
   url?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   barcode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  caloriesPer100g?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  proteinPer100g?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  carbsPer100g?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  fatPer100g?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   ingredient?: Prisma.IngredientUpdateOneRequiredWithoutProductsNestedInput
@@ -499,6 +575,10 @@ export type ProductReferenceUncheckedUpdateInput = {
   url?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   barcode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  caloriesPer100g?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  proteinPer100g?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  carbsPer100g?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  fatPer100g?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -519,6 +599,10 @@ export type ProductReferenceCreateManyInput = {
   url?: string | null
   barcode?: string | null
   notes?: string | null
+  caloriesPer100g?: number | null
+  proteinPer100g?: number | null
+  carbsPer100g?: number | null
+  fatPer100g?: number | null
   createdAt?: Date | string
   updatedAt?: Date | string
 }
@@ -537,6 +621,10 @@ export type ProductReferenceUpdateManyMutationInput = {
   url?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   barcode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  caloriesPer100g?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  proteinPer100g?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  carbsPer100g?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  fatPer100g?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -557,6 +645,10 @@ export type ProductReferenceUncheckedUpdateManyInput = {
   url?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   barcode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  caloriesPer100g?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  proteinPer100g?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  carbsPer100g?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  fatPer100g?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -587,6 +679,10 @@ export type ProductReferenceCountOrderByAggregateInput = {
   url?: Prisma.SortOrder
   barcode?: Prisma.SortOrder
   notes?: Prisma.SortOrder
+  caloriesPer100g?: Prisma.SortOrder
+  proteinPer100g?: Prisma.SortOrder
+  carbsPer100g?: Prisma.SortOrder
+  fatPer100g?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
 }
@@ -596,6 +692,10 @@ export type ProductReferenceAvgOrderByAggregateInput = {
   packageQuantity?: Prisma.SortOrder
   packageToBaseFactor?: Prisma.SortOrder
   price?: Prisma.SortOrder
+  caloriesPer100g?: Prisma.SortOrder
+  proteinPer100g?: Prisma.SortOrder
+  carbsPer100g?: Prisma.SortOrder
+  fatPer100g?: Prisma.SortOrder
 }
 
 export type ProductReferenceMaxOrderByAggregateInput = {
@@ -614,6 +714,10 @@ export type ProductReferenceMaxOrderByAggregateInput = {
   url?: Prisma.SortOrder
   barcode?: Prisma.SortOrder
   notes?: Prisma.SortOrder
+  caloriesPer100g?: Prisma.SortOrder
+  proteinPer100g?: Prisma.SortOrder
+  carbsPer100g?: Prisma.SortOrder
+  fatPer100g?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
 }
@@ -634,6 +738,10 @@ export type ProductReferenceMinOrderByAggregateInput = {
   url?: Prisma.SortOrder
   barcode?: Prisma.SortOrder
   notes?: Prisma.SortOrder
+  caloriesPer100g?: Prisma.SortOrder
+  proteinPer100g?: Prisma.SortOrder
+  carbsPer100g?: Prisma.SortOrder
+  fatPer100g?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
 }
@@ -643,6 +751,10 @@ export type ProductReferenceSumOrderByAggregateInput = {
   packageQuantity?: Prisma.SortOrder
   packageToBaseFactor?: Prisma.SortOrder
   price?: Prisma.SortOrder
+  caloriesPer100g?: Prisma.SortOrder
+  proteinPer100g?: Prisma.SortOrder
+  carbsPer100g?: Prisma.SortOrder
+  fatPer100g?: Prisma.SortOrder
 }
 
 export type ProductReferenceCreateNestedManyWithoutPackageUnitInput = {
@@ -747,6 +859,10 @@ export type ProductReferenceCreateWithoutPackageUnitInput = {
   url?: string | null
   barcode?: string | null
   notes?: string | null
+  caloriesPer100g?: number | null
+  proteinPer100g?: number | null
+  carbsPer100g?: number | null
+  fatPer100g?: number | null
   createdAt?: Date | string
   updatedAt?: Date | string
   ingredient: Prisma.IngredientCreateNestedOneWithoutProductsInput
@@ -767,6 +883,10 @@ export type ProductReferenceUncheckedCreateWithoutPackageUnitInput = {
   url?: string | null
   barcode?: string | null
   notes?: string | null
+  caloriesPer100g?: number | null
+  proteinPer100g?: number | null
+  carbsPer100g?: number | null
+  fatPer100g?: number | null
   createdAt?: Date | string
   updatedAt?: Date | string
 }
@@ -816,6 +936,10 @@ export type ProductReferenceScalarWhereInput = {
   url?: Prisma.StringNullableFilter<"ProductReference"> | string | null
   barcode?: Prisma.StringNullableFilter<"ProductReference"> | string | null
   notes?: Prisma.StringNullableFilter<"ProductReference"> | string | null
+  caloriesPer100g?: Prisma.FloatNullableFilter<"ProductReference"> | number | null
+  proteinPer100g?: Prisma.FloatNullableFilter<"ProductReference"> | number | null
+  carbsPer100g?: Prisma.FloatNullableFilter<"ProductReference"> | number | null
+  fatPer100g?: Prisma.FloatNullableFilter<"ProductReference"> | number | null
   createdAt?: Prisma.DateTimeFilter<"ProductReference"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"ProductReference"> | Date | string
 }
@@ -834,6 +958,10 @@ export type ProductReferenceCreateWithoutIngredientInput = {
   url?: string | null
   barcode?: string | null
   notes?: string | null
+  caloriesPer100g?: number | null
+  proteinPer100g?: number | null
+  carbsPer100g?: number | null
+  fatPer100g?: number | null
   createdAt?: Date | string
   updatedAt?: Date | string
   packageUnit: Prisma.UnitCreateNestedOneWithoutProductReferencesInput
@@ -854,6 +982,10 @@ export type ProductReferenceUncheckedCreateWithoutIngredientInput = {
   url?: string | null
   barcode?: string | null
   notes?: string | null
+  caloriesPer100g?: number | null
+  proteinPer100g?: number | null
+  carbsPer100g?: number | null
+  fatPer100g?: number | null
   createdAt?: Date | string
   updatedAt?: Date | string
 }
@@ -899,6 +1031,10 @@ export type ProductReferenceCreateManyPackageUnitInput = {
   url?: string | null
   barcode?: string | null
   notes?: string | null
+  caloriesPer100g?: number | null
+  proteinPer100g?: number | null
+  carbsPer100g?: number | null
+  fatPer100g?: number | null
   createdAt?: Date | string
   updatedAt?: Date | string
 }
@@ -917,6 +1053,10 @@ export type ProductReferenceUpdateWithoutPackageUnitInput = {
   url?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   barcode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  caloriesPer100g?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  proteinPer100g?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  carbsPer100g?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  fatPer100g?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   ingredient?: Prisma.IngredientUpdateOneRequiredWithoutProductsNestedInput
@@ -937,6 +1077,10 @@ export type ProductReferenceUncheckedUpdateWithoutPackageUnitInput = {
   url?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   barcode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  caloriesPer100g?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  proteinPer100g?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  carbsPer100g?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  fatPer100g?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -956,6 +1100,10 @@ export type ProductReferenceUncheckedUpdateManyWithoutPackageUnitInput = {
   url?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   barcode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  caloriesPer100g?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  proteinPer100g?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  carbsPer100g?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  fatPer100g?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -975,6 +1123,10 @@ export type ProductReferenceCreateManyIngredientInput = {
   url?: string | null
   barcode?: string | null
   notes?: string | null
+  caloriesPer100g?: number | null
+  proteinPer100g?: number | null
+  carbsPer100g?: number | null
+  fatPer100g?: number | null
   createdAt?: Date | string
   updatedAt?: Date | string
 }
@@ -993,6 +1145,10 @@ export type ProductReferenceUpdateWithoutIngredientInput = {
   url?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   barcode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  caloriesPer100g?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  proteinPer100g?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  carbsPer100g?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  fatPer100g?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   packageUnit?: Prisma.UnitUpdateOneRequiredWithoutProductReferencesNestedInput
@@ -1013,6 +1169,10 @@ export type ProductReferenceUncheckedUpdateWithoutIngredientInput = {
   url?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   barcode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  caloriesPer100g?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  proteinPer100g?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  carbsPer100g?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  fatPer100g?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -1032,6 +1192,10 @@ export type ProductReferenceUncheckedUpdateManyWithoutIngredientInput = {
   url?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   barcode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  caloriesPer100g?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  proteinPer100g?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  carbsPer100g?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  fatPer100g?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -1054,6 +1218,10 @@ export type ProductReferenceSelect<ExtArgs extends runtime.Types.Extensions.Inte
   url?: boolean
   barcode?: boolean
   notes?: boolean
+  caloriesPer100g?: boolean
+  proteinPer100g?: boolean
+  carbsPer100g?: boolean
+  fatPer100g?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   ingredient?: boolean | Prisma.IngredientDefaultArgs<ExtArgs>
@@ -1076,6 +1244,10 @@ export type ProductReferenceSelectCreateManyAndReturn<ExtArgs extends runtime.Ty
   url?: boolean
   barcode?: boolean
   notes?: boolean
+  caloriesPer100g?: boolean
+  proteinPer100g?: boolean
+  carbsPer100g?: boolean
+  fatPer100g?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   ingredient?: boolean | Prisma.IngredientDefaultArgs<ExtArgs>
@@ -1098,6 +1270,10 @@ export type ProductReferenceSelectUpdateManyAndReturn<ExtArgs extends runtime.Ty
   url?: boolean
   barcode?: boolean
   notes?: boolean
+  caloriesPer100g?: boolean
+  proteinPer100g?: boolean
+  carbsPer100g?: boolean
+  fatPer100g?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   ingredient?: boolean | Prisma.IngredientDefaultArgs<ExtArgs>
@@ -1120,11 +1296,15 @@ export type ProductReferenceSelectScalar = {
   url?: boolean
   barcode?: boolean
   notes?: boolean
+  caloriesPer100g?: boolean
+  proteinPer100g?: boolean
+  carbsPer100g?: boolean
+  fatPer100g?: boolean
   createdAt?: boolean
   updatedAt?: boolean
 }
 
-export type ProductReferenceOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "ingredientId" | "store" | "brand" | "name" | "imageUrl" | "storageType" | "stockQuantity" | "packageQuantity" | "packageUnitId" | "packageToBaseFactor" | "price" | "url" | "barcode" | "notes" | "createdAt" | "updatedAt", ExtArgs["result"]["productReference"]>
+export type ProductReferenceOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "ingredientId" | "store" | "brand" | "name" | "imageUrl" | "storageType" | "stockQuantity" | "packageQuantity" | "packageUnitId" | "packageToBaseFactor" | "price" | "url" | "barcode" | "notes" | "caloriesPer100g" | "proteinPer100g" | "carbsPer100g" | "fatPer100g" | "createdAt" | "updatedAt", ExtArgs["result"]["productReference"]>
 export type ProductReferenceInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   ingredient?: boolean | Prisma.IngredientDefaultArgs<ExtArgs>
   packageUnit?: boolean | Prisma.UnitDefaultArgs<ExtArgs>
@@ -1160,6 +1340,10 @@ export type $ProductReferencePayload<ExtArgs extends runtime.Types.Extensions.In
     url: string | null
     barcode: string | null
     notes: string | null
+    caloriesPer100g: number | null
+    proteinPer100g: number | null
+    carbsPer100g: number | null
+    fatPer100g: number | null
     createdAt: Date
     updatedAt: Date
   }, ExtArgs["result"]["productReference"]>
@@ -1602,6 +1786,10 @@ export interface ProductReferenceFieldRefs {
   readonly url: Prisma.FieldRef<"ProductReference", 'String'>
   readonly barcode: Prisma.FieldRef<"ProductReference", 'String'>
   readonly notes: Prisma.FieldRef<"ProductReference", 'String'>
+  readonly caloriesPer100g: Prisma.FieldRef<"ProductReference", 'Float'>
+  readonly proteinPer100g: Prisma.FieldRef<"ProductReference", 'Float'>
+  readonly carbsPer100g: Prisma.FieldRef<"ProductReference", 'Float'>
+  readonly fatPer100g: Prisma.FieldRef<"ProductReference", 'Float'>
   readonly createdAt: Prisma.FieldRef<"ProductReference", 'DateTime'>
   readonly updatedAt: Prisma.FieldRef<"ProductReference", 'DateTime'>
 }

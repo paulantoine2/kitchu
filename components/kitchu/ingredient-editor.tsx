@@ -25,6 +25,67 @@ import { standardUnitForPrice, updateProduct } from "@/components/kitchu/utils";
 const KNOWN_STORES = ["Leclerc", "Carrefour", "Intermarché", "Primeur"] as const;
 const knownStoreSet = new Set<string>(KNOWN_STORES);
 
+function MacroFieldsGrid({
+  values,
+  onChange,
+  labelSuffix,
+}: {
+  values: {
+    caloriesPer100g: string;
+    proteinPer100g: string;
+    carbsPer100g: string;
+    fatPer100g: string;
+  };
+  onChange: (field: keyof typeof values, value: string) => void;
+  labelSuffix?: string;
+}) {
+  const suffix = labelSuffix ? ` ${labelSuffix}` : "";
+  return (
+    <div className="grid gap-4 sm:grid-cols-2">
+      <Field label={`Calories (kcal)${suffix}`}>
+        <Input
+          type="number"
+          min={0}
+          step="1"
+          value={values.caloriesPer100g}
+          onChange={(event) => onChange("caloriesPer100g", event.target.value)}
+          placeholder="—"
+        />
+      </Field>
+      <Field label={`Protéines (g)${suffix}`}>
+        <Input
+          type="number"
+          min={0}
+          step="0.1"
+          value={values.proteinPer100g}
+          onChange={(event) => onChange("proteinPer100g", event.target.value)}
+          placeholder="—"
+        />
+      </Field>
+      <Field label={`Glucides (g)${suffix}`}>
+        <Input
+          type="number"
+          min={0}
+          step="0.1"
+          value={values.carbsPer100g}
+          onChange={(event) => onChange("carbsPer100g", event.target.value)}
+          placeholder="—"
+        />
+      </Field>
+      <Field label={`Lipides (g)${suffix}`}>
+        <Input
+          type="number"
+          min={0}
+          step="0.1"
+          value={values.fatPer100g}
+          onChange={(event) => onChange("fatPer100g", event.target.value)}
+          placeholder="—"
+        />
+      </Field>
+    </div>
+  );
+}
+
 export function IngredientEditor({
   draft,
   setDraft,
@@ -161,6 +222,23 @@ export function IngredientEditor({
                 Poids final / poids brut après préparation. Laisse vide pour ×1 — par exemple ×2,25 pour des pâtes cuites.
               </p>
             </Field>
+          )}
+          {(baseUnit?.kind === "MASS" || baseUnit?.kind === "VOLUME") && (
+            <div className="rounded-lg border border-border/70 bg-muted/20 p-4">
+              <h4 className="mb-1 text-sm font-semibold">Valeurs nutritionnelles</h4>
+              <p className="mb-4 text-sm text-muted-foreground">
+                Pour 100 {baseUnit.kind === "MASS" ? "g" : "ml"} — utilisées pour estimer les macros des recettes.
+              </p>
+              <MacroFieldsGrid
+                values={{
+                  caloriesPer100g: draft.caloriesPer100g,
+                  proteinPer100g: draft.proteinPer100g,
+                  carbsPer100g: draft.carbsPer100g,
+                  fatPer100g: draft.fatPer100g,
+                }}
+                onChange={(field, value) => setDraft({ ...draft, [field]: value })}
+              />
+            </div>
           )}
         </div>
       </div>
@@ -301,6 +379,10 @@ export function IngredientEditor({
                     url: "",
                     barcode: "",
                     notes: "",
+                    caloriesPer100g: "",
+                    proteinPer100g: "",
+                    carbsPer100g: "",
+                    fatPer100g: "",
                   },
                 ],
               }))
@@ -499,6 +581,24 @@ export function IngredientEditor({
                     </Field>
                   </div>
                 </div>
+                {(baseUnit?.kind === "MASS" || baseUnit?.kind === "VOLUME") && (
+                  <div className="rounded-lg border border-border/70 bg-muted/20 p-4">
+                    <h4 className="mb-1 text-sm font-semibold">Surcharge nutritionnelle</h4>
+                    <p className="mb-4 text-sm text-muted-foreground">
+                      Optionnel — remplace les valeurs de l&apos;ingrédient pour ce produit.
+                    </p>
+                    <MacroFieldsGrid
+                      labelSuffix="/100g"
+                      values={{
+                        caloriesPer100g: product.caloriesPer100g,
+                        proteinPer100g: product.proteinPer100g,
+                        carbsPer100g: product.carbsPer100g,
+                        fatPer100g: product.fatPer100g,
+                      }}
+                      onChange={(field, value) => updateProduct(setDraft, product.key, { [field]: value })}
+                    />
+                  </div>
+                )}
                 <div className="grid gap-4 sm:grid-cols-2">
                   <Field label="Image">
                     <Input

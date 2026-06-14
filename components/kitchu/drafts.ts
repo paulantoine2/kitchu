@@ -105,6 +105,10 @@ export function blankIngredient(baseUnitId = ""): IngredientDraft {
     imageUrl: "",
     notes: "",
     preparationWeightRatio: "",
+    caloriesPer100g: "",
+    proteinPer100g: "",
+    carbsPer100g: "",
+    fatPer100g: "",
     baseUnitId,
     units: baseUnitId ? [{ key: key(), unitId: baseUnitId, toBaseFactor: "1" }] : [],
     products: [],
@@ -124,6 +128,10 @@ export function ingredientToDraft(
     imageUrl: ingredient.imageUrl ?? "",
     notes: ingredient.notes ?? "",
     preparationWeightRatio: ingredient.preparationWeightRatio?.toString() ?? "",
+    caloriesPer100g: ingredient.caloriesPer100g?.toString() ?? "",
+    proteinPer100g: ingredient.proteinPer100g?.toString() ?? "",
+    carbsPer100g: ingredient.carbsPer100g?.toString() ?? "",
+    fatPer100g: ingredient.fatPer100g?.toString() ?? "",
     baseUnitId: ingredient.baseUnitId,
     units: ingredient.units.map((unit) => ({
       key: unit.id,
@@ -152,6 +160,10 @@ export function ingredientToDraft(
       url: product.url ?? "",
       barcode: product.barcode ?? "",
       notes: product.notes ?? "",
+      caloriesPer100g: product.caloriesPer100g?.toString() ?? "",
+      proteinPer100g: product.proteinPer100g?.toString() ?? "",
+      carbsPer100g: product.carbsPer100g?.toString() ?? "",
+      fatPer100g: product.fatPer100g?.toString() ?? "",
     })),
   };
 }

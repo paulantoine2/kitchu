@@ -103,7 +103,7 @@ export function EntityImage({
   const initial = label.trim().charAt(0).toUpperCase() || "?";
 
   return (
-    <Avatar className={cn(sizeClassName, "rounded-lg after:rounded-lg", className)}>
+    <Avatar className={cn(sizeClassName, "rounded-lg after:rounded-lg after:border-0", className)}>
       {src ? <AvatarImage src={src} alt={label} className="rounded-lg" /> : null}
       <AvatarFallback className="rounded-lg bg-primary/10 font-semibold text-primary">
         {initial}

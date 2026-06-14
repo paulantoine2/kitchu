@@ -81,6 +81,10 @@ export async function saveIngredient(payload: unknown) {
               imageUrl: data.imageUrl,
               notes: data.notes,
               preparationWeightRatio: data.preparationWeightRatio,
+              caloriesPer100g: data.caloriesPer100g,
+              proteinPer100g: data.proteinPer100g,
+              carbsPer100g: data.carbsPer100g,
+              fatPer100g: data.fatPer100g,
               baseUnitId: data.baseUnitId,
             },
           })
@@ -90,6 +94,10 @@ export async function saveIngredient(payload: unknown) {
               imageUrl: data.imageUrl,
               notes: data.notes,
               preparationWeightRatio: data.preparationWeightRatio,
+              caloriesPer100g: data.caloriesPer100g,
+              proteinPer100g: data.proteinPer100g,
+              carbsPer100g: data.carbsPer100g,
+              fatPer100g: data.fatPer100g,
               baseUnitId: data.baseUnitId,
             },
           });
@@ -121,6 +129,10 @@ export async function saveIngredient(payload: unknown) {
             url: product.url,
             barcode: product.barcode,
             notes: product.notes,
+            caloriesPer100g: product.caloriesPer100g,
+            proteinPer100g: product.proteinPer100g,
+            carbsPer100g: product.carbsPer100g,
+            fatPer100g: product.fatPer100g,
           })),
         });
       }

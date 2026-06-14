@@ -58,6 +58,10 @@ import {
   estimateDraftRecipeWeightPerServing,
   formatRecipeWeight,
 } from "@/components/kitchu/recipe-weight";
+import {
+  estimateDraftRecipeMacrosPerServing,
+  formatRecipeMacrosSummary,
+} from "@/components/kitchu/recipe-macros";
 import { move, standardUnitForPrice } from "@/components/kitchu/utils";
 
 const KNOWN_STORES = ["Leclerc", "Carrefour", "Intermarché", "Primeur"] as const;
@@ -171,6 +175,10 @@ export function RecipeEditor({
               url: "",
               barcode: "",
               notes: "",
+              caloriesPer100g: "",
+              proteinPer100g: "",
+              carbsPer100g: "",
+              fatPer100g: "",
             },
           ],
         },
@@ -349,6 +357,8 @@ export function RecipeEditor({
   const dialogProductComplete = isDialogProductComplete(dialogProduct);
   const weightEstimate = estimateDraftRecipeWeightPerServing(draft, ingredients, globalRatios, units);
   const weightPerServingLabel = formatRecipeWeight(weightEstimate.gramsPerServing);
+  const macroEstimate = estimateDraftRecipeMacrosPerServing(draft, ingredients, globalRatios, units);
+  const macroPerServingLabel = formatRecipeMacrosSummary(macroEstimate.perServing);
 
   return (
     <section className="mx-auto flex w-full max-w-3xl animate-fade-in flex-col gap-12 pb-20">
@@ -427,6 +437,12 @@ export function RecipeEditor({
               <p className="text-sm text-muted-foreground">
                 Poids estimé : {weightPerServingLabel}/portion
                 {!weightEstimate.isComplete && " (partiel)"}
+              </p>
+            )}
+            {macroPerServingLabel && (
+              <p className="text-sm text-muted-foreground">
+                Macros estimées : {macroPerServingLabel}/portion
+                {!macroEstimate.isComplete && " (partiel)"}
               </p>
             )}
             {importIssues > 0 && (

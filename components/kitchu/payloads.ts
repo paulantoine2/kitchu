@@ -59,6 +59,11 @@ function productStockInBase(
   return baseQuantity;
 }
 
+function parseOptionalMacro(value: string) {
+  const trimmed = value.trim();
+  return trimmed ? Number(trimmed) : null;
+}
+
 export function toRecipePayload(draft: RecipeDraft) {
   return {
     id: draft.id,
@@ -105,6 +110,10 @@ export function toIngredientPayload(draft: IngredientDraft, units: UnitRecord[],
     preparationWeightRatio: draft.preparationWeightRatio.trim()
       ? Number(draft.preparationWeightRatio)
       : null,
+    caloriesPer100g: parseOptionalMacro(draft.caloriesPer100g),
+    proteinPer100g: parseOptionalMacro(draft.proteinPer100g),
+    carbsPer100g: parseOptionalMacro(draft.carbsPer100g),
+    fatPer100g: parseOptionalMacro(draft.fatPer100g),
     baseUnitId: draft.baseUnitId,
     units: Array.from(payloadUnits.values()),
     products: draft.products
@@ -127,6 +136,10 @@ export function toIngredientPayload(draft: IngredientDraft, units: UnitRecord[],
         url: product.url,
         barcode: product.barcode,
         notes: product.notes,
+        caloriesPer100g: parseOptionalMacro(product.caloriesPer100g),
+        proteinPer100g: parseOptionalMacro(product.proteinPer100g),
+        carbsPer100g: parseOptionalMacro(product.carbsPer100g),
+        fatPer100g: parseOptionalMacro(product.fatPer100g),
       })),
   };
 }

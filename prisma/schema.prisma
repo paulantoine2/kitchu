@@ -60,6 +60,10 @@ model Ingredient {
   imageUrl                 String?
   notes                    String?
   preparationWeightRatio   Float?
+  caloriesPer100g          Float?
+  proteinPer100g           Float?
+  carbsPer100g             Float?
+  fatPer100g               Float?
   baseUnitId               String
   baseUnit    Unit               @relation("IngredientBaseUnit", fields: [baseUnitId], references: [id])
   units       IngredientUnit[]
@@ -98,6 +102,10 @@ model ProductReference {
   url                 String?
   barcode             String?
   notes               String?
+  caloriesPer100g     Float?
+  proteinPer100g      Float?
+  carbsPer100g        Float?
+  fatPer100g          Float?
   ingredient          Ingredient         @relation(fields: [ingredientId], references: [id], onDelete: Cascade)
   packageUnit         Unit               @relation(fields: [packageUnitId], references: [id])
   createdAt           DateTime           @default(now())

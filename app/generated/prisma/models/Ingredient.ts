@@ -28,10 +28,18 @@ export type AggregateIngredient = {
 
 export type IngredientAvgAggregateOutputType = {
   preparationWeightRatio: number | null
+  caloriesPer100g: number | null
+  proteinPer100g: number | null
+  carbsPer100g: number | null
+  fatPer100g: number | null
 }
 
 export type IngredientSumAggregateOutputType = {
   preparationWeightRatio: number | null
+  caloriesPer100g: number | null
+  proteinPer100g: number | null
+  carbsPer100g: number | null
+  fatPer100g: number | null
 }
 
 export type IngredientMinAggregateOutputType = {
@@ -40,6 +48,10 @@ export type IngredientMinAggregateOutputType = {
   imageUrl: string | null
   notes: string | null
   preparationWeightRatio: number | null
+  caloriesPer100g: number | null
+  proteinPer100g: number | null
+  carbsPer100g: number | null
+  fatPer100g: number | null
   baseUnitId: string | null
   createdAt: Date | null
   updatedAt: Date | null
@@ -51,6 +63,10 @@ export type IngredientMaxAggregateOutputType = {
   imageUrl: string | null
   notes: string | null
   preparationWeightRatio: number | null
+  caloriesPer100g: number | null
+  proteinPer100g: number | null
+  carbsPer100g: number | null
+  fatPer100g: number | null
   baseUnitId: string | null
   createdAt: Date | null
   updatedAt: Date | null
@@ -62,6 +78,10 @@ export type IngredientCountAggregateOutputType = {
   imageUrl: number
   notes: number
   preparationWeightRatio: number
+  caloriesPer100g: number
+  proteinPer100g: number
+  carbsPer100g: number
+  fatPer100g: number
   baseUnitId: number
   createdAt: number
   updatedAt: number
@@ -71,10 +91,18 @@ export type IngredientCountAggregateOutputType = {
 
 export type IngredientAvgAggregateInputType = {
   preparationWeightRatio?: true
+  caloriesPer100g?: true
+  proteinPer100g?: true
+  carbsPer100g?: true
+  fatPer100g?: true
 }
 
 export type IngredientSumAggregateInputType = {
   preparationWeightRatio?: true
+  caloriesPer100g?: true
+  proteinPer100g?: true
+  carbsPer100g?: true
+  fatPer100g?: true
 }
 
 export type IngredientMinAggregateInputType = {
@@ -83,6 +111,10 @@ export type IngredientMinAggregateInputType = {
   imageUrl?: true
   notes?: true
   preparationWeightRatio?: true
+  caloriesPer100g?: true
+  proteinPer100g?: true
+  carbsPer100g?: true
+  fatPer100g?: true
   baseUnitId?: true
   createdAt?: true
   updatedAt?: true
@@ -94,6 +126,10 @@ export type IngredientMaxAggregateInputType = {
   imageUrl?: true
   notes?: true
   preparationWeightRatio?: true
+  caloriesPer100g?: true
+  proteinPer100g?: true
+  carbsPer100g?: true
+  fatPer100g?: true
   baseUnitId?: true
   createdAt?: true
   updatedAt?: true
@@ -105,6 +141,10 @@ export type IngredientCountAggregateInputType = {
   imageUrl?: true
   notes?: true
   preparationWeightRatio?: true
+  caloriesPer100g?: true
+  proteinPer100g?: true
+  carbsPer100g?: true
+  fatPer100g?: true
   baseUnitId?: true
   createdAt?: true
   updatedAt?: true
@@ -203,6 +243,10 @@ export type IngredientGroupByOutputType = {
   imageUrl: string | null
   notes: string | null
   preparationWeightRatio: number | null
+  caloriesPer100g: number | null
+  proteinPer100g: number | null
+  carbsPer100g: number | null
+  fatPer100g: number | null
   baseUnitId: string
   createdAt: Date
   updatedAt: Date
@@ -237,6 +281,10 @@ export type IngredientWhereInput = {
   imageUrl?: Prisma.StringNullableFilter<"Ingredient"> | string | null
   notes?: Prisma.StringNullableFilter<"Ingredient"> | string | null
   preparationWeightRatio?: Prisma.FloatNullableFilter<"Ingredient"> | number | null
+  caloriesPer100g?: Prisma.FloatNullableFilter<"Ingredient"> | number | null
+  proteinPer100g?: Prisma.FloatNullableFilter<"Ingredient"> | number | null
+  carbsPer100g?: Prisma.FloatNullableFilter<"Ingredient"> | number | null
+  fatPer100g?: Prisma.FloatNullableFilter<"Ingredient"> | number | null
   baseUnitId?: Prisma.StringFilter<"Ingredient"> | string
   createdAt?: Prisma.DateTimeFilter<"Ingredient"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Ingredient"> | Date | string
@@ -252,6 +300,10 @@ export type IngredientOrderByWithRelationInput = {
   imageUrl?: Prisma.SortOrderInput | Prisma.SortOrder
   notes?: Prisma.SortOrderInput | Prisma.SortOrder
   preparationWeightRatio?: Prisma.SortOrderInput | Prisma.SortOrder
+  caloriesPer100g?: Prisma.SortOrderInput | Prisma.SortOrder
+  proteinPer100g?: Prisma.SortOrderInput | Prisma.SortOrder
+  carbsPer100g?: Prisma.SortOrderInput | Prisma.SortOrder
+  fatPer100g?: Prisma.SortOrderInput | Prisma.SortOrder
   baseUnitId?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
@@ -270,6 +322,10 @@ export type IngredientWhereUniqueInput = Prisma.AtLeast<{
   imageUrl?: Prisma.StringNullableFilter<"Ingredient"> | string | null
   notes?: Prisma.StringNullableFilter<"Ingredient"> | string | null
   preparationWeightRatio?: Prisma.FloatNullableFilter<"Ingredient"> | number | null
+  caloriesPer100g?: Prisma.FloatNullableFilter<"Ingredient"> | number | null
+  proteinPer100g?: Prisma.FloatNullableFilter<"Ingredient"> | number | null
+  carbsPer100g?: Prisma.FloatNullableFilter<"Ingredient"> | number | null
+  fatPer100g?: Prisma.FloatNullableFilter<"Ingredient"> | number | null
   baseUnitId?: Prisma.StringFilter<"Ingredient"> | string
   createdAt?: Prisma.DateTimeFilter<"Ingredient"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Ingredient"> | Date | string
@@ -285,6 +341,10 @@ export type IngredientOrderByWithAggregationInput = {
   imageUrl?: Prisma.SortOrderInput | Prisma.SortOrder
   notes?: Prisma.SortOrderInput | Prisma.SortOrder
   preparationWeightRatio?: Prisma.SortOrderInput | Prisma.SortOrder
+  caloriesPer100g?: Prisma.SortOrderInput | Prisma.SortOrder
+  proteinPer100g?: Prisma.SortOrderInput | Prisma.SortOrder
+  carbsPer100g?: Prisma.SortOrderInput | Prisma.SortOrder
+  fatPer100g?: Prisma.SortOrderInput | Prisma.SortOrder
   baseUnitId?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
@@ -304,6 +364,10 @@ export type IngredientScalarWhereWithAggregatesInput = {
   imageUrl?: Prisma.StringNullableWithAggregatesFilter<"Ingredient"> | string | null
   notes?: Prisma.StringNullableWithAggregatesFilter<"Ingredient"> | string | null
   preparationWeightRatio?: Prisma.FloatNullableWithAggregatesFilter<"Ingredient"> | number | null
+  caloriesPer100g?: Prisma.FloatNullableWithAggregatesFilter<"Ingredient"> | number | null
+  proteinPer100g?: Prisma.FloatNullableWithAggregatesFilter<"Ingredient"> | number | null
+  carbsPer100g?: Prisma.FloatNullableWithAggregatesFilter<"Ingredient"> | number | null
+  fatPer100g?: Prisma.FloatNullableWithAggregatesFilter<"Ingredient"> | number | null
   baseUnitId?: Prisma.StringWithAggregatesFilter<"Ingredient"> | string
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"Ingredient"> | Date | string
   updatedAt?: Prisma.DateTimeWithAggregatesFilter<"Ingredient"> | Date | string
@@ -315,6 +379,10 @@ export type IngredientCreateInput = {
   imageUrl?: string | null
   notes?: string | null
   preparationWeightRatio?: number | null
+  caloriesPer100g?: number | null
+  proteinPer100g?: number | null
+  carbsPer100g?: number | null
+  fatPer100g?: number | null
   createdAt?: Date | string
   updatedAt?: Date | string
   baseUnit: Prisma.UnitCreateNestedOneWithoutBaseIngredientsInput
@@ -329,6 +397,10 @@ export type IngredientUncheckedCreateInput = {
   imageUrl?: string | null
   notes?: string | null
   preparationWeightRatio?: number | null
+  caloriesPer100g?: number | null
+  proteinPer100g?: number | null
+  carbsPer100g?: number | null
+  fatPer100g?: number | null
   baseUnitId: string
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -343,6 +415,10 @@ export type IngredientUpdateInput = {
   imageUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   preparationWeightRatio?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  caloriesPer100g?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  proteinPer100g?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  carbsPer100g?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  fatPer100g?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   baseUnit?: Prisma.UnitUpdateOneRequiredWithoutBaseIngredientsNestedInput
@@ -357,6 +433,10 @@ export type IngredientUncheckedUpdateInput = {
   imageUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   preparationWeightRatio?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  caloriesPer100g?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  proteinPer100g?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  carbsPer100g?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  fatPer100g?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   baseUnitId?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -371,6 +451,10 @@ export type IngredientCreateManyInput = {
   imageUrl?: string | null
   notes?: string | null
   preparationWeightRatio?: number | null
+  caloriesPer100g?: number | null
+  proteinPer100g?: number | null
+  carbsPer100g?: number | null
+  fatPer100g?: number | null
   baseUnitId: string
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -382,6 +466,10 @@ export type IngredientUpdateManyMutationInput = {
   imageUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   preparationWeightRatio?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  caloriesPer100g?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  proteinPer100g?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  carbsPer100g?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  fatPer100g?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -392,6 +480,10 @@ export type IngredientUncheckedUpdateManyInput = {
   imageUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   preparationWeightRatio?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  caloriesPer100g?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  proteinPer100g?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  carbsPer100g?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  fatPer100g?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   baseUnitId?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -413,6 +505,10 @@ export type IngredientCountOrderByAggregateInput = {
   imageUrl?: Prisma.SortOrder
   notes?: Prisma.SortOrder
   preparationWeightRatio?: Prisma.SortOrder
+  caloriesPer100g?: Prisma.SortOrder
+  proteinPer100g?: Prisma.SortOrder
+  carbsPer100g?: Prisma.SortOrder
+  fatPer100g?: Prisma.SortOrder
   baseUnitId?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
@@ -420,6 +516,10 @@ export type IngredientCountOrderByAggregateInput = {
 
 export type IngredientAvgOrderByAggregateInput = {
   preparationWeightRatio?: Prisma.SortOrder
+  caloriesPer100g?: Prisma.SortOrder
+  proteinPer100g?: Prisma.SortOrder
+  carbsPer100g?: Prisma.SortOrder
+  fatPer100g?: Prisma.SortOrder
 }
 
 export type IngredientMaxOrderByAggregateInput = {
@@ -428,6 +528,10 @@ export type IngredientMaxOrderByAggregateInput = {
   imageUrl?: Prisma.SortOrder
   notes?: Prisma.SortOrder
   preparationWeightRatio?: Prisma.SortOrder
+  caloriesPer100g?: Prisma.SortOrder
+  proteinPer100g?: Prisma.SortOrder
+  carbsPer100g?: Prisma.SortOrder
+  fatPer100g?: Prisma.SortOrder
   baseUnitId?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
@@ -439,6 +543,10 @@ export type IngredientMinOrderByAggregateInput = {
   imageUrl?: Prisma.SortOrder
   notes?: Prisma.SortOrder
   preparationWeightRatio?: Prisma.SortOrder
+  caloriesPer100g?: Prisma.SortOrder
+  proteinPer100g?: Prisma.SortOrder
+  carbsPer100g?: Prisma.SortOrder
+  fatPer100g?: Prisma.SortOrder
   baseUnitId?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
@@ -446,6 +554,10 @@ export type IngredientMinOrderByAggregateInput = {
 
 export type IngredientSumOrderByAggregateInput = {
   preparationWeightRatio?: Prisma.SortOrder
+  caloriesPer100g?: Prisma.SortOrder
+  proteinPer100g?: Prisma.SortOrder
+  carbsPer100g?: Prisma.SortOrder
+  fatPer100g?: Prisma.SortOrder
 }
 
 export type IngredientScalarRelationFilter = {
@@ -543,6 +655,10 @@ export type IngredientCreateWithoutBaseUnitInput = {
   imageUrl?: string | null
   notes?: string | null
   preparationWeightRatio?: number | null
+  caloriesPer100g?: number | null
+  proteinPer100g?: number | null
+  carbsPer100g?: number | null
+  fatPer100g?: number | null
   createdAt?: Date | string
   updatedAt?: Date | string
   units?: Prisma.IngredientUnitCreateNestedManyWithoutIngredientInput
@@ -556,6 +672,10 @@ export type IngredientUncheckedCreateWithoutBaseUnitInput = {
   imageUrl?: string | null
   notes?: string | null
   preparationWeightRatio?: number | null
+  caloriesPer100g?: number | null
+  proteinPer100g?: number | null
+  carbsPer100g?: number | null
+  fatPer100g?: number | null
   createdAt?: Date | string
   updatedAt?: Date | string
   units?: Prisma.IngredientUnitUncheckedCreateNestedManyWithoutIngredientInput
@@ -598,6 +718,10 @@ export type IngredientScalarWhereInput = {
   imageUrl?: Prisma.StringNullableFilter<"Ingredient"> | string | null
   notes?: Prisma.StringNullableFilter<"Ingredient"> | string | null
   preparationWeightRatio?: Prisma.FloatNullableFilter<"Ingredient"> | number | null
+  caloriesPer100g?: Prisma.FloatNullableFilter<"Ingredient"> | number | null
+  proteinPer100g?: Prisma.FloatNullableFilter<"Ingredient"> | number | null
+  carbsPer100g?: Prisma.FloatNullableFilter<"Ingredient"> | number | null
+  fatPer100g?: Prisma.FloatNullableFilter<"Ingredient"> | number | null
   baseUnitId?: Prisma.StringFilter<"Ingredient"> | string
   createdAt?: Prisma.DateTimeFilter<"Ingredient"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Ingredient"> | Date | string
@@ -609,6 +733,10 @@ export type IngredientCreateWithoutUnitsInput = {
   imageUrl?: string | null
   notes?: string | null
   preparationWeightRatio?: number | null
+  caloriesPer100g?: number | null
+  proteinPer100g?: number | null
+  carbsPer100g?: number | null
+  fatPer100g?: number | null
   createdAt?: Date | string
   updatedAt?: Date | string
   baseUnit: Prisma.UnitCreateNestedOneWithoutBaseIngredientsInput
@@ -622,6 +750,10 @@ export type IngredientUncheckedCreateWithoutUnitsInput = {
   imageUrl?: string | null
   notes?: string | null
   preparationWeightRatio?: number | null
+  caloriesPer100g?: number | null
+  proteinPer100g?: number | null
+  carbsPer100g?: number | null
+  fatPer100g?: number | null
   baseUnitId: string
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -651,6 +783,10 @@ export type IngredientUpdateWithoutUnitsInput = {
   imageUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   preparationWeightRatio?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  caloriesPer100g?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  proteinPer100g?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  carbsPer100g?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  fatPer100g?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   baseUnit?: Prisma.UnitUpdateOneRequiredWithoutBaseIngredientsNestedInput
@@ -664,6 +800,10 @@ export type IngredientUncheckedUpdateWithoutUnitsInput = {
   imageUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   preparationWeightRatio?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  caloriesPer100g?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  proteinPer100g?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  carbsPer100g?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  fatPer100g?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   baseUnitId?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -677,6 +817,10 @@ export type IngredientCreateWithoutProductsInput = {
   imageUrl?: string | null
   notes?: string | null
   preparationWeightRatio?: number | null
+  caloriesPer100g?: number | null
+  proteinPer100g?: number | null
+  carbsPer100g?: number | null
+  fatPer100g?: number | null
   createdAt?: Date | string
   updatedAt?: Date | string
   baseUnit: Prisma.UnitCreateNestedOneWithoutBaseIngredientsInput
@@ -690,6 +834,10 @@ export type IngredientUncheckedCreateWithoutProductsInput = {
   imageUrl?: string | null
   notes?: string | null
   preparationWeightRatio?: number | null
+  caloriesPer100g?: number | null
+  proteinPer100g?: number | null
+  carbsPer100g?: number | null
+  fatPer100g?: number | null
   baseUnitId: string
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -719,6 +867,10 @@ export type IngredientUpdateWithoutProductsInput = {
   imageUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   preparationWeightRatio?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  caloriesPer100g?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  proteinPer100g?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  carbsPer100g?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  fatPer100g?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   baseUnit?: Prisma.UnitUpdateOneRequiredWithoutBaseIngredientsNestedInput
@@ -732,6 +884,10 @@ export type IngredientUncheckedUpdateWithoutProductsInput = {
   imageUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   preparationWeightRatio?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  caloriesPer100g?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  proteinPer100g?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  carbsPer100g?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  fatPer100g?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   baseUnitId?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -745,6 +901,10 @@ export type IngredientCreateWithoutRecipeItemsInput = {
   imageUrl?: string | null
   notes?: string | null
   preparationWeightRatio?: number | null
+  caloriesPer100g?: number | null
+  proteinPer100g?: number | null
+  carbsPer100g?: number | null
+  fatPer100g?: number | null
   createdAt?: Date | string
   updatedAt?: Date | string
   baseUnit: Prisma.UnitCreateNestedOneWithoutBaseIngredientsInput
@@ -758,6 +918,10 @@ export type IngredientUncheckedCreateWithoutRecipeItemsInput = {
   imageUrl?: string | null
   notes?: string | null
   preparationWeightRatio?: number | null
+  caloriesPer100g?: number | null
+  proteinPer100g?: number | null
+  carbsPer100g?: number | null
+  fatPer100g?: number | null
   baseUnitId: string
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -787,6 +951,10 @@ export type IngredientUpdateWithoutRecipeItemsInput = {
   imageUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   preparationWeightRatio?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  caloriesPer100g?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  proteinPer100g?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  carbsPer100g?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  fatPer100g?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   baseUnit?: Prisma.UnitUpdateOneRequiredWithoutBaseIngredientsNestedInput
@@ -800,6 +968,10 @@ export type IngredientUncheckedUpdateWithoutRecipeItemsInput = {
   imageUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   preparationWeightRatio?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  caloriesPer100g?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  proteinPer100g?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  carbsPer100g?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  fatPer100g?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   baseUnitId?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -813,6 +985,10 @@ export type IngredientCreateManyBaseUnitInput = {
   imageUrl?: string | null
   notes?: string | null
   preparationWeightRatio?: number | null
+  caloriesPer100g?: number | null
+  proteinPer100g?: number | null
+  carbsPer100g?: number | null
+  fatPer100g?: number | null
   createdAt?: Date | string
   updatedAt?: Date | string
 }
@@ -823,6 +999,10 @@ export type IngredientUpdateWithoutBaseUnitInput = {
   imageUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   preparationWeightRatio?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  caloriesPer100g?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  proteinPer100g?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  carbsPer100g?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  fatPer100g?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   units?: Prisma.IngredientUnitUpdateManyWithoutIngredientNestedInput
@@ -836,6 +1016,10 @@ export type IngredientUncheckedUpdateWithoutBaseUnitInput = {
   imageUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   preparationWeightRatio?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  caloriesPer100g?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  proteinPer100g?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  carbsPer100g?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  fatPer100g?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   units?: Prisma.IngredientUnitUncheckedUpdateManyWithoutIngredientNestedInput
@@ -849,6 +1033,10 @@ export type IngredientUncheckedUpdateManyWithoutBaseUnitInput = {
   imageUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   preparationWeightRatio?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  caloriesPer100g?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  proteinPer100g?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  carbsPer100g?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  fatPer100g?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -908,6 +1096,10 @@ export type IngredientSelect<ExtArgs extends runtime.Types.Extensions.InternalAr
   imageUrl?: boolean
   notes?: boolean
   preparationWeightRatio?: boolean
+  caloriesPer100g?: boolean
+  proteinPer100g?: boolean
+  carbsPer100g?: boolean
+  fatPer100g?: boolean
   baseUnitId?: boolean
   createdAt?: boolean
   updatedAt?: boolean
@@ -924,6 +1116,10 @@ export type IngredientSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Ex
   imageUrl?: boolean
   notes?: boolean
   preparationWeightRatio?: boolean
+  caloriesPer100g?: boolean
+  proteinPer100g?: boolean
+  carbsPer100g?: boolean
+  fatPer100g?: boolean
   baseUnitId?: boolean
   createdAt?: boolean
   updatedAt?: boolean
@@ -936,6 +1132,10 @@ export type IngredientSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Ex
   imageUrl?: boolean
   notes?: boolean
   preparationWeightRatio?: boolean
+  caloriesPer100g?: boolean
+  proteinPer100g?: boolean
+  carbsPer100g?: boolean
+  fatPer100g?: boolean
   baseUnitId?: boolean
   createdAt?: boolean
   updatedAt?: boolean
@@ -948,12 +1148,16 @@ export type IngredientSelectScalar = {
   imageUrl?: boolean
   notes?: boolean
   preparationWeightRatio?: boolean
+  caloriesPer100g?: boolean
+  proteinPer100g?: boolean
+  carbsPer100g?: boolean
+  fatPer100g?: boolean
   baseUnitId?: boolean
   createdAt?: boolean
   updatedAt?: boolean
 }
 
-export type IngredientOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "name" | "imageUrl" | "notes" | "preparationWeightRatio" | "baseUnitId" | "createdAt" | "updatedAt", ExtArgs["result"]["ingredient"]>
+export type IngredientOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "name" | "imageUrl" | "notes" | "preparationWeightRatio" | "caloriesPer100g" | "proteinPer100g" | "carbsPer100g" | "fatPer100g" | "baseUnitId" | "createdAt" | "updatedAt", ExtArgs["result"]["ingredient"]>
 export type IngredientInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   baseUnit?: boolean | Prisma.UnitDefaultArgs<ExtArgs>
   units?: boolean | Prisma.Ingredient$unitsArgs<ExtArgs>
@@ -982,6 +1186,10 @@ export type $IngredientPayload<ExtArgs extends runtime.Types.Extensions.Internal
     imageUrl: string | null
     notes: string | null
     preparationWeightRatio: number | null
+    caloriesPer100g: number | null
+    proteinPer100g: number | null
+    carbsPer100g: number | null
+    fatPer100g: number | null
     baseUnitId: string
     createdAt: Date
     updatedAt: Date
@@ -1417,6 +1625,10 @@ export interface IngredientFieldRefs {
   readonly imageUrl: Prisma.FieldRef<"Ingredient", 'String'>
   readonly notes: Prisma.FieldRef<"Ingredient", 'String'>
   readonly preparationWeightRatio: Prisma.FieldRef<"Ingredient", 'Float'>
+  readonly caloriesPer100g: Prisma.FieldRef<"Ingredient", 'Float'>
+  readonly proteinPer100g: Prisma.FieldRef<"Ingredient", 'Float'>
+  readonly carbsPer100g: Prisma.FieldRef<"Ingredient", 'Float'>
+  readonly fatPer100g: Prisma.FieldRef<"Ingredient", 'Float'>
   readonly baseUnitId: Prisma.FieldRef<"Ingredient", 'String'>
   readonly createdAt: Prisma.FieldRef<"Ingredient", 'DateTime'>
   readonly updatedAt: Prisma.FieldRef<"Ingredient", 'DateTime'>

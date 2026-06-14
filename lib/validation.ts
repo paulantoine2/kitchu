@@ -10,6 +10,19 @@ const optionalPositiveNumber = z
   .transform((value) => (value === "" || value == null ? null : value));
 const nonNegativeInteger = z.coerce.number().int().nonnegative().optional().nullable();
 
+const optionalNonNegativeNumber = z
+  .union([z.literal(""), z.coerce.number().nonnegative()])
+  .optional()
+  .nullable()
+  .transform((value) => (value === "" || value == null ? null : value));
+
+export const macroProfileSchema = z.object({
+  caloriesPer100g: optionalNonNegativeNumber,
+  proteinPer100g: optionalNonNegativeNumber,
+  carbsPer100g: optionalNonNegativeNumber,
+  fatPer100g: optionalNonNegativeNumber,
+});
+
 export const unitPayloadSchema = z.object({
   id: z.string().optional().nullable(),
   code: z
@@ -28,6 +41,7 @@ export const ingredientPayloadSchema = z.object({
   imageUrl: optionalText,
   notes: optionalText,
   preparationWeightRatio: optionalPositiveNumber,
+  ...macroProfileSchema.shape,
   baseUnitId: z.string().min(1, "Choisis un type de mesure."),
   units: z
     .array(
@@ -68,6 +82,7 @@ export const ingredientPayloadSchema = z.object({
       url: optionalText,
       barcode: optionalText,
       notes: optionalText,
+      ...macroProfileSchema.shape,
     }),
   ),
 });
