@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useTransition } from "react";
-import { useRouter } from "next/navigation";
+import { useKitchuRouter } from "@/components/use-kitchu-router";
 import { ArrowLeft } from "lucide-react";
 import { deleteIngredient, saveIngredient } from "@/app/actions";
 import { blankIngredient, ingredientToDraft } from "@/components/kitchu/drafts";
@@ -20,7 +20,7 @@ export function IngredientEditorPage({
   initialIngredient,
   ...props
 }: KitchuAppProps & { initialIngredient: IngredientRecord | null }) {
-  const router = useRouter();
+  const router = useKitchuRouter();
   const [isPending, startTransition] = useTransition();
   const { cartOpen, setCartOpen, cart } = useKitchuCart(props);
   const defaultBaseUnitId = canonicalBaseUnitForKind("MASS", props.units)?.id ?? props.units[0]?.id ?? "";

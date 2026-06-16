@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useTransition } from "react";
-import { useRouter } from "next/navigation";
+import { useKitchuRouter } from "@/components/use-kitchu-router";
 import { ArrowLeft } from "lucide-react";
 import { deleteUnit, deleteUnitRatio, saveUnit, saveUnitRatio } from "@/app/actions";
 import { blankUnit, unitToDraft } from "@/components/kitchu/drafts";
@@ -19,7 +19,7 @@ export function UnitEditorPage({
   initialUnit,
   ...props
 }: KitchuAppProps & { initialUnit: UnitRecord | null }) {
-  const router = useRouter();
+  const router = useKitchuRouter();
   const [isPending, startTransition] = useTransition();
   const { cartOpen, setCartOpen, cart } = useKitchuCart(props);
   const [unitDraft, setUnitDraft] = useState<UnitDraft>(() =>

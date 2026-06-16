@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { useState } from "react";
-import { useRouter } from "next/navigation";
+import { useKitchuRouter } from "@/components/use-kitchu-router";
 import { ArrowLeft, Pencil } from "lucide-react";
 import { KitchuShell } from "@/components/kitchu/kitchu-shell";
 import { RecipeView } from "@/components/kitchu/recipe-view";
@@ -14,7 +14,7 @@ export function RecipeDetailPage({
   recipe,
   ...props
 }: KitchuAppProps & { recipe: RecipeRecord }) {
-  const router = useRouter();
+  const router = useKitchuRouter();
   const { cartOpen, setCartOpen, cart, stockByIngredientId } = useKitchuCart(props);
   const [portions, setPortions] = useState(cart.getPortions(recipe.id) ?? 2);
 

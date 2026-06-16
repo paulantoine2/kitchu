@@ -203,7 +203,21 @@ select {
 @media (prefers-reduced-motion: reduce) {
   .animate-fade-up,
   .animate-fade-in,
-  .stagger-children > * {
+  .stagger-children > *,
+  .navigation-progress-bar {
     animation: none;
   }
+}
+
+@keyframes navigation-progress {
+  0% {
+    transform: translateX(-100%);
+  }
+  100% {
+    transform: translateX(400%);
+  }
+}
+
+.navigation-progress-bar {
+  animation: navigation-progress 1s ease-in-out infinite;
 }

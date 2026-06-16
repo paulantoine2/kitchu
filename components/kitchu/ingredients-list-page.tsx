@@ -1,13 +1,13 @@
 "use client";
 
-import { useRouter } from "next/navigation";
+import { useKitchuRouter } from "@/components/use-kitchu-router";
 import { IngredientList } from "@/components/kitchu/ingredient-list";
 import { KitchuShell } from "@/components/kitchu/kitchu-shell";
 import { useKitchuCart } from "@/components/kitchu/use-kitchu-cart";
 import type { KitchuAppProps } from "@/components/kitchu/types";
 
 export function IngredientsListPage(props: KitchuAppProps) {
-  const router = useRouter();
+  const router = useKitchuRouter();
   const { cartOpen, setCartOpen, cart } = useKitchuCart(props);
 
   return (
