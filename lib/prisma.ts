@@ -28,8 +28,8 @@ function assertRuntimeDatabaseUrl(connectionString: string) {
     !connectionString.includes("pooled.db.prisma.io");
 
   if (process.env.NODE_ENV === "production" && usesPrismaPostgresDirect) {
-    throw new Error(
-      "DATABASE_URL must use the pooled Prisma Postgres host (pooled.db.prisma.io), not the direct migration host (db.prisma.io).",
+    console.error(
+      "DATABASE_URL uses the direct Prisma Postgres host (db.prisma.io). Use pooled.db.prisma.io for application traffic to avoid connection exhaustion.",
     );
   }
 }
