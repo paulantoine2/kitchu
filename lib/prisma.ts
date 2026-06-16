@@ -4,6 +4,7 @@ import { loadEnv } from "@/lib/load-env";
 
 loadEnv();
 import { PrismaPg } from "@prisma/adapter-pg";
+import { Pool } from "pg";
 import { PrismaClient } from "@/app/generated/prisma/client";
 
 const GENERATED_CLIENT_PATH = join(process.cwd(), "app/generated/prisma/client.ts");
@@ -21,13 +22,31 @@ function generatedClientMtime() {
   }
 }
 
+function assertRuntimeDatabaseUrl(connectionString: string) {
+  const usesPrismaPostgresDirect =
+    connectionString.includes("db.prisma.io") &&
+    !connectionString.includes("pooled.db.prisma.io");
+
+  if (process.env.NODE_ENV === "production" && usesPrismaPostgresDirect) {
+    throw new Error(
+      "DATABASE_URL must use the pooled Prisma Postgres host (pooled.db.prisma.io), not the direct migration host (db.prisma.io).",
+    );
+  }
+}
+
 function createPrismaClient() {
   const connectionString = process.env.DATABASE_URL;
   if (!connectionString) {
     throw new Error("DATABASE_URL is not set");
   }
 
-  const adapter = new PrismaPg({ connectionString });
+  assertRuntimeDatabaseUrl(connectionString);
+
+  const pool = new Pool({
+    connectionString,
+    max: 1,
+  });
+  const adapter = new PrismaPg(pool);
   return new PrismaClient({ adapter });
 }
 

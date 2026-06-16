@@ -10,6 +10,7 @@ if (existsSync(ENV_FILE)) {
 
 const connectionString =
   process.env.PROD_DATABASE_URL ??
+  process.env.DIRECT_URL ??
   process.env.PRISMA_DATABASE_URL ??
   process.env.DATABASE_URL;
 

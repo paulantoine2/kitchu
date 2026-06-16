@@ -9,6 +9,11 @@ export default defineConfig({
     path: "prisma/migrations",
   },
   datasource: {
-    url: process.env.PRISMA_DATABASE_URL ?? process.env.DATABASE_URL ?? "",
+    // Migrations need a direct connection (db.prisma.io), not the pooled runtime URL.
+    url:
+      process.env.DIRECT_URL ??
+      process.env.PRISMA_DATABASE_URL ??
+      process.env.DATABASE_URL ??
+      "",
   },
 });
