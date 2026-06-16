@@ -22,16 +22,17 @@ function generatedClientMtime() {
   }
 }
 
-function assertRuntimeDatabaseUrl(connectionString: string) {
-  const usesPrismaPostgresDirect =
-    connectionString.includes("db.prisma.io") &&
-    !connectionString.includes("pooled.db.prisma.io");
-
-  if (process.env.NODE_ENV === "production" && usesPrismaPostgresDirect) {
-    console.error(
-      "DATABASE_URL uses the direct Prisma Postgres host (db.prisma.io). Use pooled.db.prisma.io for application traffic to avoid connection exhaustion.",
-    );
+function resolveRuntimeConnectionString(connectionString: string) {
+  // Vercel's Prisma Postgres integration provisions the direct host (db.prisma.io).
+  // Runtime traffic with @prisma/adapter-pg must go through the pooler instead.
+  if (
+    connectionString.includes("@db.prisma.io") &&
+    !connectionString.includes("pooled.db.prisma.io")
+  ) {
+    return connectionString.replace("@db.prisma.io", "@pooled.db.prisma.io");
   }
+
+  return connectionString;
 }
 
 function createPrismaClient() {
@@ -40,10 +41,8 @@ function createPrismaClient() {
     throw new Error("DATABASE_URL is not set");
   }
 
-  assertRuntimeDatabaseUrl(connectionString);
-
   const pool = new Pool({
-    connectionString,
+    connectionString: resolveRuntimeConnectionString(connectionString),
     max: 1,
   });
   const adapter = new PrismaPg(pool);
