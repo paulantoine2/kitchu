@@ -156,6 +156,27 @@ export function formatMacroCalories(calories: number | null) {
   return `${Math.round(calories)} kcal`;
 }
 
+export function formatMacroPer100gCell(value: number | null, kind: "calories" | "grams") {
+  if (value === null || !Number.isFinite(value)) return "—";
+  if (kind === "calories") {
+    return formatMacroCalories(value) ?? "—";
+  }
+  return `${formatNumber(value)} g`;
+}
+
+export function formatMacroProfilePer100gSummary(profile: MacroProfile) {
+  if (!hasMacroProfile(profile)) return null;
+
+  const parts = [
+    formatMacroCalories(profile.caloriesPer100g),
+    profile.proteinPer100g !== null ? `P ${formatNumber(profile.proteinPer100g)} g` : null,
+    profile.carbsPer100g !== null ? `G ${formatNumber(profile.carbsPer100g)} g` : null,
+    profile.fatPer100g !== null ? `L ${formatNumber(profile.fatPer100g)} g` : null,
+  ].filter((part): part is string => Boolean(part));
+
+  return parts.length ? parts.join(" · ") : null;
+}
+
 export function formatRecipeMacrosSummary(totals: MacroTotals | null) {
   if (!totals) return null;
 

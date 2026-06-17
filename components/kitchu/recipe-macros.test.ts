@@ -3,6 +3,7 @@ import { describe, it } from "node:test";
 import {
   effectiveMacroProfile,
   estimateRecipeMacrosPerServing,
+  formatMacroProfilePer100gSummary,
   formatRecipeMacrosSummary,
   hasMacroProfile,
 } from "./recipe-macros";
@@ -204,5 +205,29 @@ describe("formatRecipeMacrosSummary", () => {
       fat: 33.2,
     });
     assert.equal(summary, "745 kcal · P 37 g · G 72,3 g · L 33,2 g");
+  });
+});
+
+describe("formatMacroProfilePer100gSummary", () => {
+  it("formats per-100g profile values", () => {
+    const summary = formatMacroProfilePer100gSummary({
+      caloriesPer100g: 165,
+      proteinPer100g: 31,
+      carbsPer100g: 0,
+      fatPer100g: 3.6,
+    });
+    assert.equal(summary, "165 kcal · P 31 g · G 0 g · L 3,6 g");
+  });
+
+  it("returns null when profile is empty", () => {
+    assert.equal(
+      formatMacroProfilePer100gSummary({
+        caloriesPer100g: null,
+        proteinPer100g: null,
+        carbsPer100g: null,
+        fatPer100g: null,
+      }),
+      null,
+    );
   });
 });
