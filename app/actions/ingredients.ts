@@ -7,29 +7,36 @@ import { effectiveToBaseFactor, globalConversionFactor } from "@/lib/conversions
 import { totalProductStock } from "@/lib/product-storage";
 import { actionError } from "@/app/actions/shared";
 import { supportsIngredientSpecificRatio } from "@/app/actions/unit-helpers";
-import { revalidateKitchuPaths } from "@/lib/revalidate-kitchu";
+import { revalidateIngredientPaths } from "@/lib/revalidate-kitchu";
+import { createPerfTimer, measurePerf } from "@/lib/perf-log";
 
 export async function saveIngredient(payload: unknown) {
+  const timer = createPerfTimer("action:saveIngredient");
   try {
     const data = ingredientPayloadSchema.parse(payload);
+    timer.step("parsed", { ingredientId: data.id ?? "new", productCount: data.products.length });
     const units = data.units.some((unit) => unit.unitId === data.baseUnitId)
       ? data.units
       : [{ unitId: data.baseUnitId, toBaseFactor: null }, ...data.units];
-    const unitRecords = await prisma.unit.findMany({
-      where: {
-        id: {
-          in: Array.from(
-            new Set([
-              data.baseUnitId,
-              ...units.map((unit) => unit.unitId),
-              ...data.products.map((product) => product.packageUnitId),
-            ]),
-          ),
+    const unitRecords = await measurePerf("action:saveIngredient", "unit.findMany.filtered", () =>
+      prisma.unit.findMany({
+        where: {
+          id: {
+            in: Array.from(
+              new Set([
+                data.baseUnitId,
+                ...units.map((unit) => unit.unitId),
+                ...data.products.map((product) => product.packageUnitId),
+              ]),
+            ),
+          },
         },
-      },
-    });
-    const allUnits = await prisma.unit.findMany();
-    const globalRatios = await prisma.unitRatio.findMany();
+      }),
+    );
+    const [allUnits, globalRatios] = await Promise.all([
+      measurePerf("action:saveIngredient", "unit.findMany.all", () => prisma.unit.findMany()),
+      measurePerf("action:saveIngredient", "unitRatio.findMany", () => prisma.unitRatio.findMany()),
+    ]);
     const unitById = new Map(unitRecords.map((unit) => [unit.id, unit]));
     const baseUnit = unitById.get(data.baseUnitId);
 
@@ -72,7 +79,8 @@ export async function saveIngredient(payload: unknown) {
       };
     });
 
-    const ingredient = await prisma.$transaction(async (tx) => {
+    const ingredient = await measurePerf("action:saveIngredient", "transaction", () =>
+      prisma.$transaction(async (tx) => {
       const saved = data.id
         ? await tx.ingredient.update({
             where: { id: data.id },
@@ -138,19 +146,23 @@ export async function saveIngredient(payload: unknown) {
       }
 
       return saved;
-    });
+      }),
+    );
 
-    const fullIngredient = await prisma.ingredient.findUniqueOrThrow({
+    const fullIngredient = await measurePerf("action:saveIngredient", "ingredient.findUniqueOrThrow", () =>
+      prisma.ingredient.findUniqueOrThrow({
       where: { id: ingredient.id },
       include: {
         baseUnit: true,
         units: { include: { unit: true }, orderBy: { unit: { name: "asc" } } },
         products: { include: { packageUnit: true }, orderBy: { updatedAt: "desc" } },
       },
-    });
+    }),
+    );
 
     const totalStock = totalProductStock(fullIngredient.products);
-    revalidateKitchuPaths({ ingredientId: fullIngredient.id });
+    revalidateIngredientPaths(fullIngredient.id);
+    timer.end("done", { ingredientId: fullIngredient.id });
     return {
       ok: true as const,
       id: fullIngredient.id,
@@ -160,6 +172,7 @@ export async function saveIngredient(payload: unknown) {
       },
     };
   } catch (error) {
+    timer.end("error", { message: error instanceof Error ? error.message : "unknown" });
     return actionError(error);
   }
 }
@@ -207,7 +220,7 @@ export async function createIngredientQuick(
         products: { include: { packageUnit: true }, orderBy: { updatedAt: "desc" } },
       },
     });
-    revalidateKitchuPaths({ ingredientId: ingredient.id });
+    revalidateIngredientPaths(ingredient.id);
     return {
       ok: true as const,
       ingredient: {
@@ -260,7 +273,7 @@ export async function addIngredientUnitQuick(ingredientId: string, unitCode: str
       },
     });
 
-    revalidateKitchuPaths({ ingredientId: id });
+    revalidateIngredientPaths(id);
     return {
       ok: true as const,
       ingredient: {
@@ -278,7 +291,7 @@ export async function addIngredientUnitQuick(ingredientId: string, unitCode: str
 export async function deleteIngredient(id: string) {
   try {
     await prisma.ingredient.delete({ where: { id } });
-    revalidateKitchuPaths({ ingredientId: id });
+    revalidateIngredientPaths(id);
     return { ok: true as const };
   } catch {
     return {

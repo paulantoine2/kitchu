@@ -1,5 +1,14 @@
 import { revalidatePath } from "next/cache";
 
+export function revalidateIngredientPaths(ingredientId?: string) {
+  revalidatePath("/ingredients");
+  revalidatePath("/ingredients/new");
+
+  if (ingredientId) {
+    revalidatePath(`/ingredients/${ingredientId}`);
+  }
+}
+
 export function revalidateKitchuPaths({
   recipeId,
   ingredientId,
