@@ -6,6 +6,7 @@ import { unitPayloadSchema, unitRatioPayloadSchema } from "@/lib/validation";
 import { globalConversionFactor } from "@/lib/conversions";
 import { actionError } from "@/app/actions/shared";
 import { revalidateKitchuPaths } from "@/lib/revalidate-kitchu";
+import { revalidateReferenceData } from "@/lib/reference-data";
 import {
   isHardcodedMeasurementUnit,
   normalizeConfigurableUnitRatio,
@@ -37,6 +38,7 @@ export async function saveUnit(payload: unknown) {
           },
         });
 
+    revalidateReferenceData();
     revalidateKitchuPaths({ unitId: unit.id });
     return { ok: true as const, id: unit.id };
   } catch (error) {
@@ -65,6 +67,7 @@ export async function deleteUnit(id: string, options?: { force?: boolean }) {
     } else {
       await prisma.unit.delete({ where: { id: unitId } });
     }
+    revalidateReferenceData();
     revalidateKitchuPaths({ unitId });
     return { ok: true as const };
   } catch {
@@ -129,6 +132,7 @@ export async function saveUnitRatio(payload: unknown) {
           },
         });
 
+    revalidateReferenceData();
     revalidateKitchuPaths();
     return { ok: true as const, id: saved.id };
   } catch (error) {
@@ -139,6 +143,7 @@ export async function saveUnitRatio(payload: unknown) {
 export async function deleteUnitRatio(id: string) {
   try {
     await prisma.unitRatio.delete({ where: { id } });
+    revalidateReferenceData();
     revalidateKitchuPaths();
     return { ok: true as const };
   } catch (error) {

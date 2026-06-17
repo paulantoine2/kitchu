@@ -1,6 +1,7 @@
 import { prisma } from "@/lib/prisma";
 import { totalProductStock } from "@/lib/product-storage";
 import { createPerfTimer, measurePerf } from "@/lib/perf-log";
+import { getReferenceData } from "@/lib/reference-data";
 import type { CartRecipeEntry, IngredientRecord, RecipeRecord, UnitRatioRecord, UnitRecord } from "@/components/kitchu/types";
 
 const ingredientInclude = {
@@ -108,13 +109,8 @@ async function fetchCartContext() {
 export async function fetchIngredientPageData(ingredientId?: string): Promise<KitchuData> {
   const timer = createPerfTimer("data:fetchIngredientPageData", { ingredientId: ingredientId ?? "new" });
 
-  const [units, globalRatios, cartContext, ingredient] = await Promise.all([
-    measurePerf("data:fetchIngredientPageData", "unit.findMany", () =>
-      prisma.unit.findMany({ orderBy: [{ kind: "asc" }, { name: "asc" }] }),
-    ),
-    measurePerf("data:fetchIngredientPageData", "unitRatio.findMany", () =>
-      prisma.unitRatio.findMany({ orderBy: { updatedAt: "desc" } }),
-    ),
+  const [{ units, globalRatios }, cartContext, ingredient] = await Promise.all([
+    measurePerf("data:fetchIngredientPageData", "referenceData", () => getReferenceData()),
     fetchCartContext(),
     ingredientId
       ? measurePerf("data:fetchIngredientPageData", "ingredient.findUnique", () =>
@@ -153,13 +149,8 @@ export async function fetchIngredientPageData(ingredientId?: string): Promise<Ki
 export async function fetchKitchuData(): Promise<KitchuData> {
   const timer = createPerfTimer("data:fetchKitchuData");
 
-  const [units, globalRatios, ingredients, recipes, cartItems] = await Promise.all([
-    measurePerf("data:fetchKitchuData", "unit.findMany", () =>
-      prisma.unit.findMany({ orderBy: [{ kind: "asc" }, { name: "asc" }] }),
-    ),
-    measurePerf("data:fetchKitchuData", "unitRatio.findMany", () =>
-      prisma.unitRatio.findMany({ orderBy: { updatedAt: "desc" } }),
-    ),
+  const [{ units, globalRatios }, ingredients, recipes, cartItems] = await Promise.all([
+    measurePerf("data:fetchKitchuData", "referenceData", () => getReferenceData()),
     measurePerf("data:fetchKitchuData", "ingredient.findMany", () =>
       prisma.ingredient.findMany({
         orderBy: { name: "asc" },

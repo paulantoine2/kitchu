@@ -9,6 +9,7 @@ import { actionError } from "@/app/actions/shared";
 import { supportsIngredientSpecificRatio } from "@/app/actions/unit-helpers";
 import { revalidateIngredientPaths } from "@/lib/revalidate-kitchu";
 import { createPerfTimer, measurePerf } from "@/lib/perf-log";
+import { getReferenceData } from "@/lib/reference-data";
 
 export async function saveIngredient(payload: unknown) {
   const timer = createPerfTimer("action:saveIngredient");
@@ -18,26 +19,11 @@ export async function saveIngredient(payload: unknown) {
     const units = data.units.some((unit) => unit.unitId === data.baseUnitId)
       ? data.units
       : [{ unitId: data.baseUnitId, toBaseFactor: null }, ...data.units];
-    const unitRecords = await measurePerf("action:saveIngredient", "unit.findMany.filtered", () =>
-      prisma.unit.findMany({
-        where: {
-          id: {
-            in: Array.from(
-              new Set([
-                data.baseUnitId,
-                ...units.map((unit) => unit.unitId),
-                ...data.products.map((product) => product.packageUnitId),
-              ]),
-            ),
-          },
-        },
-      }),
-    );
-    const [allUnits, globalRatios] = await Promise.all([
-      measurePerf("action:saveIngredient", "unit.findMany.all", () => prisma.unit.findMany()),
-      measurePerf("action:saveIngredient", "unitRatio.findMany", () => prisma.unitRatio.findMany()),
+    const [, { units: allUnits, globalRatios }] = await Promise.all([
+      measurePerf("action:saveIngredient", "db.connect", () => prisma.$queryRaw`SELECT 1`),
+      measurePerf("action:saveIngredient", "referenceData", () => getReferenceData()),
     ]);
-    const unitById = new Map(unitRecords.map((unit) => [unit.id, unit]));
+    const unitById = new Map(allUnits.map((unit) => [unit.id, unit]));
     const baseUnit = unitById.get(data.baseUnitId);
 
     if (!baseUnit) {
@@ -186,10 +172,7 @@ export async function createIngredientQuick(
     const requestedCodes = Array.from(
       new Set([options?.baseUnitCode ?? "g", ...(options?.unitCodes ?? [])].filter(Boolean)),
     );
-    const [allUnits, globalRatios] = await Promise.all([
-      prisma.unit.findMany(),
-      prisma.unitRatio.findMany(),
-    ]);
+    const { units: allUnits, globalRatios } = await getReferenceData();
     const unitByCode = new Map(allUnits.map((unit) => [unit.code, unit]));
     const baseUnit = unitByCode.get(options?.baseUnitCode ?? "g") ?? unitByCode.get("g");
     if (!baseUnit) {
@@ -239,11 +222,10 @@ export async function addIngredientUnitQuick(ingredientId: string, unitCode: str
   try {
     const id = z.string().min(1).parse(ingredientId);
     const code = z.string().trim().min(1).parse(unitCode);
-    const [unit, ingredient, allUnits, globalRatios] = await Promise.all([
+    const [{ units: allUnits, globalRatios }, unit, ingredient] = await Promise.all([
+      getReferenceData(),
       prisma.unit.findUnique({ where: { code } }),
       prisma.ingredient.findUnique({ where: { id }, include: { baseUnit: true } }),
-      prisma.unit.findMany(),
-      prisma.unitRatio.findMany(),
     ]);
     if (!unit) {
       return { ok: false as const, error: `Unité « ${code} » introuvable.` };
