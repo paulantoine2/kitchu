@@ -215,9 +215,9 @@ function RecipeIngredientItem({
     <Collapsible>
       <Item size="sm" className={itemClassName}>
         {compactRow}
-        <CollapsibleContent className="flex flex-col">
+        <CollapsibleContent className="flex min-w-0 flex-col overflow-hidden">
           <Separator className="opacity-60" />
-          <ItemFooter className="p-3 pt-2.5">
+          <ItemFooter className="min-w-0 p-3 pt-2.5">
             <IngredientPurchaseDetails estimate={estimate} ingredient={item.ingredient} applyStock={applyStock} />
           </ItemFooter>
         </CollapsibleContent>
@@ -461,7 +461,7 @@ function IngredientPurchaseDetails({
     .sort((left, right) => compareProductStoragePriority(left.storageType, right.storageType));
 
   return (
-    <div className="flex w-full flex-col gap-2">
+    <div className="flex w-full min-w-0 flex-col gap-2">
       {hasInventoryContext && (
         <div className="flex flex-wrap gap-2">
           {estimate.stockAvailable > 0 && (
@@ -509,15 +509,15 @@ function IngredientPurchaseDetails({
           )}
         </div>
       )}
-      <div className="grid gap-2 sm:grid-cols-3">
-        <div className="rounded-md bg-muted/40 px-2.5 py-2">
-          <p className="text-[11px] font-semibold uppercase tracking-wide text-muted-foreground">Théorique</p>
+      <div className="grid min-w-0 grid-cols-3 gap-2">
+        <div className="min-w-0 rounded-md bg-muted/40 px-2.5 py-2">
+          <p className="truncate text-[11px] font-semibold uppercase tracking-wide text-muted-foreground">Théorique</p>
           <p className="mt-0.5 text-sm font-semibold">
             {estimate.theoreticalPrice === null ? "—" : formatCurrency(estimate.theoreticalPrice)}
           </p>
         </div>
-        <div className="rounded-md bg-muted/40 px-2.5 py-2">
-          <p className="text-[11px] font-semibold uppercase tracking-wide text-muted-foreground">Achat réel</p>
+        <div className="min-w-0 rounded-md bg-muted/40 px-2.5 py-2">
+          <p className="truncate text-[11px] font-semibold uppercase tracking-wide text-muted-foreground">Achat réel</p>
           <p className="mt-0.5 text-sm font-semibold">
             {coveredByInventory
               ? formatCurrency(0)
@@ -526,8 +526,8 @@ function IngredientPurchaseDetails({
                 : "—"}
           </p>
         </div>
-        <div className="rounded-md bg-muted/40 px-2.5 py-2">
-          <p className="text-[11px] font-semibold uppercase tracking-wide text-muted-foreground">Restes</p>
+        <div className="min-w-0 rounded-md bg-muted/40 px-2.5 py-2">
+          <p className="truncate text-[11px] font-semibold uppercase tracking-wide text-muted-foreground">Restes</p>
           <p className="mt-0.5 text-sm font-semibold">
             {coveredByInventory
               ? "—"
@@ -554,7 +554,7 @@ function IngredientPurchaseDetails({
                 key={productItem.product.id}
                 href={productHref(ingredient.id, productItem.product.id)}
                 className={cn(
-                  "flex w-full items-center gap-3 rounded-xl bg-muted/50 p-3 transition-colors duration-150 hover:bg-accent",
+                  "flex w-full min-w-0 items-center gap-3 overflow-hidden rounded-xl bg-muted/50 p-3 transition-colors duration-150 hover:bg-accent",
                   entityLinkClassName,
                 )}
               >
@@ -564,10 +564,10 @@ function IngredientPurchaseDetails({
                   size="sm"
                   className="shrink-0"
                 />
-                <div className="min-w-0 flex-1">
-                  <div className="flex flex-wrap items-center gap-2">
-                    <span className="truncate font-semibold leading-snug">{productLabel}</span>
-                    <ProductStorageBadge storageType={productItem.product.storageType} className="text-[10px]" />
+                <div className="min-w-0 flex-1 overflow-hidden">
+                  <div className="flex min-w-0 items-center gap-2">
+                    <span className="min-w-0 truncate font-semibold leading-snug">{productLabel}</span>
+                    <ProductStorageBadge storageType={productItem.product.storageType} className="shrink-0 text-[10px]" />
                   </div>
                   {productMeta && (
                     <p className="mt-0.5 truncate text-xs text-muted-foreground">{productMeta}</p>
