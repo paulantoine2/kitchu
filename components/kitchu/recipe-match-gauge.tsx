@@ -66,7 +66,7 @@ export function RecipeMatchGauge({
   const theme = matchGaugeTheme(clampedPercent);
   const showPercentSign = gaugeSize > 44;
   const displayTextClass =
-    gaugeSize <= 44 ? "text-[11px]" : gaugeSize <= 56 ? "text-base" : "text-lg";
+    gaugeSize <= 44 ? "text-sm" : gaugeSize <= 56 ? "text-base" : "text-lg";
   const shellPadding = framed ? (gaugeSize <= 44 ? 3 : 4) : compact ? 2 : 0;
   const outerSize = gaugeSize + shellPadding * 2;
 
@@ -76,9 +76,8 @@ export function RecipeMatchGauge({
         "relative isolate flex shrink-0 items-center justify-center overflow-hidden",
         framed &&
           cn(
-            "rounded-full border border-white/50 bg-white/20 shadow-[0_8px_24px_-4px_oklch(0_0_0/28%)] backdrop-blur-2xl backdrop-saturate-150",
-            "ring-1 ring-inset ring-white/30",
-            "dark:border-white/20 dark:bg-white/10 dark:shadow-[0_8px_24px_-4px_oklch(0_0_0/55%)] dark:ring-white/15",
+            "rounded-full border border-white/25 bg-black/55 shadow-[0_8px_24px_-4px_oklch(0_0_0/35%)] backdrop-blur-md backdrop-saturate-150",
+            "ring-1 ring-inset ring-white/15",
           ),
         compact &&
           !framed &&
@@ -95,7 +94,7 @@ export function RecipeMatchGauge({
       {framed && (
         <div
           aria-hidden
-          className="pointer-events-none absolute inset-0 rounded-full bg-gradient-to-br from-white/55 via-white/15 to-white/5 dark:from-white/20 dark:via-white/5 dark:to-transparent"
+          className="pointer-events-none absolute inset-0 rounded-full bg-gradient-to-br from-white/10 via-transparent to-black/25"
         />
       )}
       <div
@@ -122,7 +121,7 @@ export function RecipeMatchGauge({
             fill="none"
             stroke="currentColor"
             strokeWidth={strokeWidth}
-            className={framed ? "text-white/25 dark:text-white/15" : "text-foreground/10 dark:text-foreground/20"}
+            className={framed ? "text-white/30" : "text-foreground/10 dark:text-foreground/20"}
           />
           <circle
             cx={center}
@@ -140,13 +139,20 @@ export function RecipeMatchGauge({
         <span
           className={cn(
             "absolute inset-0 flex items-center justify-center font-semibold tabular-nums leading-none tracking-tight",
-            framed ? "text-foreground drop-shadow-[0_1px_1px_oklch(1_0_0/35%)]" : "text-foreground",
+            framed ? "text-white drop-shadow-[0_1px_2px_oklch(0_0_0/45%)]" : "text-foreground",
             displayTextClass,
           )}
         >
           {displayPercent}
           {showPercentSign && (
-            <span className="ml-px text-[0.58em] font-medium text-muted-foreground">%</span>
+            <span
+              className={cn(
+                "ml-px text-[0.58em] font-medium",
+                framed ? "text-white/75" : "text-muted-foreground",
+              )}
+            >
+              %
+            </span>
           )}
         </span>
       </div>

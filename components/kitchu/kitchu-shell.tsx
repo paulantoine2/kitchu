@@ -6,6 +6,7 @@ import { Search, ShoppingCart } from "lucide-react";
 import { ModeToggle } from "@/components/mode-toggle";
 import { CartSheet } from "@/components/kitchu/cart-sheet";
 import type { CartPurchaseSummary } from "@/components/kitchu/cart";
+import { KitchuLogo } from "@/components/kitchu/kitchu-logo";
 import { KitchuSearchProvider, useKitchuSearch } from "@/components/kitchu/kitchu-search";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -70,12 +71,8 @@ function KitchuHeader({
     <header className="sticky top-0 z-20 border-b border-border/60 bg-background/85 backdrop-blur-md">
       <div className="mx-auto max-w-[1120px] min-w-0 px-4 py-3 lg:px-8">
         <div className="flex min-w-0 items-center gap-3 md:gap-4">
-          <Link href="/recipes" className="shrink-0 rounded-lg overflow-hidden">
-            <img
-              src="/kitchu-logo.png"
-              alt="Kitchu"
-              className="h-8 w-auto md:h-9"
-            />
+          <Link href="/recipes" className="shrink-0 rounded-lg">
+            <KitchuLogo />
           </Link>
 
           <nav className="hidden shrink-0 items-center md:flex">

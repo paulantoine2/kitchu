@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { useMemo, useState, useSyncExternalStore } from "react";
-import { Clock, Flame, Plus, Scale, Search, ShoppingCart } from "lucide-react";
+import { Plus, Search, ShoppingCart } from "lucide-react";
 import { ingredientImageUrl, recipeImageUrl } from "@/components/kitchu/images";
 import {
   computeRecipeListMatch,
@@ -13,11 +13,10 @@ import { RecipeMatchGauge } from "@/components/kitchu/recipe-match-gauge";
 import { useKitchuSearch } from "@/components/kitchu/kitchu-search";
 import {
   estimateRecipeWeightPerServing,
-  formatRecipeWeight,
 } from "@/components/kitchu/recipe-weight";
 import {
   estimateRecipeMacrosPerServing,
-  formatMacroCalories,
+  type MacroTotals,
 } from "@/components/kitchu/recipe-macros";
 import type { CartRecipeEntry, IngredientRecord, RecipeRecord, UnitRatioRecord, UnitRecord } from "@/components/kitchu/types";
 import { EntityImage, Field, PartialEstimateIndicator, type PartialEstimateSeverity } from "@/components/kitchu/ui/shared";
@@ -41,7 +40,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { NativeSelect, NativeSelectOption } from "@/components/ui/native-select";
 import { Switch } from "@/components/ui/switch";
-import { cn, formatCurrency } from "@/lib/utils";
+import { cn, formatCurrency, formatNumber } from "@/lib/utils";
 
 const DEFAULT_LIST_PORTIONS = 2;
 
@@ -123,13 +122,42 @@ function PriceModeToggle({
   );
 }
 
+const RECIPE_CARD_MACRO_COLUMNS: { key: keyof MacroTotals; label: string; kind: "calories" | "grams" }[] = [
+  { key: "calories", label: "kcal", kind: "calories" },
+  { key: "protein", label: "Prot.", kind: "grams" },
+  { key: "carbs", label: "Gluc.", kind: "grams" },
+  { key: "fat", label: "Lip.", kind: "grams" },
+];
+
+function formatRecipeCardMacroValue(value: number, kind: "calories" | "grams") {
+  if (!Number.isFinite(value) || value <= 0) return "—";
+  if (kind === "calories") return String(Math.round(value));
+  return `${formatNumber(value)} g`;
+}
+
+function RecipeCardMacroRow({ macros }: { macros: MacroTotals }) {
+  return (
+    <div className="grid min-w-0 grid-cols-4 divide-x divide-border/50 overflow-hidden rounded-lg bg-muted/30">
+      {RECIPE_CARD_MACRO_COLUMNS.map((column) => (
+        <div key={column.key} className="min-w-0 px-2 py-1.5">
+          <p className="truncate text-[10px] font-medium uppercase tracking-wide text-muted-foreground">
+            {column.label}
+          </p>
+          <p className="mt-0.5 truncate text-xs font-semibold tabular-nums">
+            {formatRecipeCardMacroValue(macros[column.key], column.kind)}
+          </p>
+        </div>
+      ))}
+    </div>
+  );
+}
+
 function RecipeCard({
   recipe,
   pricePerPortion,
   priceComplete,
-  weightPerPortion,
   weightComplete,
-  macroCaloriesPerPortion,
+  macrosPerPortion,
   macroComplete,
   matchPercent,
   isInCart,
@@ -138,18 +166,20 @@ function RecipeCard({
   recipe: RecipeRecord;
   pricePerPortion: number | null;
   priceComplete: boolean;
-  weightPerPortion: string | null;
   weightComplete: boolean;
-  macroCaloriesPerPortion: string | null;
+  macrosPerPortion: MacroTotals | null;
   macroComplete: boolean;
   matchPercent: number | null;
   isInCart: boolean;
   onAddToCart: () => void;
 }) {
   const imageUrl = recipeImageUrl(recipe);
-  const totalMinutes = (recipe.prepMinutes ?? 0) + (recipe.cookMinutes ?? 0);
   const estimateSeverity: PartialEstimateSeverity | null =
-    pricePerPortion === null ? "critical" : !priceComplete ? "minor" : null;
+    pricePerPortion === null
+      ? "critical"
+      : !priceComplete || !weightComplete || !macroComplete
+        ? "minor"
+        : null;
 
   const cartButtonLabel = isInCart ? "Ajuster le panier" : "Ajouter au panier";
 
@@ -182,48 +212,35 @@ function RecipeCard({
               </div>
             )
           )}
+          {estimateSeverity && (
+            <div className="absolute bottom-3 left-3 flex size-7 shrink-0 items-center justify-center rounded-full bg-background/90 shadow-soft ring-1 ring-foreground/10 backdrop-blur-sm">
+              <PartialEstimateIndicator
+                severity={estimateSeverity}
+                compact
+                className={
+                  estimateSeverity === "critical"
+                    ? "text-destructive opacity-100"
+                    : "text-amber-600 opacity-100 dark:text-amber-400"
+                }
+              />
+            </div>
+          )}
         </div>
         <CardHeader className="gap-1.5 pt-4 pb-0">
           <CardTitle className="line-clamp-1 text-lg leading-snug">{recipe.name}</CardTitle>
-          {(totalMinutes > 0 || weightPerPortion || macroCaloriesPerPortion) && (
-            <div className="flex flex-wrap items-center gap-1.5">
-              {totalMinutes > 0 && (
-                <Badge variant="secondary">
-                  <Clock data-icon="inline-start" />
-                  {totalMinutes} min
-                </Badge>
-              )}
-              {weightPerPortion && (
-                <Badge variant="secondary">
-                  <Scale data-icon="inline-start" />
-                  {weightPerPortion}/portion
-                  {!weightComplete && " · partiel"}
-                </Badge>
-              )}
-              {macroCaloriesPerPortion && (
-                <Badge variant="secondary">
-                  <Flame data-icon="inline-start" />
-                  {macroCaloriesPerPortion}/portion
-                  {!macroComplete && " · partiel"}
-                </Badge>
-              )}
-            </div>
-          )}
+          {macrosPerPortion && <RecipeCardMacroRow macros={macrosPerPortion} />}
         </CardHeader>
         <CardContent className="pt-3 pb-0">
-          <div className="flex items-baseline gap-1.5">
-            <p className="text-xl font-semibold tabular-nums tracking-tight">
-              {pricePerPortion !== null ? (
-                <>
-                  {formatCurrency(pricePerPortion)}
-                  <span className="text-sm font-medium text-muted-foreground">/portion</span>
-                </>
-              ) : (
-                "—"
-              )}
-            </p>
-            <PartialEstimateIndicator severity={estimateSeverity} compact />
-          </div>
+          <p className="text-xl font-semibold tabular-nums tracking-tight">
+            {pricePerPortion !== null ? (
+              <>
+                {formatCurrency(pricePerPortion)}
+                <span className="text-sm font-medium text-muted-foreground">/portion</span>
+              </>
+            ) : (
+              "—"
+            )}
+          </p>
         </CardContent>
       </Link>
       <CardFooter className="border-t-0 bg-transparent px-(--card-spacing) pt-0 pb-4">
@@ -268,7 +285,7 @@ export function RecipeList({
   const { query } = useKitchuSearch();
   const [selectedIngredients, setSelectedIngredients] = useState<IngredientRecord[]>([]);
   const [sortMode, setSortMode] = useState<RecipeListSortMode>("match");
-  const [priceMode, setPriceMode] = useState<RecipeListPriceMode>("purchase");
+  const [priceMode, setPriceMode] = useState<RecipeListPriceMode>("theoretical");
   const [listPortions, setListPortions] = useState(DEFAULT_LIST_PORTIONS);
   const comboboxAnchorRef = useComboboxAnchor();
   const portionCount = Math.max(1, listPortions);
@@ -312,9 +329,8 @@ export function RecipeList({
       {
         perPortion: number | null;
         isComplete: boolean;
-        weightPerPortion: string | null;
         weightComplete: boolean;
-        macroCaloriesPerPortion: string | null;
+        macrosPerPortion: MacroTotals | null;
         macroComplete: boolean;
         matchPercent: number | null;
       }
@@ -350,9 +366,8 @@ export function RecipeList({
       entries.set(recipe.id, {
         perPortion: price.perPortion,
         isComplete: price.isComplete,
-        weightPerPortion: formatRecipeWeight(weight.gramsPerServing),
         weightComplete: weight.isComplete,
-        macroCaloriesPerPortion: formatMacroCalories(macros.perServing?.calories ?? null),
+        macrosPerPortion: macros.perServing,
         macroComplete: macros.isComplete,
         matchPercent: match.percent,
       });
@@ -531,9 +546,8 @@ export function RecipeList({
                 recipe={recipe}
                 pricePerPortion={cardData?.perPortion ?? null}
                 priceComplete={cardData?.isComplete ?? false}
-                weightPerPortion={cardData?.weightPerPortion ?? null}
                 weightComplete={cardData?.weightComplete ?? true}
-                macroCaloriesPerPortion={cardData?.macroCaloriesPerPortion ?? null}
+                macrosPerPortion={cardData?.macrosPerPortion ?? null}
                 macroComplete={cardData?.macroComplete ?? true}
                 matchPercent={cardData?.matchPercent ?? null}
                 isInCart={isInCart(recipe.id)}
