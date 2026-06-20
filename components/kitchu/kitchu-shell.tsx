@@ -69,7 +69,7 @@ function KitchuHeader({
 
   return (
     <header className="sticky top-0 z-20 border-b border-border/60 bg-background/85 backdrop-blur-md">
-      <div className="mx-auto max-w-[1120px] min-w-0 px-4 py-3 lg:px-8">
+      <div className="mx-auto max-w-page min-w-0 px-4 py-3 lg:px-8">
         <div className="flex min-w-0 items-center gap-3 md:gap-4">
           <Link href="/recipes" className="shrink-0 rounded-lg">
             <KitchuLogo />

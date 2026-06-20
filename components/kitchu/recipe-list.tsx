@@ -152,6 +152,13 @@ function RecipeCardMacroRow({ macros }: { macros: MacroTotals }) {
   );
 }
 
+function recipeCardTitleText(recipe: RecipeRecord) {
+  const name = recipe.name.trim();
+  const description = recipe.description?.trim();
+  if (!description) return name;
+  return `${name} — ${description}`;
+}
+
 function RecipeCard({
   recipe,
   pricePerPortion,
@@ -227,15 +234,17 @@ function RecipeCard({
           )}
         </div>
         <CardHeader className="gap-1.5 pt-4 pb-0">
-          <CardTitle className="line-clamp-1 text-lg leading-snug">{recipe.name}</CardTitle>
+          <CardTitle className="line-clamp-2 min-h-12 text-lg leading-snug">
+            {recipeCardTitleText(recipe)}
+          </CardTitle>
           {macrosPerPortion && <RecipeCardMacroRow macros={macrosPerPortion} />}
         </CardHeader>
         <CardContent className="pt-3 pb-0">
-          <p className="text-xl font-semibold tabular-nums tracking-tight">
+          <p className="text-2xl font-semibold tabular-nums tracking-tight">
             {pricePerPortion !== null ? (
               <>
                 {formatCurrency(pricePerPortion)}
-                <span className="text-sm font-medium text-muted-foreground">/portion</span>
+                <span className="text-base font-medium text-muted-foreground">/portion</span>
               </>
             ) : (
               "—"
@@ -421,7 +430,7 @@ export function RecipeList({
   }, [filteredRecipes, cardDataByRecipeId, sortMode]);
 
   return (
-    <div className="mx-auto max-w-[1120px] animate-fade-in px-4 py-8 lg:px-8">
+    <div className="mx-auto max-w-page animate-fade-in px-4 py-8 lg:px-8">
       <div className="mb-8 flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
         <div>
           <h1 className="text-2xl font-semibold tracking-tight md:text-3xl">Recettes</h1>
@@ -478,8 +487,13 @@ export function RecipeList({
               <ComboboxList>
                 {(option) => (
                   <ComboboxItem key={option.id} value={option}>
-                    <div className="flex min-w-0 items-center gap-3">
-                      <EntityImage src={ingredientImageUrl(option)} label={option.name} size="sm" />
+                    <div className="flex min-w-0 items-center gap-2">
+                      <EntityImage
+                        src={ingredientImageUrl(option)}
+                        label={option.name}
+                        size="xs"
+                        className="shrink-0"
+                      />
                       <span className="truncate font-medium">{option.name}</span>
                     </div>
                   </ComboboxItem>

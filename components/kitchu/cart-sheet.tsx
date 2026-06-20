@@ -228,7 +228,7 @@ export function CartSheet({
                         size="sm"
                         className={cn("flex-col items-stretch gap-0 p-0", isMissing && "border-amber-500/40")}
                       >
-                        <div className="flex min-w-0 items-start gap-3 p-3">
+                        <div className="grid min-w-0 grid-cols-[auto_minmax(0,1fr)_auto] items-start gap-3 p-3">
                           <ItemMedia variant="image" className="!size-14 !rounded-lg">
                             <EntityImage
                               src={line.product.imageUrl ?? line.ingredientImageUrl}
@@ -236,12 +236,12 @@ export function CartSheet({
                               size="sm"
                             />
                           </ItemMedia>
-                          <ItemContent className="min-w-0 flex-1 overflow-hidden">
-                            <div className="flex min-w-0 items-center gap-2">
-                              <span className="min-w-0 truncate text-base font-medium">{line.product.name}</span>
+                          <ItemContent className="min-w-0 overflow-hidden">
+                            <p className="truncate text-base font-medium">{line.product.name}</p>
+                            <div className="mt-0.5 flex min-w-0 items-center gap-2">
                               <ProductStorageBadge storageType={line.product.storageType} className="shrink-0 text-[10px]" />
                             </div>
-                            <p className="mt-0.5 text-xs text-muted-foreground">{line.ingredientName}</p>
+                            <p className="mt-0.5 truncate text-xs text-muted-foreground">{line.ingredientName}</p>
                             {isMissing ? (
                               <p className="mt-2 text-sm text-amber-700 dark:text-amber-400">
                                 {line.missingReason}

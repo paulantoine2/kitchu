@@ -40,6 +40,7 @@
   --sidebar-ring: oklch(0.56 0.135 152 / 40%);
   --shadow-soft: 0 1px 2px oklch(0.3 0.02 145 / 5%), 0 4px 12px -2px oklch(0.3 0.02 145 / 6%);
   --shadow-lifted: 0 2px 4px oklch(0.3 0.02 145 / 5%), 0 12px 28px -8px oklch(0.3 0.02 145 / 12%);
+  --page-max-width: 75rem;
 }
 
 @theme inline {
@@ -86,6 +87,7 @@
   --radius-4xl: calc(var(--radius) * 2.6);
   --shadow-soft: var(--shadow-soft);
   --shadow-lifted: var(--shadow-lifted);
+  --max-width-page: var(--page-max-width);
   --animate-fade-up: kitchu-fade-up 0.5s cubic-bezier(0.21, 0.47, 0.32, 0.98) both;
   --animate-fade-in: kitchu-fade-in 0.4s ease-out both;
 }

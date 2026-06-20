@@ -520,20 +520,20 @@ export function RecipeEditor({
                             }
                           }}
                         >
-                          <ComboboxInput placeholder="Chercher un ingrédient" showClear />
-                          <ComboboxContent>
+                          <ComboboxInput className="w-full" placeholder="Chercher un ingrédient" showClear />
+                          <ComboboxContent className="min-w-80">
                             <ComboboxEmpty>Aucun ingrédient trouvé.</ComboboxEmpty>
                             <ComboboxList>
                               {(option) => (
                                 <ComboboxItem key={option.id} value={option}>
-                                  <div className="flex min-w-0 items-center gap-3">
-                                    <EntityImage src={ingredientImageUrl(option)} label={option.name} size="sm" />
-                                    <div className="min-w-0">
-                                      <div className="truncate font-semibold">{option.name}</div>
-                                      <div className="truncate text-xs text-muted-foreground">
-                                        {usableUnitsForIngredient(option, units, globalRatios).length} unités
-                                      </div>
-                                    </div>
+                                  <div className="flex min-w-0 items-center gap-2">
+                                    <EntityImage
+                                      src={ingredientImageUrl(option)}
+                                      label={option.name}
+                                      size="xs"
+                                      className="shrink-0"
+                                    />
+                                    <span className="truncate font-medium">{option.name}</span>
                                   </div>
                                 </ComboboxItem>
                               )}
@@ -733,7 +733,7 @@ export function RecipeEditor({
         open={Boolean(ingredientDialog)}
         onOpenChange={(open) => !open && requestCloseIngredientDialog()}
       >
-        <DialogContent>
+        <DialogContent className="sm:max-w-2xl">
           {ingredientDialog && (
             <>
               <DialogHeader>
@@ -753,9 +753,9 @@ export function RecipeEditor({
                     <div className="truncate font-semibold">{ingredientDialog.draft.name || "Nouvel ingrédient"}</div>
                     <div className="mt-1 flex flex-wrap gap-2">
                       {ingredientDialog.suggestedUnitCode && (
-                        <Badge className="bg-card">Unité HelloFresh {ingredientDialog.suggestedUnitCode}</Badge>
+                        <Badge variant="outline">Unité HelloFresh {ingredientDialog.suggestedUnitCode}</Badge>
                       )}
-                      {dialogBaseUnit && <Badge className="bg-card">Base {dialogBaseUnit.symbol}</Badge>}
+                      {dialogBaseUnit && <Badge variant="outline">Base {dialogBaseUnit.symbol}</Badge>}
                     </div>
                   </div>
                 </div>

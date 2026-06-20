@@ -174,7 +174,7 @@ export function IngredientList({
   );
 
   return (
-    <div className="mx-auto max-w-[1120px] animate-fade-in px-4 py-8 lg:px-8">
+    <div className="mx-auto max-w-page animate-fade-in px-4 py-8 lg:px-8">
       <div className="mb-8 flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
         <div>
           <h1 className="text-2xl font-semibold tracking-tight md:text-3xl">Ingrédients</h1>

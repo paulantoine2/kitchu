@@ -95,7 +95,7 @@ export function KitchuPageLoading({
       onCartPortionsChange={() => {}}
       onCartRemoveRecipe={() => {}}
     >
-      <div className="mx-auto max-w-[1120px] px-4 py-8 lg:px-8">
+      <div className="mx-auto max-w-page px-4 py-8 lg:px-8">
         {variant === "grid" && <GridSkeleton />}
         {variant === "table" && <TableSkeleton />}
         {variant === "detail" && <DetailSkeleton />}

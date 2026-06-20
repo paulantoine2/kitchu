@@ -33,7 +33,7 @@ export function KitchuNotFoundPage() {
       onCartPortionsChange={() => {}}
       onCartRemoveRecipe={() => {}}
     >
-      <div className="mx-auto flex max-w-[1120px] flex-1 items-center justify-center px-4 py-16 lg:px-8">
+      <div className="mx-auto flex max-w-page flex-1 items-center justify-center px-4 py-16 lg:px-8">
         <Empty className="max-w-md animate-fade-up rounded-2xl bg-card py-12 shadow-soft ring-1 ring-foreground/[0.05] dark:ring-foreground/[0.08]">
           <EmptyHeader>
             <EmptyMedia variant="icon">

@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { useState, type ReactNode } from "react";
-import { ChevronDown, Clock, Flame, Scale, ShoppingCart } from "lucide-react";
+import { Beef, ChevronDown, Clock, Droplet, Flame, Scale, ShoppingCart, Wheat } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
@@ -150,90 +150,68 @@ function RecipeIngredientItem({
   item,
   quantity,
   estimate,
-  showPurchaseDetails,
   applyStock,
-  isPrimaryIngredientRow,
 }: {
   item: RecipeIngredientRow;
   quantity: ReturnType<typeof formatIngredientQuantity>;
   estimate: RecipeCostEstimate | undefined;
-  showPurchaseDetails: boolean;
   applyStock: boolean;
-  isPrimaryIngredientRow: boolean;
 }) {
   const purchaseSummary = estimate ? compactPurchaseSummary(estimate, applyStock) : null;
 
-  const compactRow = (
-    <div className="flex items-start gap-3 p-3">
+  const rowBody = (
+    <>
       <ItemMedia variant="image">
         <EntityImage src={ingredientImageUrl(item.ingredient)} label={item.ingredient.name} size="xs" />
       </ItemMedia>
       <ItemContent className="min-w-0 flex-1">
-        <div className="flex flex-wrap items-start justify-between gap-x-3 gap-y-1">
+        <div className="flex items-start justify-between gap-x-3 gap-y-1">
           <div className="min-w-0 flex-1">
-            <ItemTitle className="text-base font-semibold">
-              {isPrimaryIngredientRow ? (
-                <Link href={ingredientHref(item.ingredient.id)} className={entityLinkClassName}>
-                  {item.ingredient.name}
-                </Link>
-              ) : (
-                <span>{item.ingredient.name}</span>
-              )}
+            <ItemTitle className="w-full min-w-0 text-base font-semibold">
+              <span>{item.ingredient.name}</span>
             </ItemTitle>
-            {purchaseSummary && (
-              <p className="mt-0.5 text-sm text-muted-foreground">{purchaseSummary.label}</p>
-            )}
+            <p className="mt-0.5 min-h-5 text-sm leading-5 text-muted-foreground">
+              {purchaseSummary?.label ?? "\u00A0"}
+            </p>
           </div>
           <div className="flex shrink-0 items-start gap-2">
-            <div className="flex flex-col items-end gap-0.5 text-right">
-              <span className="text-sm font-semibold text-primary">{quantity.primary}</span>
-              {quantity.secondary && (
-                <span className="text-xs text-muted-foreground">{quantity.secondary}</span>
-              )}
-              {purchaseSummary?.price && (
-                <span className="text-sm font-semibold tabular-nums">{purchaseSummary.price}</span>
-              )}
+            <div className="flex min-h-[3.75rem] flex-col items-end justify-start gap-0.5 text-right">
+              <span className="text-sm font-semibold leading-5 text-primary">{quantity.primary}</span>
+              <span className="min-h-4 text-xs leading-4 text-muted-foreground">
+                {quantity.secondary ?? "\u00A0"}
+              </span>
+              <span className="min-h-5 text-sm font-semibold leading-5 tabular-nums">
+                {purchaseSummary?.price ?? "\u00A0"}
+              </span>
             </div>
-            {showPurchaseDetails && estimate && (
-              <CollapsibleTrigger
-                render={
-                  <Button
-                    variant="ghost"
-                    size="icon-sm"
-                    className="shrink-0"
-                    aria-label={`Détail d'achat pour ${item.ingredient.name}`}
-                  />
-                }
-              >
-                <ChevronDown />
-              </CollapsibleTrigger>
-            )}
+            <ChevronDown className="mt-0.5 size-4 shrink-0 text-muted-foreground transition-transform group-data-[panel-open]/trigger:rotate-180" />
           </div>
         </div>
         {item.note && <ItemDescription className="mt-1">{item.note}</ItemDescription>}
       </ItemContent>
-    </div>
+    </>
   );
 
   const itemClassName =
-    "flex-col items-stretch gap-0 rounded-xl p-0 transition-colors duration-150 hover:bg-muted/40";
-
-  if (!showPurchaseDetails || !estimate) {
-    return (
-      <Item size="sm" className={itemClassName}>
-        {compactRow}
-      </Item>
-    );
-  }
+    "w-full flex-col items-stretch gap-0 rounded-none border-0 p-0";
 
   return (
-    <Collapsible>
+    <Collapsible className="w-full">
       <Item size="sm" className={itemClassName}>
-        {compactRow}
+        <CollapsibleTrigger
+          className="group/trigger flex w-full cursor-pointer items-start gap-3 px-5 py-2 text-left outline-none transition-colors hover:bg-muted/40 focus-visible:ring-2 focus-visible:ring-ring/50 data-[panel-open]:bg-muted/30"
+          aria-label={`Détail d'achat pour ${item.ingredient.name}`}
+        >
+          {rowBody}
+        </CollapsibleTrigger>
         <CollapsibleContent className="flex min-w-0 flex-col overflow-hidden">
           <Separator className="opacity-60" />
-          <ItemFooter className="min-w-0 p-3 pt-2.5">
-            <IngredientPurchaseDetails estimate={estimate} ingredient={item.ingredient} applyStock={applyStock} />
+          <ItemFooter className="w-full min-w-0 flex-col items-stretch px-5 py-2.5">
+            {estimate ? (
+              <IngredientPurchaseDetails estimate={estimate} ingredient={item.ingredient} applyStock={applyStock} />
+            ) : (
+              <p className="text-sm text-muted-foreground">Aucun détail d&apos;achat disponible.</p>
+            )}
           </ItemFooter>
         </CollapsibleContent>
       </Item>
@@ -241,29 +219,52 @@ function RecipeIngredientItem({
   );
 }
 
+function formatMacroGrams(value: number) {
+  return `${formatNumber(value)} g`;
+}
+
 function RecipeStatItem({
   value,
   label,
   detail,
   icon,
+  compact = false,
 }: {
   value: ReactNode;
   label: string;
   detail?: ReactNode;
   icon?: ReactNode;
+  compact?: boolean;
 }) {
   return (
-    <div className="flex min-h-28 flex-col justify-between gap-4 rounded-2xl bg-card p-4 shadow-soft ring-1 ring-foreground/[0.05] dark:ring-foreground/[0.08]">
-      <div className="flex items-start justify-between gap-3">
-        <p className="text-xs font-medium text-muted-foreground">{label}</p>
+    <div
+      className={cn(
+        "flex flex-col justify-between rounded-2xl bg-card shadow-soft ring-1 ring-foreground/[0.05] dark:ring-foreground/[0.08]",
+        compact ? "min-h-0 gap-2 p-3" : "min-h-28 gap-4 p-4",
+      )}
+    >
+      <div className="flex items-start justify-between gap-2">
+        <p className="truncate text-[11px] font-medium text-muted-foreground">{label}</p>
         {icon && (
-          <div className="flex size-9 shrink-0 items-center justify-center rounded-full bg-accent text-accent-foreground">
+          <div
+            className={cn(
+              "flex shrink-0 items-center justify-center rounded-full bg-accent text-accent-foreground",
+              compact ? "size-7 [&_svg]:size-3.5" : "size-9",
+            )}
+          >
             {icon}
           </div>
         )}
       </div>
       <div>
-        <p className="text-xl font-semibold tabular-nums tracking-tight sm:text-2xl">{value}</p>
+        <p
+          className={cn(
+            "font-semibold tabular-nums tracking-tight",
+            compact ? "text-base" : "text-xl sm:text-2xl",
+          )}
+        >
+          {value}
+        </p>
         {detail && <p className="mt-1 text-sm text-muted-foreground">{detail}</p>}
       </div>
     </div>
@@ -377,11 +378,7 @@ function RecipeSidebarCosts({
   const purchasePerPortion = purchaseTotal !== null ? purchaseTotal / portionCount : null;
 
   return (
-    <RecipeSidebarPanel
-      title="Coûts estimés"
-      description={`Pour ${portionCount} portion${portionCount > 1 ? "s" : ""}`}
-      unified={unified}
-    >
+    <RecipeSidebarPanel title="Coûts estimés" unified={unified}>
       <div className="grid grid-cols-2 gap-3">
         <div className="min-w-0 rounded-xl bg-muted/40 px-4 py-3">
           <p className="text-[11px] font-semibold uppercase tracking-wide text-muted-foreground">Coût théorique</p>
@@ -424,14 +421,42 @@ function RecipeSidebarCosts({
   );
 }
 
-function RecipeStepsSection({ sortedSteps }: { sortedSteps: RecipeRecord["steps"] }) {
+function RecipeStepsSection({
+  sortedSteps,
+  totalMinutes,
+  prepMinutes,
+  cookMinutes,
+}: {
+  sortedSteps: RecipeRecord["steps"];
+  totalMinutes: number;
+  prepMinutes: number | null;
+  cookMinutes: number | null;
+}) {
+  const durationDetail =
+    prepMinutes !== null && cookMinutes !== null
+      ? `${prepMinutes} prépa · ${cookMinutes} cuisson`
+      : null;
+
   return (
     <section className="flex flex-col gap-4">
-      <div>
-        <h2 className="text-xl font-semibold tracking-tight">Étapes</h2>
-        <p className="mt-1 text-sm text-muted-foreground">
-          {sortedSteps.length} étape{sortedSteps.length > 1 ? "s" : ""} de préparation
-        </p>
+      <div className="flex flex-wrap items-start justify-between gap-3">
+        <div>
+          <h2 className="text-xl font-semibold tracking-tight">Étapes</h2>
+          <p className="mt-1 text-sm text-muted-foreground">
+            {sortedSteps.length} étape{sortedSteps.length > 1 ? "s" : ""} de préparation
+          </p>
+        </div>
+        {totalMinutes > 0 && (
+          <div className="flex items-center gap-2.5 rounded-xl bg-muted/40 px-3 py-2">
+            <div className="flex size-8 shrink-0 items-center justify-center rounded-full bg-accent text-accent-foreground">
+              <Clock className="size-4" />
+            </div>
+            <div>
+              <p className="text-sm font-semibold tabular-nums">{totalMinutes} min</p>
+              {durationDetail && <p className="text-xs text-muted-foreground">{durationDetail}</p>}
+            </div>
+          </div>
+        )}
       </div>
       <div className="flex flex-col divide-y divide-border/50 rounded-2xl bg-card shadow-soft ring-1 ring-foreground/[0.05] dark:ring-foreground/[0.08]">
         {sortedSteps.map((step, index) => (
@@ -490,10 +515,12 @@ function IngredientPurchaseDetails({
               href={productHref(ingredient.id, product.id)}
               className="inline-flex"
             >
-              <Badge variant="outline" className="gap-1.5 transition-colors hover:border-primary/40 hover:bg-primary/5">
-                <ProductStorageBadge storageType={product.storageType} className="text-[10px]" />
-                {formatNumber(product.stockQuantity!)} {estimate.baseUnit.symbol}
-                {product.name.trim() ? ` · ${product.name}` : ""}
+              <Badge variant="outline" className="max-w-full gap-1.5 transition-colors hover:border-primary/40 hover:bg-primary/5">
+                <ProductStorageBadge storageType={product.storageType} className="shrink-0 text-[10px]" />
+                <span className="truncate">
+                  {formatNumber(product.stockQuantity!)} {estimate.baseUnit.symbol}
+                  {product.name.trim() ? ` · ${product.name}` : ""}
+                </span>
               </Badge>
             </Link>
           ))}
@@ -524,21 +551,11 @@ function IngredientPurchaseDetails({
           )}
         </div>
       )}
-      <div className="grid min-w-0 grid-cols-3 gap-2">
+      <div className="grid min-w-0 grid-cols-2 gap-2">
         <div className="min-w-0 rounded-md bg-muted/40 px-2.5 py-2">
           <p className="truncate text-[11px] font-semibold uppercase tracking-wide text-muted-foreground">Théorique</p>
           <p className="mt-0.5 text-sm font-semibold">
             {estimate.theoreticalPrice === null ? "—" : formatCurrency(estimate.theoreticalPrice)}
-          </p>
-        </div>
-        <div className="min-w-0 rounded-md bg-muted/40 px-2.5 py-2">
-          <p className="truncate text-[11px] font-semibold uppercase tracking-wide text-muted-foreground">Achat réel</p>
-          <p className="mt-0.5 text-sm font-semibold">
-            {coveredByInventory
-              ? formatCurrency(0)
-              : purchasePlan
-                ? formatCurrency(purchasePlan.totalPrice)
-                : "—"}
           </p>
         </div>
         <div className="min-w-0 rounded-md bg-muted/40 px-2.5 py-2">
@@ -574,7 +591,7 @@ function IngredientPurchaseDetails({
                 key={productItem.product.id}
                 href={productHref(ingredient.id, productItem.product.id)}
                 className={cn(
-                  "flex w-full min-w-0 items-center gap-3 overflow-hidden rounded-xl bg-muted/50 p-3 transition-colors duration-150 hover:bg-accent",
+                  "grid w-full min-w-0 grid-cols-[auto_minmax(0,1fr)_auto] items-start gap-3 overflow-hidden rounded-xl bg-muted/50 p-3 transition-colors duration-150 hover:bg-accent",
                   entityLinkClassName,
                 )}
               >
@@ -584,15 +601,18 @@ function IngredientPurchaseDetails({
                   size="sm"
                   className="shrink-0"
                 />
-                <div className="min-w-0 flex-1 overflow-hidden">
-                  <div className="flex min-w-0 items-center gap-2">
-                    <span className="min-w-0 truncate font-semibold leading-snug">{productLabel}</span>
-                    <ProductStorageBadge storageType={productItem.product.storageType} className="shrink-0 text-[10px]" />
+                <div className="min-w-0 overflow-hidden">
+                  <p className="truncate font-semibold leading-snug">{productLabel}</p>
+                  <div className="mt-0.5 flex min-w-0 items-center gap-2">
+                    <ProductStorageBadge
+                      storageType={productItem.product.storageType}
+                      className="shrink-0 text-[10px]"
+                    />
+                    {productMeta && (
+                      <p className="min-w-0 truncate text-xs text-muted-foreground">{productMeta}</p>
+                    )}
                   </div>
-                  {productMeta && (
-                    <p className="mt-0.5 truncate text-xs text-muted-foreground">{productMeta}</p>
-                  )}
-                  <p className="mt-1 text-sm font-medium">
+                  <p className="mt-1 truncate text-sm font-medium">
                     {productItem.count}× {formatNumber(productItem.product.packageQuantity)}{" "}
                     {productItem.product.packageUnit.symbol}
                   </p>
@@ -625,7 +645,6 @@ function RecipeIngredientsPanel({
   units,
   globalRatios,
   applyStock,
-  weightEstimate,
   unified,
 }: {
   sortedIngredients: RecipeIngredientRow[];
@@ -634,56 +653,21 @@ function RecipeIngredientsPanel({
   units: UnitRecord[];
   globalRatios: UnitRatioRecord[];
   applyStock: boolean;
-  weightEstimate: ReturnType<typeof estimateRecipeWeightPerServing>;
   unified?: boolean;
 }) {
   const estimateByIngredientId = new Map(estimates.map((estimate) => [estimate.ingredientId, estimate]));
-  const firstRowByIngredientId = new Map<string, string>();
-  for (const item of sortedIngredients) {
-    if (!firstRowByIngredientId.has(item.ingredientId)) {
-      firstRowByIngredientId.set(item.ingredientId, item.id);
-    }
-  }
-
-  const portionCount = Math.max(1, portions);
-  const hasEstimates = estimates.length > 0;
-  const totalWeightLabel =
-    weightEstimate.gramsPerServing !== null
-      ? formatRecipeWeight(weightEstimate.gramsPerServing * portionCount)
-      : null;
-  const weightPerServingLabel = formatRecipeWeight(weightEstimate.gramsPerServing);
 
   return (
-    <RecipeSidebarPanel
-      title="Ingrédients"
-      description={[
-        `Quantités pour ${portionCount} portion${portionCount > 1 ? "s" : ""}`,
-        weightPerServingLabel
-          ? ` — poids estimé ${totalWeightLabel}${portionCount > 1 ? ` (${weightPerServingLabel}/portion)` : ""}${!weightEstimate.isComplete ? " (partiel)" : ""}`
-          : null,
-        hasEstimates
-          ? applyStock
-            ? ". Détail d'achat avec stock et restes du panier déduits."
-            : ". Détail d'achat par ingrédient."
-          : weightPerServingLabel
-            ? "."
-            : null,
-      ]
-        .filter(Boolean)
-        .join("")}
-      unified={unified}
-    >
+    <RecipeSidebarPanel title="Ingrédients" unified={unified}>
       {sortedIngredients.length === 0 ? (
         <div className="rounded-lg border border-dashed border-border bg-muted/30 p-6 text-center text-sm text-muted-foreground">
           Aucun ingrédient dans cette recette.
         </div>
       ) : (
-        <ItemGroup className="-mx-1 gap-0 divide-y divide-border/50">
+        <ItemGroup className="-mx-5 w-auto gap-0 divide-y divide-border/50">
           {sortedIngredients.map((item) => {
             const quantity = formatIngredientQuantity(item, portions, globalRatios, units);
             const estimate = estimateByIngredientId.get(item.ingredientId);
-            const isPrimaryRow = estimate && firstRowByIngredientId.get(item.ingredientId) === item.id;
-            const showPurchaseDetails = Boolean(isPrimaryRow && estimate);
 
             return (
               <RecipeIngredientItem
@@ -691,9 +675,7 @@ function RecipeIngredientsPanel({
                 item={item}
                 quantity={quantity}
                 estimate={estimate}
-                showPurchaseDetails={showPurchaseDetails}
                 applyStock={applyStock}
-                isPrimaryIngredientRow={Boolean(isPrimaryRow)}
               />
             );
           })}
@@ -719,7 +701,6 @@ function RecipeUnifiedSidebar({
   estimates,
   units,
   globalRatios,
-  weightEstimate,
 }: {
   portions: number;
   setPortions: (value: number) => void;
@@ -736,7 +717,6 @@ function RecipeUnifiedSidebar({
   estimates: RecipeCostEstimate[];
   units: UnitRecord[];
   globalRatios: UnitRatioRecord[];
-  weightEstimate: ReturnType<typeof estimateRecipeWeightPerServing>;
 }) {
   return (
     <div className="overflow-hidden rounded-[2rem] bg-card shadow-soft ring-1 ring-foreground/[0.05] dark:ring-foreground/[0.08]">
@@ -776,7 +756,6 @@ function RecipeUnifiedSidebar({
         units={units}
         globalRatios={globalRatios}
         applyStock={applyStock}
-        weightEstimate={weightEstimate}
         unified
       />
     </div>
@@ -845,7 +824,49 @@ export function RecipeView({
   const weightEstimate = estimateRecipeWeightPerServing(recipe, globalRatios, units);
   const weightPerServingLabel = formatRecipeWeight(weightEstimate.gramsPerServing);
   const macroEstimate = estimateRecipeMacrosPerServing(recipe, globalRatios, units);
-  const macroCaloriesLabel = formatMacroCalories(macroEstimate.perServing?.calories ?? null);
+  const macroPerServing = macroEstimate.perServing;
+  const recipeStats = [
+    weightPerServingLabel
+      ? {
+          key: "weight",
+          label: "Poids",
+          value: weightPerServingLabel,
+          icon: <Scale />,
+        }
+      : null,
+    macroPerServing
+      ? {
+          key: "calories",
+          label: "Calories",
+          value: formatMacroCalories(macroPerServing.calories) ?? "—",
+          icon: <Flame />,
+        }
+      : null,
+    macroPerServing
+      ? {
+          key: "protein",
+          label: "Protéines",
+          value: formatMacroGrams(macroPerServing.protein),
+          icon: <Beef />,
+        }
+      : null,
+    macroPerServing
+      ? {
+          key: "carbs",
+          label: "Glucides",
+          value: formatMacroGrams(macroPerServing.carbs),
+          icon: <Wheat />,
+        }
+      : null,
+    macroPerServing
+      ? {
+          key: "fat",
+          label: "Lipides",
+          value: formatMacroGrams(macroPerServing.fat),
+          icon: <Droplet />,
+        }
+      : null,
+  ].filter((stat): stat is NonNullable<typeof stat> => stat !== null);
 
   return (
     <section className="flex min-w-0 animate-fade-in flex-col gap-8 lg:gap-10">
@@ -856,7 +877,7 @@ export function RecipeView({
               {recipe.name}
             </h1>
             {recipe.description && (
-              <p className="mt-4 max-w-3xl text-[15px] leading-7 text-muted-foreground sm:text-base">
+              <p className="mt-4 max-w-3xl text-base leading-7 text-muted-foreground sm:text-lg sm:leading-8">
                 {recipe.description}
               </p>
             )}
@@ -889,43 +910,30 @@ export function RecipeView({
             estimates={estimates}
             units={uniqueUnits(ingredients)}
             globalRatios={globalRatios}
-            weightEstimate={weightEstimate}
           />
         </aside>
 
-        <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 lg:col-start-1 lg:grid-cols-3">
-          {totalMinutes > 0 && (
-            <RecipeStatItem
-              value={`${totalMinutes} min`}
-              label="Durée totale"
-              detail={
-                recipe.prepMinutes !== null && recipe.cookMinutes !== null
-                  ? `${recipe.prepMinutes} prépa · ${recipe.cookMinutes} cuisson`
-                  : undefined
-              }
-              icon={<Clock />}
-            />
-          )}
-          {weightPerServingLabel && (
-            <RecipeStatItem
-              value={weightPerServingLabel}
-              label="Poids / portion"
-              detail={!weightEstimate.isComplete ? "Estimation partielle" : undefined}
-              icon={<Scale />}
-            />
-          )}
-          {macroCaloriesLabel && (
-            <RecipeStatItem
-              value={macroCaloriesLabel}
-              label="Calories / portion"
-              detail={!macroEstimate.isComplete ? "Estimation partielle" : undefined}
-              icon={<Flame />}
-            />
-          )}
-        </div>
+        {recipeStats.length > 0 && (
+          <div className="grid auto-cols-fr grid-flow-col gap-2 lg:col-start-1">
+            {recipeStats.map((stat) => (
+              <RecipeStatItem
+                key={stat.key}
+                label={stat.label}
+                value={stat.value}
+                icon={stat.icon}
+                compact
+              />
+            ))}
+          </div>
+        )}
 
         <div className="flex min-w-0 flex-col gap-10 lg:col-start-1">
-          <RecipeStepsSection sortedSteps={sortedSteps} />
+          <RecipeStepsSection
+            sortedSteps={sortedSteps}
+            totalMinutes={totalMinutes}
+            prepMinutes={recipe.prepMinutes}
+            cookMinutes={recipe.cookMinutes}
+          />
           {macroEstimate.perServing && (
             <RecipeMacrosPanel macroEstimate={macroEstimate} portions={portions} />
           )}
