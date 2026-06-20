@@ -7,7 +7,8 @@ import {
   normalizeUsageShares,
   removeCartItem,
 } from "@/components/kitchu/cart";
-import { estimatePurchaseTotal, estimateRecipeViewCosts, computeRecipeInventoryMatch } from "@/components/kitchu/recipe-cost";
+import { estimatePurchaseTotal, estimateRecipeViewCosts, computeRecipeInventoryMatch, estimateRecipeCosts } from "@/components/kitchu/recipe-cost";
+import { recipeToDraft } from "@/components/kitchu/drafts";
 import type { IngredientRecord, RecipeRecord, UnitRatioRecord, UnitRecord } from "@/components/kitchu/types";
 
 const gram: UnitRecord = {
@@ -501,5 +502,201 @@ describe("cart coverage", () => {
 
     const match = computeRecipeInventoryMatch(estimates);
     assert.ok(Math.abs((match.percent ?? 0) - 100) < 0.000001);
+  });
+
+  it("buys whole pieces for count-based recipe ingredients", () => {
+    const piece: UnitRecord = {
+      id: "u-piece",
+      code: "piece",
+      name: "Pièce",
+      symbol: "pièce",
+      kind: "COUNT",
+      globalBaseUnitId: null,
+      globalToBaseFactor: null,
+    };
+
+    const bread: IngredientRecord = {
+      id: "ing-bread",
+      name: "Pain de mie",
+      imageUrl: null,
+      notes: null,
+      preparationWeightRatio: null,
+      caloriesPer100g: null,
+      proteinPer100g: null,
+      carbsPer100g: null,
+      fatPer100g: null,
+      baseUnitId: gram.id,
+      baseUnit: gram,
+      units: [{ id: "iu-piece", unitId: piece.id, toBaseFactor: 50, unit: piece }],
+      products: [
+        {
+          id: "prod-bread-slice",
+          store: "Test",
+          brand: null,
+          name: "Tranche pain 40 g",
+          imageUrl: null,
+          storageType: "DRY",
+          stockQuantity: null,
+          packageQuantity: 1,
+          packageUnitId: piece.id,
+          packageToBaseFactor: 40,
+          price: 0.5,
+          url: null,
+          barcode: null,
+          notes: null,
+          caloriesPer100g: null,
+          proteinPer100g: null,
+          carbsPer100g: null,
+          fatPer100g: null,
+          packageUnit: piece,
+        },
+      ],
+      stock: null,
+    };
+
+    const croque = {
+      id: "recipe-croque",
+      name: "Croque-monsieur",
+      imageUrl: null,
+      description: null,
+      sourceUrl: null,
+      prepMinutes: null,
+      cookMinutes: null,
+      ingredients: [
+        {
+          id: "recipe-croque-bread",
+          ingredientId: bread.id,
+          unitId: piece.id,
+          quantityPerServing: 2,
+          unitToBaseFactor: 50,
+          preparationWeightRatio: null,
+          note: null,
+          position: 0,
+          ingredient: bread,
+          unit: piece,
+        },
+      ],
+      steps: [],
+    } satisfies RecipeRecord;
+
+    const summary = computeCartPurchases(
+      [{ recipeId: croque.id, portions: 1 }],
+      [croque],
+      [bread],
+      [],
+      [gram, piece],
+      new Map(),
+      false,
+    );
+
+    assert.equal(summary.productLines.length, 1);
+    const line = summary.productLines[0];
+    assert.equal(line?.count, 2);
+    assert.equal(line?.totalBaseQuantity, 80);
+    assert.equal(line?.totalPrice, 1);
+    assert.match(line?.pieceWarning ?? "", /plus petite/i);
+  });
+
+  it("estimates theoretical and purchase price from one multipack for two pieces", () => {
+    const piece: UnitRecord = {
+      id: "u-piece",
+      code: "piece",
+      name: "Pièce",
+      symbol: "pièce",
+      kind: "COUNT",
+      globalBaseUnitId: null,
+      globalToBaseFactor: null,
+    };
+
+    const bread: IngredientRecord = {
+      id: "ing-bread-pack",
+      name: "Pain de mie",
+      imageUrl: null,
+      notes: null,
+      preparationWeightRatio: null,
+      caloriesPer100g: null,
+      proteinPer100g: null,
+      carbsPer100g: null,
+      fatPer100g: null,
+      baseUnitId: gram.id,
+      baseUnit: gram,
+      units: [{ id: "iu-piece", unitId: piece.id, toBaseFactor: 50, unit: piece }],
+      products: [
+        {
+          id: "prod-bread-pack",
+          store: "Test",
+          brand: null,
+          name: "Pack 2 tranches 40 g",
+          imageUrl: null,
+          storageType: "DRY",
+          stockQuantity: null,
+          packageQuantity: 2,
+          packageUnitId: piece.id,
+          packageToBaseFactor: 40,
+          price: 1,
+          url: null,
+          barcode: null,
+          notes: null,
+          caloriesPer100g: null,
+          proteinPer100g: null,
+          carbsPer100g: null,
+          fatPer100g: null,
+          packageUnit: piece,
+        },
+      ],
+      stock: null,
+    };
+
+    const croque = {
+      id: "recipe-croque-pack",
+      name: "Croque-monsieur",
+      imageUrl: null,
+      description: null,
+      sourceUrl: null,
+      prepMinutes: null,
+      cookMinutes: null,
+      ingredients: [
+        {
+          id: "recipe-croque-pack-bread",
+          ingredientId: bread.id,
+          unitId: piece.id,
+          quantityPerServing: 2,
+          unitToBaseFactor: 50,
+          preparationWeightRatio: null,
+          note: null,
+          position: 0,
+          ingredient: bread,
+          unit: piece,
+        },
+      ],
+      steps: [],
+    } satisfies RecipeRecord;
+
+    const estimates = estimateRecipeCosts(
+      recipeToDraft(croque),
+      [bread],
+      1,
+      [],
+      [gram, piece],
+      new Map(),
+      new Map(),
+      false,
+    );
+    const estimate = estimates[0];
+    assert.equal(estimate?.theoreticalPrice, 1);
+    assert.equal(estimatePurchaseTotal(estimate!), 1);
+    assert.equal(estimate?.purchasePlan?.items[0]?.count, 1);
+
+    const summary = computeCartPurchases(
+      [{ recipeId: croque.id, portions: 1 }],
+      [croque],
+      [bread],
+      [],
+      [gram, piece],
+      new Map(),
+      false,
+    );
+    assert.equal(summary.productLines[0]?.count, 1);
+    assert.equal(summary.productLines[0]?.totalPrice, 1);
   });
 });

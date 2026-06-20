@@ -1,7 +1,6 @@
-import { recipeToDraft } from "@/components/kitchu/drafts";
+import { convertToBase, scaleQuantity } from "@/lib/conversions";
 import { ingredientImageUrl } from "@/components/kitchu/images";
 import {
-  estimateRecipeCosts,
   optimizePurchase,
   productOptionsForIngredient,
   sumPartial,
@@ -9,6 +8,16 @@ import {
   type PurchasePlan,
 } from "@/components/kitchu/recipe-cost";
 import type { IngredientRecord, RecipeRecord, UnitRatioRecord, UnitRecord } from "@/components/kitchu/types";
+import { isCountUnit, recipeLineToBaseFactor } from "@/components/kitchu/unit-helpers";
+import {
+  allocateStockPiecesProportionally,
+  buildPieceSizeWarning,
+  ingredientDemandsUsePieces,
+  optimizePiecePurchase,
+  pieceProductOptions,
+  productPieceWeight,
+  weightedRecipePieceWeight,
+} from "@/lib/piece-purchase";
 
 export type CartRecipeEntry = {
   recipeId: string;
@@ -42,6 +51,7 @@ export type CartProductLine = {
   usage: CartUsageShare[];
   leftoverPercent: number;
   missingReason: string | null;
+  pieceWarning: string | null;
 };
 
 export type CartPurchaseSummary = {
@@ -60,6 +70,8 @@ type IngredientDemand = {
   recipeId: string;
   recipeName: string;
   requiredBaseQuantity: number;
+  requiredPieceCount?: number;
+  recipePieceWeight?: number;
 };
 
 export function getCartItem(items: CartRecipeEntry[], recipeId: string) {
@@ -211,31 +223,70 @@ export function collectIngredientDemands(
   units: UnitRecord[],
 ) {
   const recipeById = new Map(recipes.map((recipe) => [recipe.id, recipe]));
+  const ingredientById = new Map(ingredients.map((ingredient) => [ingredient.id, ingredient]));
   const demandsByIngredientId = new Map<string, IngredientDemand[]>();
 
   for (const cartItem of cartItems) {
     const recipe = recipeById.get(cartItem.recipeId);
     if (!recipe) continue;
 
-    const estimates = estimateRecipeCosts(
-      recipeToDraft(recipe),
-      ingredients,
-      cartItem.portions,
-      globalRatios,
-      units,
-      new Map(),
-      new Map(),
-      false,
-    );
+    const totalsByIngredientId = new Map<
+      string,
+      { requiredBaseQuantity: number; requiredPieceCount: number; recipePieceWeight: number | null }
+    >();
 
-    for (const estimate of estimates) {
-      const current = demandsByIngredientId.get(estimate.ingredientId) ?? [];
-      current.push({
+    for (const row of recipe.ingredients) {
+      const ingredient = ingredientById.get(row.ingredientId);
+      if (!ingredient) continue;
+
+      const unit = units.find((entry) => entry.id === row.unitId);
+      const factor = recipeLineToBaseFactor(
+        ingredient,
+        unit,
+        row.unitId,
+        row.unitToBaseFactor,
+        globalRatios,
+        units,
+      );
+      const perServingBaseQuantity = convertToBase(row.quantityPerServing, factor);
+      if (!perServingBaseQuantity) continue;
+
+      const scaledBaseQuantity = scaleQuantity(perServingBaseQuantity, cartItem.portions);
+      const current = totalsByIngredientId.get(row.ingredientId) ?? {
+        requiredBaseQuantity: 0,
+        requiredPieceCount: 0,
+        recipePieceWeight: null,
+      };
+      current.requiredBaseQuantity += scaledBaseQuantity;
+
+      if (isCountUnit(unit)) {
+        const scaledPieceCount = scaleQuantity(row.quantityPerServing, cartItem.portions);
+        current.requiredPieceCount += scaledPieceCount;
+        if (factor) {
+          current.recipePieceWeight = factor;
+        }
+      }
+
+      totalsByIngredientId.set(row.ingredientId, current);
+    }
+
+    for (const [ingredientId, totals] of totalsByIngredientId) {
+      const demand: IngredientDemand = {
         recipeId: recipe.id,
         recipeName: recipe.name,
-        requiredBaseQuantity: estimate.requiredBaseQuantity,
-      });
-      demandsByIngredientId.set(estimate.ingredientId, current);
+        requiredBaseQuantity: totals.requiredBaseQuantity,
+      };
+
+      if (totals.requiredPieceCount > 0) {
+        demand.requiredPieceCount = totals.requiredPieceCount;
+        demand.recipePieceWeight =
+          totals.recipePieceWeight ??
+          totals.requiredBaseQuantity / totals.requiredPieceCount;
+      }
+
+      const current = demandsByIngredientId.get(ingredientId) ?? [];
+      current.push(demand);
+      demandsByIngredientId.set(ingredientId, current);
     }
   }
 
@@ -248,6 +299,8 @@ type IngredientPurchaseContext = {
   totalToPurchase: number;
   purchasePlan: PurchasePlan | null;
   purchaseLeftoverBase: number;
+  usesPiecePurchase: boolean;
+  recipePieceWeight: number | null;
 };
 
 type IngredientBuildResult = {
@@ -263,7 +316,62 @@ function computeIngredientPurchaseContext(
   stockAvailable: number,
   options: ProductOption[],
   applyStock: boolean,
+  ingredient?: IngredientRecord,
+  globalRatios: UnitRatioRecord[] = [],
+  units: UnitRecord[] = [],
 ): IngredientPurchaseContext {
+  const usePieces =
+    ingredient !== undefined &&
+    ingredientDemandsUsePieces(demands) &&
+    pieceProductOptions(options, ingredient, globalRatios, units).length > 0;
+
+  if (usePieces && ingredient) {
+    const pieceOptions = pieceProductOptions(options, ingredient, globalRatios, units);
+    const avgPieceWeight = weightedRecipePieceWeight(demands) ?? 0;
+    const stockPieces =
+      applyStock && avgPieceWeight > 0 ? Math.floor(stockAvailable / avgPieceWeight) : 0;
+    const stockPiecesByRecipeId = allocateStockPiecesProportionally(demands, stockPieces);
+    const stockByRecipeId = new Map(
+      demands.map((demand) => {
+        const pieceWeight = demand.recipePieceWeight ?? avgPieceWeight;
+        const stockPiecesUsed = stockPiecesByRecipeId.get(demand.recipeId) ?? 0;
+        return [demand.recipeId, stockPiecesUsed * pieceWeight];
+      }),
+    );
+    const remainingPiecesByRecipeId = new Map(
+      demands.map((demand) => [
+        demand.recipeId,
+        Math.max(0, (demand.requiredPieceCount ?? 0) - (stockPiecesByRecipeId.get(demand.recipeId) ?? 0)),
+      ]),
+    );
+    const remainingByRecipeId = new Map(
+      demands.map((demand) => {
+        const pieceWeight = demand.recipePieceWeight ?? avgPieceWeight;
+        const remainingPieces = remainingPiecesByRecipeId.get(demand.recipeId) ?? 0;
+        return [demand.recipeId, remainingPieces * pieceWeight];
+      }),
+    );
+    const totalPiecesToPurchase = Array.from(remainingPiecesByRecipeId.values()).reduce(
+      (sum, value) => sum + value,
+      0,
+    );
+    const totalToPurchase = Array.from(remainingByRecipeId.values()).reduce((sum, value) => sum + value, 0);
+    const purchasePlan =
+      totalPiecesToPurchase > 0
+        ? optimizePiecePurchase(totalPiecesToPurchase, pieceOptions, totalToPurchase)
+        : null;
+
+    return {
+      stockByRecipeId,
+      remainingByRecipeId,
+      totalToPurchase,
+      purchasePlan,
+      purchaseLeftoverBase: purchasePlan?.leftover ?? 0,
+      usesPiecePurchase: true,
+      recipePieceWeight: avgPieceWeight,
+    };
+  }
+
   const totalRequired = demands.reduce((sum, demand) => sum + demand.requiredBaseQuantity, 0);
   const stockUsed = applyStock ? Math.min(stockAvailable, totalRequired) : 0;
   const stockByRecipeId = allocateStockProportionally(demands, stockUsed);
@@ -282,6 +390,8 @@ function computeIngredientPurchaseContext(
       totalToPurchase,
       purchasePlan: null,
       purchaseLeftoverBase: 0,
+      usesPiecePurchase: false,
+      recipePieceWeight: null,
     };
   }
 
@@ -292,6 +402,8 @@ function computeIngredientPurchaseContext(
     totalToPurchase,
     purchasePlan,
     purchaseLeftoverBase: purchasePlan?.leftover ?? 0,
+    usesPiecePurchase: false,
+    recipePieceWeight: null,
   };
 }
 
@@ -328,7 +440,15 @@ export function computeCartLeftoversByIngredient(
 
     const options = productOptionsForIngredient(ingredient, globalRatios, units);
     const stockAvailable = stockByIngredientId.get(ingredientId) ?? 0;
-    const context = computeIngredientPurchaseContext(demands, stockAvailable, options, applyStock);
+    const context = computeIngredientPurchaseContext(
+      demands,
+      stockAvailable,
+      options,
+      applyStock,
+      ingredient,
+      globalRatios,
+      units,
+    );
     if (context.purchaseLeftoverBase > 0) {
       leftoversByIngredientId.set(ingredientId, context.purchaseLeftoverBase);
     }
@@ -343,9 +463,26 @@ export function buildProductLinesForIngredient(
   stockAvailable: number,
   options: ProductOption[],
   applyStock: boolean,
+  globalRatios: UnitRatioRecord[] = [],
+  units: UnitRecord[] = [],
 ): IngredientBuildResult {
-  const context = computeIngredientPurchaseContext(demands, stockAvailable, options, applyStock);
-  const { stockByRecipeId, remainingByRecipeId, totalToPurchase, purchasePlan } = context;
+  const context = computeIngredientPurchaseContext(
+    demands,
+    stockAvailable,
+    options,
+    applyStock,
+    ingredient,
+    globalRatios,
+    units,
+  );
+  const {
+    stockByRecipeId,
+    remainingByRecipeId,
+    totalToPurchase,
+    purchasePlan,
+    usesPiecePurchase,
+    recipePieceWeight,
+  } = context;
   const stockUnitPrice = cheapestUnitPrice(options) ?? 0;
   const recipeStockValue = stockValueByRecipe(demands, stockByRecipeId, stockUnitPrice);
 
@@ -395,6 +532,7 @@ export function buildProductLinesForIngredient(
         usage: [],
         leftoverPercent: 0,
         missingReason: "Aucun produit convertible",
+        pieceWarning: null,
       },
       ],
       recipeStockValue,
@@ -420,6 +558,7 @@ export function buildProductLinesForIngredient(
         usage: [],
         leftoverPercent: 0,
         missingReason: "Impossible d'optimiser l'achat",
+        pieceWarning: null,
       },
       ],
       recipeStockValue,
@@ -444,6 +583,12 @@ export function buildProductLinesForIngredient(
     productLines: purchasePlan.items.map((item) => {
       const option = options.find((entry) => entry.product.id === item.product.id);
       const unitPrice = option?.unitPrice ?? item.price / Math.max(item.baseQuantity, 1);
+      const productPieceWeightValue = usesPiecePurchase
+        ? productPieceWeight(item.product, ingredient, globalRatios, units)
+        : null;
+      const pieceWarning = usesPiecePurchase
+        ? buildPieceSizeWarning(recipePieceWeight, productPieceWeightValue, ingredient.baseUnit.symbol)
+        : null;
 
       return {
         ingredientId: ingredient.id,
@@ -458,6 +603,7 @@ export function buildProductLinesForIngredient(
         usage,
         leftoverPercent,
         missingReason: null,
+        pieceWarning,
       };
     }),
     recipeStockValue,
@@ -491,7 +637,15 @@ export function computeCartPurchases(
 
     const options = productOptionsForIngredient(ingredient, globalRatios, units);
     const stockAvailable = stockByIngredientId.get(ingredientId) ?? 0;
-    const result = buildProductLinesForIngredient(ingredient, demands, stockAvailable, options, applyStock);
+    const result = buildProductLinesForIngredient(
+      ingredient,
+      demands,
+      stockAvailable,
+      options,
+      applyStock,
+      globalRatios,
+      units,
+    );
     mergeRecipeValues(recipeStockValue, result.recipeStockValue);
 
     for (const line of result.productLines) {

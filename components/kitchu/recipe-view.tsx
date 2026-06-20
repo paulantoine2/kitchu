@@ -95,10 +95,25 @@ function formatIngredientQuantity(item: RecipeIngredientRow, portions: number, g
   };
 }
 
+function needsPurchase(estimate: RecipeCostEstimate) {
+  if (estimate.toPurchasePieceCount !== null) {
+    return estimate.toPurchasePieceCount > 0;
+  }
+  return estimate.toPurchaseBaseQuantity > 0;
+}
+
+function formatPurchaseQuantity(estimate: RecipeCostEstimate) {
+  if (estimate.toPurchasePieceCount !== null && estimate.toPurchasePieceCount > 0) {
+    const pieces = estimate.toPurchasePieceCount;
+    return `À acheter ${formatNumber(pieces)} pièce${pieces > 1 ? "s" : ""}`;
+  }
+  return `À acheter ${formatNumber(estimate.toPurchaseBaseQuantity)} ${estimate.baseUnit.symbol}`;
+}
+
 function isCoveredByInventory(estimate: RecipeCostEstimate, applyStock: boolean) {
   return (
     applyStock &&
-    estimate.toPurchaseBaseQuantity === 0 &&
+    !needsPurchase(estimate) &&
     (estimate.stockUsed > 0 || estimate.cartLeftoverUsed > 0)
   );
 }
@@ -111,9 +126,9 @@ function compactPurchaseSummary(
     return { label: "Couvert par le stock", price: formatCurrency(0) };
   }
 
-  if (applyStock && estimate.toPurchaseBaseQuantity > 0) {
+  if (applyStock && needsPurchase(estimate)) {
     return {
-      label: `À acheter ${formatNumber(estimate.toPurchaseBaseQuantity)} ${estimate.baseUnit.symbol}`,
+      label: formatPurchaseQuantity(estimate),
       price: estimate.purchasePlan ? formatCurrency(estimate.purchasePlan.totalPrice) : null,
     };
   }
@@ -444,12 +459,12 @@ function IngredientPurchaseDetails({
   const purchasePlan = estimate.purchasePlan;
   const coveredByInventory =
     applyStock &&
-    estimate.toPurchaseBaseQuantity === 0 &&
+    !needsPurchase(estimate) &&
     (estimate.stockUsed > 0 || estimate.cartLeftoverUsed > 0);
   const partiallyCovered =
     applyStock &&
     (estimate.stockUsed > 0 || estimate.cartLeftoverUsed > 0) &&
-    estimate.toPurchaseBaseQuantity > 0;
+    needsPurchase(estimate);
   const hasInventoryContext =
     applyStock &&
     (estimate.stockAvailable > 0 ||
@@ -504,7 +519,7 @@ function IngredientPurchaseDetails({
           )}
           {partiallyCovered && (
             <Badge variant="outline">
-              À acheter {formatNumber(estimate.toPurchaseBaseQuantity)} {estimate.baseUnit.symbol}
+              {formatPurchaseQuantity(estimate)}
             </Badge>
           )}
         </div>
@@ -537,6 +552,11 @@ function IngredientPurchaseDetails({
           </p>
         </div>
       </div>
+      {estimate.pieceWarning && (
+        <div className="rounded-lg border border-amber-500/30 bg-amber-500/5 px-3 py-2.5 text-sm text-amber-700 dark:text-amber-400">
+          {estimate.pieceWarning}
+        </div>
+      )}
       {coveredByInventory ? (
         <div className="rounded-lg border border-dashed border-emerald-500/30 bg-emerald-500/5 px-3 py-2.5 text-sm text-emerald-700 dark:text-emerald-400">
           Rien à acheter — couvert par le stock et les restes du panier

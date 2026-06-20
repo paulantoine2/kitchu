@@ -253,6 +253,9 @@ export function CartSheet({
                                     ? `${line.count}× ${formatNumber(line.product.packageQuantity)} ${line.product.packageUnit.symbol}`
                                     : `${formatNumber(line.totalBaseQuantity)} ${line.baseUnit.symbol}`}
                                 </p>
+                                {line.pieceWarning && (
+                                  <p className="text-amber-700 dark:text-amber-400">{line.pieceWarning}</p>
+                                )}
                                 <p className="text-muted-foreground">
                                   {formatCurrency(line.unitPrice)} / {line.baseUnit.symbol}
                                 </p>

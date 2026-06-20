@@ -142,6 +142,10 @@ export function supportsIngredientSpecificRatio(unit?: UnitRecord | null) {
   return unit ? ["COUNT", "PACKAGE", "CUSTOM"].includes(unit.kind) : false;
 }
 
+export function isCountUnit(unit?: UnitRecord | null) {
+  return unit?.kind === "COUNT";
+}
+
 export function canDefineIngredientSpecificRatio(
   unit: UnitRecord | undefined,
   baseUnit: UnitRecord | undefined,
