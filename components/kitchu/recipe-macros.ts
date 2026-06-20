@@ -39,6 +39,24 @@ function effectiveMacroValue(
   return productValue ?? ingredientValue ?? null;
 }
 
+function ingredientMacroValue(
+  ingredientValue: number | null | undefined,
+  productValue: number | null | undefined,
+) {
+  return ingredientValue ?? productValue ?? null;
+}
+
+export function resolvedIngredientMacroProfile(ingredient: IngredientRecord): MacroProfile {
+  const firstProduct = ingredient.products[0] ?? null;
+
+  return {
+    caloriesPer100g: ingredientMacroValue(ingredient.caloriesPer100g, firstProduct?.caloriesPer100g),
+    proteinPer100g: ingredientMacroValue(ingredient.proteinPer100g, firstProduct?.proteinPer100g),
+    carbsPer100g: ingredientMacroValue(ingredient.carbsPer100g, firstProduct?.carbsPer100g),
+    fatPer100g: ingredientMacroValue(ingredient.fatPer100g, firstProduct?.fatPer100g),
+  };
+}
+
 export function hasMacroProfile(profile: MacroProfile) {
   return (
     profile.caloriesPer100g !== null ||

@@ -6,6 +6,7 @@ import {
   formatMacroProfilePer100gSummary,
   formatRecipeMacrosSummary,
   hasMacroProfile,
+  resolvedIngredientMacroProfile,
 } from "./recipe-macros";
 import type { IngredientRecord, RecipeRecord, UnitRecord } from "./types";
 
@@ -93,6 +94,76 @@ function recipeLine(
     unit: gram,
   };
 }
+
+describe("resolvedIngredientMacroProfile", () => {
+  it("uses ingredient values when set", () => {
+    const profile = resolvedIngredientMacroProfile(chicken);
+    assert.equal(profile.caloriesPer100g, 165);
+    assert.equal(profile.proteinPer100g, 31);
+    assert.equal(profile.carbsPer100g, 0);
+    assert.equal(profile.fatPer100g, 3.6);
+  });
+
+  it("falls back to the first product when ingredient values are missing", () => {
+    const tomato: IngredientRecord = {
+      ...rice,
+      id: "ing-tomato",
+      name: "Tomate",
+      caloriesPer100g: null,
+      proteinPer100g: null,
+      carbsPer100g: null,
+      fatPer100g: null,
+      products: [
+        {
+          id: "prod-tomato",
+          store: "Carrefour",
+          brand: null,
+          name: "Tomates cerises",
+          imageUrl: null,
+          storageType: "FRESH",
+          stockQuantity: null,
+          packageQuantity: 250,
+          packageUnitId: gram.id,
+          packageToBaseFactor: null,
+          price: 2.5,
+          url: null,
+          barcode: null,
+          notes: null,
+          caloriesPer100g: 18,
+          proteinPer100g: 0.9,
+          carbsPer100g: 3.9,
+          fatPer100g: 0.2,
+          packageUnit: gram,
+        },
+      ],
+    };
+
+    const profile = resolvedIngredientMacroProfile(tomato);
+    assert.equal(profile.caloriesPer100g, 18);
+    assert.equal(profile.proteinPer100g, 0.9);
+    assert.equal(profile.carbsPer100g, 3.9);
+    assert.equal(profile.fatPer100g, 0.2);
+  });
+
+  it("fills only missing ingredient fields from the first product", () => {
+    const partial: IngredientRecord = {
+      ...rice,
+      id: "ing-partial",
+      name: "Partiel",
+      caloriesPer100g: 200,
+      proteinPer100g: null,
+      carbsPer100g: null,
+      fatPer100g: 5,
+      products: chicken.products,
+    };
+
+    const profile = resolvedIngredientMacroProfile(partial);
+    assert.equal(profile.caloriesPer100g, 200);
+    assert.equal(profile.proteinPer100g, 26);
+    assert.equal(profile.carbsPer100g, null);
+    assert.equal(profile.fatPer100g, 5);
+  });
+});
 
 describe("effectiveMacroProfile", () => {
   it("uses product overrides when set", () => {

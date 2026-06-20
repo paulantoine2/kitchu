@@ -8,6 +8,7 @@ import { ingredientImageUrl } from "@/components/kitchu/images";
 import {
   formatMacroPer100gCell,
   formatMacroProfilePer100gSummary,
+  resolvedIngredientMacroProfile,
 } from "@/components/kitchu/recipe-macros";
 import type { IngredientRecord } from "@/components/kitchu/types";
 import { EntityImage } from "@/components/kitchu/ui/shared";
@@ -40,22 +41,13 @@ const INGREDIENT_MACRO_COLUMNS = [
   { key: "fatPer100g", label: "Lip.", kind: "grams" },
 ] as const;
 
-function ingredientMacroProfile(ingredient: IngredientRecord) {
-  return {
-    caloriesPer100g: ingredient.caloriesPer100g,
-    proteinPer100g: ingredient.proteinPer100g,
-    carbsPer100g: ingredient.carbsPer100g,
-    fatPer100g: ingredient.fatPer100g,
-  };
-}
-
 function IngredientMobileItem({ ingredient }: { ingredient: IngredientRecord }) {
   const imageUrl = ingredientImageUrl(ingredient);
   const hasProducts = ingredient.products.length > 0;
   const stockedProducts = ingredient.products
     .filter((product) => product.stockQuantity && product.stockQuantity > 0)
     .sort((left, right) => compareProductStoragePriority(left.storageType, right.storageType));
-  const macroSummary = formatMacroProfilePer100gSummary(ingredientMacroProfile(ingredient));
+  const macroSummary = formatMacroProfilePer100gSummary(resolvedIngredientMacroProfile(ingredient));
 
   return (
     <Item variant="outline" size="sm" render={<Link href={`/ingredients/${ingredient.id}`} />}>
@@ -106,7 +98,7 @@ function IngredientTableRow({ ingredient }: { ingredient: IngredientRecord }) {
   const stockedProducts = ingredient.products
     .filter((product) => product.stockQuantity && product.stockQuantity > 0)
     .sort((left, right) => compareProductStoragePriority(left.storageType, right.storageType));
-  const macroProfile = ingredientMacroProfile(ingredient);
+  const macroProfile = resolvedIngredientMacroProfile(ingredient);
 
   return (
     <TableRow>
