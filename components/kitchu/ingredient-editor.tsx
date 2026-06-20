@@ -2,6 +2,7 @@
 
 import { useEffect } from "react";
 import { Plus, Trash2 } from "lucide-react";
+import { LeclercDriveImporter } from "@/components/leclerc-drive-importer";
 import { ProductStorageBadge } from "@/components/kitchu/product-storage-badge";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -95,6 +96,7 @@ export function IngredientEditor({
   notice,
   onSave,
   onDelete,
+  onNotice,
 }: {
   draft: IngredientDraft;
   setDraft: React.Dispatch<React.SetStateAction<IngredientDraft>>;
@@ -104,6 +106,7 @@ export function IngredientEditor({
   notice: string;
   onSave: () => void;
   onDelete: () => void;
+  onNotice?: (message: string) => void;
 }) {
   const baseUnit = units.find((unit) => unit.id === draft.baseUnitId);
   const measurementOptions = baseMeasurementOptions(units);
@@ -393,6 +396,14 @@ export function IngredientEditor({
             Produit
           </Button>
         </div>
+        <LeclercDriveImporter
+          busy={busy}
+          units={units}
+          baseUnitId={draft.baseUnitId}
+          setDraft={setDraft}
+          onError={(message) => onNotice?.(message)}
+          onSuccess={(message) => onNotice?.(message)}
+        />
         <div className="flex flex-col gap-6">
           {draft.products.length === 0 && (
             <div className="rounded-lg border border-dashed border-border bg-muted/30 p-8 text-center text-sm text-muted-foreground">

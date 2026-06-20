@@ -119,6 +119,7 @@ export function IngredientEditorPage({
               }
             })
           }
+          onNotice={setNotice}
         />
       </div>
 
