@@ -1,2 +1,14 @@
 packages:
-  - "."
+  - "apps/*"
+  - "packages/*"
+overrides:
+  '@types/react': 19.2.18
+  '@types/react-dom': 19.2.3
+allowBuilds:
+  '@prisma/engines': true
+  better-sqlite3: true
+  esbuild: true
+  prisma: true
+  unrs-resolver: true
+patchedDependencies:
+  expo-sqlite@57.0.1: patches/expo-sqlite@57.0.1.patch

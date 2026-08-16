@@ -1,0 +1,131 @@
+import { z } from "zod";
+import { isProductStorageType } from "./product-storage";
+
+const optionalText = z.string().trim().optional().transform((value) => value || null);
+const positiveNumber = z.coerce.number().positive();
+const optionalPositiveNumber = z
+  .union([z.literal(""), positiveNumber])
+  .optional()
+  .nullable()
+  .transform((value) => (value === "" || value == null ? null : value));
+const nonNegativeInteger = z.coerce.number().int().nonnegative().optional().nullable();
+
+const optionalNonNegativeNumber = z
+  .union([z.literal(""), z.coerce.number().nonnegative()])
+  .optional()
+  .nullable()
+  .transform((value) => (value === "" || value == null ? null : value));
+
+export const macroProfileSchema = z.object({
+  caloriesPer100g: optionalNonNegativeNumber,
+  proteinPer100g: optionalNonNegativeNumber,
+  carbsPer100g: optionalNonNegativeNumber,
+  fatPer100g: optionalNonNegativeNumber,
+});
+
+export const productReferencePayloadSchema = z.object({
+  id: z.string().optional().nullable(),
+  store: z.string().trim().min(1, "Le magasin est requis."),
+  brand: optionalText,
+  name: z.string().trim().min(1, "Le nom produit est requis."),
+  imageUrl: optionalText,
+  storageType: z.preprocess(
+    (value) => (isProductStorageType(typeof value === "string" ? value : "") ? value : "FRESH"),
+    z.enum(["FRESH", "FROZEN", "DRY"]),
+  ),
+  stockQuantity: optionalNonNegativeNumber,
+  packageQuantity: positiveNumber,
+  packageUnitId: z.string().min(1, "Choisis l'unité du produit."),
+  packageToBaseFactor: optionalPositiveNumber,
+  price: z.coerce.number().nonnegative(),
+  url: optionalText,
+  barcode: optionalText,
+  notes: optionalText,
+  ...macroProfileSchema.shape,
+});
+
+export const userProductStatePayloadSchema = z.object({
+  productReferenceId: z.string().min(1),
+  stockQuantity: optionalNonNegativeNumber,
+  priceOverride: optionalNonNegativeNumber,
+});
+
+export const unitPayloadSchema = z.object({
+  id: z.string().optional().nullable(),
+  code: z
+    .string()
+    .trim()
+    .min(1, "Le code est requis.")
+    .regex(/^[a-zA-Z0-9_-]+$/, "Le code peut contenir lettres, chiffres, tirets et underscores."),
+  name: z.string().trim().min(1, "Le nom est requis."),
+  symbol: z.string().trim().min(1, "Le symbole est requis."),
+  kind: z.enum(["MASS", "VOLUME", "COUNT", "PACKAGE", "CUSTOM"]),
+});
+
+export const ingredientPayloadSchema = z.object({
+  id: z.string().optional().nullable(),
+  name: z.string().trim().min(1, "Le nom est requis."),
+  imageUrl: optionalText,
+  notes: optionalText,
+  preparationWeightRatio: optionalPositiveNumber,
+  ...macroProfileSchema.shape,
+  baseUnitId: z.string().min(1, "Choisis un type de mesure."),
+  units: z
+    .array(
+      z.object({
+        unitId: z.string().min(1),
+        toBaseFactor: z
+          .union([z.literal(""), positiveNumber])
+          .optional()
+          .nullable()
+          .transform((value) => (value === "" || value == null ? null : value)),
+      }),
+    )
+    .min(1, "Choisis un type de mesure."),
+  products: z.array(productReferencePayloadSchema),
+});
+
+export const recipePayloadSchema = z.object({
+  id: z.string().optional().nullable(),
+  name: z.string().trim().min(1, "Le titre est requis."),
+  imageUrl: optionalText,
+  description: optionalText,
+  sourceUrl: optionalText,
+  prepMinutes: nonNegativeInteger,
+  cookMinutes: nonNegativeInteger,
+  ingredients: z
+    .array(
+      z.object({
+        ingredientId: z.string().min(1, "Choisis un ingrédient."),
+        unitId: z.string().min(1, "Choisis une unité."),
+        quantityPerServing: positiveNumber,
+        unitToBaseFactor: z
+          .union([z.literal(""), positiveNumber])
+          .optional()
+          .nullable()
+          .transform((value) => (value === "" || value == null ? null : value)),
+        preparationWeightRatio: optionalPositiveNumber,
+        note: optionalText,
+      }),
+    )
+    .min(1, "Ajoute au moins un ingrédient."),
+  steps: z
+    .array(
+      z.object({
+        instruction: z.string().trim().min(1, "L'étape ne peut pas être vide."),
+      }),
+    )
+    .min(1, "Ajoute au moins une étape."),
+});
+
+export const unitRatioPayloadSchema = z.object({
+  id: z.string().optional().nullable(),
+  fromUnitId: z.string().min(1, "Choisis l'unité source."),
+  toUnitId: z.string().min(1, "Choisis l'unité de référence."),
+  factor: positiveNumber,
+});
+
+export const cartItemPayloadSchema = z.object({
+  recipeId: z.string().min(1, "La recette est requise."),
+  portions: z.coerce.number().int().min(1, "Au moins une portion."),
+});

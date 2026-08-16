@@ -1,0 +1,27 @@
+diff --git a/ios/ExpoSQLite.podspec b/ios/ExpoSQLite.podspec
+index 46338662d6f2f90a8cb6b224ff82b3909964fd2a..c0e00982754f2bbd6f0bf5634ba8a41cbde7128e 100644
+--- a/ios/ExpoSQLite.podspec
++++ b/ios/ExpoSQLite.podspec
+@@ -33,6 +33,13 @@ Pod::Spec.new do |s|
+       destination = File.join(__dir__, '..', 'ios', file)
+       FileUtils.cp(source, destination)
+     end
++    # Expose the vendored declarations under a unique header name. With Xcode 26,
++    # an umbrella import of the generic `sqlite3.h` can resolve to Apple's system
++    # header, hiding Expo's namespaced `exsqlite3_*` symbols from Swift.
++    FileUtils.cp(
++      File.join(__dir__, '..', 'vendor', vendor_src, 'sqlite3.h'),
++      File.join(__dir__, '..', 'ios', 'expo-sqlite3.h')
++    )
+   end
+ 
+   sqlite_cflags = '-DHAVE_USLEEP=1 -DSQLITE_ENABLE_LOCKING_STYLE=0 -DSQLITE_ENABLE_BYTECODE_VTAB=1 -DSQLITE_TEMP_STORE=2'
+@@ -70,6 +77,8 @@ Pod::Spec.new do |s|
+     'OTHER_SWIFT_FLAGS' => '$(inherited) ' + swift_flags,
+   }
+   s.source_files = "**/*.{c,h,m,swift}"
++  s.public_header_files = 'expo-sqlite3.h'
++  s.private_header_files = 'sqlite3.h'
+ 
+   vendored_frameworks = []
+   if podfile_properties['expo.sqlite.useLibSQL'] == 'true'

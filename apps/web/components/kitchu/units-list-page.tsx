@@ -1,0 +1,30 @@
+"use client";
+
+import { useKitchuRouter } from "@/components/use-kitchu-router";
+import { KitchuShell } from "@/components/kitchu/kitchu-shell";
+import { UnitList } from "@/components/kitchu/unit-list";
+import { useKitchuCart } from "@/components/kitchu/use-kitchu-cart";
+import type { KitchuAppProps } from "@/components/kitchu/types";
+
+export function UnitsListPage(props: KitchuAppProps) {
+  const router = useKitchuRouter();
+  const { cartOpen, setCartOpen, cart } = useKitchuCart(props);
+
+  return (
+    <KitchuShell
+      cartOpen={cartOpen}
+      onCartOpenChange={setCartOpen}
+      cartItemCount={cart.itemCount}
+      cartSummary={cart.summary}
+      viewer={props.viewer}
+      onCartPortionsChange={cart.setPortions}
+      onCartRemoveRecipe={cart.remove}
+    >
+      <UnitList
+        units={props.units}
+        canEdit={props.viewer?.role === "ADMIN"}
+        onNewUnit={props.viewer?.role === "ADMIN" ? () => router.push("/units/new") : undefined}
+      />
+    </KitchuShell>
+  );
+}
